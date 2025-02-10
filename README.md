@@ -1,8 +1,5 @@
 # Yorgut
-O.G. Social Media Backend
+O.G. Social Media
 
 # TODO
-- Implement controllers
-- Finish configuring swagger
-- Add unittests
-- Change Sqlite to Postgres for production
+...[]

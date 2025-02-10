@@ -11,5 +11,6 @@ type Photo struct {
 	PhotoAlbumID uuid.UUID
 	PhotoAlbum   PhotoAlbum `gorm:"foreignKey:PhotoAlbumID;references:ID"`
 	URL          string
+	Caption      string
 	UploadedAt   time.Time
 }
