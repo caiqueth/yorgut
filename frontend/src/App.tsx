@@ -2,17 +2,20 @@ import React from "react";
 import { Wrapper } from "components/Wrapper";
 import { Profile } from "pages/Profile";
 
-import { CssBaseline } from "@mui/material";
+import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
+
+import { theme } from "./theme";
 
 import "./App.css";
 
 const App: React.FC = () => {
   return (
-    <CssBaseline>
+    <ThemeProvider theme={createTheme(theme)}>
+      <CssBaseline />
       <Wrapper>
         <Profile />
       </Wrapper>
-    </CssBaseline>
+    </ThemeProvider>
   );
 };
 
