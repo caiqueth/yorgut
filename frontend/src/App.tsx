@@ -1,9 +1,19 @@
 import React from "react";
+import { Wrapper } from "components/Wrapper";
+import { Profile } from "pages/Profile";
+
+import { CssBaseline } from "@mui/material";
+
 import "./App.css";
-import { Home } from "pages/Home";
 
 const App: React.FC = () => {
-  return <Home />;
+  return (
+    <CssBaseline>
+      <Wrapper>
+        <Profile />
+      </Wrapper>
+    </CssBaseline>
+  );
 };
 
 export default App;
