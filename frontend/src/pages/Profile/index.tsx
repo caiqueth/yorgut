@@ -1,6 +1,7 @@
 import React from "react";
+import ProfileImage from "assets/users/frizz.jpg";
 
-import { Grid2 as Grid } from "@mui/material";
+import { Box, Grid2 as Grid, Stack } from "@mui/material";
 
 import { CommunitiesList } from "./CommunitiesList";
 import { FriendsList } from "./FriendsList";
@@ -12,19 +13,27 @@ import { ProfilePicture } from "./ProfilePicture";
 export const Profile: React.FC = () => {
   const userId = 1;
   return (
-    <Grid container>
-      <Grid sx={{ xs: 2 }}>
-        <ProfilePicture imagePath="/test" />
-        <ProfileMenu />
+    <Box sx={{ width: "100%" }}>
+      <Grid container spacing={2}>
+        <Grid size={2}>
+          <Stack direction={"column"} gap={2}>
+            <ProfilePicture imagePath={ProfileImage} />
+            <ProfileMenu />
+          </Stack>
+        </Grid>
+        <Grid size={6}>
+          <Stack direction={"column"} gap={2}>
+            <ProfileHeader />
+            <ProfileDetails />
+          </Stack>
+        </Grid>
+        <Grid size={4}>
+          <Stack direction={"column"} gap={2}>
+            <FriendsList userId={userId} />
+            <CommunitiesList userId={userId} />
+          </Stack>
+        </Grid>
       </Grid>
-      <Grid sx={{ xs: 6 }}>
-        <ProfileHeader />
-        <ProfileDetails />
-      </Grid>
-      <Grid sx={{ xs: 4 }}>
-        <FriendsList userId={userId} />
-        <CommunitiesList userId={userId} />
-      </Grid>
-    </Grid>
+    </Box>
   );
 };

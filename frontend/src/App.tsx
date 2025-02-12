@@ -1,4 +1,6 @@
 import React from "react";
+import { Navbar } from "components/Navbar";
+import { UserMenu } from "components/UserMenu";
 import { Wrapper } from "components/Wrapper";
 import { Profile } from "pages/Profile";
 
@@ -13,6 +15,8 @@ const App: React.FC = () => {
     <ThemeProvider theme={createTheme(theme)}>
       <CssBaseline />
       <Wrapper>
+        <UserMenu />
+        <Navbar />
         <Profile />
       </Wrapper>
     </ThemeProvider>

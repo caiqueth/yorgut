@@ -1,18 +1,33 @@
 import { ThemeOptions } from "@mui/material";
 
-const bgColorPrimary = "#d4ddee";
+const lightBlue = "#eef4fb";
+const mediumBlue = "#d5def0";
+const darkBlue = "#cdd9ef";
+const strongPink = "#d744b6";
+const lightPink = "#f0cfe8";
+
+export const palette = {
+  lightBlue,
+  mediumBlue,
+  darkBlue,
+  strongPink,
+  lightPink,
+};
 
 export const theme: ThemeOptions = {
   palette: {
     primary: {
-      main: "#d744b6",
+      main: strongPink,
     },
     secondary: {
-      main: "#f0cfe8",
+      main: lightPink,
     },
     background: {
-      paper: "#fafafa",
-      default: bgColorPrimary,
+      paper: darkBlue,
+      default: mediumBlue,
     },
+  },
+  typography: {
+    fontFamily: "Verdana",
   },
 };
