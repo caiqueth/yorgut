@@ -23,15 +23,15 @@ export const ProfileHeader = () => {
           </Typography>
         </Stack>
         <Stack direction={"row"} gap={1}>
-          <Typography>📝 {user.statistics.scraps} recados</Typography>
-          <Typography>📷 {user.statistics.photos} fotos</Typography>
-          <Typography>📹 {user.statistics.videos} vídeo</Typography>
-          <Typography>⭐ {user.statistics.fans} fãs</Typography>
+          <Typography variant={"body2"}>📝 {user.statistics.scraps} recados</Typography>
+          <Typography variant={"body2"}>📷 {user.statistics.photos} fotos</Typography>
+          <Typography variant={"body2"}>📹 {user.statistics.videos} vídeo</Typography>
+          <Typography variant={"body2"}>⭐ {user.statistics.fans} fãs</Typography>
         </Stack>
         <Stack direction={"row"} gap={1}>
-          <Typography>{user.statistics.cool} Legal</Typography>
-          <Typography>{user.statistics.trustworthy} Confiável</Typography>
-          <Typography>{user.statistics.beautiful} Lindo(a)</Typography>
+          <Typography variant={"body2"}>{user.statistics.cool} Legal</Typography>
+          <Typography variant={"body2"}>{user.statistics.trustworthy} Confiável</Typography>
+          <Typography variant={"body2"}>{user.statistics.beautiful} Lindo(a)</Typography>
         </Stack>
       </Paper>
     </Box>
