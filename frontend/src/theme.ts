@@ -30,4 +30,15 @@ export const theme: ThemeOptions = {
   typography: {
     fontFamily: "Verdana",
   },
+  components: {
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          border: `1px solid ${darkBlue}`,
+          boxShadow: "none",
+          borderRadius: 0,
+        },
+      },
+    },
+  },
 };
