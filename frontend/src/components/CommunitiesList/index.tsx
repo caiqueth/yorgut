@@ -1,6 +1,6 @@
 import React from "react";
 import { useUserCommunities, useUserStatistics } from "api/user/queries";
-import { isStripeRow } from "helpers/isStripedRow";
+import { isStripedRow } from "helpers/isStripedRow";
 import { palette } from "theme";
 
 import { Box, Grid2 as Grid, Paper, Stack, Typography } from "@mui/material";
@@ -24,7 +24,7 @@ export const CommunitiesList: React.FC<ICommunitiesListProps> = ({ userId }) => 
           <Grid
             size={4}
             key={community.id}
-            sx={{ p: 1, backgroundColor: isStripeRow(idx, 3) ? palette.darkBlue : palette.mediumBlue }}
+            sx={{ p: 1, backgroundColor: isStripedRow(idx, 3) ? palette.darkBlue : palette.mediumBlue }}
           >
             <Stack alignItems={"center"} flexDirection={"column"} sx={{ textAlign: "center" }}>
               <img height={64} src={community.picture} alt="image not found" />

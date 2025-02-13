@@ -1,6 +1,6 @@
 import React from "react";
 import { useUserFriends, useUserStatistics } from "api/user/queries";
-import { isStripeRow } from "helpers/isStripedRow";
+import { isStripedRow } from "helpers/isStripedRow";
 import { palette } from "theme";
 
 import { Box, Grid2 as Grid, Paper, Stack, Typography } from "@mui/material";
@@ -25,7 +25,7 @@ export const FriendsList: React.FC<IFriendsListProps> = ({ userId }) => {
             <Grid
               size={3}
               key={idx}
-              sx={{ p: 1, backgroundColor: isStripeRow(idx, 4) ? palette.darkBlue : palette.mediumBlue }}
+              sx={{ p: 1, backgroundColor: isStripedRow(idx, 4) ? palette.darkBlue : palette.mediumBlue }}
             >
               <Stack alignItems={"center"} flexDirection={"column"} sx={{ textAlign: "center" }}>
                 <img height={64} src={friend.profilePicture} alt="image not found" />
