@@ -1,6 +1,6 @@
-import { CommunitiesList } from "pages/Profile/CommunitiesList";
-import { FriendsList } from "pages/Profile/FriendsList";
-import { ProfilePicture } from "pages/Profile/ProfilePicture";
+import { CommunitiesList } from "components/CommunitiesList";
+import { FriendsList } from "components/FriendsList";
+import { ProfilePicture } from "components/ProfilePicture";
 
 import { Box, Grid2 as Grid, Stack } from "@mui/material";
 

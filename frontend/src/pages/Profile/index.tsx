@@ -2,12 +2,12 @@ import React from "react";
 
 import { Box, Grid2 as Grid, Stack } from "@mui/material";
 
-import { CommunitiesList } from "./CommunitiesList";
-import { FriendsList } from "./FriendsList";
+import { CommunitiesList } from "../../components/CommunitiesList";
+import { FriendsList } from "../../components/FriendsList";
 import { ProfileDetails } from "./ProfileDetails";
 import { ProfileHeader } from "./ProfileHeader";
 import { ProfileMenu } from "./ProfileMenu";
-import { ProfilePicture } from "./ProfilePicture";
+import { ProfilePicture } from "../../components/ProfilePicture";
 
 export const Profile: React.FC = () => {
   const userId = 1;
