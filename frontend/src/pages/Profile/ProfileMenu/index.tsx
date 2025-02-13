@@ -1,11 +1,14 @@
 import React from "react";
 import { palette } from "theme";
 
-import { Divider, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, Paper } from "@mui/material";
+import { Box, Divider, List, ListItem, ListItemAvatar, ListItemButton, ListItemText } from "@mui/material";
 
-export const ProfileMenu: React.FC = () => {
+interface IProfileMenuProps {
+  userId: number;
+}
+export const ProfileMenu: React.FC<IProfileMenuProps> = ({ userId }) => {
   return (
-    <Paper>
+    <Box>
       <List sx={{ backgroundColor: palette.lightBlue }}>
         <ListItem disablePadding>
           <ListItemButton>
@@ -63,6 +66,6 @@ export const ProfileMenu: React.FC = () => {
           </ListItemButton>
         </ListItem>
       </List>
-    </Paper>
+    </Box>
   );
 };

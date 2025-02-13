@@ -26,7 +26,10 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-export const ProfileDetails: React.FC = () => {
+interface IProfileDetailsProps {
+  userId: number;
+}
+export const ProfileDetails: React.FC<IProfileDetailsProps> = ({ userId }) => {
   return (
     <Paper>
       <Box sx={{ width: "100%" }}>

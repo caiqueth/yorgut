@@ -2,7 +2,7 @@ import React from "react";
 import { Navbar } from "components/Navbar";
 import { UserMenu } from "components/UserMenu";
 import { Wrapper } from "components/Wrapper";
-import { Profile } from "pages/Profile";
+import { Home } from "pages/Home";
 
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 
@@ -17,7 +17,7 @@ const App: React.FC = () => {
       <Wrapper>
         <UserMenu />
         <Navbar />
-        <Profile />
+        <Home />
       </Wrapper>
     </ThemeProvider>
   );

@@ -1,37 +1,33 @@
+import React from "react";
+import { useUserDetails, useUserStatistics } from "api/user/queries";
+
 import { Box, Paper, Stack, Typography } from "@mui/material";
 
-export const ProfileHeader = () => {
-  const user = {
-    name: "Frizz Chapper",
-    statistics: {
-      scraps: 123,
-      photos: 12,
-      videos: 1,
-      fans: 8,
-      trustworthy: 1,
-      cool: 1,
-      beautiful: 1,
-    },
-  };
+interface IProfileHeaderProps {
+  userId: number;
+}
+export const ProfileHeader: React.FC<IProfileHeaderProps> = ({ userId }) => {
+  const user = useUserDetails(userId);
+  const userStatistics = useUserStatistics(userId);
 
   return (
     <Box>
       <Paper sx={{ backgroundColor: "white", p: 1 }}>
         <Stack direction={"row"} sx={{ width: "100%", padding: 0 }} alignItems={"end"}>
           <Typography variant={"h5"} sx={{ "&::first-letter": { fontSize: "200%" } }}>
-            {user.name}
+            {user.firstName} {user.lastName}
           </Typography>
         </Stack>
         <Stack direction={"row"} gap={1}>
-          <Typography variant={"body2"}>📝 {user.statistics.scraps} recados</Typography>
-          <Typography variant={"body2"}>📷 {user.statistics.photos} fotos</Typography>
-          <Typography variant={"body2"}>📹 {user.statistics.videos} vídeo</Typography>
-          <Typography variant={"body2"}>⭐ {user.statistics.fans} fãs</Typography>
+          <Typography variant={"body2"}>📝 {userStatistics.totalScraps} recados</Typography>
+          <Typography variant={"body2"}>📷 {userStatistics.totalPhotos} fotos</Typography>
+          <Typography variant={"body2"}>📹 {userStatistics.totalVideos} vídeo</Typography>
+          <Typography variant={"body2"}>⭐ {userStatistics.totalFans} fãs</Typography>
         </Stack>
         <Stack direction={"row"} gap={1}>
-          <Typography variant={"body2"}>{user.statistics.cool} Legal</Typography>
-          <Typography variant={"body2"}>{user.statistics.trustworthy} Confiável</Typography>
-          <Typography variant={"body2"}>{user.statistics.beautiful} Lindo(a)</Typography>
+          <Typography variant={"body2"}>{userStatistics.cool} Legal</Typography>
+          <Typography variant={"body2"}>{userStatistics.trustworthy} Confiável</Typography>
+          <Typography variant={"body2"}>{userStatistics.beautiful} Lindo(a)</Typography>
         </Stack>
       </Paper>
     </Box>

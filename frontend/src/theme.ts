@@ -3,6 +3,7 @@ import { ThemeOptions } from "@mui/material";
 const lightBlue = "#eef4fb";
 const mediumBlue = "#d5def0";
 const darkBlue = "#cdd9ef";
+const darkerBlue = "#bac6dd";
 const strongPink = "#d744b6";
 const lightPink = "#f0cfe8";
 
@@ -34,7 +35,7 @@ export const theme: ThemeOptions = {
     MuiPaper: {
       styleOverrides: {
         root: {
-          border: `1px solid ${darkBlue}`,
+          border: `2px solid ${darkerBlue}`,
           boxShadow: "none",
           borderRadius: 0,
         },

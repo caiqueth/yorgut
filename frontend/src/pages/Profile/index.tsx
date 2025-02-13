@@ -1,5 +1,4 @@
 import React from "react";
-import ProfileImage from "assets/users/frizz.jpg";
 
 import { Box, Grid2 as Grid, Stack } from "@mui/material";
 
@@ -17,14 +16,14 @@ export const Profile: React.FC = () => {
       <Grid container spacing={2}>
         <Grid size={2}>
           <Stack direction={"column"} gap={2}>
-            <ProfilePicture imagePath={ProfileImage} />
-            <ProfileMenu />
+            <ProfilePicture userId={userId} />
+            <ProfileMenu userId={userId} />
           </Stack>
         </Grid>
         <Grid size={6}>
           <Stack direction={"column"} gap={2}>
-            <ProfileHeader />
-            <ProfileDetails />
+            <ProfileHeader userId={userId} />
+            <ProfileDetails userId={userId} />
           </Stack>
         </Grid>
         <Grid size={4}>
