@@ -52,14 +52,14 @@ export const useUserStatistics = (userId: number) => ({
 });
 
 export const useUserFriends = (userId: number) => [
-  { name: "Aline", birthDay: new Date(), profilePicture: aline, friends: 123 },
-  { name: "Caique", birthDay: new Date(), profilePicture: caique, friends: 123 },
-  { name: "Carol", birthDay: new Date(), profilePicture: carol, friends: 123 },
-  { name: "Diego", birthDay: new Date(), profilePicture: diego, friends: 123 },
-  { name: "Lígia", birthDay: new Date(), profilePicture: ligia, friends: 123 },
-  { name: "Luciana", birthDay: new Date(), profilePicture: luciana, friends: 123 },
-  { name: "Renato", birthDay: new Date(), profilePicture: renato, friends: 123 },
-  { name: "Weslley", birthDay: new Date(), profilePicture: weslley, friends: 123 },
+  { id: 1, name: "Aline", birthDay: new Date(), profilePicture: aline, friends: 123 },
+  { id: 2, name: "Caique", birthDay: new Date(), profilePicture: caique, friends: 123 },
+  { id: 3, name: "Carol", birthDay: new Date(), profilePicture: carol, friends: 123 },
+  { id: 4, name: "Diego", birthDay: new Date(), profilePicture: diego, friends: 123 },
+  { id: 5, name: "Lígia", birthDay: new Date(), profilePicture: ligia, friends: 123 },
+  { id: 6, name: "Luciana", birthDay: new Date(), profilePicture: luciana, friends: 123 },
+  { id: 7, name: "Renato", birthDay: new Date(), profilePicture: renato, friends: 123 },
+  { id: 8, name: "Weslley", birthDay: new Date(), profilePicture: weslley, friends: 123 },
 ];
 
 export const useUserCommunities = (userId: number) => [

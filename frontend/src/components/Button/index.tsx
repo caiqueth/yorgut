@@ -1,4 +1,5 @@
 import React from "react";
+import { palette } from "theme";
 
 import { Button as MuiButton, ButtonProps } from "@mui/material";
 
@@ -9,8 +10,18 @@ export const Button: React.FC<IButtonProps> = ({ children, ...props }) => {
       {...props}
       sx={{
         ...props.sx,
-        boxShadow: "inset 1px 1px 8px 0px rgba(255,255,255,1);",
+        m: 1,
+        // backgroundColor: "rgba(195,208,238,1)",
+        backgroundColor: palette.mediumBlue,
+        boxShadow: `inset 0px 0px 3px 1px rgba(146, 163, 195,1);`,
         borderRadius: 2,
+        px: 2,
+        color: "black",
+        lineHeight: 1,
+        textTransform: "none",
+        typographyProps: {
+          variant: "h1",
+        },
       }}
     >
       {children}

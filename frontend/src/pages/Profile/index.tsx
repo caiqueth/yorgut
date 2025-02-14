@@ -4,10 +4,11 @@ import { Box, Grid2 as Grid, Stack } from "@mui/material";
 
 import { CommunitiesList } from "../../components/CommunitiesList";
 import { FriendsList } from "../../components/FriendsList";
+import { ProfilePicture } from "../../components/ProfilePicture";
+
 import { ProfileDetails } from "./ProfileDetails";
 import { ProfileHeader } from "./ProfileHeader";
 import { ProfileMenu } from "./ProfileMenu";
-import { ProfilePicture } from "../../components/ProfilePicture";
 
 export const Profile: React.FC = () => {
   const userId = 1;

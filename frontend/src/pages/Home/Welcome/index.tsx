@@ -17,7 +17,8 @@ export const Welcome = () => {
           </Typography>
           <Box>
             <Typography variant={"body1"}>
-              Você está conectado a {userStatistics.undirectConnections} pessoas através de {} amigos
+              Você está conectado a {userStatistics.undirectConnections} pessoas através de{" "}
+              {userStatistics.totalFriends} amigos
             </Typography>
             <Typography variant={"body1"}>Aumente sua rede agora mesmo!</Typography>
           </Box>

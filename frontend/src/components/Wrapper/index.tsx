@@ -1,6 +1,8 @@
 import React from "react";
+import { Navbar } from "components/Navbar";
+import { UserBar } from "components/UserBar";
 
-import { Box, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 
 interface IWrapperProps {
   children: React.ReactNode;
@@ -18,6 +20,8 @@ export const Wrapper: React.FC<IWrapperProps> = ({ children }) => {
         pt: 3,
       }}
     >
+      <UserBar />
+      <Navbar />
       {children}
     </Stack>
   );

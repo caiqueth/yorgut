@@ -1,6 +1,6 @@
 import { Stack, Typography } from "@mui/material";
 
-export const UserMenu: React.FC = () => {
+export const UserBar: React.FC = () => {
   return (
     <Stack direction={"row"} gap={1} sx={{ width: "100%", justifyContent: "end" }}>
       <Typography variant={"body2"}>

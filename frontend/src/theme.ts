@@ -11,6 +11,7 @@ export const palette = {
   lightBlue,
   mediumBlue,
   darkBlue,
+  darkerBlue,
   strongPink,
   lightPink,
 };

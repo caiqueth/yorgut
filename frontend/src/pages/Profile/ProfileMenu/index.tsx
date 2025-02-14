@@ -1,71 +1,26 @@
 import React from "react";
-import { palette } from "theme";
+import { LateralButtonList } from "components/LateralButtonList";
 
-import { Box, Divider, List, ListItem, ListItemAvatar, ListItemButton, ListItemText } from "@mui/material";
+import { Box } from "@mui/material";
 
 interface IProfileMenuProps {
   userId: number;
 }
 export const ProfileMenu: React.FC<IProfileMenuProps> = ({ userId }) => {
+  const itemsList = [
+    { text: "recados", avatar: "📝", onClick: () => null },
+    { text: "álbum", avatar: "📷", onClick: () => null },
+    { text: "vídeos", avatar: "📹", onClick: () => null },
+    { text: "enviar mensagem", avatar: "📧", onClick: () => null },
+    { text: "escrever depoimento", avatar: "✒", onClick: () => null },
+    { text: "provocar", avatar: "😋", onClick: () => null },
+    { text: "ignorar", avatar: "🤐", onClick: () => null },
+    { text: "reportar", avatar: "🚫", onClick: () => null },
+  ];
+
   return (
     <Box>
-      <List sx={{ backgroundColor: palette.lightBlue }}>
-        <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemAvatar>📝</ListItemAvatar>
-            <ListItemText slotProps={{ primary: { fontSize: "10px" } }} primary={"recados"} />
-          </ListItemButton>
-        </ListItem>
-        <Divider />
-        <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemAvatar>📷</ListItemAvatar>
-            <ListItemText slotProps={{ primary: { fontSize: "10px" } }} primary={"álbum"} />
-          </ListItemButton>
-        </ListItem>
-        <Divider />
-        <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemAvatar>📹</ListItemAvatar>
-            <ListItemText slotProps={{ primary: { fontSize: "10px" } }} primary={"vídeos"} />
-          </ListItemButton>
-        </ListItem>
-        <Divider />
-        <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemAvatar>📧</ListItemAvatar>
-            <ListItemText slotProps={{ primary: { fontSize: "10px" } }} primary={"enviar mensagem"} />
-          </ListItemButton>
-        </ListItem>
-        <Divider />
-        <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemAvatar>✒</ListItemAvatar>
-            <ListItemText slotProps={{ primary: { fontSize: "10px" } }} primary={"escrever depoimento"} />
-          </ListItemButton>
-        </ListItem>
-        <Divider />
-        <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemAvatar>😋</ListItemAvatar>
-            <ListItemText slotProps={{ primary: { fontSize: "10px" } }} primary={"provocar"} />
-          </ListItemButton>
-        </ListItem>
-        <Divider />
-        <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemAvatar>🤐</ListItemAvatar>
-            <ListItemText slotProps={{ primary: { fontSize: "10px" } }} primary={"ignorar"} />
-          </ListItemButton>
-        </ListItem>
-        <Divider />
-        <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemAvatar>🚫</ListItemAvatar>
-            <ListItemText slotProps={{ primary: { fontSize: "10px" } }} primary={"reportar"} />
-          </ListItemButton>
-        </ListItem>
-      </List>
+      <LateralButtonList items={itemsList} />
     </Box>
   );
 };

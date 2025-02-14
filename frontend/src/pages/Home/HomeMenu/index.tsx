@@ -1,57 +1,30 @@
 import React from "react";
-import { palette } from "theme";
+import { LateralButtonList } from "components/LateralButtonList";
+import { useNavigate } from "react-router-dom";
 
-import { Box, Divider, List, ListItem, ListItemAvatar, ListItemButton, ListItemText } from "@mui/material";
+import { Box } from "@mui/material";
 
 interface IHomeMenuProps {
   userId: number;
 }
 export const HomeMenu: React.FC<IHomeMenuProps> = ({ userId }) => {
+  const navigate = useNavigate();
+  const handleGoToProfile = () => {
+    navigate(`/profile/${userId}`);
+  };
+
+  const listItems = [
+    { text: "perfil", avatar: "🙂", onClick: handleGoToProfile },
+    { text: "álbum", avatar: "📷", onClick: () => null },
+    { text: "listas", avatar: "📃", onClick: () => null },
+    { text: "recados", avatar: "📝", onClick: () => null },
+    { text: "depoimentos", avatar: "✒", onClick: () => null },
+    { text: "configurações", avatar: "🔨", onClick: () => null },
+  ];
+
   return (
     <Box>
-      <List sx={{ backgroundColor: palette.lightBlue }}>
-        <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemAvatar>🙂</ListItemAvatar>
-            <ListItemText slotProps={{ primary: { fontSize: "10px" } }} primary={"perfil"} />
-          </ListItemButton>
-        </ListItem>
-        <Divider />
-        <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemAvatar>📷</ListItemAvatar>
-            <ListItemText slotProps={{ primary: { fontSize: "10px" } }} primary={"álbum"} />
-          </ListItemButton>
-        </ListItem>
-        <Divider />
-        <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemAvatar>📃</ListItemAvatar>
-            <ListItemText slotProps={{ primary: { fontSize: "10px" } }} primary={"listas"} />
-          </ListItemButton>
-        </ListItem>
-        <Divider />
-        <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemAvatar>📝</ListItemAvatar>
-            <ListItemText slotProps={{ primary: { fontSize: "10px" } }} primary={"recados"} />
-          </ListItemButton>
-        </ListItem>
-        <Divider />
-        <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemAvatar>✒</ListItemAvatar>
-            <ListItemText slotProps={{ primary: { fontSize: "10px" } }} primary={"depoimentos"} />
-          </ListItemButton>
-        </ListItem>
-        <Divider />
-        <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemAvatar>🔨</ListItemAvatar>
-            <ListItemText slotProps={{ primary: { fontSize: "10px" } }} primary={"configurações"} />
-          </ListItemButton>
-        </ListItem>
-      </List>
+      <LateralButtonList items={listItems} />
     </Box>
   );
 };

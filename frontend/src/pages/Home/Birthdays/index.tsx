@@ -1,6 +1,7 @@
 import React from "react";
 import { useUserFriends } from "api/user/queries";
 import { isStripedRow } from "helpers/isStripedRow";
+import { Link } from "react-router-dom";
 import { palette } from "theme";
 
 import { Box, Grid2 as Grid, Paper, Stack, Typography } from "@mui/material";
@@ -27,7 +28,9 @@ export const Birthdays: React.FC<IBirthdaysProps> = ({ userId }) => {
             >
               <Stack alignItems={"center"} flexDirection={"row"} sx={{ textAlign: "left" }} gap={1}>
                 <img height={64} src={friend.profilePicture} alt="image not found" />
-                <Typography variant={"body2"}>{`${friend.name} ${friend.birthDay.toDateString()}`}</Typography>
+                <Typography variant={"body2"}>
+                  <Link to={`/profile/${friend.id}`}>{friend.name}</Link> {`${friend.birthDay.toDateString()}`}
+                </Typography>
               </Stack>
             </Grid>
           );
