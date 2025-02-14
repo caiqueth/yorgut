@@ -13,9 +13,10 @@ interface ILateralButtonList {
 export const LateralButtonList: React.FC<ILateralButtonList> = ({ items }) => {
   const theme = useTheme();
   return (
-    <Stack spacing={"1px"}>
+    <Stack spacing={"2px"}>
       {items.map(({ text, avatar, onClick }, idx) => (
         <Button
+          disableElevation
           key={idx}
           fullWidth
           variant="contained"
