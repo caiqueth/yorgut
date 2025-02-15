@@ -61,8 +61,8 @@ func (controller *CommunityController) FindCommunityById(ctx *gin.Context) {
 
 	community := controller.communityService.FindById(id)
 
-	webResponse := response.FindCommunityByIdResponse{
-		Name: community.Name,
+	webResponse := response.Response{
+		Data: community,
 	}
 	ctx.JSON(http.StatusOK, webResponse)
 
