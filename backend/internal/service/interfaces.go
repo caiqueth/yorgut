@@ -1,8 +1,8 @@
 package service
 
 import (
-	"yorgut/internal/data/request"
-	"yorgut/internal/data/response"
+	"yorgut/internal/dto/request"
+	"yorgut/internal/dto/response"
 )
 
 type CommunityService interface {

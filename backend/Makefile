@@ -23,7 +23,7 @@ clean:
 	@echo "Cleaning..."
 	@rm -f main
 
-swag_init:
+swagger:
 	@swag init -g .\internal\server\routes.go
 
 # Live Reload

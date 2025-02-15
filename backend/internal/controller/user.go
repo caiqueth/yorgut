@@ -3,12 +3,11 @@ package controller
 import (
 	"net/http"
 	"strconv"
-	"yorgut/internal/data/request"
-	"yorgut/internal/data/response"
+	"yorgut/internal/dto/request"
+	"yorgut/internal/dto/response"
 	"yorgut/internal/service"
 
 	"github.com/gin-gonic/gin"
-	"github.com/rs/zerolog/log"
 )
 
 type UserController struct {
@@ -30,7 +29,6 @@ func NewUserController(service service.UserService) *UserController {
 // @Success			200 {object} response.Response{}
 // @Router			/user [post]
 func (controller *UserController) Create(ctx *gin.Context) {
-	log.Info().Msg("Create user")
 	createUserRequest := request.CreateUserRequest{}
 	err := ctx.ShouldBindJSON(&createUserRequest)
 	if err != nil {
@@ -39,9 +37,7 @@ func (controller *UserController) Create(ctx *gin.Context) {
 
 	controller.userService.Create(createUserRequest)
 	webResponse := response.Response{
-		Code:   http.StatusOK,
-		Status: "Ok",
-		Data:   nil,
+		Data: nil,
 	}
 	ctx.Header("Content-Type", "application/json")
 	ctx.JSON(http.StatusOK, webResponse)
@@ -56,7 +52,6 @@ func (controller *UserController) Create(ctx *gin.Context) {
 // @Success				200 {object} response.FindUserByIdResponse{}
 // @Router				/user/{userId} [get]
 func (controller *UserController) FindUserById(ctx *gin.Context) {
-	log.Info().Msg("Find user by id")
 	userId := ctx.Param("userId")
 	id, err := strconv.Atoi(userId)
 	if err != nil {
@@ -66,9 +61,7 @@ func (controller *UserController) FindUserById(ctx *gin.Context) {
 	user := controller.userService.FindById(id)
 
 	webResponse := response.Response{
-		Code:   http.StatusOK,
-		Status: "Ok",
-		Data:   user,
+		Data: user,
 	}
 	ctx.JSON(http.StatusOK, webResponse)
 
