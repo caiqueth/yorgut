@@ -4,31 +4,49 @@ import (
 	"net/http"
 	"yorgut/internal/controller"
 
+	_ "yorgut/docs"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
+// @title Yorgut APIs
+// @version 1.0
+// @description Our very own OG Social Media.
+
+// @in header
+
+// @name token// @license.name Apache 2.0
+
+// @host localhost:8080
+// @BasePath /api/v1
+
+// @schemes http
 func NewRouter(userController *controller.UserController) *gin.Engine {
 	router := gin.Default()
 
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:5173"},
+		AllowOrigins:     []string{"http://localhost:3000"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"},
 		AllowHeaders:     []string{"Accept", "Authorization", "Content-Type"},
 		AllowCredentials: true,
 	}))
 
-	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	router.GET("/", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, "Welcome")
 	})
 
-	baseRouter := router.Group("/api")
-	userRouter := baseRouter.Group("/user")
-	userRouter.GET("/:userId", userController.FindUserById)
+	v1 := router.Group("/api/v1")
+	{
+		users := v1.Group("/user")
+		{
+			users.GET("/:userId", userController.FindUserById)
+		}
+	}
 
 	return router
 }

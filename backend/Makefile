@@ -23,6 +23,9 @@ clean:
 	@echo "Cleaning..."
 	@rm -f main
 
+swag_init:
+	@swag init -g .\internal\server\routes.go
+
 # Live Reload
 watch:
 	@powershell -ExecutionPolicy Bypass -Command "if (Get-Command air -ErrorAction SilentlyContinue) { \
@@ -36,12 +39,12 @@ watch:
 	}"
 
 migration_up:
-	migrate -path database/migration/ -database "postgresql://username:secretkey@localhost:5432/database_name?sslmode=disable" -verbose up
+	@migrate -path database/migration/ -database "postgresql://username:secretkey@localhost:5432/database_name?sslmode=disable" -verbose up
 
 migration_down:
-	migrate -path database/migration/ -database "postgresql://username:secretkey@localhost:5432/database_name?sslmode=disable" -verbose down
+	@migrate -path database/migration/ -database "postgresql://username:secretkey@localhost:5432/database_name?sslmode=disable" -verbose down
 
 migration_fix:
-	migrate -path database/migration/ -database "postgresql://username:secretkey@localhost:5432/database_name?sslmode=disable" force VERSION
+	@migrate -path database/migration/ -database "postgresql://username:secretkey@localhost:5432/database_name?sslmode=disable" force VERSION
 
 .PHONY: all build run test clean migration_up migration_down migration_fix watch

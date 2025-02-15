@@ -9,6 +9,7 @@ import (
 	"syscall"
 	"time"
 
+	_ "yorgut/docs"
 	"yorgut/internal/server"
 )
 

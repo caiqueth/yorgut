@@ -24,7 +24,7 @@ func NewUserController(service service.UserService) *UserController {
 // CreateUsers		godoc
 // @Symmary			Create user
 // @Decription		Save user in Db.
-// @Param			user body request.UserCreateRequest true "Create User"
+// @Param			user body request.CreateUserRequest true "Create User"
 // @Produce			application/json
 // @Tags			user
 // @Success			200 {object} response.Response{}
@@ -63,14 +63,13 @@ func (controller *UserController) FindUserById(ctx *gin.Context) {
 		panic(err)
 	}
 
-	userResponse := controller.userService.FindById(id)
+	user := controller.userService.FindById(id)
 
 	webResponse := response.Response{
 		Code:   http.StatusOK,
 		Status: "Ok",
-		Data:   userResponse,
+		Data:   user,
 	}
-	ctx.Header("Content-Type", "application/json")
 	ctx.JSON(http.StatusOK, webResponse)
 
 }
