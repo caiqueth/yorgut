@@ -6,6 +6,12 @@ import (
 	"gorm.io/gorm"
 )
 
+type FriendshipRepository interface {
+	Save(f model.Friendship)
+	Delete(id int)
+	FindOfUser(userId int)
+}
+
 type FriendshipRepositoryImpl struct {
 	Db *gorm.DB
 }

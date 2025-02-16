@@ -2,10 +2,19 @@ package repository
 
 import (
 	"errors"
+	"yorgut/internal/dto/request"
 	"yorgut/internal/model"
 
 	"gorm.io/gorm"
 )
+
+type UserRepository interface {
+	Save(u model.User)
+	Update(u model.User)
+	Delete(id int)
+	FindById(id int) (model.User, error)
+	FindMany() []model.User
+}
 
 type UserRepositoryImpl struct {
 	Db *gorm.DB
@@ -46,7 +55,15 @@ func (u *UserRepositoryImpl) Save(user model.User) {
 }
 
 func (u *UserRepositoryImpl) Update(user model.User) {
-	panic("unimplemented")
+	updateUser := request.UpdateUserRequest{
+		Name:      user.Name,
+		Email:     user.Email,
+		BirthDate: user.BirthDate,
+	}
+	result := u.Db.Model(&user).Updates(updateUser)
+	if result.Error != nil {
+		panic(result.Error)
+	}
 }
 
 func NewUserRepositoryImpl(Db *gorm.DB) UserRepository {

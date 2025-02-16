@@ -6,6 +6,13 @@ import (
 	"gorm.io/gorm"
 )
 
+type TestimonialRepository interface {
+	Save(t model.Testimonial)
+	Delete(id int)
+	FindOfUserRecipient(userId int)
+	FindOfUserAuthor(userId int)
+}
+
 type TestimonialRepositoryImpl struct {
 	Db *gorm.DB
 }

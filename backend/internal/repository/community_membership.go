@@ -6,6 +6,12 @@ import (
 	"gorm.io/gorm"
 )
 
+type CommunityMembershipRepository interface {
+	Save(cm model.CommunityMembership)
+	Delete(id int)
+	FindOfUser(id int)
+}
+
 type CommunityMembershipRepositoryImpl struct {
 	Db *gorm.DB
 }

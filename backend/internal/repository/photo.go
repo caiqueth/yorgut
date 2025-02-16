@@ -6,6 +6,13 @@ import (
 	"gorm.io/gorm"
 )
 
+type PhotoRepository interface {
+	Save(p model.Photo)
+	Delete(id int)
+	FindOfUser(userId int)
+	FindOfPhotoAlbum(photoAlbumId int)
+}
+
 type PhotoRepositoryImpl struct {
 	Db *gorm.DB
 }
