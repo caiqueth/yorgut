@@ -19,7 +19,6 @@ type ScrapRepositoryImpl struct {
 	Repository[model.Scrap]
 }
 
-// FindOfUserRecipient implements ScrapRepository.
 func (s *ScrapRepositoryImpl) FindOfUserRecipient(userId int) {
 	panic("unimplemented")
 }

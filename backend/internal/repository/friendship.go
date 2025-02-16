@@ -7,30 +7,23 @@ import (
 )
 
 type FriendshipRepository interface {
-	Save(f model.Friendship)
+	Create(f model.Friendship) error
 	Delete(id int)
+	FindById(id int) (model.Friendship, error)
+	FindMany() []model.Friendship
 	FindOfUser(userId int)
 }
 
 type FriendshipRepositoryImpl struct {
-	Db *gorm.DB
+	Repository[model.Friendship]
 }
 
-// Delete implements FriendshipRepository.
-func (f *FriendshipRepositoryImpl) Delete(id int) {
-	panic("unimplemented")
-}
-
-// FindOfUser implements FriendshipRepository.
 func (f *FriendshipRepositoryImpl) FindOfUser(userId int) {
 	panic("unimplemented")
 }
 
-// Save implements FriendshipRepository.
-func (*FriendshipRepositoryImpl) Save(f model.Friendship) {
-	panic("unimplemented")
-}
-
 func NewFriendshipRepositoryImpl(Db *gorm.DB) FriendshipRepository {
-	return &FriendshipRepositoryImpl{Db: Db}
+	return &FriendshipRepositoryImpl{
+		Repository: Repository[model.Friendship]{Db: Db},
+	}
 }

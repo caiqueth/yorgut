@@ -7,30 +7,23 @@ import (
 )
 
 type CommunityMembershipRepository interface {
-	Save(cm model.CommunityMembership)
+	Create(cm model.CommunityMembership) error
 	Delete(id int)
+	FindById(id int) (model.CommunityMembership, error)
+	FindMany() []model.CommunityMembership
 	FindOfUser(id int)
 }
 
 type CommunityMembershipRepositoryImpl struct {
-	Db *gorm.DB
+	Repository[model.CommunityMembership]
 }
 
-// Delete implements CommunityMembershipRepository.
-func (c *CommunityMembershipRepositoryImpl) Delete(id int) {
-	panic("unimplemented")
-}
-
-// FindOfUser implements CommunityMembershipRepository.
 func (c *CommunityMembershipRepositoryImpl) FindOfUser(id int) {
 	panic("unimplemented")
 }
 
-// Save implements CommunityMembershipRepository.
-func (c *CommunityMembershipRepositoryImpl) Save(cm model.CommunityMembership) {
-	panic("unimplemented")
-}
-
 func NewCommunityMembershipRepositoryImpl(Db *gorm.DB) CommunityMembershipRepository {
-	return &CommunityMembershipRepositoryImpl{Db: Db}
+	return &CommunityMembershipRepositoryImpl{
+		Repository: Repository[model.CommunityMembership]{Db: Db},
+	}
 }
