@@ -25,7 +25,7 @@ func NewCommunityController(service service.CommunityService) *CommunityControll
 // @Decription			Save community in Db.
 // @Param				community body request.CreateCommunityRequest true "Create Community"
 // @Produce				application/json
-// @Tags				community
+// @Tags				Community
 // @Success				200 {object} response.Response{}
 // @Router				/community [post]
 func (controller *CommunityController) Create(ctx *gin.Context) {
@@ -49,7 +49,7 @@ func (controller *CommunityController) Create(ctx *gin.Context) {
 // @Param				communityId path string true "get community by id"
 // @Description			Returns the community matching the requested id
 // @Produce				application/json
-// @Tags				tags
+// @Tags				Community
 // @Success				200 {object} response.FindCommunityByIdResponse{}
 // @Router				/community/{communityId} [get]
 func (controller *CommunityController) FindCommunityById(ctx *gin.Context) {

@@ -14,7 +14,7 @@ type CommunityServiceImpl struct {
 }
 
 // Create implements CommunityService.
-func (c *CommunityServiceImpl) Create(community request.CreateCommunityRequest) response.Response {
+func (c *CommunityServiceImpl) Create(community request.CreateCommunityRequest) error {
 	panic("unimplemented")
 }
 

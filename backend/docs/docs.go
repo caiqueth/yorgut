@@ -15,14 +15,91 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/user": {
+        "/community": {
             "post": {
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "user"
+                    "Community"
                 ],
+                "parameters": [
+                    {
+                        "description": "Create Community",
+                        "name": "community",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CreateCommunityRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/community/{communityId}": {
+            "get": {
+                "description": "Returns the community matching the requested id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Community"
+                ],
+                "summary": "Get Single community by id.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "get community by id",
+                        "name": "communityId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.FindCommunityByIdResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/user": {
+            "get": {
+                "description": "Returns a list of users",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Gets a list of users.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Create user",
                 "parameters": [
                     {
                         "description": "Create User",
@@ -42,6 +119,33 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "delete": {
+                "description": "Deletes the user matching the requested id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Delete User by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "delete user by id",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
             }
         },
         "/user/{userId}": {
@@ -51,7 +155,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "tags"
+                    "User"
                 ],
                 "summary": "Get Single user by id.",
                 "parameters": [
@@ -71,10 +175,40 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "put": {
+                "description": "Returns null",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Update user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "update user",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
             }
         }
     },
     "definitions": {
+        "request.CreateCommunityRequest": {
+            "type": "object"
+        },
         "request.CreateUserRequest": {
             "type": "object",
             "properties": {
@@ -84,6 +218,14 @@ const docTemplate = `{
                 "email": {
                     "type": "string"
                 },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.FindCommunityByIdResponse": {
+            "type": "object",
+            "properties": {
                 "name": {
                     "type": "string"
                 }
@@ -115,13 +257,7 @@ const docTemplate = `{
         "response.Response": {
             "type": "object",
             "properties": {
-                "code": {
-                    "type": "integer"
-                },
-                "data": {},
-                "status": {
-                    "type": "string"
-                }
+                "data": {}
             }
         }
     }

@@ -6,7 +6,7 @@ import (
 )
 
 type CommunityService interface {
-	Create(community request.CreateCommunityRequest) response.Response
+	Create(community request.CreateCommunityRequest) error
 	Update(user request.UpdateCommunityRequest) response.Response
 	Delete(communityId int)
 	FindById(communityId int) response.FindCommunityByIdResponse
@@ -52,8 +52,8 @@ type TestimonialService interface {
 }
 
 type UserService interface {
-	Create(user request.CreateUserRequest) response.Response
-	Update(user request.UpdateUserRequest) response.Response
+	Create(user request.CreateUserRequest) error
+	Update(user request.UpdateUserRequest) error
 	Delete(userId int)
 	FindById(userId int) response.FindUserByIdResponse
 	FindMany() response.Response

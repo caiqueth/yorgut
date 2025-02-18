@@ -3,6 +3,7 @@ package service
 import (
 	"yorgut/internal/dto/request"
 	"yorgut/internal/dto/response"
+	"yorgut/internal/model"
 	"yorgut/internal/repository"
 
 	"github.com/go-playground/validator/v10"
@@ -24,13 +25,17 @@ func (u *UserServiceImpl) FindMany() response.Response {
 }
 
 // Update implements UserService.
-func (u *UserServiceImpl) Update(user request.UpdateUserRequest) response.Response {
+func (u *UserServiceImpl) Update(user request.UpdateUserRequest) error {
 	panic("unimplemented")
 }
 
 // CreateUser implements UserService.
-func (u *UserServiceImpl) Create(user request.CreateUserRequest) response.Response {
-	panic("unimplemented")
+func (u *UserServiceImpl) Create(user request.CreateUserRequest) error {
+	err := u.UserRepository.Create(model.NewUser(user.Name, user.Email, user.BirthDate))
+	if err != nil {
+		panic(err)
+	}
+	return nil
 }
 
 // FindById implements UserService.

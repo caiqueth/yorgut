@@ -44,7 +44,11 @@ func NewRouter(userController *controller.UserController) *gin.Engine {
 	{
 		users := v1.Group("/user")
 		{
+			users.POST("", userController.Create)
+			users.GET("", userController.FindMany)
 			users.GET("/:userId", userController.FindUserById)
+			users.DELETE("/:userId", userController.DeleteUser)
+			users.PUT("/:userId", userController.UpdateUser)
 		}
 	}
 
