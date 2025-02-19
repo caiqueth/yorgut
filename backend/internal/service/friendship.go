@@ -8,28 +8,28 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-type FriendshipServiceImpl struct {
+type FriendshipService struct {
 	FriendshipRepository repository.FriendshipRepository
 	Validate             *validator.Validate
 }
 
-// Create implements FriendshipService.
-func (f *FriendshipServiceImpl) Create(friendship request.CreateFriendshipRequest) {
+func (f *FriendshipService) Create(friendship request.CreateFriendshipRequest) {
 	panic("unimplemented")
 }
 
-// Delete implements FriendshipService.
-func (f *FriendshipServiceImpl) Delete(id int) {
+func (f *FriendshipService) Delete(id int) {
 	panic("unimplemented")
 }
 
-// FindOfUser implements FriendshipService.
-func (f *FriendshipServiceImpl) FindOfUser(userId int) response.FindFriendshipOfUserResponse {
+func (f *FriendshipService) FindOfUser(userId int) response.FindFriendshipOfUserResponse {
 	panic("unimplemented")
 }
 
-func NewFriendshipServiceImpl(friendshipRepository repository.FriendshipRepository, validate *validator.Validate) FriendshipService {
-	return &FriendshipServiceImpl{
+func NewFriendshipService(
+	friendshipRepository repository.FriendshipRepository,
+	validate *validator.Validate,
+) *FriendshipService {
+	return &FriendshipService{
 		FriendshipRepository: friendshipRepository,
 		Validate:             validate,
 	}

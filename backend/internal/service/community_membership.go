@@ -8,28 +8,28 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-type CommunityMembershipServiceImpl struct {
+type CommunityMembershipService struct {
 	CommunityMembershipRepository repository.CommunityMembershipRepository
 	Validate                      *validator.Validate
 }
 
-// Create implements CommunityMembershipService.
-func (c *CommunityMembershipServiceImpl) Create(community request.CreateCommunityMembershipRequest) {
+func (c *CommunityMembershipService) Create(community request.CreateCommunityMembershipRequest) {
 	panic("unimplemented")
 }
 
-// Delete implements CommunityMembershipService.
-func (c *CommunityMembershipServiceImpl) Delete(id int) {
+func (c *CommunityMembershipService) Delete(id int) {
 	panic("unimplemented")
 }
 
-// FindOfUser implements CommunityMembershipService.
-func (c *CommunityMembershipServiceImpl) FindOfUser(userId int) response.FindCommunityMembershipOfUserResponse {
+func (c *CommunityMembershipService) FindOfUser(userId int) response.FindCommunityMembershipOfUserResponse {
 	panic("unimplemented")
 }
 
-func NewCommunityMembershipServiceImpl(communityMembershipRepository repository.CommunityMembershipRepository, validate *validator.Validate) CommunityMembershipService {
-	return &CommunityMembershipServiceImpl{
+func NewCommunityMembershipService(
+	communityMembershipRepository repository.CommunityMembershipRepository,
+	validate *validator.Validate,
+) *CommunityMembershipService {
+	return &CommunityMembershipService{
 		CommunityMembershipRepository: communityMembershipRepository,
 		Validate:                      validate,
 	}

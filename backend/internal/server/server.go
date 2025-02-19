@@ -28,13 +28,13 @@ func NewServer() *http.Server {
 	database.Migrate(db)
 
 	// Repository
-	userRepository := repository.NewUserRepositoryImpl(db)
+	userRepository := repository.NewUserRepository(db)
 
 	// Service
-	userService := service.NewUserServiceImpl(userRepository, validate)
+	userService := service.NewUserService(*userRepository, validate)
 
 	// Controller
-	userController := controller.NewUserController(userService)
+	userController := controller.NewUserController(*userService)
 
 	// Router
 	routes := NewRouter(userController)

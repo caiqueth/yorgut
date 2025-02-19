@@ -80,24 +80,6 @@ paths:
       tags:
       - Community
   /user:
-    delete:
-      description: Deletes the user matching the requested id
-      parameters:
-      - description: delete user by id
-        in: path
-        name: userId
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.Response'
-      summary: Delete User by id
-      tags:
-      - User
     get:
       description: Returns a list of users
       produces:
@@ -128,25 +110,6 @@ paths:
       summary: Create user
       tags:
       - User
-  /user/{userId}:
-    get:
-      description: Returns the user matching the requested id
-      parameters:
-      - description: get user by id
-        in: path
-        name: userId
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.FindUserByIdResponse'
-      summary: Get Single user by id.
-      tags:
-      - User
     put:
       description: Returns null
       parameters:
@@ -163,6 +126,43 @@ paths:
           schema:
             $ref: '#/definitions/response.Response'
       summary: Update user
+      tags:
+      - User
+  /user/{userId}:
+    delete:
+      description: Deletes the user matching the requested id
+      parameters:
+      - description: delete user by id
+        in: path
+        name: userId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Delete User by id
+      tags:
+      - User
+    get:
+      description: Returns the user matching the requested id
+      parameters:
+      - description: get user by id
+        in: path
+        name: userId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.FindUserByIdResponse'
+      summary: Get Single user by id.
       tags:
       - User
 schemes:

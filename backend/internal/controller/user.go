@@ -78,12 +78,7 @@ func (uc *UserController) FindUserById(ctx *gin.Context) {
 // @Router				/user [get]
 func (uc *UserController) FindMany(ctx *gin.Context) {
 	users := uc.userService.FindMany()
-
-	webResponse := response.Response{
-		Data: users,
-	}
-	ctx.JSON(http.StatusOK, webResponse)
-
+	ctx.JSON(http.StatusOK, users)
 }
 
 // DeleteUser 		godoc
@@ -93,7 +88,7 @@ func (uc *UserController) FindMany(ctx *gin.Context) {
 // @Produce			application/json
 // @Tags			User
 // @Success			200 {object} response.Response{}
-// @Router			/user [delete]
+// @Router			/user/{userId} [delete]
 func (uc *UserController) DeleteUser(ctx *gin.Context) {
 	userId := ctx.Param("userId")
 	id, err := strconv.Atoi(userId)
@@ -117,7 +112,20 @@ func (uc *UserController) DeleteUser(ctx *gin.Context) {
 // @Produce			application/json
 // @Tags			User
 // @Success			200 {object} response.Response{}
-// @Router			/user/{userId} [put]
+// @Router			/user [put]
 func (uc *UserController) UpdateUser(ctx *gin.Context) {
-	panic("not implemented")
+	request := request.UpdateUserRequest{}
+
+	err := ctx.ShouldBindJSON(&request)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+
+	uc.userService.Update(request)
+	webResponse := response.Response{
+		Data: nil,
+	}
+
+	ctx.JSON(http.StatusOK, webResponse)
 }

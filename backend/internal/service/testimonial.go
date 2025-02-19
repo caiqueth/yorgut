@@ -8,33 +8,29 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-type TestimonialServiceImpl struct {
+type TestimonialService struct {
 	TestimonialRepository repository.TestimonialRepository
 	Validate              *validator.Validate
 }
 
-// Create implements TestimonialService.
-func (t *TestimonialServiceImpl) Create(testimonial request.CreateTestimonialRequest) {
+func (t *TestimonialService) Create(testimonial request.CreateTestimonialRequest) {
 	panic("unimplemented")
 }
 
-// Delete implements TestimonialService.
-func (t *TestimonialServiceImpl) Delete(id int) {
+func (t *TestimonialService) Delete(id int) {
 	panic("unimplemented")
 }
 
-// FindOfUserAuthor implements TestimonialService.
-func (t *TestimonialServiceImpl) FindOfUserAuthor(userId int) response.FindOfUserResponse {
+func (t *TestimonialService) FindOfUserAuthor(userId int) response.FindOfUserResponse {
 	panic("unimplemented")
 }
 
-// FindOfUserRecipient implements TestimonialService.
-func (t *TestimonialServiceImpl) FindOfUserRecipient(userId int) response.FindOfUserResponse {
+func (t *TestimonialService) FindOfUserRecipient(userId int) response.FindOfUserResponse {
 	panic("unimplemented")
 }
 
-func NewTestimonialServiceImpl(testimonialRepository repository.TestimonialRepository, validate *validator.Validate) TestimonialService {
-	return &TestimonialServiceImpl{
+func NewTestimonialService(testimonialRepository repository.TestimonialRepository, validate *validator.Validate) *TestimonialService {
+	return &TestimonialService{
 		TestimonialRepository: testimonialRepository,
 		Validate:              validate,
 	}

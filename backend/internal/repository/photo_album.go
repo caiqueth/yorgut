@@ -6,24 +6,16 @@ import (
 	"gorm.io/gorm"
 )
 
-type PhotoAlbumRepository interface {
-	Create(pa model.PhotoAlbum) error
-	Delete(id int)
-	FindById(id int) (model.PhotoAlbum, error)
-	FindMany() []model.PhotoAlbum
-	FindOfUser(userId int)
-}
-
-type PhotoAlbumRepositoryImpl struct {
+type PhotoAlbumRepository struct {
 	Repository[model.PhotoAlbum]
 }
 
-func (p *PhotoAlbumRepositoryImpl) FindOfUser(userId int) {
+func (p *PhotoAlbumRepository) FindOfUser(userId int) {
 	panic("unimplemented")
 }
 
-func NewPhotoAlbumRepositoryImpl(Db *gorm.DB) PhotoAlbumRepository {
-	return &PhotoAlbumRepositoryImpl{
+func NewPhotoAlbumRepository(Db *gorm.DB) *PhotoAlbumRepository {
+	return &PhotoAlbumRepository{
 		Repository: Repository[model.PhotoAlbum]{Db: Db},
 	}
 }

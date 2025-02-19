@@ -8,33 +8,29 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-type PhotoServiceImpl struct {
+type PhotoService struct {
 	PhotoRepository repository.PhotoRepository
 	Validate        *validator.Validate
 }
 
-// Create implements PhotoService.
-func (p *PhotoServiceImpl) Create(photo request.CreatePhotoRequest) {
+func (p *PhotoService) Create(photo request.CreatePhotoRequest) {
 	panic("unimplemented")
 }
 
-// Delete implements PhotoService.
-func (p *PhotoServiceImpl) Delete(id int) {
+func (p *PhotoService) Delete(id int) {
 	panic("unimplemented")
 }
 
-// FindOfAlbum implements PhotoService.
-func (p *PhotoServiceImpl) FindOfAlbum(photoAlbumId int) response.FindPhotoOfAlbumResponse {
+func (p *PhotoService) FindOfAlbum(photoAlbumId int) response.FindPhotoOfAlbumResponse {
 	panic("unimplemented")
 }
 
-// FindOfUser implements PhotoService.
-func (p *PhotoServiceImpl) FindOfUser(userId int) response.FindPhotoOfUserResponse {
+func (p *PhotoService) FindOfUser(userId int) response.FindPhotoOfUserResponse {
 	panic("unimplemented")
 }
 
-func NewPhotoServiceImpl(photoRepository repository.PhotoRepository, validate *validator.Validate) PhotoService {
-	return &PhotoServiceImpl{
+func NewPhotoService(photoRepository repository.PhotoRepository, validate *validator.Validate) *PhotoService {
+	return &PhotoService{
 		PhotoRepository: photoRepository,
 		Validate:        validate,
 	}

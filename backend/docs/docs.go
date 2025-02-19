@@ -92,6 +92,33 @@ const docTemplate = `{
                     }
                 }
             },
+            "put": {
+                "description": "Returns null",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Update user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "update user",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            },
             "post": {
                 "produces": [
                     "application/json"
@@ -109,33 +136,6 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/request.CreateUserRequest"
                         }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.Response"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "description": "Deletes the user matching the requested id",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "Delete User by id",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "delete user by id",
-                        "name": "userId",
-                        "in": "path",
-                        "required": true
                     }
                 ],
                 "responses": {
@@ -176,19 +176,19 @@ const docTemplate = `{
                     }
                 }
             },
-            "put": {
-                "description": "Returns null",
+            "delete": {
+                "description": "Deletes the user matching the requested id",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "User"
                 ],
-                "summary": "Update user",
+                "summary": "Delete User by id",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "update user",
+                        "description": "delete user by id",
                         "name": "userId",
                         "in": "path",
                         "required": true

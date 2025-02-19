@@ -6,29 +6,20 @@ import (
 	"gorm.io/gorm"
 )
 
-type TestimonialRepository interface {
-	Create(t model.Testimonial) error
-	Delete(id int)
-	FindById(id int) (model.Testimonial, error)
-	FindMany() []model.Testimonial
-	FindOfUserRecipient(userId int)
-	FindOfUserAuthor(userId int)
-}
-
-type TestimonialRepositoryImpl struct {
+type TestimonialRepository struct {
 	Repository[model.Testimonial]
 }
 
-func (t *TestimonialRepositoryImpl) FindOfUserAuthor(userId int) {
+func (t *TestimonialRepository) FindOfUserAuthor(userId int) {
 	panic("unimplemented")
 }
 
-func (t *TestimonialRepositoryImpl) FindOfUserRecipient(userId int) {
+func (t *TestimonialRepository) FindOfUserRecipient(userId int) {
 	panic("unimplemented")
 }
 
-func NewTestimonialRepositoryImpl(Db *gorm.DB) TestimonialRepository {
-	return &TestimonialRepositoryImpl{
+func NewTestimonialRepository(Db *gorm.DB) *TestimonialRepository {
+	return &TestimonialRepository{
 		Repository: Repository[model.Testimonial]{Db: Db},
 	}
 }

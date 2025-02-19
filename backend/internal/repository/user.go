@@ -6,20 +6,12 @@ import (
 	"gorm.io/gorm"
 )
 
-type UserRepository interface {
-	Create(u *model.User) error
-	Update(u *model.User)
-	Delete(id int)
-	FindById(id int) (*model.User, error)
-	FindMany() []*model.User
-}
-
-type UserRepositoryImpl struct {
+type UserRepository struct {
 	Repository[*model.User]
 }
 
-func NewUserRepositoryImpl(Db *gorm.DB) UserRepository {
-	return &UserRepositoryImpl{
+func NewUserRepository(Db *gorm.DB) *UserRepository {
+	return &UserRepository{
 		Repository: Repository[*model.User]{Db: Db},
 	}
 }

@@ -8,38 +8,33 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-type CommunityServiceImpl struct {
+type CommunityService struct {
 	CommunityRepository repository.CommunityRepository
 	Validate            *validator.Validate
 }
 
-// Create implements CommunityService.
-func (c *CommunityServiceImpl) Create(community request.CreateCommunityRequest) error {
+func (c *CommunityService) Create(community request.CreateCommunityRequest) error {
 	panic("unimplemented")
 }
 
-// Delete implements CommunityService.
-func (c *CommunityServiceImpl) Delete(communityId int) {
+func (c *CommunityService) Delete(communityId int) {
 	panic("unimplemented")
 }
 
-// FindById implements CommunityService.
-func (c *CommunityServiceImpl) FindById(communityId int) response.FindCommunityByIdResponse {
+func (c *CommunityService) FindById(communityId int) response.FindCommunityByIdResponse {
 	panic("unimplemented")
 }
 
-// FindMany implements CommunityService.
-func (c *CommunityServiceImpl) FindMany() response.Response {
+func (c *CommunityService) FindMany() response.Response {
 	panic("unimplemented")
 }
 
-// Update implements CommunityService.
-func (c *CommunityServiceImpl) Update(user request.UpdateCommunityRequest) response.Response {
+func (c *CommunityService) Update(user request.UpdateCommunityRequest) response.Response {
 	panic("unimplemented")
 }
 
-func NewCommunityServiceImpl(communityRepository repository.CommunityRepository, validate *validator.Validate) CommunityService {
-	return &CommunityServiceImpl{
+func NewCommunityService(communityRepository repository.CommunityRepository, validate *validator.Validate) *CommunityService {
+	return &CommunityService{
 		CommunityRepository: communityRepository,
 		Validate:            validate,
 	}

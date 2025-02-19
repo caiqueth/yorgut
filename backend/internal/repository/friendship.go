@@ -6,24 +6,16 @@ import (
 	"gorm.io/gorm"
 )
 
-type FriendshipRepository interface {
-	Create(f model.Friendship) error
-	Delete(id int)
-	FindById(id int) (model.Friendship, error)
-	FindMany() []model.Friendship
-	FindOfUser(userId int)
-}
-
-type FriendshipRepositoryImpl struct {
+type FriendshipRepository struct {
 	Repository[model.Friendship]
 }
 
-func (f *FriendshipRepositoryImpl) FindOfUser(userId int) {
+func (f *FriendshipRepository) FindOfUser(userId int) {
 	panic("unimplemented")
 }
 
-func NewFriendshipRepositoryImpl(Db *gorm.DB) FriendshipRepository {
-	return &FriendshipRepositoryImpl{
+func NewFriendshipRepository(Db *gorm.DB) *FriendshipRepository {
+	return &FriendshipRepository{
 		Repository: Repository[model.Friendship]{Db: Db},
 	}
 }

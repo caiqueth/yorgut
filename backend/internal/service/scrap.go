@@ -8,28 +8,25 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-type ScrapServiceImpl struct {
+type ScrapService struct {
 	ScrapRepository repository.ScrapRepository
 	Validate        *validator.Validate
 }
 
-// Create implements ScrapService.
-func (s *ScrapServiceImpl) Create(scrap request.CreateScrapRequest) {
+func (s *ScrapService) Create(scrap request.CreateScrapRequest) {
 	panic("unimplemented")
 }
 
-// Delete implements ScrapService.
-func (s *ScrapServiceImpl) Delete(id int) {
+func (s *ScrapService) Delete(id int) {
 	panic("unimplemented")
 }
 
-// FindOfUserRecipient implements ScrapService.
-func (s *ScrapServiceImpl) FindOfUserRecipient(userId int) response.FindScrapOfUserRecipientResponse {
+func (s *ScrapService) FindOfUserRecipient(userId int) response.FindScrapOfUserRecipientResponse {
 	panic("unimplemented")
 }
 
-func NewScrapServiceImpl(scrapRepository repository.ScrapRepository, validate *validator.Validate) ScrapService {
-	return &ScrapServiceImpl{
+func NewScrapService(scrapRepository repository.ScrapRepository, validate *validator.Validate) *ScrapService {
+	return &ScrapService{
 		ScrapRepository: scrapRepository,
 		Validate:        validate,
 	}

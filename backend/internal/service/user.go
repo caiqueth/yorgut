@@ -9,28 +9,44 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-type UserServiceImpl struct {
+type UserService struct {
 	UserRepository repository.UserRepository
 	Validate       *validator.Validate
 }
 
-// Delete implements UserService.
-func (u *UserServiceImpl) Delete(userId int) {
-	panic("unimplemented")
+func (u *UserService) Delete(userId int) {
+	u.UserRepository.Delete(userId)
 }
 
-// FindMany implements UserService.
-func (u *UserServiceImpl) FindMany() response.Response {
-	panic("unimplemented")
+func (u *UserService) FindMany() response.Response {
+	users := u.UserRepository.FindMany()
+	userDtos := make([]response.UserDto, len(users))
+
+	for i, user := range users {
+		userDtos[i] = response.UserDto{
+			Id:        user.ID,
+			Email:     user.Email,
+			Name:      user.Name,
+			BirthDate: user.BirthDate,
+			CreatedAt: user.CreatedAt,
+			UpdatedAt: user.UpdatedAt,
+		}
+	}
+
+	return response.Response{
+		Data: map[string][]response.UserDto{"Users": userDtos},
+	}
 }
 
-// Update implements UserService.
-func (u *UserServiceImpl) Update(user request.UpdateUserRequest) error {
-	panic("unimplemented")
+func (u *UserService) Update(user request.UpdateUserRequest) error {
+	err := u.UserRepository.Update(model.NewUser(user.Name, user.Email, user.BirthDate))
+	if err != nil {
+		panic(err)
+	}
+	return nil
 }
 
-// CreateUser implements UserService.
-func (u *UserServiceImpl) Create(user request.CreateUserRequest) error {
+func (u *UserService) Create(user request.CreateUserRequest) error {
 	err := u.UserRepository.Create(model.NewUser(user.Name, user.Email, user.BirthDate))
 	if err != nil {
 		panic(err)
@@ -38,28 +54,28 @@ func (u *UserServiceImpl) Create(user request.CreateUserRequest) error {
 	return nil
 }
 
-// FindById implements UserService.
-func (u *UserServiceImpl) FindById(userId int) response.FindUserByIdResponse {
+func (u *UserService) FindById(userId int) response.FindUserByIdResponse {
 	userData, err := u.UserRepository.FindById(userId)
 	if err != nil {
 		panic(err)
 	}
 
 	userResponse := response.FindUserByIdResponse{
-		Id:        userData.ID,
-		Email:     userData.Email,
-		Name:      userData.Name,
-		BirthDate: userData.BirthDate,
-		CreatedAt: userData.CreatedAt,
-		UpdatedAt: userData.UpdatedAt,
-	}
+		UserDto: response.UserDto{
+			Id:        userData.ID,
+			Email:     userData.Email,
+			Name:      userData.Name,
+			BirthDate: userData.BirthDate,
+			CreatedAt: userData.CreatedAt,
+			UpdatedAt: userData.UpdatedAt,
+		}}
 
 	return userResponse
 
 }
 
-func NewUserServiceImpl(userRepository repository.UserRepository, validate *validator.Validate) UserService {
-	return &UserServiceImpl{
+func NewUserService(userRepository repository.UserRepository, validate *validator.Validate) *UserService {
+	return &UserService{
 		UserRepository: userRepository,
 		Validate:       validate,
 	}

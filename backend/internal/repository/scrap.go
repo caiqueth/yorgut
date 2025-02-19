@@ -6,25 +6,16 @@ import (
 	"gorm.io/gorm"
 )
 
-type ScrapRepository interface {
-	Create(s model.Scrap) error
-	Update(s model.Scrap)
-	Delete(id int)
-	FindById(id int) (model.Scrap, error)
-	FindMany() []model.Scrap
-	FindOfUserRecipient(userId int)
-}
-
-type ScrapRepositoryImpl struct {
+type ScrapRepository struct {
 	Repository[model.Scrap]
 }
 
-func (s *ScrapRepositoryImpl) FindOfUserRecipient(userId int) {
+func (s *ScrapRepository) FindOfUserRecipient(userId int) {
 	panic("unimplemented")
 }
 
-func NewScrapRepositoryImpl(Db *gorm.DB) ScrapRepository {
-	return &ScrapRepositoryImpl{
+func NewScrapRepository(Db *gorm.DB) *ScrapRepository {
+	return &ScrapRepository{
 		Repository: Repository[model.Scrap]{Db: Db},
 	}
 }

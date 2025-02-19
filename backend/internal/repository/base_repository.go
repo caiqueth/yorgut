@@ -46,10 +46,11 @@ func (r *Repository[T]) FindMany() []T {
 	return ents
 }
 
-func (r *Repository[T]) Update(ent T) {
+func (r *Repository[T]) Update(ent T) error {
 	updateEntity := ent
 	result := r.Db.Model(&ent).Updates(updateEntity)
 	if result.Error != nil {
-		panic(result.Error)
+		return result.Error
 	}
+	return nil
 }
