@@ -1,3 +1,7 @@
 package request
 
-type CreateScrapRequest struct{}
+type CreateScrapRequest struct {
+	UserAuthorID    uint
+	UserRecipientID uint
+	Content         string
+}

@@ -7,7 +7,7 @@ import (
 )
 
 type PhotoAlbumRepository struct {
-	Repository[model.PhotoAlbum]
+	Repository[*model.PhotoAlbum]
 }
 
 func (p *PhotoAlbumRepository) FindOfUser(userId int) {
@@ -16,6 +16,6 @@ func (p *PhotoAlbumRepository) FindOfUser(userId int) {
 
 func NewPhotoAlbumRepository(Db *gorm.DB) *PhotoAlbumRepository {
 	return &PhotoAlbumRepository{
-		Repository: Repository[model.PhotoAlbum]{Db: Db},
+		Repository: Repository[*model.PhotoAlbum]{Db: Db},
 	}
 }

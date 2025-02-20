@@ -1,15 +1,18 @@
 package model
 
-import (
-	"time"
-
-	"github.com/google/uuid"
-)
+import "gorm.io/gorm"
 
 type PhotoAlbum struct {
-	ID        uuid.UUID `gorm:"type:uuid;primaryKey"`
-	UserID    int
-	User      User `gorm:"foreignKey:UserID;references:ID"`
-	Name      string
-	CreatedAt time.Time
+	gorm.Model
+	UserID uint
+	User   *User `gorm:"foreignKey:UserID;references:ID"`
+	Name   string
+}
+
+func NewPhotoAlbum(user *User, name string) *PhotoAlbum {
+	return &PhotoAlbum{
+		UserID: user.ID,
+		User:   user,
+		Name:   name,
+	}
 }

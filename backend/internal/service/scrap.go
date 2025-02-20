@@ -1,8 +1,10 @@
 package service
 
 import (
+	"errors"
 	"yorgut/internal/dto/request"
 	"yorgut/internal/dto/response"
+	"yorgut/internal/model"
 	"yorgut/internal/repository"
 
 	"github.com/go-playground/validator/v10"
@@ -10,18 +12,40 @@ import (
 
 type ScrapService struct {
 	ScrapRepository repository.ScrapRepository
+	UserRepository  repository.UserRepository
 	Validate        *validator.Validate
 }
 
-func (s *ScrapService) Create(scrap request.CreateScrapRequest) {
-	panic("unimplemented")
+func (s *ScrapService) Create(scrap request.CreateScrapRequest) error {
+	author, err := s.UserRepository.FindById(scrap.UserAuthorID)
+	if err != nil {
+		return errors.New("author not found")
+	}
+
+	recipient, err := s.UserRepository.FindById(scrap.UserRecipientID)
+	if err != nil {
+		return errors.New("recipient not found")
+	}
+
+	scrapModel := model.NewScrap(author, recipient, scrap.Content)
+
+	err = s.ScrapRepository.Create(scrapModel)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
-func (s *ScrapService) Delete(id int) {
-	panic("unimplemented")
+func (s *ScrapService) Delete(id uint) error {
+	err := s.ScrapRepository.Delete(id)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
-func (s *ScrapService) FindOfUserRecipient(userId int) response.FindScrapOfUserRecipientResponse {
+func (s *ScrapService) FindOfUserRecipient(userId int) (response.FindScrapOfUserRecipientResponse, error) {
 	panic("unimplemented")
 }
 

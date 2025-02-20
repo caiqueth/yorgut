@@ -1,17 +1,24 @@
 package model
 
 import (
-	"time"
-
-	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 type Scrap struct {
-	ID              uuid.UUID `gorm:"type:uuid;primaryKey"`
-	UserAuthorID    int
-	UserAuthor      User `gorm:"foreignKey:UserAuthorID;references:ID"`
-	UserRecipientID int
-	UserRecipient   User `gorm:"foreignKey:UserRecipientID;references:ID"`
+	gorm.Model
+	UserAuthorID    uint
+	UserAuthor      *User `gorm:"foreignKey:UserAuthorID;references:ID"`
+	UserRecipientID uint
+	UserRecipient   *User `gorm:"foreignKey:UserRecipientID;references:ID"`
 	Content         string
-	CreatedAt       time.Time
+}
+
+func NewScrap(author *User, recipient *User, content string) *Scrap {
+	return &Scrap{
+		UserAuthor:      author,
+		UserAuthorID:    author.ID,
+		UserRecipient:   recipient,
+		UserRecipientID: recipient.ID,
+		Content:         content,
+	}
 }

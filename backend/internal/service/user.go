@@ -14,12 +14,20 @@ type UserService struct {
 	Validate       *validator.Validate
 }
 
-func (u *UserService) Delete(userId int) {
-	u.UserRepository.Delete(userId)
+func (u *UserService) Delete(id uint) error {
+	err := u.UserRepository.Delete(id)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
-func (u *UserService) FindMany() response.Response {
-	users := u.UserRepository.FindMany()
+func (u *UserService) FindMany() (response.Response, error) {
+	users, err := u.UserRepository.FindMany()
+	if err != nil {
+		return response.Response{Data: nil}, err
+	}
+
 	userDtos := make([]response.UserDto, len(users))
 
 	for i, user := range users {
@@ -35,29 +43,29 @@ func (u *UserService) FindMany() response.Response {
 
 	return response.Response{
 		Data: map[string][]response.UserDto{"Users": userDtos},
-	}
-}
-
-func (u *UserService) Update(user request.UpdateUserRequest) error {
-	err := u.UserRepository.Update(model.NewUser(user.Name, user.Email, user.BirthDate))
-	if err != nil {
-		panic(err)
-	}
-	return nil
+	}, nil
 }
 
 func (u *UserService) Create(user request.CreateUserRequest) error {
 	err := u.UserRepository.Create(model.NewUser(user.Name, user.Email, user.BirthDate))
 	if err != nil {
-		panic(err)
+		return err
 	}
 	return nil
 }
 
-func (u *UserService) FindById(userId int) response.FindUserByIdResponse {
-	userData, err := u.UserRepository.FindById(userId)
+func (u *UserService) Update(user request.UpdateUserRequest) error {
+	err := u.UserRepository.Update(model.NewUser(user.Name, user.Email, user.BirthDate))
 	if err != nil {
-		panic(err)
+		return err
+	}
+	return nil
+}
+
+func (u *UserService) FindById(id uint) (response.FindUserByIdResponse, error) {
+	userData, err := u.UserRepository.FindById(id)
+	if err != nil {
+		return response.FindUserByIdResponse{}, err
 	}
 
 	userResponse := response.FindUserByIdResponse{
@@ -70,7 +78,7 @@ func (u *UserService) FindById(userId int) response.FindUserByIdResponse {
 			UpdatedAt: userData.UpdatedAt,
 		}}
 
-	return userResponse
+	return userResponse, err
 
 }
 

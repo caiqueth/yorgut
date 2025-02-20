@@ -7,7 +7,7 @@ import (
 )
 
 type TestimonialRepository struct {
-	Repository[model.Testimonial]
+	Repository[*model.Testimonial]
 }
 
 func (t *TestimonialRepository) FindOfUserAuthor(userId int) {
@@ -20,6 +20,6 @@ func (t *TestimonialRepository) FindOfUserRecipient(userId int) {
 
 func NewTestimonialRepository(Db *gorm.DB) *TestimonialRepository {
 	return &TestimonialRepository{
-		Repository: Repository[model.Testimonial]{Db: Db},
+		Repository: Repository[*model.Testimonial]{Db: Db},
 	}
 }

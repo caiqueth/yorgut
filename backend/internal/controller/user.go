@@ -37,12 +37,18 @@ func (uc *UserController) Create(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}
 
-	uc.userService.Create(createUserRequest)
+	err = uc.userService.Create(createUserRequest)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
 	webResponse := response.Response{
 		Data: nil,
 	}
 
 	ctx.JSON(http.StatusOK, webResponse)
+	return
 }
 
 // FindUserById 		godoc
@@ -57,15 +63,22 @@ func (uc *UserController) FindUserById(ctx *gin.Context) {
 	userId := ctx.Param("userId")
 	id, err := strconv.Atoi(userId)
 	if err != nil {
-		panic(err)
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
 
-	user := uc.userService.FindById(id)
+	user, err := uc.userService.FindById(id)
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 
 	webResponse := response.Response{
 		Data: user,
 	}
 	ctx.JSON(http.StatusOK, webResponse)
+	return
 
 }
 
@@ -77,8 +90,14 @@ func (uc *UserController) FindUserById(ctx *gin.Context) {
 // @Success				200 {object} response.Response{}
 // @Router				/user [get]
 func (uc *UserController) FindMany(ctx *gin.Context) {
-	users := uc.userService.FindMany()
+	users, err := uc.userService.FindMany()
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
 	ctx.JSON(http.StatusOK, users)
+	return
 }
 
 // DeleteUser 		godoc
@@ -93,7 +112,8 @@ func (uc *UserController) DeleteUser(ctx *gin.Context) {
 	userId := ctx.Param("userId")
 	id, err := strconv.Atoi(userId)
 	if err != nil {
-		panic(err)
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	uc.userService.Delete(id)
@@ -102,6 +122,7 @@ func (uc *UserController) DeleteUser(ctx *gin.Context) {
 		Data: nil,
 	}
 	ctx.JSON(http.StatusOK, webResponse)
+	return
 
 }
 
@@ -117,15 +138,22 @@ func (uc *UserController) UpdateUser(ctx *gin.Context) {
 	request := request.UpdateUserRequest{}
 
 	err := ctx.ShouldBindJSON(&request)
-
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
 
-	uc.userService.Update(request)
+	err = uc.userService.Update(request)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
 	webResponse := response.Response{
 		Data: nil,
 	}
 
 	ctx.JSON(http.StatusOK, webResponse)
+	return
+
 }

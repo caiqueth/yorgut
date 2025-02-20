@@ -1,16 +1,21 @@
 package model
 
 import (
-	"time"
-
-	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 type Community struct {
-	ID          uuid.UUID `gorm:"type:uuid;primaryKey"`
+	gorm.Model
 	Name        string
 	Description string
-	CreateByID  uint
-	CreatedBy   User `gorm:"foreignKey:CreateByID;references:ID"`
-	CreatedAt   time.Time
+	CreatedByID uint
+	CreatedBy   *User `gorm:"foreignKey:CreatedByID;references:ID"`
+}
+
+func NewCommunity(name string, description string, createdBy *User) *Community {
+	return &Community{
+		Name:        name,
+		Description: description,
+		CreatedBy:   createdBy,
+	}
 }

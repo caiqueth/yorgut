@@ -1,8 +1,10 @@
 package service
 
 import (
+	"errors"
 	"yorgut/internal/dto/request"
 	"yorgut/internal/dto/response"
+	"yorgut/internal/model"
 	"yorgut/internal/repository"
 
 	"github.com/go-playground/validator/v10"
@@ -10,18 +12,33 @@ import (
 
 type PhotoAlbumService struct {
 	PhotoAlbumRepository repository.PhotoAlbumRepository
+	UserRepository       repository.UserRepository
 	Validate             *validator.Validate
 }
 
-func (p *PhotoAlbumService) Create(photoAlbum request.CreatePhotoAlbumRequest) {
-	panic("unimplemented")
+func (p *PhotoAlbumService) Create(photoAlbum request.CreatePhotoAlbumRequest) error {
+	owner, err := p.UserRepository.FindById(photoAlbum.UserID)
+	if err != nil {
+		return errors.New("user not found")
+	}
+	photoAlbumModel := model.NewPhotoAlbum(owner, photoAlbum.Name)
+
+	err = p.PhotoAlbumRepository.Create(photoAlbumModel)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
-func (p *PhotoAlbumService) Delete(id int) {
-	panic("unimplemented")
+func (p *PhotoAlbumService) Delete(id uint) error {
+	err := p.PhotoAlbumRepository.Delete(id)
+	if err != nil {
+		return err
+	}
+	return err
 }
 
-func (p *PhotoAlbumService) FindOfUser(userId int) response.FindPhotoAlmbumOfUserResponse {
+func (p *PhotoAlbumService) FindOfUser(userId int) (response.FindPhotoAlmbumOfUserResponse, error) {
 	panic("unimplemented")
 }
 

@@ -1,3 +1,6 @@
 package request
 
-type CreateFriendshipRequest struct{}
+type CreateFriendshipRequest struct {
+	UserRequested uint
+	UserRequestee uint
+}

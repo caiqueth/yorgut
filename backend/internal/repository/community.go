@@ -7,11 +7,11 @@ import (
 )
 
 type CommunityRepository struct {
-	Repository[model.Community]
+	Repository[*model.Community]
 }
 
 func NewCommunityRepository(Db *gorm.DB) *CommunityRepository {
 	return &CommunityRepository{
-		Repository: Repository[model.Community]{Db: Db},
+		Repository: Repository[*model.Community]{Db: Db},
 	}
 }

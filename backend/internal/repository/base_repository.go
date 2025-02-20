@@ -14,20 +14,21 @@ type Repository[T any] struct {
 func (r *Repository[T]) Create(entity T) error {
 	result := r.Db.Create(&entity)
 	if result.Error != nil {
-		return fmt.Errorf("error creating entity: %v", "asd")
+		return fmt.Errorf("error creating entity: %v", result.Error)
 	}
 	return nil
 }
 
-func (r *Repository[T]) Delete(id int) {
+func (r *Repository[T]) Delete(id uint) error {
 	var ent T
 	result := r.Db.Where("id = ?", id).Delete(&ent)
 	if result.Error != nil {
-		panic(result.Error)
+		return result.Error
 	}
+	return nil
 }
 
-func (r *Repository[T]) FindById(id int) (T, error) {
+func (r *Repository[T]) FindById(id uint) (T, error) {
 	var ent T
 	result := r.Db.Find(&ent, id)
 	if result != nil {
@@ -37,13 +38,13 @@ func (r *Repository[T]) FindById(id int) (T, error) {
 	}
 }
 
-func (r *Repository[T]) FindMany() []T {
+func (r *Repository[T]) FindMany() ([]T, error) {
 	var ents []T
 	results := r.Db.Find(&ents)
 	if results.Error != nil {
-		panic(results.Error)
+		return nil, results.Error
 	}
-	return ents
+	return ents, nil
 }
 
 func (r *Repository[T]) Update(ent T) error {

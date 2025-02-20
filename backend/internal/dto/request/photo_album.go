@@ -1,3 +1,6 @@
 package request
 
-type CreatePhotoAlbumRequest struct{}
+type CreatePhotoAlbumRequest struct {
+	UserID uint
+	Name   string
+}

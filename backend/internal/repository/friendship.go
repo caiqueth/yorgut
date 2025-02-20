@@ -7,7 +7,7 @@ import (
 )
 
 type FriendshipRepository struct {
-	Repository[model.Friendship]
+	Repository[*model.Friendship]
 }
 
 func (f *FriendshipRepository) FindOfUser(userId int) {
@@ -16,6 +16,6 @@ func (f *FriendshipRepository) FindOfUser(userId int) {
 
 func NewFriendshipRepository(Db *gorm.DB) *FriendshipRepository {
 	return &FriendshipRepository{
-		Repository: Repository[model.Friendship]{Db: Db},
+		Repository: Repository[*model.Friendship]{Db: Db},
 	}
 }

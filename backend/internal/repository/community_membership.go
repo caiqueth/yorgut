@@ -7,7 +7,7 @@ import (
 )
 
 type CommunityMembershipRepository struct {
-	Repository[model.CommunityMembership]
+	Repository[*model.CommunityMembership]
 }
 
 func (c *CommunityMembershipRepository) FindOfUser(id int) {
@@ -16,6 +16,6 @@ func (c *CommunityMembershipRepository) FindOfUser(id int) {
 
 func NewCommunityMembershipRepository(Db *gorm.DB) *CommunityMembershipRepository {
 	return &CommunityMembershipRepository{
-		Repository: Repository[model.CommunityMembership]{Db: Db},
+		Repository: Repository[*model.CommunityMembership]{Db: Db},
 	}
 }

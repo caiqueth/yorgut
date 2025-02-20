@@ -11,8 +11,6 @@ type User struct {
 	Email     string
 	Name      string
 	BirthDate time.Time
-	CreatedAt time.Time
-	UpdatedAt time.Time
 }
 
 func NewUser(name string, email string, birthDate time.Time) *User {
@@ -20,7 +18,5 @@ func NewUser(name string, email string, birthDate time.Time) *User {
 		Name:      name,
 		Email:     email,
 		BirthDate: birthDate,
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
 	}
 }

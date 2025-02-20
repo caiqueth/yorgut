@@ -1,18 +1,26 @@
 package model
 
 import (
-	"time"
-
-	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 type Testimonial struct {
-	ID              uuid.UUID `gorm:"type:uuid;primaryKey"`
-	UserAuthorID    int
-	UserAuthor      User `gorm:"foreignKey:UserAuthorID;references:ID"`
-	UserRecipientID int
-	UserRecipient   User `gorm:"foreignKey:UserRecipientID;references:ID"`
+	gorm.Model
+	UserAuthorID    uint
+	UserAuthor      *User `gorm:"foreignKey:UserAuthorID;references:ID"`
+	UserRecipientID uint
+	UserRecipient   *User `gorm:"foreignKey:UserRecipientID;references:ID"`
 	Content         string
 	Approved        bool
-	CreatedAt       time.Time
+}
+
+func NewTestimonial(author *User, recipient *User, content string) *Testimonial {
+	return &Testimonial{
+		UserAuthorID:    author.ID,
+		UserAuthor:      author,
+		UserRecipientID: recipient.ID,
+		UserRecipient:   recipient,
+		Content:         content,
+		Approved:        false,
+	}
 }

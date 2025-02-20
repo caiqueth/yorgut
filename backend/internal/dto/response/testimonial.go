@@ -1,3 +1,3 @@
 package response
 
-type FindOfUserResponse struct{}
+type FindTestimonialOfUserResponse struct{}

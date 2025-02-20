@@ -7,7 +7,7 @@ import (
 )
 
 type ScrapRepository struct {
-	Repository[model.Scrap]
+	Repository[*model.Scrap]
 }
 
 func (s *ScrapRepository) FindOfUserRecipient(userId int) {
@@ -16,6 +16,6 @@ func (s *ScrapRepository) FindOfUserRecipient(userId int) {
 
 func NewScrapRepository(Db *gorm.DB) *ScrapRepository {
 	return &ScrapRepository{
-		Repository: Repository[model.Scrap]{Db: Db},
+		Repository: Repository[*model.Scrap]{Db: Db},
 	}
 }
