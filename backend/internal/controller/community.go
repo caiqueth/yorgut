@@ -95,6 +95,10 @@ func (controller *CommunityController) FindById(ctx *gin.Context) {
 	}
 
 	community, err := controller.communityService.FindById(uint(id))
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 
 	webResponse := response.Response{
 		Data: community,

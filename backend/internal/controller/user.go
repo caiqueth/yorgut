@@ -48,7 +48,7 @@ func (uc *UserController) Create(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, webResponse)
-	return
+
 }
 
 // FindUserById 		godoc
@@ -78,7 +78,6 @@ func (uc *UserController) FindUserById(ctx *gin.Context) {
 		Data: user,
 	}
 	ctx.JSON(http.StatusOK, webResponse)
-	return
 
 }
 
@@ -97,7 +96,7 @@ func (uc *UserController) FindMany(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, users)
-	return
+
 }
 
 // DeleteUser 		godoc
