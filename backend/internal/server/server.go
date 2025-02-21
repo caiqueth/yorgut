@@ -29,15 +29,45 @@ func NewServer() *http.Server {
 
 	// Repository
 	userRepository := repository.NewUserRepository(db)
+	communityMembershipRepository := repository.NewCommunityMembershipRepository(db)
+	communityRepository := repository.NewCommunityRepository(db)
+	friendshipRepository := repository.NewFriendshipRepository(db)
+	photoAlbumRepository := repository.NewPhotoAlbumRepository(db)
+	photoRepository := repository.NewPhotoRepository(db)
+	scrapRepository := repository.NewScrapRepository(db)
+	testimonialRepository := repository.NewTestimonialRepository(db)
 
 	// Service
 	userService := service.NewUserService(*userRepository, validate)
+	communityMembershipService := service.NewCommunityMembershipService(*communityMembershipRepository, validate)
+	communityService := service.NewCommunityService(*communityRepository, validate)
+	friendshipService := service.NewFriendshipService(*friendshipRepository, validate)
+	photoAlbumService := service.NewPhotoAlbumService(*photoAlbumRepository, validate)
+	photoService := service.NewPhotoService(*photoRepository, validate)
+	scrapService := service.NewScrapService(*scrapRepository, validate)
+	testimonialService := service.NewTestimonialService(*testimonialRepository, validate)
 
-	// Controller
+	// Controllers
 	userController := controller.NewUserController(*userService)
+	communityMembershipController := controller.NewCommunityMembershipController(*communityMembershipService)
+	communityController := controller.NewCommunityController(*communityService)
+	friendshipController := controller.NewFriendshipController(*friendshipService)
+	photoAlbumController := controller.NewPhotoAlbumController(*photoAlbumService)
+	photoController := controller.NewPhotoController(*photoService)
+	scrapController := controller.NewScrapController(*scrapService)
+	testimonialController := controller.NewTestimonialController(*testimonialService)
 
 	// Router
-	routes := NewRouter(userController)
+	routes := NewRouter(
+		userController,
+		communityController,
+		communityMembershipController,
+		friendshipController,
+		photoAlbumController,
+		photoController,
+		scrapController,
+		testimonialController,
+	)
 
 	// Declare Server config
 	server := &http.Server{

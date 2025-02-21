@@ -1,6 +1,20 @@
 basePath: /api/v1
 definitions:
+  request.CreateCommunityMembershipRequest:
+    properties:
+      communityID:
+        type: integer
+      userID:
+        type: integer
+    type: object
   request.CreateCommunityRequest:
+    properties:
+      createdByID:
+        type: integer
+      description:
+        type: string
+      name:
+        type: string
     type: object
   request.CreateUserRequest:
     properties:
@@ -13,8 +27,14 @@ definitions:
     type: object
   response.FindCommunityByIdResponse:
     properties:
+      createdBy:
+        type: integer
+      description:
+        type: string
       name:
         type: string
+    type: object
+  response.FindManyCommunitiesResponse:
     type: object
   response.FindUserByIdResponse:
     properties:
@@ -43,6 +63,18 @@ info:
   version: "1.0"
 paths:
   /community:
+    get:
+      description: Returns an array of communities
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.FindManyCommunitiesResponse'
+      summary: Get Multiple communities.
+      tags:
+      - Community
     post:
       parameters:
       - description: Create Community
@@ -54,13 +86,44 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "204":
+          description: No Content
           schema:
             $ref: '#/definitions/response.Response'
+      summary: Create Community
+      tags:
+      - Community
+    put:
+      description: Updates properties of a single community
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Updates a community.
       tags:
       - Community
   /community/{communityId}:
+    delete:
+      description: Deletes a community
+      parameters:
+      - description: delete community by id
+        in: path
+        name: communityId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Delete community by id.
+      tags:
+      - Community
     get:
       description: Returns the community matching the requested id
       parameters:
@@ -79,6 +142,66 @@ paths:
       summary: Get Single community by id.
       tags:
       - Community
+  /community_membership:
+    post:
+      parameters:
+      - description: Create Community Membership
+        in: body
+        name: community
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreateCommunityMembershipRequest'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Create Community Membership
+      tags:
+      - CommunityMembership
+  /community_membership/{userId}:
+    get:
+      parameters:
+      - description: id of the user
+        in: path
+        name: userId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Lists communities that a user is member of
+      tags:
+      - CommunityMembership
+  /community_membership/{userId}/{communityId}:
+    delete:
+      parameters:
+      - description: id of the user
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: id of the community
+        in: path
+        name: communityId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Delete Community Membership
+      tags:
+      - CommunityMembership
   /user:
     get:
       description: Returns a list of users

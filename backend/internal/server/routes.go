@@ -24,7 +24,16 @@ import (
 // @BasePath /api/v1
 
 // @schemes http
-func NewRouter(userController *controller.UserController) *gin.Engine {
+func NewRouter(
+	userController *controller.UserController,
+	communityController *controller.CommunityController,
+	communityMembershipController *controller.CommunityMembershipController,
+	friendshipController *controller.FriendshipController,
+	photoAlbumController *controller.PhotoAlbumController,
+	photoController *controller.PhotoController,
+	scrapController *controller.ScrapController,
+	testimonialController *controller.TestimonialController,
+) *gin.Engine {
 	router := gin.Default()
 
 	router.Use(cors.New(cors.Config{
@@ -49,6 +58,22 @@ func NewRouter(userController *controller.UserController) *gin.Engine {
 			users.PUT("", userController.UpdateUser)
 			users.GET("/:userId", userController.FindUserById)
 			users.DELETE("/:userId", userController.DeleteUser)
+		}
+
+		communities := v1.Group("/community")
+		{
+			communities.POST("", communityController.Create)
+			communities.PUT("", communityController.Update)
+			communities.GET("", communityController.FindMany)
+			communities.DELETE("/:communityId", communityController.Delete)
+			communities.GET("/:communityId", communityController.FindById)
+		}
+
+		community_memberships := v1.Group("/community_membership")
+		{
+			community_memberships.POST("", communityMembershipController.Create)
+			community_memberships.DELETE("/:userId/:communityId", communityMembershipController.Delete)
+			community_memberships.GET("/:userId", communityMembershipController.FindOfUser)
 		}
 	}
 

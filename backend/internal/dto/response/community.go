@@ -5,3 +5,5 @@ type FindCommunityByIdResponse struct {
 	Description string
 	CreatedBy   uint
 }
+
+type FindManyCommunitiesResponse struct{}

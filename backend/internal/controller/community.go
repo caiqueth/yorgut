@@ -20,13 +20,13 @@ func NewCommunityController(service service.CommunityService) *CommunityControll
 	}
 }
 
-// CreateCommunities	godoc
-// @Symmary				Create Community
+// Create				godoc
+// @Summary				Create Community
 // @Decription			Save community in Db.
 // @Param				community body request.CreateCommunityRequest true "Create Community"
 // @Produce				application/json
 // @Tags				Community
-// @Success				200 {object} response.Response{}
+// @Success				204 {object} response.Response{}
 // @Router				/community [post]
 func (controller *CommunityController) Create(ctx *gin.Context) {
 	createCommunityRequest := request.CreateCommunityRequest{}
@@ -41,10 +41,45 @@ func (controller *CommunityController) Create(ctx *gin.Context) {
 		Data: nil,
 	}
 
-	ctx.JSON(http.StatusOK, webResponse)
+	ctx.JSON(http.StatusNoContent, webResponse)
 }
 
-// FindByIdCommunity 	godoc
+// FindById				godoc
+// @Summary				Updates a community.
+// @Description			Updates properties of a single community
+// @Produce				application/json
+// @Tags				Community
+// @Success				204 {object} response.Response{}
+// @Router				/community [put]
+func (controller *CommunityController) Update(ctx *gin.Context) {
+	panic("unimplemented")
+}
+
+// Delete 				godoc
+// @Summary				Delete community by id.
+// @Param				communityId path string true "delete community by id"
+// @Description			Deletes a community
+// @Produce				application/json
+// @Tags				Community
+// @Success				204 {object} response.Response{}
+// @Router				/community/{communityId} [delete]
+func (controller *CommunityController) Delete(ctx *gin.Context) {
+	communityId := ctx.Param("communityId")
+	id, err := strconv.ParseUint(communityId, 0, 0)
+	if err != nil {
+		panic(err)
+	}
+
+	err = controller.communityService.Delete(uint(id))
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	}
+
+	ctx.JSON(http.StatusNoContent, response.Response{})
+
+}
+
+// FindById				godoc
 // @Summary				Get Single community by id.
 // @Param				communityId path string true "get community by id"
 // @Description			Returns the community matching the requested id
@@ -52,18 +87,29 @@ func (controller *CommunityController) Create(ctx *gin.Context) {
 // @Tags				Community
 // @Success				200 {object} response.FindCommunityByIdResponse{}
 // @Router				/community/{communityId} [get]
-func (controller *CommunityController) FindCommunityById(ctx *gin.Context) {
+func (controller *CommunityController) FindById(ctx *gin.Context) {
 	communityId := ctx.Param("communityId")
-	id, err := strconv.Atoi(communityId)
+	id, err := strconv.ParseUint(communityId, 0, 0)
 	if err != nil {
 		panic(err)
 	}
 
-	community := controller.communityService.FindById(id)
+	community, err := controller.communityService.FindById(uint(id))
 
 	webResponse := response.Response{
 		Data: community,
 	}
 	ctx.JSON(http.StatusOK, webResponse)
 
+}
+
+// FindMany				godoc
+// @Summary				Get Multiple communities.
+// @Description			Returns an array of communities
+// @Produce				application/json
+// @Tags				Community
+// @Success				200 {object} response.FindManyCommunitiesResponse{}
+// @Router				/community [get]
+func (controller *CommunityController) FindMany(ctx *gin.Context) {
+	panic("unimplemented")
 }

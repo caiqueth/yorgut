@@ -16,6 +16,42 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/community": {
+            "get": {
+                "description": "Returns an array of communities",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Community"
+                ],
+                "summary": "Get Multiple communities.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.FindManyCommunitiesResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Updates properties of a single community",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Community"
+                ],
+                "summary": "Updates a community.",
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            },
             "post": {
                 "produces": [
                     "application/json"
@@ -23,6 +59,7 @@ const docTemplate = `{
                 "tags": [
                     "Community"
                 ],
+                "summary": "Create Community",
                 "parameters": [
                     {
                         "description": "Create Community",
@@ -35,8 +72,8 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK",
+                    "204": {
+                        "description": "No Content",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
@@ -68,6 +105,126 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/response.FindCommunityByIdResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deletes a community",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Community"
+                ],
+                "summary": "Delete community by id.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "delete community by id",
+                        "name": "communityId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/community_membership": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CommunityMembership"
+                ],
+                "summary": "Create Community Membership",
+                "parameters": [
+                    {
+                        "description": "Create Community Membership",
+                        "name": "community",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CreateCommunityMembershipRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/community_membership/{userId}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CommunityMembership"
+                ],
+                "summary": "Lists communities that a user is member of",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id of the user",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/community_membership/{userId}/{communityId}": {
+            "delete": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CommunityMembership"
+                ],
+                "summary": "Delete Community Membership",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id of the user",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the community",
+                        "name": "communityId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
                         }
                     }
                 }
@@ -206,8 +363,30 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "request.CreateCommunityMembershipRequest": {
+            "type": "object",
+            "properties": {
+                "communityID": {
+                    "type": "integer"
+                },
+                "userID": {
+                    "type": "integer"
+                }
+            }
+        },
         "request.CreateCommunityRequest": {
-            "type": "object"
+            "type": "object",
+            "properties": {
+                "createdByID": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
         },
         "request.CreateUserRequest": {
             "type": "object",
@@ -226,10 +405,19 @@ const docTemplate = `{
         "response.FindCommunityByIdResponse": {
             "type": "object",
             "properties": {
+                "createdBy": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string"
+                },
                 "name": {
                     "type": "string"
                 }
             }
+        },
+        "response.FindManyCommunitiesResponse": {
+            "type": "object"
         },
         "response.FindUserByIdResponse": {
             "type": "object",

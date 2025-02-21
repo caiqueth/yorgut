@@ -67,7 +67,7 @@ func (uc *UserController) FindUserById(ctx *gin.Context) {
 		return
 	}
 
-	user, err := uc.userService.FindById(id)
+	user, err := uc.userService.FindById(uint(id))
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -116,13 +116,12 @@ func (uc *UserController) DeleteUser(ctx *gin.Context) {
 		return
 	}
 
-	uc.userService.Delete(id)
+	uc.userService.Delete(uint(id))
 
 	webResponse := response.Response{
 		Data: nil,
 	}
 	ctx.JSON(http.StatusOK, webResponse)
-	return
 
 }
 
@@ -154,6 +153,5 @@ func (uc *UserController) UpdateUser(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, webResponse)
-	return
 
 }
