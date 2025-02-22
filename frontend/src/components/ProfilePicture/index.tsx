@@ -1,5 +1,5 @@
 import React from "react";
-import { useUserDetails } from "api/user/queries";
+import { useUser } from "api/user/queries";
 
 import { Box } from "@mui/material";
 
@@ -7,7 +7,7 @@ interface IProfilePictureProps {
   userId: number;
 }
 export const ProfilePicture: React.FC<IProfilePictureProps> = ({ userId }) => {
-  const { profilePictureUrl } = useUserDetails(userId);
+  const { profilePictureUrl } = useUser(userId);
   return (
     <Box>
       <Box

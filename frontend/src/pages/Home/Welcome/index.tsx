@@ -1,10 +1,10 @@
-import { useTodaysLuck, useUserDetails, useUserStatistics } from "api/user/queries";
+import { useTodaysLuck, useUser, useUserStatistics } from "api/user/queries";
 
 import { Box, Paper, Stack, Typography } from "@mui/material";
 
 export const Welcome = () => {
   const userId = 1;
-  const user = useUserDetails(userId);
+  const { data: user } = useUser(userId);
   const userStatistics = useUserStatistics(userId);
   const todaysLuck = useTodaysLuck(userId);
 
@@ -13,7 +13,7 @@ export const Welcome = () => {
       <Paper sx={{ p: 1 }}>
         <Stack direction={"column"} gap={1}>
           <Typography variant={"subtitle1"} sx={{ "&::first-letter": { fontSize: "200%" } }}>
-            Bem-vindo(a), {user.firstName}
+            Bem-vindo(a), {user?.firstName}
           </Typography>
           <Box>
             <Typography variant={"body1"}>
@@ -28,7 +28,7 @@ export const Welcome = () => {
             <strong>Visualizações do seu perfil:</strong>
           </Typography>
           <Typography variant={"body1"}>
-            Desde {user.accountCreatedAt.toLocaleDateString()}: {userStatistics.totalProfileViews}, Semana passada:{" "}
+            Desde {user?.createdAt}: {userStatistics.totalProfileViews}, Semana passada:{" "}
             {userStatistics.lastWeekProfileViews}
           </Typography>
           <Box>

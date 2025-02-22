@@ -5,13 +5,15 @@ import (
 )
 
 type CreateUserRequest struct {
-	Name      string
+	FirstName string
+	LastName  string
 	Email     string
 	BirthDate time.Time
 }
 
 type UpdateUserRequest struct {
-	Name      string
+	FirstName string
+	LastName  string
 	Email     string
 	BirthDate time.Time
 }

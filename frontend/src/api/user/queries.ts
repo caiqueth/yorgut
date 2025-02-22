@@ -1,3 +1,4 @@
+import { doGet } from "api/http";
 import arrasa from "assets/communities/arrasa.png";
 import borracha from "assets/communities/borracha.png";
 import campainha from "assets/communities/campainha.png";
@@ -11,19 +12,20 @@ import aline from "assets/users/aline.jpg";
 import caique from "assets/users/caique.jpg";
 import carol from "assets/users/carol.jpg";
 import diego from "assets/users/diego.jpg";
-import frizz from "assets/users/frizz.jpg";
 import ligia from "assets/users/ligia.jpg";
 import luciana from "assets/users/luciana.jpg";
 import renato from "assets/users/renato.jpg";
 import weslley from "assets/users/weslley.jpg";
 
-export const useUserDetails = (userId: number) => ({
-  userId: userId,
-  firstName: "Frizz",
-  lastName: "Chapper",
-  profilePictureUrl: frizz,
-  accountCreatedAt: new Date(),
-});
+import { useQuery } from "@tanstack/react-query";
+
+import { IUser } from "./types";
+
+export const useUser = (userId: number) =>
+  useQuery<IUser>({
+    queryKey: [`/user/${userId}`, {}],
+    queryFn: ({ queryKey }) => doGet<IUser>({ queryKey }),
+  });
 
 export const useUserStatistics = (userId: number) => ({
   userId: userId,

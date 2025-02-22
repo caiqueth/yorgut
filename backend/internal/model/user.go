@@ -9,13 +9,15 @@ import (
 type User struct {
 	gorm.Model
 	Email     string
-	Name      string
+	FirstName string
+	LastName  string
 	BirthDate time.Time
 }
 
-func NewUser(name string, email string, birthDate time.Time) *User {
+func NewUser(firstName string, lastName string, email string, birthDate time.Time) *User {
 	return &User{
-		Name:      name,
+		FirstName: firstName,
+		LastName:  lastName,
 		Email:     email,
 		BirthDate: birthDate,
 	}

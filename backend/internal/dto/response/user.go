@@ -3,9 +3,10 @@ package response
 import "time"
 
 type UserDto struct {
-	Id        uint      `json:"id"`
+	ID        uint      `json:"id"`
 	Email     string    `json:"email"`
-	Name      string    `json:"name"`
+	FirstName string    `json:"firstName"`
+	LastName  string    `json:"lastName"`
 	BirthDate time.Time `json:"birthDate"`
 	CreatedAt time.Time `json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`

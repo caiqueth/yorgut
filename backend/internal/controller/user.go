@@ -26,7 +26,7 @@ func NewUserController(service service.UserService) *UserController {
 // @Param			user body request.CreateUserRequest true "Create User"
 // @Produce			application/json
 // @Tags			User
-// @Success			200 {object} response.Response{}
+// @Success			204 {object} response.Response{}
 // @Router			/user [post]
 func (uc *UserController) Create(ctx *gin.Context) {
 	createUserRequest := request.CreateUserRequest{}
@@ -47,11 +47,11 @@ func (uc *UserController) Create(ctx *gin.Context) {
 		Data: nil,
 	}
 
-	ctx.JSON(http.StatusOK, webResponse)
+	ctx.JSON(http.StatusNoContent, webResponse)
 
 }
 
-// FindUserById 		godoc
+// FindById 			godoc
 // @Summary				Get Single user by id.
 // @Param				userId path string true "get user by id"
 // @Description			Returns the user matching the requested id
@@ -59,7 +59,7 @@ func (uc *UserController) Create(ctx *gin.Context) {
 // @Tags				User
 // @Success				200 {object} response.FindUserByIdResponse{}
 // @Router				/user/{userId} [get]
-func (uc *UserController) FindUserById(ctx *gin.Context) {
+func (uc *UserController) FindById(ctx *gin.Context) {
 	userId := ctx.Param("userId")
 	id, err := strconv.Atoi(userId)
 	if err != nil {
@@ -81,7 +81,7 @@ func (uc *UserController) FindUserById(ctx *gin.Context) {
 
 }
 
-// ListUsers			godoc
+// FindMany				godoc
 // @Summary				Gets a list of users.
 // @Description			Returns a list of users
 // @Produce				application/json
@@ -99,7 +99,7 @@ func (uc *UserController) FindMany(ctx *gin.Context) {
 
 }
 
-// DeleteUser 		godoc
+// Delete 		godoc
 // @Summary			Delete User by id
 // @Param			userId path string true "delete user by id"
 // @Description		Deletes the user matching the requested id
@@ -107,7 +107,7 @@ func (uc *UserController) FindMany(ctx *gin.Context) {
 // @Tags			User
 // @Success			200 {object} response.Response{}
 // @Router			/user/{userId} [delete]
-func (uc *UserController) DeleteUser(ctx *gin.Context) {
+func (uc *UserController) Delete(ctx *gin.Context) {
 	userId := ctx.Param("userId")
 	id, err := strconv.Atoi(userId)
 	if err != nil {
@@ -124,7 +124,7 @@ func (uc *UserController) DeleteUser(ctx *gin.Context) {
 
 }
 
-// UpdateUser 		godoc
+// Update 			godoc
 // @Summary			Update user
 // @Param			userId path string true "update user"
 // @Description		Returns null
@@ -132,7 +132,7 @@ func (uc *UserController) DeleteUser(ctx *gin.Context) {
 // @Tags			User
 // @Success			200 {object} response.Response{}
 // @Router			/user [put]
-func (uc *UserController) UpdateUser(ctx *gin.Context) {
+func (uc *UserController) Update(ctx *gin.Context) {
 	request := request.UpdateUserRequest{}
 
 	err := ctx.ShouldBindJSON(&request)

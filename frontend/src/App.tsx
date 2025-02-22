@@ -4,7 +4,7 @@ import { useNavigate, useRoutes } from "react-router-dom";
 import { Routes } from "routes";
 
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
-import { QueryCache, QueryClient } from "@tanstack/react-query";
+import { QueryCache, QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { theme } from "./theme";
 
@@ -18,10 +18,10 @@ const App: React.FC = () => {
     () =>
       new QueryCache({
         onError: (error: Error) => {
-          if (error.message === "Unauthorized") {
+          if (error.message.startsWith("Unauthorized")) {
             navigate("/disconnected");
           }
-          if (error.message === "Not allowed") {
+          if (error.message.startsWith("Not allowed")) {
             navigate("/not-allowed");
           }
         },
@@ -39,10 +39,12 @@ const App: React.FC = () => {
   );
 
   return (
-    <ThemeProvider theme={createTheme(theme)}>
-      <CssBaseline />
-      <Wrapper>{routes}</Wrapper>
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={createTheme(theme)}>
+        <CssBaseline />
+        <Wrapper>{routes}</Wrapper>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 };
 

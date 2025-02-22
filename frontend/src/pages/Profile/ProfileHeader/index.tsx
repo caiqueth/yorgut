@@ -1,5 +1,5 @@
 import React from "react";
-import { useUserDetails, useUserStatistics } from "api/user/queries";
+import { useUser, useUserStatistics } from "api/user/queries";
 
 import { Box, Paper, Stack, Typography } from "@mui/material";
 
@@ -7,7 +7,7 @@ interface IProfileHeaderProps {
   userId: number;
 }
 export const ProfileHeader: React.FC<IProfileHeaderProps> = ({ userId }) => {
-  const user = useUserDetails(userId);
+  const user = useUser(userId);
   const userStatistics = useUserStatistics(userId);
 
   return (

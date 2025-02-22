@@ -1,6 +1,9 @@
 package controller
 
 import (
+	"net/http"
+	"yorgut/internal/dto/request"
+	"yorgut/internal/dto/response"
 	"yorgut/internal/service"
 
 	"github.com/gin-gonic/gin"
@@ -25,7 +28,26 @@ func NewCommunityMembershipController(service service.CommunityMembershipService
 // @Success				204 {object} response.Response{}
 // @Router				/community_membership [post]
 func (cm *CommunityMembershipController) Create(ctx *gin.Context) {
-	panic("unimplemented")
+	createMembershipRequest := request.CreateCommunityMembershipRequest{}
+
+	err := ctx.ShouldBindJSON(&createMembershipRequest)
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	}
+
+	err = cm.CommunityMembershipService.Create(createMembershipRequest)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	webResponse := response.Response{
+		Data: nil,
+	}
+
+	ctx.JSON(http.StatusNoContent, webResponse)
+
 }
 
 // Create				godoc
