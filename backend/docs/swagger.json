@@ -227,6 +227,342 @@
                 }
             }
         },
+        "/friendship": {
+            "post": {
+                "description": "Creates a Friendship.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Friendship"
+                ],
+                "summary": "Create a Friendship.",
+                "parameters": [
+                    {
+                        "description": "Create Friendship",
+                        "name": "Friendship",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CreateFriendshipRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/friendship/{friendshipId}": {
+            "delete": {
+                "description": "Deletes a Friendship.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Friendship"
+                ],
+                "summary": "Delete Friendship by id.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "delete Friendship by id",
+                        "name": "friendshipId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/photo": {
+            "post": {
+                "description": "Creates a Photo.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Photo"
+                ],
+                "summary": "Create a Photo.",
+                "parameters": [
+                    {
+                        "description": "Create Photo",
+                        "name": "Photo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CreatePhotoRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/photo/{photoId}": {
+            "delete": {
+                "description": "Deletes a Photo.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Photo"
+                ],
+                "summary": "Delete Photo by id.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "delete Photo by id",
+                        "name": "photoId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/photoAlbum": {
+            "get": {
+                "description": "Returns an array of PhotoAlbums.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PhotoAlbum"
+                ],
+                "summary": "Get a list of PhotoAlbums.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Updates properties of a single PhotoAlbum",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PhotoAlbum"
+                ],
+                "summary": "Updates a PhotoAlbum.",
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Creates a PhotoAlbum.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PhotoAlbum"
+                ],
+                "summary": "Create a PhotoAlbum.",
+                "parameters": [
+                    {
+                        "description": "Create PhotoAlbum",
+                        "name": "PhotoAlbum",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CreatePhotoAlbumRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/photoAlbum/{photoAlbumId}": {
+            "delete": {
+                "description": "Deletes a PhotoAlbum.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PhotoAlbum"
+                ],
+                "summary": "Delete PhotoAlbum by id.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "delete PhotoAlbum by id",
+                        "name": "photoAlbumId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/scrap": {
+            "post": {
+                "description": "Creates a Scrap.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Scrap"
+                ],
+                "summary": "Create a Scrap.",
+                "parameters": [
+                    {
+                        "description": "Create Scrap",
+                        "name": "Scrap",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CreateScrapRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/scrap/{scrapId}": {
+            "delete": {
+                "description": "Deletes a Scrap.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Scrap"
+                ],
+                "summary": "Delete Scrap by id.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "delete Scrap by id",
+                        "name": "scrapId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/testimonial": {
+            "post": {
+                "description": "Creates a Testimonial.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Testimonial"
+                ],
+                "summary": "Create a Testimonial.",
+                "parameters": [
+                    {
+                        "description": "Create Testimonial",
+                        "name": "Testimonial",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CreateTestimonialRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/testimonial/{testimonialId}": {
+            "delete": {
+                "description": "Deletes a Testimonial.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Testimonial"
+                ],
+                "summary": "Delete Testimonial by id.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "delete Testimonial by id",
+                        "name": "testimonialId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/user": {
             "get": {
                 "description": "Returns a list of users",
@@ -382,6 +718,70 @@
                 },
                 "name": {
                     "type": "string"
+                }
+            }
+        },
+        "request.CreateFriendshipRequest": {
+            "type": "object",
+            "properties": {
+                "userRequested": {
+                    "type": "integer"
+                },
+                "userRequestee": {
+                    "type": "integer"
+                }
+            }
+        },
+        "request.CreatePhotoAlbumRequest": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "userID": {
+                    "type": "integer"
+                }
+            }
+        },
+        "request.CreatePhotoRequest": {
+            "type": "object",
+            "properties": {
+                "caption": {
+                    "type": "string"
+                },
+                "photoAlbumID": {
+                    "type": "integer"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.CreateScrapRequest": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "userAuthorID": {
+                    "type": "integer"
+                },
+                "userRecipientID": {
+                    "type": "integer"
+                }
+            }
+        },
+        "request.CreateTestimonialRequest": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "userAuthorID": {
+                    "type": "integer"
+                },
+                "userRecipientID": {
+                    "type": "integer"
                 }
             }
         },

@@ -1,0 +1,42 @@
+// Create				godoc
+// @Summary				Create a Entity.
+// @Description			Creates a Entity.
+// @Param				entity body request.CreateEntityRequest true "Create Entity"
+// @Produce				application/json
+// @Tags				Entity
+// @Success				204 {object} response.Response{}
+// @Router				/entity [post]
+
+// FindById				godoc
+// @Summary				Get Single Entity by ID.
+// @Param				EntityId path string true "get Entity by id"
+// @Description			Returns the Entity matching the requested id
+// @Produce				application/json
+// @Tags				Entity
+// @Success				200 {object} response.Response{}
+// @Router				/entity/{entityId} [get]
+
+// FindMany				godoc
+// @Summary				Get a list of entities.
+// @Description			Returns an array of entities.
+// @Produce				application/json
+// @Tags				Entity
+// @Success				200 {object} response.Response{}
+// @Router				/entity [get]
+
+// Update				godoc
+// @Summary				Updates a Entity.
+// @Description			Updates properties of a single Entity
+// @Produce				application/json
+// @Tags				Entity
+// @Success				204 {object} response.Response{}
+// @Router				/entity [put]
+
+// Delete 				godoc
+// @Summary				Delete Entity by id.
+// @Param				EntityId path string true "delete Entity by id"
+// @Description			Deletes a Entity.
+// @Produce				application/json
+// @Tags				Entity
+// @Success				204 {object} response.Response{}
+// @Router				/entity/{entityId} [delete]

@@ -44,7 +44,7 @@ func (controller *CommunityController) Create(ctx *gin.Context) {
 	ctx.JSON(http.StatusNoContent, webResponse)
 }
 
-// FindById				godoc
+// Update				godoc
 // @Summary				Updates a community.
 // @Description			Updates properties of a single community
 // @Produce				application/json

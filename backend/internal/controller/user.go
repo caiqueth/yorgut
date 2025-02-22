@@ -154,3 +154,27 @@ func (uc *UserController) UpdateUser(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, webResponse)
 
 }
+
+func (uc *UserController) FindPhotoAlbums(ctx *gin.Context) {
+	panic("unimplemented")
+}
+
+func (uc *UserController) FindFriends(ctx *gin.Context) {
+	panic("unimplemented")
+}
+
+func (uc *UserController) FindAuthoredTestimonials(ctx *gin.Context) {
+	panic("unimplemented")
+}
+
+func (uc *UserController) FindReceivedTestimonials(ctx *gin.Context) {
+	panic("unimplemented")
+}
+
+func (uc *UserController) FindCommunitiesOwned(ctx *gin.Context) {
+	panic("unimplemented")
+}
+
+func (uc *UserController) FindCommunitiesMemberof(ctx *gin.Context) {
+	panic("unimplemented")
+}

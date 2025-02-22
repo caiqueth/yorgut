@@ -16,6 +16,47 @@ definitions:
       name:
         type: string
     type: object
+  request.CreateFriendshipRequest:
+    properties:
+      userRequested:
+        type: integer
+      userRequestee:
+        type: integer
+    type: object
+  request.CreatePhotoAlbumRequest:
+    properties:
+      name:
+        type: string
+      userID:
+        type: integer
+    type: object
+  request.CreatePhotoRequest:
+    properties:
+      caption:
+        type: string
+      photoAlbumID:
+        type: integer
+      url:
+        type: string
+    type: object
+  request.CreateScrapRequest:
+    properties:
+      content:
+        type: string
+      userAuthorID:
+        type: integer
+      userRecipientID:
+        type: integer
+    type: object
+  request.CreateTestimonialRequest:
+    properties:
+      content:
+        type: string
+      userAuthorID:
+        type: integer
+      userRecipientID:
+        type: integer
+    type: object
   request.CreateUserRequest:
     properties:
       birthDate:
@@ -202,6 +243,225 @@ paths:
       summary: Delete Community Membership
       tags:
       - CommunityMembership
+  /friendship:
+    post:
+      description: Creates a Friendship.
+      parameters:
+      - description: Create Friendship
+        in: body
+        name: Friendship
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreateFriendshipRequest'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Create a Friendship.
+      tags:
+      - Friendship
+  /friendship/{friendshipId}:
+    delete:
+      description: Deletes a Friendship.
+      parameters:
+      - description: delete Friendship by id
+        in: path
+        name: friendshipId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Delete Friendship by id.
+      tags:
+      - Friendship
+  /photo:
+    post:
+      description: Creates a Photo.
+      parameters:
+      - description: Create Photo
+        in: body
+        name: Photo
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreatePhotoRequest'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Create a Photo.
+      tags:
+      - Photo
+  /photo/{photoId}:
+    delete:
+      description: Deletes a Photo.
+      parameters:
+      - description: delete Photo by id
+        in: path
+        name: photoId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Delete Photo by id.
+      tags:
+      - Photo
+  /photoAlbum:
+    get:
+      description: Returns an array of PhotoAlbums.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Get a list of PhotoAlbums.
+      tags:
+      - PhotoAlbum
+    post:
+      description: Creates a PhotoAlbum.
+      parameters:
+      - description: Create PhotoAlbum
+        in: body
+        name: PhotoAlbum
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreatePhotoAlbumRequest'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Create a PhotoAlbum.
+      tags:
+      - PhotoAlbum
+    put:
+      description: Updates properties of a single PhotoAlbum
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Updates a PhotoAlbum.
+      tags:
+      - PhotoAlbum
+  /photoAlbum/{photoAlbumId}:
+    delete:
+      description: Deletes a PhotoAlbum.
+      parameters:
+      - description: delete PhotoAlbum by id
+        in: path
+        name: photoAlbumId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Delete PhotoAlbum by id.
+      tags:
+      - PhotoAlbum
+  /scrap:
+    post:
+      description: Creates a Scrap.
+      parameters:
+      - description: Create Scrap
+        in: body
+        name: Scrap
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreateScrapRequest'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Create a Scrap.
+      tags:
+      - Scrap
+  /scrap/{scrapId}:
+    delete:
+      description: Deletes a Scrap.
+      parameters:
+      - description: delete Scrap by id
+        in: path
+        name: scrapId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Delete Scrap by id.
+      tags:
+      - Scrap
+  /testimonial:
+    post:
+      description: Creates a Testimonial.
+      parameters:
+      - description: Create Testimonial
+        in: body
+        name: Testimonial
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreateTestimonialRequest'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Create a Testimonial.
+      tags:
+      - Testimonial
+  /testimonial/{testimonialId}:
+    delete:
+      description: Deletes a Testimonial.
+      parameters:
+      - description: delete Testimonial by id
+        in: path
+        name: testimonialId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Delete Testimonial by id.
+      tags:
+      - Testimonial
   /user:
     get:
       description: Returns a list of users

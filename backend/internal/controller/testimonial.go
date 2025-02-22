@@ -1,6 +1,10 @@
 package controller
 
-import "yorgut/internal/service"
+import (
+	"yorgut/internal/service"
+
+	"github.com/gin-gonic/gin"
+)
 
 type TestimonialController struct {
 	TestimonialService service.TestimonialService
@@ -12,18 +16,26 @@ func NewTestimonialController(service service.TestimonialService) *TestimonialCo
 	}
 }
 
-func (t *TestimonialController) Create() {
+// Create				godoc
+// @Summary				Create a Testimonial.
+// @Description			Creates a Testimonial.
+// @Param				Testimonial body request.CreateTestimonialRequest true "Create Testimonial"
+// @Produce				application/json
+// @Tags				Testimonial
+// @Success				204 {object} response.Response{}
+// @Router				/testimonial [post]
+func (t *TestimonialController) Create(ctx *gin.Context) {
 	panic("unimplemented")
 }
 
-func (t *TestimonialController) Delete() {
-	panic("unimplemented")
-}
-
-func (t *TestimonialController) FindOfUserAuthor() {
-	panic("unimplemented")
-}
-
-func (t *TestimonialController) FindOfUserRecipient() {
+// Delete 				godoc
+// @Summary				Delete Testimonial by id.
+// @Param				testimonialId path string true "delete Testimonial by id"
+// @Description			Deletes a Testimonial.
+// @Produce				application/json
+// @Tags				Testimonial
+// @Success				204 {object} response.Response{}
+// @Router				/testimonial/{testimonialId} [delete]
+func (t *TestimonialController) Delete(ctx *gin.Context) {
 	panic("unimplemented")
 }

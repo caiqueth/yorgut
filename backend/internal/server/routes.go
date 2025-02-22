@@ -75,6 +75,37 @@ func NewRouter(
 			community_memberships.DELETE("/:userId/:communityId", communityMembershipController.Delete)
 			community_memberships.GET("/:userId", communityMembershipController.FindOfUser)
 		}
+
+		friendships := v1.Group("/friendship")
+		{
+			friendships.POST("", friendshipController.Create)
+			friendships.DELETE("", friendshipController.Delete)
+		}
+
+		photoAlbums := v1.Group("/photoAlbum")
+		{
+			photoAlbums.POST("", photoAlbumController.Create)
+			photoAlbums.DELETE("", photoAlbumController.Delete)
+		}
+
+		photos := v1.Group("/photo")
+		{
+			photos.POST("", photoController.Create)
+			photos.DELETE("", photoController.Delete)
+		}
+
+		scraps := v1.Group("/scrap")
+		{
+			scraps.POST("", scrapController.Create)
+			scraps.DELETE("", scrapController.Delete)
+		}
+
+		testimonials := v1.Group("/testimonial")
+		{
+			testimonials.POST("", testimonialController.Create)
+			testimonials.DELETE("", testimonialController.Delete)
+		}
+
 	}
 
 	return router
