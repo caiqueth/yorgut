@@ -10,8 +10,13 @@ type CommunityMembershipRepository struct {
 	Repository[*model.CommunityMembership]
 }
 
-func (c *CommunityMembershipRepository) FindOfUser(id int) {
-	panic("unimplemented")
+func (c *CommunityMembershipRepository) FindOfUser(id uint) ([]model.CommunityMembership, error) {
+	var memberships []model.CommunityMembership
+	results := c.Db.Find(&memberships)
+	if results.Error != nil {
+		return nil, results.Error
+	}
+	return memberships, nil
 }
 
 func NewCommunityMembershipRepository(Db *gorm.DB) *CommunityMembershipRepository {

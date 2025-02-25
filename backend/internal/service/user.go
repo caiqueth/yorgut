@@ -10,8 +10,9 @@ import (
 )
 
 type UserService struct {
-	UserRepository repository.UserRepository
-	Validate       *validator.Validate
+	UserRepository                repository.UserRepository
+	CommunityMembershipRepository repository.CommunityMembershipRepository
+	Validate                      *validator.Validate
 }
 
 func (u *UserService) Delete(id uint) error {
@@ -22,32 +23,33 @@ func (u *UserService) Delete(id uint) error {
 	return nil
 }
 
-func (u *UserService) FindMany() (response.Response, error) {
+func (u *UserService) FindMany() (*response.Response, error) {
 	users, err := u.UserRepository.FindMany()
 	if err != nil {
-		return response.Response{Data: nil}, err
+		return nil, err
 	}
 
 	userDtos := make([]response.UserDto, len(users))
 
 	for i, user := range users {
 		userDtos[i] = response.UserDto{
-			Id:        user.ID,
+			ID:        user.ID,
 			Email:     user.Email,
-			Name:      user.Name,
+			FirstName: user.FirstName,
+			LastName:  user.LastName,
 			BirthDate: user.BirthDate,
 			CreatedAt: user.CreatedAt,
 			UpdatedAt: user.UpdatedAt,
 		}
 	}
 
-	return response.Response{
+	return &response.Response{
 		Data: map[string][]response.UserDto{"Users": userDtos},
 	}, nil
 }
 
 func (u *UserService) Create(user request.CreateUserRequest) error {
-	err := u.UserRepository.Create(model.NewUser(user.Name, user.Email, user.BirthDate))
+	err := u.UserRepository.Create(model.NewUser(user.FirstName, user.LastName, user.Email, user.BirthDate))
 	if err != nil {
 		return err
 	}
@@ -55,31 +57,71 @@ func (u *UserService) Create(user request.CreateUserRequest) error {
 }
 
 func (u *UserService) Update(user request.UpdateUserRequest) error {
-	err := u.UserRepository.Update(model.NewUser(user.Name, user.Email, user.BirthDate))
+	err := u.UserRepository.Update(model.NewUser(user.FirstName, user.LastName, user.Email, user.BirthDate))
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (u *UserService) FindById(id uint) (response.FindUserByIdResponse, error) {
+func (u *UserService) FindById(id uint) (*response.FindUserByIdResponse, error) {
 	userData, err := u.UserRepository.FindById(id)
 	if err != nil {
-		return response.FindUserByIdResponse{}, err
+		return nil, err
 	}
 
 	userResponse := response.FindUserByIdResponse{
 		UserDto: response.UserDto{
-			Id:        userData.ID,
+			ID:        userData.ID,
 			Email:     userData.Email,
-			Name:      userData.Name,
+			FirstName: userData.FirstName,
+			LastName:  userData.LastName,
 			BirthDate: userData.BirthDate,
 			CreatedAt: userData.CreatedAt,
 			UpdatedAt: userData.UpdatedAt,
 		}}
 
-	return userResponse, err
+	return &userResponse, err
 
+}
+
+func (u *UserService) FindUserOwnedCommunities(userId uint) (*response.FindUserCommunitiesResponse, error) {
+	communities, err := u.UserRepository.FindUserOwnedCommunities(userId)
+	if err != nil {
+		return nil, err
+	}
+	r := make([]response.CommunityDto, len(communities))
+
+	for _, c := range communities {
+		r = append(r, response.CommunityDto{
+			Name:        c.Name,
+			Description: c.Description,
+			CreatedBy:   c.CreatedByID,
+			PictureUrl:  c.PictureUrl,
+		})
+	}
+	return &response.FindUserCommunitiesResponse{
+		Communities: r,
+	}, nil
+}
+
+func (u *UserService) FindUserMemberships(userId uint) (*response.FindUserMembershipsResponse, error) {
+	memberships, err := u.CommunityMembershipRepository.FindOfUser(userId)
+	if err != nil {
+		return nil, err
+	}
+	r := make([]response.CommunityDto, len(memberships))
+	for _, m := range memberships {
+		r = append(r, response.CommunityDto{
+			Name:        m.Community.Name,
+			Description: m.Community.Description,
+			CreatedBy:   m.Community.CreatedByID,
+			PictureUrl:  m.Community.PictureUrl,
+		})
+	}
+	return &response.FindUserMembershipsResponse{
+		Communities: r,
+	}, nil
 }
 
 func NewUserService(userRepository repository.UserRepository, validate *validator.Validate) *UserService {

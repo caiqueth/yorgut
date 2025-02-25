@@ -63,7 +63,9 @@ definitions:
         type: string
       email:
         type: string
-      name:
+      firstName:
+        type: string
+      lastName:
         type: string
     type: object
   response.FindCommunityByIdResponse:
@@ -73,6 +75,8 @@ definitions:
       description:
         type: string
       name:
+        type: string
+      pictureUrl:
         type: string
     type: object
   response.FindManyCommunitiesResponse:
@@ -85,9 +89,11 @@ definitions:
         type: string
       email:
         type: string
+      firstName:
+        type: string
       id:
         type: integer
-      name:
+      lastName:
         type: string
       updatedAt:
         type: string

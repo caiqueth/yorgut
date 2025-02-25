@@ -12,10 +12,25 @@ type UserDto struct {
 	UpdatedAt time.Time `json:"updatedAt"`
 }
 
+type CommunityDto struct {
+	Name        string
+	Description string
+	CreatedBy   uint
+	PictureUrl  *string
+}
+
 type FindUserByIdResponse struct {
 	UserDto
 }
 
 type FindManyUsersResponse struct {
 	Users []UserDto `json:"users"`
+}
+
+type FindUserCommunitiesResponse struct {
+	Communities []CommunityDto `json:"communities"`
+}
+
+type FindUserMembershipsResponse struct {
+	Communities []CommunityDto `json:"communities"`
 }
