@@ -15,15 +15,12 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.01",
     "react-router-dom": "^7.1.5",
-    "react-scripts": "5.0.1",
     "typescript": "^4.9.5"
   },
   "scripts": {
-    "dev": "react-scripts start",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "start": "rsbuild dev",
+    "build": "rsbuild build",
+    "preview": "rsbuild preview",
     "lint": "eslint --fix --ext .js,.jsx,.ts,.tsx ."
   },
   "eslintConfig": {
@@ -45,6 +42,8 @@
     ]
   },
   "devDependencies": {
+    "@rsbuild/core": "^1.2.11",
+    "@rsbuild/plugin-react": "^1.1.1",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.3",
