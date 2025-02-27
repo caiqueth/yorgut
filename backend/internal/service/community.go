@@ -22,7 +22,7 @@ func (c *CommunityService) Create(community request.CreateCommunityRequest) erro
 		return errors.New("could not find specified community owner")
 	}
 
-	communityModel := model.NewCommunity(community.Name, community.Description, owner)
+	communityModel := model.NewCommunity(community.Name, community.Description, community.PictureUrl, owner)
 	err = c.CommunityRepository.Create(communityModel)
 	if err != nil {
 		return err

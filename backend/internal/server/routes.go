@@ -55,9 +55,9 @@ func NewRouter(
 		{
 			users.POST("", userController.Create)
 			users.GET("", userController.FindMany)
-			users.PUT("", userController.UpdateUser)
-			users.GET("/:userId", userController.FindUserById)
-			users.DELETE("/:userId", userController.DeleteUser)
+			users.PUT("", userController.Update)
+			users.GET("/:userId", userController.FindById)
+			users.DELETE("/:userId", userController.Delete)
 		}
 
 		communities := v1.Group("/community")
