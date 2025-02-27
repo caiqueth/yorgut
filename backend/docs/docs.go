@@ -696,6 +696,35 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/user/{userId}/memberships": {
+            "get": {
+                "description": "Returns a list of communities",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Gets a list of communities that user is member of.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "get user memberships by id",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.FindUserMembershipsResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -720,6 +749,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "name": {
+                    "type": "string"
+                },
+                "pictureUrl": {
                     "type": "string"
                 }
             }
@@ -805,6 +837,23 @@ const docTemplate = `{
                 }
             }
         },
+        "response.CommunityDto": {
+            "type": "object",
+            "properties": {
+                "createdBy": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "pictureUrl": {
+                    "type": "string"
+                }
+            }
+        },
         "response.FindCommunityByIdResponse": {
             "type": "object",
             "properties": {
@@ -848,6 +897,17 @@ const docTemplate = `{
                 },
                 "updatedAt": {
                     "type": "string"
+                }
+            }
+        },
+        "response.FindUserMembershipsResponse": {
+            "type": "object",
+            "properties": {
+                "communities": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/response.CommunityDto"
+                    }
                 }
             }
         },

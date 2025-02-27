@@ -175,6 +175,28 @@ func (uc *UserController) FindCommunitiesOwned(ctx *gin.Context) {
 	panic("unimplemented")
 }
 
-func (uc *UserController) FindCommunitiesMemberof(ctx *gin.Context) {
-	panic("unimplemented")
+// FindMany				godoc
+// @Summary				Gets a list of communities that user is member of.
+// @Param				userId path string true "get user memberships by id"
+// @Description			Returns a list of communities
+// @Produce				application/json
+// @Tags				User
+// @Success				200 {object} response.FindUserMembershipsResponse{}
+// @Router				/user/{userId}/memberships [get]
+func (uc *UserController) FindCommunitiesMemberOf(ctx *gin.Context) {
+	userId := ctx.Param("userId")
+	id, err := strconv.Atoi(userId)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	memberships, err := uc.userService.FindUserMemberships(uint(id))
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, memberships)
 }

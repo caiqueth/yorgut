@@ -58,6 +58,7 @@ func NewRouter(
 			users.PUT("", userController.Update)
 			users.GET("/:userId", userController.FindById)
 			users.DELETE("/:userId", userController.Delete)
+			users.GET("/:userId/memberships", userController.FindCommunitiesMemberOf)
 		}
 
 		communities := v1.Group("/community")

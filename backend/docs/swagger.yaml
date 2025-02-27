@@ -15,6 +15,8 @@ definitions:
         type: string
       name:
         type: string
+      pictureUrl:
+        type: string
     type: object
   request.CreateFriendshipRequest:
     properties:
@@ -68,6 +70,17 @@ definitions:
       lastName:
         type: string
     type: object
+  response.CommunityDto:
+    properties:
+      createdBy:
+        type: integer
+      description:
+        type: string
+      name:
+        type: string
+      pictureUrl:
+        type: string
+    type: object
   response.FindCommunityByIdResponse:
     properties:
       createdBy:
@@ -97,6 +110,13 @@ definitions:
         type: string
       updatedAt:
         type: string
+    type: object
+  response.FindUserMembershipsResponse:
+    properties:
+      communities:
+        items:
+          $ref: '#/definitions/response.CommunityDto'
+        type: array
     type: object
   response.Response:
     properties:
@@ -552,6 +572,25 @@ paths:
           schema:
             $ref: '#/definitions/response.FindUserByIdResponse'
       summary: Get Single user by id.
+      tags:
+      - User
+  /user/{userId}/memberships:
+    get:
+      description: Returns a list of communities
+      parameters:
+      - description: get user memberships by id
+        in: path
+        name: userId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.FindUserMembershipsResponse'
+      summary: Gets a list of communities that user is member of.
       tags:
       - User
 schemes:
