@@ -153,8 +153,8 @@ paths:
       produces:
       - application/json
       responses:
-        "204":
-          description: No Content
+        "201":
+          description: Created
           schema:
             $ref: '#/definitions/response.Response'
       summary: Create Community
@@ -221,8 +221,8 @@ paths:
       produces:
       - application/json
       responses:
-        "204":
-          description: No Content
+        "201":
+          description: Created
           schema:
             $ref: '#/definitions/response.Response'
       summary: Create Community Membership
@@ -239,8 +239,8 @@ paths:
       produces:
       - application/json
       responses:
-        "204":
-          description: No Content
+        "200":
+          description: OK
           schema:
             $ref: '#/definitions/response.Response'
       summary: Lists communities that a user is member of
@@ -282,8 +282,8 @@ paths:
       produces:
       - application/json
       responses:
-        "204":
-          description: No Content
+        "201":
+          description: Created
           schema:
             $ref: '#/definitions/response.Response'
       summary: Create a Friendship.
@@ -321,8 +321,8 @@ paths:
       produces:
       - application/json
       responses:
-        "204":
-          description: No Content
+        "201":
+          description: Created
           schema:
             $ref: '#/definitions/response.Response'
       summary: Create a Photo.
@@ -372,8 +372,8 @@ paths:
       produces:
       - application/json
       responses:
-        "204":
-          description: No Content
+        "201":
+          description: Created
           schema:
             $ref: '#/definitions/response.Response'
       summary: Create a PhotoAlbum.
@@ -423,8 +423,8 @@ paths:
       produces:
       - application/json
       responses:
-        "204":
-          description: No Content
+        "201":
+          description: Created
           schema:
             $ref: '#/definitions/response.Response'
       summary: Create a Scrap.
@@ -462,8 +462,8 @@ paths:
       produces:
       - application/json
       responses:
-        "204":
-          description: No Content
+        "201":
+          description: Created
           schema:
             $ref: '#/definitions/response.Response'
       summary: Create a Testimonial.
@@ -512,8 +512,8 @@ paths:
       produces:
       - application/json
       responses:
-        "204":
-          description: No Content
+        "201":
+          description: Created
           schema:
             $ref: '#/definitions/response.Response'
       summary: Create user
@@ -572,6 +572,30 @@ paths:
           schema:
             $ref: '#/definitions/response.FindUserByIdResponse'
       summary: Get Single user by id.
+      tags:
+      - User
+  /user/{userId}/join/{communityId}:
+    post:
+      description: Joins a community.
+      parameters:
+      - description: user Id
+        in: path
+        name: userId
+        required: true
+        type: string
+      - description: community Id
+        in: path
+        name: communityId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: User joins a community.
       tags:
       - User
   /user/{userId}/memberships:

@@ -26,7 +26,7 @@ func NewUserController(service service.UserService) *UserController {
 // @Param			user body request.CreateUserRequest true "Create User"
 // @Produce			application/json
 // @Tags			User
-// @Success			204 {object} response.Response{}
+// @Success			201 {object} response.Response{}
 // @Router			/user [post]
 func (uc *UserController) Create(ctx *gin.Context) {
 	createUserRequest := request.CreateUserRequest{}
@@ -47,7 +47,7 @@ func (uc *UserController) Create(ctx *gin.Context) {
 		Data: nil,
 	}
 
-	ctx.JSON(http.StatusNoContent, webResponse)
+	ctx.JSON(http.StatusCreated, webResponse)
 
 }
 
@@ -175,24 +175,54 @@ func (uc *UserController) FindCommunitiesOwned(ctx *gin.Context) {
 	panic("unimplemented")
 }
 
-// FindMany				godoc
-// @Summary				Gets a list of communities that user is member of.
-// @Param				userId path string true "get user memberships by id"
-// @Description			Returns a list of communities
-// @Produce				application/json
-// @Tags				User
-// @Success				200 {object} response.FindUserMembershipsResponse{}
-// @Router				/user/{userId}/memberships [get]
+// JoinCommunity	godoc
+// @Summary			User joins a community.
+// @Param			userId path string true "user Id"
+// @Param			communityId path string true "community Id"
+// @Description		Joins a community.
+// @Produce			application/json
+// @Tags			User
+// @Success			201 {object} response.Response{}
+// @Router			/user/{userId}/join/{communityId} [post]
+func (uc *UserController) JoinCommunity(ctx *gin.Context) {
+	userId, err := strconv.Atoi(ctx.Param("userId"))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	communityId, err := strconv.Atoi(ctx.Param("communityId"))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	err = uc.userService.JoinCommunity(uint(userId), uint(communityId))
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusCreated, response.Response{})
+}
+
+// FindCommunitiesMemberOf	godoc
+// @Summary					Gets a list of communities that user is member of.
+// @Param					userId path string true "get user memberships by id"
+// @Description				Returns a list of communities
+// @Produce					application/json
+// @Tags					User
+// @Success					200 {object} response.FindUserMembershipsResponse{}
+// @Router					/user/{userId}/memberships [get]
 func (uc *UserController) FindCommunitiesMemberOf(ctx *gin.Context) {
 	userId := ctx.Param("userId")
 	id, err := strconv.Atoi(userId)
+
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
 	memberships, err := uc.userService.FindUserMemberships(uint(id))
-
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

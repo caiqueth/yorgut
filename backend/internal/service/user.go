@@ -11,6 +11,7 @@ import (
 
 type UserService struct {
 	userRepository                repository.UserRepository
+	communityRepository           repository.CommunityRepository
 	communityMembershipRepository repository.CommunityMembershipRepository
 	Validate                      *validator.Validate
 }
@@ -44,7 +45,7 @@ func (u *UserService) FindMany() (*response.Response, error) {
 	}
 
 	return &response.Response{
-		Data: map[string][]response.UserDto{"Users": userDtos},
+		Data: map[string][]response.UserDto{"users": userDtos},
 	}, nil
 }
 
@@ -110,6 +111,7 @@ func (u *UserService) FindUserMemberships(userId uint) (*response.FindUserMember
 	if err != nil {
 		return nil, err
 	}
+
 	r := make([]response.CommunityDto, len(memberships))
 	for _, m := range memberships {
 		r = append(r, response.CommunityDto{
@@ -124,13 +126,31 @@ func (u *UserService) FindUserMemberships(userId uint) (*response.FindUserMember
 	}, nil
 }
 
+func (u *UserService) JoinCommunity(userId uint, communityId uint) error {
+	community, err := u.communityRepository.FindById(communityId)
+	if err != nil {
+		return err
+	}
+	user, err := u.userRepository.FindById(userId)
+	if err != nil {
+		return err
+	}
+
+	m := model.NewCommunityMembership(community, user)
+
+	u.communityMembershipRepository.Create(m)
+	return nil
+}
+
 func NewUserService(
 	userRepository repository.UserRepository,
+	communityRepository repository.CommunityRepository,
 	communityMembershipRepository repository.CommunityMembershipRepository,
 	validate *validator.Validate,
 ) *UserService {
 	return &UserService{
 		userRepository:                userRepository,
+		communityRepository:           communityRepository,
 		communityMembershipRepository: communityMembershipRepository,
 		Validate:                      validate,
 	}

@@ -22,7 +22,7 @@ func NewScrapController(service service.ScrapService) *ScrapController {
 // @Param				Scrap body request.CreateScrapRequest true "Create Scrap"
 // @Produce				application/json
 // @Tags				Scrap
-// @Success				204 {object} response.Response{}
+// @Success				201 {object} response.Response{}
 // @Router				/scrap [post]
 func (s *ScrapController) Create(ctx *gin.Context) {
 	panic("unimplemented")

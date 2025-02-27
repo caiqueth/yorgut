@@ -38,9 +38,9 @@ func NewServer() *http.Server {
 	testimonialRepository := repository.NewTestimonialRepository(db)
 
 	// Service
-	userService := service.NewUserService(*userRepository, *communityMembershipRepository, validate)
+	userService := service.NewUserService(*userRepository, *communityRepository, *communityMembershipRepository, validate)
 	communityMembershipService := service.NewCommunityMembershipService(*communityMembershipRepository, validate)
-	communityService := service.NewCommunityService(*communityRepository, validate)
+	communityService := service.NewCommunityService(*communityRepository, *userRepository, validate)
 	friendshipService := service.NewFriendshipService(*friendshipRepository, validate)
 	photoAlbumService := service.NewPhotoAlbumService(*photoAlbumRepository, validate)
 	photoService := service.NewPhotoService(*photoRepository, validate)

@@ -16,7 +16,7 @@ type CommunityDto struct {
 	Name        string
 	Description string
 	CreatedBy   uint
-	PictureUrl  *string
+	PictureUrl  string
 }
 
 type FindUserByIdResponse struct {

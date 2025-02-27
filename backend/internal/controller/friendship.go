@@ -22,7 +22,7 @@ func NewFriendshipController(service service.FriendshipService) *FriendshipContr
 // @Param				Friendship body request.CreateFriendshipRequest true "Create Friendship"
 // @Produce				application/json
 // @Tags				Friendship
-// @Success				204 {object} response.Response{}
+// @Success				201 {object} response.Response{}
 // @Router				/friendship [post]
 func (f *FriendshipController) Create(ctx *gin.Context) {
 	panic("unimplemented")

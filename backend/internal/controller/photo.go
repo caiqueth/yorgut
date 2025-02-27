@@ -22,7 +22,7 @@ func NewPhotoController(service service.PhotoService) *PhotoController {
 // @Param				Photo body request.CreatePhotoRequest true "Create Photo"
 // @Produce				application/json
 // @Tags				Photo
-// @Success				204 {object} response.Response{}
+// @Success				201 {object} response.Response{}
 // @Router				/photo [post]
 func (p *PhotoController) Create(ctx *gin.Context) {
 	panic("unimplemented")

@@ -22,7 +22,7 @@ func NewTestimonialController(service service.TestimonialService) *TestimonialCo
 // @Param				Testimonial body request.CreateTestimonialRequest true "Create Testimonial"
 // @Produce				application/json
 // @Tags				Testimonial
-// @Success				204 {object} response.Response{}
+// @Success				201 {object} response.Response{}
 // @Router				/testimonial [post]
 func (t *TestimonialController) Create(ctx *gin.Context) {
 	panic("unimplemented")

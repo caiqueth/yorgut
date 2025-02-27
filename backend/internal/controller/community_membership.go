@@ -25,7 +25,7 @@ func NewCommunityMembershipController(service service.CommunityMembershipService
 // @Param				community body request.CreateCommunityMembershipRequest true "Create Community Membership"
 // @Produce				application/json
 // @Tags				CommunityMembership
-// @Success				204 {object} response.Response{}
+// @Success				201 {object} response.Response{}
 // @Router				/community_membership [post]
 func (cm *CommunityMembershipController) Create(ctx *gin.Context) {
 	createMembershipRequest := request.CreateCommunityMembershipRequest{}
@@ -46,7 +46,7 @@ func (cm *CommunityMembershipController) Create(ctx *gin.Context) {
 		Data: nil,
 	}
 
-	ctx.JSON(http.StatusNoContent, webResponse)
+	ctx.JSON(http.StatusCreated, webResponse)
 
 }
 
@@ -69,7 +69,7 @@ func (cm *CommunityMembershipController) Delete(ctx *gin.Context) {
 // @Param				userId path uint true "id of the user"
 // @Produce				application/json
 // @Tags				CommunityMembership
-// @Success				204 {object} response.Response{}
+// @Success				200 {object} response.Response{}
 // @Router				/community_membership/{userId} [get]
 func (cm *CommunityMembershipController) FindOfUser(ctx *gin.Context) {
 	panic("unimplemented")

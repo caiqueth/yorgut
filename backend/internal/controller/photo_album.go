@@ -22,7 +22,7 @@ func NewPhotoAlbumController(service service.PhotoAlbumService) *PhotoAlbumContr
 // @Param				PhotoAlbum body request.CreatePhotoAlbumRequest true "Create PhotoAlbum"
 // @Produce				application/json
 // @Tags				PhotoAlbum
-// @Success				204 {object} response.Response{}
+// @Success				201 {object} response.Response{}
 // @Router				/photoAlbum [post]
 func (pa *PhotoAlbumController) Create(ctx *gin.Context) {
 	panic("unimplemented")

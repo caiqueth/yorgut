@@ -11,19 +11,19 @@ import (
 )
 
 type CommunityService struct {
-	CommunityRepository repository.CommunityRepository
-	UserRepository      repository.UserRepository
+	communityRepository repository.CommunityRepository
+	userRepository      repository.UserRepository
 	Validate            *validator.Validate
 }
 
 func (c *CommunityService) Create(community request.CreateCommunityRequest) error {
-	owner, err := c.UserRepository.FindById(community.CreatedByID)
+	owner, err := c.userRepository.FindById(community.CreatedByID)
 	if err != nil {
 		return errors.New("could not find specified community owner")
 	}
 
 	communityModel := model.NewCommunity(community.Name, community.Description, community.PictureUrl, owner)
-	err = c.CommunityRepository.Create(communityModel)
+	err = c.communityRepository.Create(communityModel)
 	if err != nil {
 		return err
 	}
@@ -31,7 +31,7 @@ func (c *CommunityService) Create(community request.CreateCommunityRequest) erro
 }
 
 func (c *CommunityService) Delete(id uint) error {
-	err := c.CommunityRepository.Delete(id)
+	err := c.communityRepository.Delete(id)
 	if err != nil {
 		return err
 	}
@@ -39,7 +39,7 @@ func (c *CommunityService) Delete(id uint) error {
 }
 
 func (c *CommunityService) FindById(id uint) (response.FindCommunityByIdResponse, error) {
-	community, err := c.CommunityRepository.FindById(id)
+	community, err := c.communityRepository.FindById(id)
 	if err != nil {
 		return response.FindCommunityByIdResponse{}, errors.New("could not find specified community id")
 	}
@@ -52,17 +52,40 @@ func (c *CommunityService) FindById(id uint) (response.FindCommunityByIdResponse
 	return r, nil
 }
 
-func (c *CommunityService) FindMany() (response.Response, error) {
-	panic("unimplemented")
+func (c *CommunityService) FindMany() (*response.Response, error) {
+	communities, err := c.communityRepository.FindMany()
+	if err != nil {
+		return nil, err
+	}
+
+	communityDtos := make([]response.CommunityDto, len(communities))
+
+	for i, community := range communities {
+		communityDtos[i] = response.CommunityDto{
+			Name:        community.Name,
+			Description: community.Description,
+			CreatedBy:   community.CreatedByID,
+			PictureUrl:  community.PictureUrl,
+		}
+	}
+
+	return &response.Response{
+		Data: map[string][]response.CommunityDto{"communities": communityDtos},
+	}, nil
 }
 
 func (c *CommunityService) Update(user request.UpdateCommunityRequest) (response.Response, error) {
 	panic("unimplemented")
 }
 
-func NewCommunityService(communityRepository repository.CommunityRepository, validate *validator.Validate) *CommunityService {
+func NewCommunityService(
+	communityRepository repository.CommunityRepository,
+	userRepository repository.UserRepository,
+	validate *validator.Validate,
+) *CommunityService {
 	return &CommunityService{
-		CommunityRepository: communityRepository,
+		communityRepository: communityRepository,
+		userRepository:      userRepository,
 		Validate:            validate,
 	}
 }

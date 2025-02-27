@@ -9,11 +9,11 @@ type Community struct {
 	Name        string
 	Description string
 	CreatedByID uint
-	PictureUrl  *string
+	PictureUrl  string
 	CreatedBy   *User `gorm:"foreignKey:CreatedByID;references:ID"`
 }
 
-func NewCommunity(name string, description string, pictureUrl *string, createdBy *User) *Community {
+func NewCommunity(name string, description string, pictureUrl string, createdBy *User) *Community {
 	return &Community{
 		Name:        name,
 		Description: description,

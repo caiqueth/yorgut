@@ -26,9 +26,9 @@ func NewCommunityController(service service.CommunityService) *CommunityControll
 // @Param				community body request.CreateCommunityRequest true "Create Community"
 // @Produce				application/json
 // @Tags				Community
-// @Success				204 {object} response.Response{}
+// @Success				201 {object} response.Response{}
 // @Router				/community [post]
-func (controller *CommunityController) Create(ctx *gin.Context) {
+func (c *CommunityController) Create(ctx *gin.Context) {
 	createCommunityRequest := request.CreateCommunityRequest{}
 
 	err := ctx.ShouldBindJSON(&createCommunityRequest)
@@ -36,12 +36,17 @@ func (controller *CommunityController) Create(ctx *gin.Context) {
 		panic(err)
 	}
 
-	controller.communityService.Create(createCommunityRequest)
+	err = c.communityService.Create(createCommunityRequest)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
 	webResponse := response.Response{
 		Data: nil,
 	}
 
-	ctx.JSON(http.StatusNoContent, webResponse)
+	ctx.JSON(http.StatusCreated, webResponse)
 }
 
 // Update				godoc
@@ -51,7 +56,7 @@ func (controller *CommunityController) Create(ctx *gin.Context) {
 // @Tags				Community
 // @Success				204 {object} response.Response{}
 // @Router				/community [put]
-func (controller *CommunityController) Update(ctx *gin.Context) {
+func (c *CommunityController) Update(ctx *gin.Context) {
 	panic("unimplemented")
 }
 
@@ -63,16 +68,17 @@ func (controller *CommunityController) Update(ctx *gin.Context) {
 // @Tags				Community
 // @Success				204 {object} response.Response{}
 // @Router				/community/{communityId} [delete]
-func (controller *CommunityController) Delete(ctx *gin.Context) {
+func (c *CommunityController) Delete(ctx *gin.Context) {
 	communityId := ctx.Param("communityId")
 	id, err := strconv.ParseUint(communityId, 0, 0)
 	if err != nil {
 		panic(err)
 	}
 
-	err = controller.communityService.Delete(uint(id))
+	err = c.communityService.Delete(uint(id))
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	ctx.JSON(http.StatusNoContent, response.Response{})
@@ -87,14 +93,14 @@ func (controller *CommunityController) Delete(ctx *gin.Context) {
 // @Tags				Community
 // @Success				200 {object} response.FindCommunityByIdResponse{}
 // @Router				/community/{communityId} [get]
-func (controller *CommunityController) FindById(ctx *gin.Context) {
+func (c *CommunityController) FindById(ctx *gin.Context) {
 	communityId := ctx.Param("communityId")
 	id, err := strconv.ParseUint(communityId, 0, 0)
 	if err != nil {
 		panic(err)
 	}
 
-	community, err := controller.communityService.FindById(uint(id))
+	community, err := c.communityService.FindById(uint(id))
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -114,6 +120,12 @@ func (controller *CommunityController) FindById(ctx *gin.Context) {
 // @Tags				Community
 // @Success				200 {object} response.FindManyCommunitiesResponse{}
 // @Router				/community [get]
-func (controller *CommunityController) FindMany(ctx *gin.Context) {
-	panic("unimplemented")
+func (c *CommunityController) FindMany(ctx *gin.Context) {
+	communities, err := c.communityService.FindMany()
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, communities)
 }
