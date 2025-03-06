@@ -2,8 +2,7 @@ package service
 
 import (
 	"errors"
-	"yorgut/internal/dto/request"
-	"yorgut/internal/dto/response"
+	"yorgut/internal/dto"
 	"yorgut/internal/model"
 	"yorgut/internal/repository"
 
@@ -16,7 +15,7 @@ type CommunityService struct {
 	Validate            *validator.Validate
 }
 
-func (c *CommunityService) Create(community request.CreateCommunityRequest) error {
+func (c *CommunityService) Create(community dto.CreateCommunityRequest) error {
 	owner, err := c.userRepository.FindById(community.CreatedByID)
 	if err != nil {
 		return errors.New("could not find specified community owner")
@@ -38,13 +37,13 @@ func (c *CommunityService) Delete(id uint) error {
 	return nil
 }
 
-func (c *CommunityService) FindById(id uint) (response.FindCommunityByIdResponse, error) {
+func (c *CommunityService) FindById(id uint) (dto.FindCommunityByIdResponse, error) {
 	community, err := c.communityRepository.FindById(id)
 	if err != nil {
-		return response.FindCommunityByIdResponse{}, errors.New("could not find specified community id")
+		return dto.FindCommunityByIdResponse{}, errors.New("could not find specified community id")
 	}
 
-	r := response.FindCommunityByIdResponse{
+	r := dto.FindCommunityByIdResponse{
 		Name:        community.Name,
 		Description: community.Description,
 		CreatedBy:   community.CreatedByID,
@@ -52,16 +51,16 @@ func (c *CommunityService) FindById(id uint) (response.FindCommunityByIdResponse
 	return r, nil
 }
 
-func (c *CommunityService) FindMany() (*response.Response, error) {
+func (c *CommunityService) FindMany() (*dto.Response, error) {
 	communities, err := c.communityRepository.FindMany()
 	if err != nil {
 		return nil, err
 	}
 
-	communityDtos := make([]response.CommunityDto, len(communities))
+	communityDtos := make([]dto.CommunityDto, len(communities))
 
 	for i, community := range communities {
-		communityDtos[i] = response.CommunityDto{
+		communityDtos[i] = dto.CommunityDto{
 			Name:        community.Name,
 			Description: community.Description,
 			CreatedBy:   community.CreatedByID,
@@ -69,12 +68,12 @@ func (c *CommunityService) FindMany() (*response.Response, error) {
 		}
 	}
 
-	return &response.Response{
-		Data: map[string][]response.CommunityDto{"communities": communityDtos},
+	return &dto.Response{
+		Data: map[string][]dto.CommunityDto{"communities": communityDtos},
 	}, nil
 }
 
-func (c *CommunityService) Update(user request.UpdateCommunityRequest) (response.Response, error) {
+func (c *CommunityService) Update(user dto.UpdateCommunityRequest) (dto.Response, error) {
 	panic("unimplemented")
 }
 

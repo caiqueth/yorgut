@@ -19,13 +19,10 @@ func NewUserRepository(Db *gorm.DB) *UserRepository {
 func (u *UserRepository) FindUserOwnedCommunities(userId uint) ([]model.Community, error) {
 	var communities []model.Community
 
-	err := u.Db.Joins("JOIN communities ON communities.created_by_id = user.id").
-		Where("communities.created_by_id = ?", userId).
-		Find(&communities).
-		Error
+	result := u.Db.Where("created_by_id = ?", userId).Find(&communities)
 
-	if err != nil {
-		return nil, err
+	if result.Error != nil {
+		return nil, result.Error
 	}
 
 	return communities, nil

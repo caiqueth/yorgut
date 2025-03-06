@@ -19,10 +19,10 @@ func NewPhotoAlbumController(service service.PhotoAlbumService) *PhotoAlbumContr
 // Create				godoc
 // @Summary				Create a PhotoAlbum.
 // @Description			Creates a PhotoAlbum.
-// @Param				PhotoAlbum body request.CreatePhotoAlbumRequest true "Create PhotoAlbum"
+// @Param				PhotoAlbum body dto.CreatePhotoAlbumRequest true "Create PhotoAlbum"
 // @Produce				application/json
 // @Tags				PhotoAlbum
-// @Success				201 {object} response.Response{}
+// @Success				201 {object} dto.Response{}
 // @Router				/photoAlbum [post]
 func (pa *PhotoAlbumController) Create(ctx *gin.Context) {
 	panic("unimplemented")
@@ -34,7 +34,7 @@ func (pa *PhotoAlbumController) Create(ctx *gin.Context) {
 // @Description			Deletes a PhotoAlbum.
 // @Produce				application/json
 // @Tags				PhotoAlbum
-// @Success				204 {object} response.Response{}
+// @Success				204 {object} dto.Response{}
 // @Router				/photoAlbum/{photoAlbumId} [delete]
 func (pa *PhotoAlbumController) Delete(ctx *gin.Context) {
 	panic("unimplemented")
@@ -45,7 +45,7 @@ func (pa *PhotoAlbumController) Delete(ctx *gin.Context) {
 // @Description			Updates properties of a single PhotoAlbum
 // @Produce				application/json
 // @Tags				PhotoAlbum
-// @Success				204 {object} response.Response{}
+// @Success				204 {object} dto.Response{}
 // @Router				/photoAlbum [put]
 func (pa *PhotoAlbumController) Update(ctx *gin.Context) {
 	panic("unimplemented")
@@ -56,7 +56,7 @@ func (pa *PhotoAlbumController) Update(ctx *gin.Context) {
 // @Description			Returns an array of PhotoAlbums.
 // @Produce				application/json
 // @Tags				PhotoAlbum
-// @Success				200 {object} response.Response{}
+// @Success				200 {object} dto.Response{}
 // @Router				/photoAlbum [get]
 func (pa *PhotoAlbumController) FindPhotos(ctx *gin.Context) {
 	panic("unimplemented")

@@ -19,10 +19,10 @@ func NewScrapController(service service.ScrapService) *ScrapController {
 // Create				godoc
 // @Summary				Create a Scrap.
 // @Description			Creates a Scrap.
-// @Param				Scrap body request.CreateScrapRequest true "Create Scrap"
+// @Param				Scrap body dto.CreateScrapRequest true "Create Scrap"
 // @Produce				application/json
 // @Tags				Scrap
-// @Success				201 {object} response.Response{}
+// @Success				201 {object} dto.Response{}
 // @Router				/scrap [post]
 func (s *ScrapController) Create(ctx *gin.Context) {
 	panic("unimplemented")
@@ -34,7 +34,7 @@ func (s *ScrapController) Create(ctx *gin.Context) {
 // @Description			Deletes a Scrap.
 // @Produce				application/json
 // @Tags				Scrap
-// @Success				204 {object} response.Response{}
+// @Success				204 {object} dto.Response{}
 // @Router				/scrap/{scrapId} [delete]
 func (s *ScrapController) Delete(ctx *gin.Context) {
 	panic("unimplemented")

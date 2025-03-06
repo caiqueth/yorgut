@@ -1,4 +1,4 @@
-package request
+package dto
 
 type CreateCommunityRequest struct {
 	Name        string
@@ -11,3 +11,12 @@ type UpdateCommunityRequest struct {
 	Name        string
 	Description string
 }
+
+type FindCommunityByIdResponse struct {
+	Name        string
+	Description string
+	CreatedBy   uint
+	PictureUrl  string
+}
+
+type FindManyCommunitiesResponse struct{}

@@ -19,10 +19,10 @@ func NewPhotoController(service service.PhotoService) *PhotoController {
 // Create				godoc
 // @Summary				Create a Photo.
 // @Description			Creates a Photo.
-// @Param				Photo body request.CreatePhotoRequest true "Create Photo"
+// @Param				Photo body dto.CreatePhotoRequest true "Create Photo"
 // @Produce				application/json
 // @Tags				Photo
-// @Success				201 {object} response.Response{}
+// @Success				201 {object} dto.Response{}
 // @Router				/photo [post]
 func (p *PhotoController) Create(ctx *gin.Context) {
 	panic("unimplemented")
@@ -34,7 +34,7 @@ func (p *PhotoController) Create(ctx *gin.Context) {
 // @Description			Deletes a Photo.
 // @Produce				application/json
 // @Tags				Photo
-// @Success				204 {object} response.Response{}
+// @Success				204 {object} dto.Response{}
 // @Router				/photo/{photoId} [delete]
 func (p *PhotoController) Delete(ctx *gin.Context) {
 	panic("unimplemented")

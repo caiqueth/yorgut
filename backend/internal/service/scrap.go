@@ -2,8 +2,7 @@ package service
 
 import (
 	"errors"
-	"yorgut/internal/dto/request"
-	"yorgut/internal/dto/response"
+	"yorgut/internal/dto"
 	"yorgut/internal/model"
 	"yorgut/internal/repository"
 
@@ -16,7 +15,7 @@ type ScrapService struct {
 	Validate        *validator.Validate
 }
 
-func (s *ScrapService) Create(scrap request.CreateScrapRequest) error {
+func (s *ScrapService) Create(scrap dto.CreateScrapRequest) error {
 	author, err := s.UserRepository.FindById(scrap.UserAuthorID)
 	if err != nil {
 		return errors.New("author not found")
@@ -45,7 +44,7 @@ func (s *ScrapService) Delete(id uint) error {
 	return nil
 }
 
-func (s *ScrapService) FindOfUserRecipient(userId int) (response.FindScrapOfUserRecipientResponse, error) {
+func (s *ScrapService) FindOfUserRecipient(userId int) (dto.FindScrapOfUserRecipientResponse, error) {
 	panic("unimplemented")
 }
 

@@ -12,9 +12,18 @@ type CommunityMembershipRepository struct {
 
 func (c *CommunityMembershipRepository) FindOfUser(id uint) ([]model.CommunityMembership, error) {
 	var memberships []model.CommunityMembership
-	results := c.Db.Find(&memberships)
-	if results.Error != nil {
-		return nil, results.Error
+	result := c.Db.Preload("Community").Where("user_id = ?", id).Find(&memberships)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return memberships, nil
+}
+
+func (c *CommunityMembershipRepository) FindOfCommunity(id uint) ([]model.CommunityMembership, error) {
+	var memberships []model.CommunityMembership
+	result := c.Db.Preload("Community").Where("community_id = ?", id).Find(&memberships)
+	if result.Error != nil {
+		return nil, result.Error
 	}
 	return memberships, nil
 }

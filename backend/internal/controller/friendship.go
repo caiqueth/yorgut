@@ -19,10 +19,10 @@ func NewFriendshipController(service service.FriendshipService) *FriendshipContr
 // Create				godoc
 // @Summary				Create a Friendship.
 // @Description			Creates a Friendship.
-// @Param				Friendship body request.CreateFriendshipRequest true "Create Friendship"
+// @Param				Friendship body dto.CreateFriendshipRequest true "Create Friendship"
 // @Produce				application/json
 // @Tags				Friendship
-// @Success				201 {object} response.Response{}
+// @Success				201 {object} dto.Response{}
 // @Router				/friendship [post]
 func (f *FriendshipController) Create(ctx *gin.Context) {
 	panic("unimplemented")
@@ -34,7 +34,7 @@ func (f *FriendshipController) Create(ctx *gin.Context) {
 // @Description			Deletes a Friendship.
 // @Produce				application/json
 // @Tags				Friendship
-// @Success				204 {object} response.Response{}
+// @Success				204 {object} dto.Response{}
 // @Router				/friendship/{friendshipId} [delete]
 func (f *FriendshipController) Delete(ctx *gin.Context) {
 	panic("unimplemented")

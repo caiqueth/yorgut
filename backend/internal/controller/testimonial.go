@@ -19,10 +19,10 @@ func NewTestimonialController(service service.TestimonialService) *TestimonialCo
 // Create				godoc
 // @Summary				Create a Testimonial.
 // @Description			Creates a Testimonial.
-// @Param				Testimonial body request.CreateTestimonialRequest true "Create Testimonial"
+// @Param				Testimonial body dto.CreateTestimonialRequest true "Create Testimonial"
 // @Produce				application/json
 // @Tags				Testimonial
-// @Success				201 {object} response.Response{}
+// @Success				201 {object} dto.Response{}
 // @Router				/testimonial [post]
 func (t *TestimonialController) Create(ctx *gin.Context) {
 	panic("unimplemented")
@@ -34,7 +34,7 @@ func (t *TestimonialController) Create(ctx *gin.Context) {
 // @Description			Deletes a Testimonial.
 // @Produce				application/json
 // @Tags				Testimonial
-// @Success				204 {object} response.Response{}
+// @Success				204 {object} dto.Response{}
 // @Router				/testimonial/{testimonialId} [delete]
 func (t *TestimonialController) Delete(ctx *gin.Context) {
 	panic("unimplemented")

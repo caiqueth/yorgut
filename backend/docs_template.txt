@@ -1,7 +1,7 @@
 // Create				godoc
 // @Summary				Create a Entity.
 // @Description			Creates a Entity.
-// @Param				entity body request.CreateEntityRequest true "Create Entity"
+// @Param				entity body dto.CreateEntityRequest true "Create Entity"
 // @Produce				application/json
 // @Tags				Entity
 // @Success				204 {object} response.Response{}

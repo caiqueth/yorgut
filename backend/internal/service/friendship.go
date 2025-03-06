@@ -2,8 +2,7 @@ package service
 
 import (
 	"errors"
-	"yorgut/internal/dto/request"
-	"yorgut/internal/dto/response"
+	"yorgut/internal/dto"
 	"yorgut/internal/model"
 	"yorgut/internal/repository"
 
@@ -16,7 +15,7 @@ type FriendshipService struct {
 	Validate             *validator.Validate
 }
 
-func (f *FriendshipService) Create(friendship request.CreateFriendshipRequest) error {
+func (f *FriendshipService) Create(friendship dto.CreateFriendshipRequest) error {
 	userRequested, err := f.UserRepository.FindById(friendship.UserRequested)
 	if err != nil {
 		return errors.New("could not find user that requested the friendship")
@@ -44,7 +43,7 @@ func (f *FriendshipService) Delete(id uint) error {
 	return nil
 }
 
-func (f *FriendshipService) FindOfUser(userId uint) (response.FindFriendshipOfUserResponse, error) {
+func (f *FriendshipService) FindOfUser(userId uint) (dto.FindFriendshipOfUserResponse, error) {
 	panic("unimplemented")
 }
 

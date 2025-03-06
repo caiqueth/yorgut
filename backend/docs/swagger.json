@@ -26,7 +26,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.FindManyCommunitiesResponse"
+                            "$ref": "#/definitions/dto.FindManyCommunitiesResponse"
                         }
                     }
                 }
@@ -44,7 +44,7 @@
                     "204": {
                         "description": "No Content",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/dto.Response"
                         }
                     }
                 }
@@ -64,7 +64,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.CreateCommunityRequest"
+                            "$ref": "#/definitions/dto.CreateCommunityRequest"
                         }
                     }
                 ],
@@ -72,7 +72,7 @@
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/dto.Response"
                         }
                     }
                 }
@@ -101,7 +101,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.FindCommunityByIdResponse"
+                            "$ref": "#/definitions/dto.FindCommunityByIdResponse"
                         }
                     }
                 }
@@ -128,7 +128,7 @@
                     "204": {
                         "description": "No Content",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/dto.Response"
                         }
                     }
                 }
@@ -150,7 +150,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.CreateCommunityMembershipRequest"
+                            "$ref": "#/definitions/dto.CreateCommunityMembershipRequest"
                         }
                     }
                 ],
@@ -158,7 +158,7 @@
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/dto.Response"
                         }
                     }
                 }
@@ -186,7 +186,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/dto.Response"
                         }
                     }
                 }
@@ -221,7 +221,7 @@
                     "204": {
                         "description": "No Content",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/dto.Response"
                         }
                     }
                 }
@@ -244,7 +244,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.CreateFriendshipRequest"
+                            "$ref": "#/definitions/dto.CreateFriendshipRequest"
                         }
                     }
                 ],
@@ -252,7 +252,7 @@
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/dto.Response"
                         }
                     }
                 }
@@ -281,7 +281,7 @@
                     "204": {
                         "description": "No Content",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/dto.Response"
                         }
                     }
                 }
@@ -304,7 +304,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.CreatePhotoRequest"
+                            "$ref": "#/definitions/dto.CreatePhotoRequest"
                         }
                     }
                 ],
@@ -312,7 +312,7 @@
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/dto.Response"
                         }
                     }
                 }
@@ -341,7 +341,7 @@
                     "204": {
                         "description": "No Content",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/dto.Response"
                         }
                     }
                 }
@@ -361,7 +361,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/dto.Response"
                         }
                     }
                 }
@@ -379,7 +379,7 @@
                     "204": {
                         "description": "No Content",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/dto.Response"
                         }
                     }
                 }
@@ -400,7 +400,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.CreatePhotoAlbumRequest"
+                            "$ref": "#/definitions/dto.CreatePhotoAlbumRequest"
                         }
                     }
                 ],
@@ -408,7 +408,7 @@
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/dto.Response"
                         }
                     }
                 }
@@ -437,7 +437,7 @@
                     "204": {
                         "description": "No Content",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/dto.Response"
                         }
                     }
                 }
@@ -460,7 +460,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.CreateScrapRequest"
+                            "$ref": "#/definitions/dto.CreateScrapRequest"
                         }
                     }
                 ],
@@ -468,7 +468,7 @@
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/dto.Response"
                         }
                     }
                 }
@@ -497,7 +497,7 @@
                     "204": {
                         "description": "No Content",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/dto.Response"
                         }
                     }
                 }
@@ -520,7 +520,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.CreateTestimonialRequest"
+                            "$ref": "#/definitions/dto.CreateTestimonialRequest"
                         }
                     }
                 ],
@@ -528,7 +528,7 @@
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/dto.Response"
                         }
                     }
                 }
@@ -557,7 +557,7 @@
                     "204": {
                         "description": "No Content",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/dto.Response"
                         }
                     }
                 }
@@ -577,7 +577,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/dto.Response"
                         }
                     }
                 }
@@ -604,7 +604,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/dto.Response"
                         }
                     }
                 }
@@ -624,7 +624,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.CreateUserRequest"
+                            "$ref": "#/definitions/dto.CreateUserRequest"
                         }
                     }
                 ],
@@ -632,7 +632,7 @@
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/dto.Response"
                         }
                     }
                 }
@@ -661,7 +661,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.FindUserByIdResponse"
+                            "$ref": "#/definitions/dto.FindUserByIdResponse"
                         }
                     }
                 }
@@ -688,7 +688,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/dto.Response"
                         }
                     }
                 }
@@ -724,7 +724,7 @@
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/dto.Response"
                         }
                     }
                 }
@@ -753,7 +753,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.FindUserMembershipsResponse"
+                            "$ref": "#/definitions/dto.FindUserMembershipsResponse"
                         }
                     }
                 }
@@ -761,7 +761,24 @@
         }
     },
     "definitions": {
-        "request.CreateCommunityMembershipRequest": {
+        "dto.CommunityDto": {
+            "type": "object",
+            "properties": {
+                "createdBy": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "pictureUrl": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.CreateCommunityMembershipRequest": {
             "type": "object",
             "properties": {
                 "communityID": {
@@ -772,7 +789,7 @@
                 }
             }
         },
-        "request.CreateCommunityRequest": {
+        "dto.CreateCommunityRequest": {
             "type": "object",
             "properties": {
                 "createdByID": {
@@ -789,7 +806,7 @@
                 }
             }
         },
-        "request.CreateFriendshipRequest": {
+        "dto.CreateFriendshipRequest": {
             "type": "object",
             "properties": {
                 "userRequested": {
@@ -800,7 +817,7 @@
                 }
             }
         },
-        "request.CreatePhotoAlbumRequest": {
+        "dto.CreatePhotoAlbumRequest": {
             "type": "object",
             "properties": {
                 "name": {
@@ -811,7 +828,7 @@
                 }
             }
         },
-        "request.CreatePhotoRequest": {
+        "dto.CreatePhotoRequest": {
             "type": "object",
             "properties": {
                 "caption": {
@@ -825,7 +842,7 @@
                 }
             }
         },
-        "request.CreateScrapRequest": {
+        "dto.CreateScrapRequest": {
             "type": "object",
             "properties": {
                 "content": {
@@ -839,7 +856,7 @@
                 }
             }
         },
-        "request.CreateTestimonialRequest": {
+        "dto.CreateTestimonialRequest": {
             "type": "object",
             "properties": {
                 "content": {
@@ -853,7 +870,7 @@
                 }
             }
         },
-        "request.CreateUserRequest": {
+        "dto.CreateUserRequest": {
             "type": "object",
             "properties": {
                 "birthDate": {
@@ -870,7 +887,7 @@
                 }
             }
         },
-        "response.CommunityDto": {
+        "dto.FindCommunityByIdResponse": {
             "type": "object",
             "properties": {
                 "createdBy": {
@@ -887,27 +904,10 @@
                 }
             }
         },
-        "response.FindCommunityByIdResponse": {
-            "type": "object",
-            "properties": {
-                "createdBy": {
-                    "type": "integer"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "pictureUrl": {
-                    "type": "string"
-                }
-            }
-        },
-        "response.FindManyCommunitiesResponse": {
+        "dto.FindManyCommunitiesResponse": {
             "type": "object"
         },
-        "response.FindUserByIdResponse": {
+        "dto.FindUserByIdResponse": {
             "type": "object",
             "properties": {
                 "birthDate": {
@@ -933,18 +933,18 @@
                 }
             }
         },
-        "response.FindUserMembershipsResponse": {
+        "dto.FindUserMembershipsResponse": {
             "type": "object",
             "properties": {
                 "communities": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/response.CommunityDto"
+                        "$ref": "#/definitions/dto.CommunityDto"
                     }
                 }
             }
         },
-        "response.Response": {
+        "dto.Response": {
             "type": "object",
             "properties": {
                 "data": {}

@@ -2,8 +2,7 @@ package service
 
 import (
 	"errors"
-	"yorgut/internal/dto/request"
-	"yorgut/internal/dto/response"
+	"yorgut/internal/dto"
 	"yorgut/internal/model"
 	"yorgut/internal/repository"
 
@@ -17,7 +16,7 @@ type CommunityMembershipService struct {
 	Validate                      *validator.Validate
 }
 
-func (c *CommunityMembershipService) Create(communityMembership request.CreateCommunityMembershipRequest) error {
+func (c *CommunityMembershipService) Create(communityMembership dto.CreateCommunityMembershipRequest) error {
 	community, err := c.CommunityRepository.FindById(communityMembership.CommunityID)
 	if err != nil {
 		return errors.New("could not find specified community")
@@ -44,7 +43,7 @@ func (c *CommunityMembershipService) Delete(id uint) error {
 	return nil
 }
 
-func (c *CommunityMembershipService) FindOfUser(userId uint) (response.FindCommunityMembershipOfUserResponse, error) {
+func (c *CommunityMembershipService) FindOfUser(userId uint) (dto.FindCommunityMembershipOfUserResponse, error) {
 	panic("unimplemented")
 }
 

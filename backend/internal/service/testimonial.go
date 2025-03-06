@@ -2,8 +2,7 @@ package service
 
 import (
 	"fmt"
-	"yorgut/internal/dto/request"
-	"yorgut/internal/dto/response"
+	"yorgut/internal/dto"
 	"yorgut/internal/model"
 	"yorgut/internal/repository"
 
@@ -16,7 +15,7 @@ type TestimonialService struct {
 	Validate              *validator.Validate
 }
 
-func (t *TestimonialService) Create(testimonial request.CreateTestimonialRequest) error {
+func (t *TestimonialService) Create(testimonial dto.CreateTestimonialRequest) error {
 	author, err := t.UserRepository.FindById(testimonial.UserAuthorID)
 	if err != nil {
 		return fmt.Errorf("author not found %v", testimonial.UserAuthorID)
@@ -44,11 +43,11 @@ func (t *TestimonialService) Delete(id uint) error {
 	return nil
 }
 
-func (t *TestimonialService) FindOfUserAuthor(userId uint) response.FindTestimonialOfUserResponse {
+func (t *TestimonialService) FindOfUserAuthor(userId uint) dto.FindTestimonialOfUserResponse {
 	panic("unimplemented")
 }
 
-func (t *TestimonialService) FindOfUserRecipient(userId uint) response.FindTestimonialOfUserResponse {
+func (t *TestimonialService) FindOfUserRecipient(userId uint) dto.FindTestimonialOfUserResponse {
 	panic("unimplemented")
 }
 

@@ -3,8 +3,7 @@ package controller
 import (
 	"net/http"
 	"strconv"
-	"yorgut/internal/dto/request"
-	"yorgut/internal/dto/response"
+	"yorgut/internal/dto"
 	"yorgut/internal/service"
 
 	"github.com/gin-gonic/gin"
@@ -23,13 +22,13 @@ func NewUserController(service service.UserService) *UserController {
 // Create			godoc
 // @Summary			Create user
 // @Decription		Save user in Db.
-// @Param			user body request.CreateUserRequest true "Create User"
+// @Param			user body dto.CreateUserRequest true "Create User"
 // @Produce			application/json
 // @Tags			User
-// @Success			201 {object} response.Response{}
+// @Success			201 {object} dto.Response{}
 // @Router			/user [post]
 func (uc *UserController) Create(ctx *gin.Context) {
-	createUserRequest := request.CreateUserRequest{}
+	createUserRequest := dto.CreateUserRequest{}
 
 	err := ctx.ShouldBindJSON(&createUserRequest)
 
@@ -43,7 +42,7 @@ func (uc *UserController) Create(ctx *gin.Context) {
 		return
 	}
 
-	webResponse := response.Response{
+	webResponse := dto.Response{
 		Data: nil,
 	}
 
@@ -57,7 +56,7 @@ func (uc *UserController) Create(ctx *gin.Context) {
 // @Description			Returns the user matching the requested id
 // @Produce				application/json
 // @Tags				User
-// @Success				200 {object} response.FindUserByIdResponse{}
+// @Success				200 {object} dto.FindUserByIdResponse{}
 // @Router				/user/{userId} [get]
 func (uc *UserController) FindById(ctx *gin.Context) {
 	userId := ctx.Param("userId")
@@ -74,7 +73,7 @@ func (uc *UserController) FindById(ctx *gin.Context) {
 		return
 	}
 
-	webResponse := response.Response{
+	webResponse := dto.Response{
 		Data: user,
 	}
 	ctx.JSON(http.StatusOK, webResponse)
@@ -86,7 +85,7 @@ func (uc *UserController) FindById(ctx *gin.Context) {
 // @Description			Returns a list of users
 // @Produce				application/json
 // @Tags				User
-// @Success				200 {object} response.Response{}
+// @Success				200 {object} dto.Response{}
 // @Router				/user [get]
 func (uc *UserController) FindMany(ctx *gin.Context) {
 	users, err := uc.userService.FindMany()
@@ -105,7 +104,7 @@ func (uc *UserController) FindMany(ctx *gin.Context) {
 // @Description		Deletes the user matching the requested id
 // @Produce			application/json
 // @Tags			User
-// @Success			200 {object} response.Response{}
+// @Success			200 {object} dto.Response{}
 // @Router			/user/{userId} [delete]
 func (uc *UserController) Delete(ctx *gin.Context) {
 	userId := ctx.Param("userId")
@@ -117,7 +116,7 @@ func (uc *UserController) Delete(ctx *gin.Context) {
 
 	uc.userService.Delete(uint(id))
 
-	webResponse := response.Response{
+	webResponse := dto.Response{
 		Data: nil,
 	}
 	ctx.JSON(http.StatusOK, webResponse)
@@ -130,10 +129,10 @@ func (uc *UserController) Delete(ctx *gin.Context) {
 // @Description		Returns null
 // @Produce			application/json
 // @Tags			User
-// @Success			200 {object} response.Response{}
+// @Success			200 {object} dto.Response{}
 // @Router			/user [put]
 func (uc *UserController) Update(ctx *gin.Context) {
-	request := request.UpdateUserRequest{}
+	request := dto.UpdateUserRequest{}
 
 	err := ctx.ShouldBindJSON(&request)
 	if err != nil {
@@ -147,7 +146,7 @@ func (uc *UserController) Update(ctx *gin.Context) {
 		return
 	}
 
-	webResponse := response.Response{
+	webResponse := dto.Response{
 		Data: nil,
 	}
 
@@ -172,7 +171,20 @@ func (uc *UserController) FindReceivedTestimonials(ctx *gin.Context) {
 }
 
 func (uc *UserController) FindCommunitiesOwned(ctx *gin.Context) {
-	panic("unimplemented")
+	userId, err := strconv.Atoi(ctx.Param("userId"))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	communities, err := uc.userService.FindUserOwnedCommunities(uint(userId))
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, communities)
 }
 
 // JoinCommunity	godoc
@@ -182,7 +194,7 @@ func (uc *UserController) FindCommunitiesOwned(ctx *gin.Context) {
 // @Description		Joins a community.
 // @Produce			application/json
 // @Tags			User
-// @Success			201 {object} response.Response{}
+// @Success			201 {object} dto.Response{}
 // @Router			/user/{userId}/join/{communityId} [post]
 func (uc *UserController) JoinCommunity(ctx *gin.Context) {
 	userId, err := strconv.Atoi(ctx.Param("userId"))
@@ -202,7 +214,7 @@ func (uc *UserController) JoinCommunity(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	ctx.JSON(http.StatusCreated, response.Response{})
+	ctx.JSON(http.StatusCreated, dto.Response{})
 }
 
 // FindCommunitiesMemberOf	godoc
@@ -211,9 +223,9 @@ func (uc *UserController) JoinCommunity(ctx *gin.Context) {
 // @Description				Returns a list of communities
 // @Produce					application/json
 // @Tags					User
-// @Success					200 {object} response.FindUserMembershipsResponse{}
+// @Success					200 {object} dto.FindUserMembershipsResponse{}
 // @Router					/user/{userId}/memberships [get]
-func (uc *UserController) FindCommunitiesMemberOf(ctx *gin.Context) {
+func (uc *UserController) FindMemberships(ctx *gin.Context) {
 	userId := ctx.Param("userId")
 	id, err := strconv.Atoi(userId)
 

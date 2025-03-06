@@ -2,8 +2,7 @@ package service
 
 import (
 	"errors"
-	"yorgut/internal/dto/request"
-	"yorgut/internal/dto/response"
+	"yorgut/internal/dto"
 	"yorgut/internal/model"
 	"yorgut/internal/repository"
 
@@ -16,7 +15,7 @@ type PhotoAlbumService struct {
 	Validate             *validator.Validate
 }
 
-func (p *PhotoAlbumService) Create(photoAlbum request.CreatePhotoAlbumRequest) error {
+func (p *PhotoAlbumService) Create(photoAlbum dto.CreatePhotoAlbumRequest) error {
 	owner, err := p.UserRepository.FindById(photoAlbum.UserID)
 	if err != nil {
 		return errors.New("user not found")
@@ -38,7 +37,7 @@ func (p *PhotoAlbumService) Delete(id uint) error {
 	return err
 }
 
-func (p *PhotoAlbumService) FindOfUser(userId int) (response.FindPhotoAlmbumOfUserResponse, error) {
+func (p *PhotoAlbumService) FindOfUser(userId int) (dto.FindPhotoAlmbumOfUserResponse, error) {
 	panic("unimplemented")
 }
 

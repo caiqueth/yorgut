@@ -1,13 +1,24 @@
 basePath: /api/v1
 definitions:
-  request.CreateCommunityMembershipRequest:
+  dto.CommunityDto:
+    properties:
+      createdBy:
+        type: integer
+      description:
+        type: string
+      name:
+        type: string
+      pictureUrl:
+        type: string
+    type: object
+  dto.CreateCommunityMembershipRequest:
     properties:
       communityID:
         type: integer
       userID:
         type: integer
     type: object
-  request.CreateCommunityRequest:
+  dto.CreateCommunityRequest:
     properties:
       createdByID:
         type: integer
@@ -18,21 +29,21 @@ definitions:
       pictureUrl:
         type: string
     type: object
-  request.CreateFriendshipRequest:
+  dto.CreateFriendshipRequest:
     properties:
       userRequested:
         type: integer
       userRequestee:
         type: integer
     type: object
-  request.CreatePhotoAlbumRequest:
+  dto.CreatePhotoAlbumRequest:
     properties:
       name:
         type: string
       userID:
         type: integer
     type: object
-  request.CreatePhotoRequest:
+  dto.CreatePhotoRequest:
     properties:
       caption:
         type: string
@@ -41,7 +52,7 @@ definitions:
       url:
         type: string
     type: object
-  request.CreateScrapRequest:
+  dto.CreateScrapRequest:
     properties:
       content:
         type: string
@@ -50,7 +61,7 @@ definitions:
       userRecipientID:
         type: integer
     type: object
-  request.CreateTestimonialRequest:
+  dto.CreateTestimonialRequest:
     properties:
       content:
         type: string
@@ -59,7 +70,7 @@ definitions:
       userRecipientID:
         type: integer
     type: object
-  request.CreateUserRequest:
+  dto.CreateUserRequest:
     properties:
       birthDate:
         type: string
@@ -70,7 +81,7 @@ definitions:
       lastName:
         type: string
     type: object
-  response.CommunityDto:
+  dto.FindCommunityByIdResponse:
     properties:
       createdBy:
         type: integer
@@ -81,20 +92,9 @@ definitions:
       pictureUrl:
         type: string
     type: object
-  response.FindCommunityByIdResponse:
-    properties:
-      createdBy:
-        type: integer
-      description:
-        type: string
-      name:
-        type: string
-      pictureUrl:
-        type: string
+  dto.FindManyCommunitiesResponse:
     type: object
-  response.FindManyCommunitiesResponse:
-    type: object
-  response.FindUserByIdResponse:
+  dto.FindUserByIdResponse:
     properties:
       birthDate:
         type: string
@@ -111,14 +111,14 @@ definitions:
       updatedAt:
         type: string
     type: object
-  response.FindUserMembershipsResponse:
+  dto.FindUserMembershipsResponse:
     properties:
       communities:
         items:
-          $ref: '#/definitions/response.CommunityDto'
+          $ref: '#/definitions/dto.CommunityDto'
         type: array
     type: object
-  response.Response:
+  dto.Response:
     properties:
       data: {}
     type: object
@@ -138,7 +138,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.FindManyCommunitiesResponse'
+            $ref: '#/definitions/dto.FindManyCommunitiesResponse'
       summary: Get Multiple communities.
       tags:
       - Community
@@ -149,14 +149,14 @@ paths:
         name: community
         required: true
         schema:
-          $ref: '#/definitions/request.CreateCommunityRequest'
+          $ref: '#/definitions/dto.CreateCommunityRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/response.Response'
+            $ref: '#/definitions/dto.Response'
       summary: Create Community
       tags:
       - Community
@@ -168,7 +168,7 @@ paths:
         "204":
           description: No Content
           schema:
-            $ref: '#/definitions/response.Response'
+            $ref: '#/definitions/dto.Response'
       summary: Updates a community.
       tags:
       - Community
@@ -187,7 +187,7 @@ paths:
         "204":
           description: No Content
           schema:
-            $ref: '#/definitions/response.Response'
+            $ref: '#/definitions/dto.Response'
       summary: Delete community by id.
       tags:
       - Community
@@ -205,7 +205,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.FindCommunityByIdResponse'
+            $ref: '#/definitions/dto.FindCommunityByIdResponse'
       summary: Get Single community by id.
       tags:
       - Community
@@ -217,14 +217,14 @@ paths:
         name: community
         required: true
         schema:
-          $ref: '#/definitions/request.CreateCommunityMembershipRequest'
+          $ref: '#/definitions/dto.CreateCommunityMembershipRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/response.Response'
+            $ref: '#/definitions/dto.Response'
       summary: Create Community Membership
       tags:
       - CommunityMembership
@@ -242,7 +242,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.Response'
+            $ref: '#/definitions/dto.Response'
       summary: Lists communities that a user is member of
       tags:
       - CommunityMembership
@@ -265,7 +265,7 @@ paths:
         "204":
           description: No Content
           schema:
-            $ref: '#/definitions/response.Response'
+            $ref: '#/definitions/dto.Response'
       summary: Delete Community Membership
       tags:
       - CommunityMembership
@@ -278,14 +278,14 @@ paths:
         name: Friendship
         required: true
         schema:
-          $ref: '#/definitions/request.CreateFriendshipRequest'
+          $ref: '#/definitions/dto.CreateFriendshipRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/response.Response'
+            $ref: '#/definitions/dto.Response'
       summary: Create a Friendship.
       tags:
       - Friendship
@@ -304,7 +304,7 @@ paths:
         "204":
           description: No Content
           schema:
-            $ref: '#/definitions/response.Response'
+            $ref: '#/definitions/dto.Response'
       summary: Delete Friendship by id.
       tags:
       - Friendship
@@ -317,14 +317,14 @@ paths:
         name: Photo
         required: true
         schema:
-          $ref: '#/definitions/request.CreatePhotoRequest'
+          $ref: '#/definitions/dto.CreatePhotoRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/response.Response'
+            $ref: '#/definitions/dto.Response'
       summary: Create a Photo.
       tags:
       - Photo
@@ -343,7 +343,7 @@ paths:
         "204":
           description: No Content
           schema:
-            $ref: '#/definitions/response.Response'
+            $ref: '#/definitions/dto.Response'
       summary: Delete Photo by id.
       tags:
       - Photo
@@ -356,7 +356,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.Response'
+            $ref: '#/definitions/dto.Response'
       summary: Get a list of PhotoAlbums.
       tags:
       - PhotoAlbum
@@ -368,14 +368,14 @@ paths:
         name: PhotoAlbum
         required: true
         schema:
-          $ref: '#/definitions/request.CreatePhotoAlbumRequest'
+          $ref: '#/definitions/dto.CreatePhotoAlbumRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/response.Response'
+            $ref: '#/definitions/dto.Response'
       summary: Create a PhotoAlbum.
       tags:
       - PhotoAlbum
@@ -387,7 +387,7 @@ paths:
         "204":
           description: No Content
           schema:
-            $ref: '#/definitions/response.Response'
+            $ref: '#/definitions/dto.Response'
       summary: Updates a PhotoAlbum.
       tags:
       - PhotoAlbum
@@ -406,7 +406,7 @@ paths:
         "204":
           description: No Content
           schema:
-            $ref: '#/definitions/response.Response'
+            $ref: '#/definitions/dto.Response'
       summary: Delete PhotoAlbum by id.
       tags:
       - PhotoAlbum
@@ -419,14 +419,14 @@ paths:
         name: Scrap
         required: true
         schema:
-          $ref: '#/definitions/request.CreateScrapRequest'
+          $ref: '#/definitions/dto.CreateScrapRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/response.Response'
+            $ref: '#/definitions/dto.Response'
       summary: Create a Scrap.
       tags:
       - Scrap
@@ -445,7 +445,7 @@ paths:
         "204":
           description: No Content
           schema:
-            $ref: '#/definitions/response.Response'
+            $ref: '#/definitions/dto.Response'
       summary: Delete Scrap by id.
       tags:
       - Scrap
@@ -458,14 +458,14 @@ paths:
         name: Testimonial
         required: true
         schema:
-          $ref: '#/definitions/request.CreateTestimonialRequest'
+          $ref: '#/definitions/dto.CreateTestimonialRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/response.Response'
+            $ref: '#/definitions/dto.Response'
       summary: Create a Testimonial.
       tags:
       - Testimonial
@@ -484,7 +484,7 @@ paths:
         "204":
           description: No Content
           schema:
-            $ref: '#/definitions/response.Response'
+            $ref: '#/definitions/dto.Response'
       summary: Delete Testimonial by id.
       tags:
       - Testimonial
@@ -497,7 +497,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.Response'
+            $ref: '#/definitions/dto.Response'
       summary: Gets a list of users.
       tags:
       - User
@@ -508,14 +508,14 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/request.CreateUserRequest'
+          $ref: '#/definitions/dto.CreateUserRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/response.Response'
+            $ref: '#/definitions/dto.Response'
       summary: Create user
       tags:
       - User
@@ -533,7 +533,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.Response'
+            $ref: '#/definitions/dto.Response'
       summary: Update user
       tags:
       - User
@@ -552,7 +552,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.Response'
+            $ref: '#/definitions/dto.Response'
       summary: Delete User by id
       tags:
       - User
@@ -570,7 +570,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.FindUserByIdResponse'
+            $ref: '#/definitions/dto.FindUserByIdResponse'
       summary: Get Single user by id.
       tags:
       - User
@@ -594,7 +594,7 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/response.Response'
+            $ref: '#/definitions/dto.Response'
       summary: User joins a community.
       tags:
       - User
@@ -613,7 +613,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.FindUserMembershipsResponse'
+            $ref: '#/definitions/dto.FindUserMembershipsResponse'
       summary: Gets a list of communities that user is member of.
       tags:
       - User

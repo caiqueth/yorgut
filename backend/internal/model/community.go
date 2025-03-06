@@ -8,8 +8,8 @@ type Community struct {
 	gorm.Model
 	Name        string
 	Description string
-	CreatedByID uint
 	PictureUrl  string
+	CreatedByID uint
 	CreatedBy   *User `gorm:"foreignKey:CreatedByID;references:ID"`
 }
 

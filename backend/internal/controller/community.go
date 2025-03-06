@@ -3,8 +3,8 @@ package controller
 import (
 	"net/http"
 	"strconv"
-	"yorgut/internal/dto/request"
-	"yorgut/internal/dto/response"
+	"yorgut/internal/dto"
+
 	"yorgut/internal/service"
 
 	"github.com/gin-gonic/gin"
@@ -23,13 +23,13 @@ func NewCommunityController(service service.CommunityService) *CommunityControll
 // Create				godoc
 // @Summary				Create Community
 // @Decription			Save community in Db.
-// @Param				community body request.CreateCommunityRequest true "Create Community"
+// @Param				community body dto.CreateCommunityRequest true "Create Community"
 // @Produce				application/json
 // @Tags				Community
-// @Success				201 {object} response.Response{}
+// @Success				201 {object} dto.Response{}
 // @Router				/community [post]
 func (c *CommunityController) Create(ctx *gin.Context) {
-	createCommunityRequest := request.CreateCommunityRequest{}
+	createCommunityRequest := dto.CreateCommunityRequest{}
 
 	err := ctx.ShouldBindJSON(&createCommunityRequest)
 	if err != nil {
@@ -42,7 +42,7 @@ func (c *CommunityController) Create(ctx *gin.Context) {
 		return
 	}
 
-	webResponse := response.Response{
+	webResponse := dto.Response{
 		Data: nil,
 	}
 
@@ -54,7 +54,7 @@ func (c *CommunityController) Create(ctx *gin.Context) {
 // @Description			Updates properties of a single community
 // @Produce				application/json
 // @Tags				Community
-// @Success				204 {object} response.Response{}
+// @Success				204 {object} dto.Response{}
 // @Router				/community [put]
 func (c *CommunityController) Update(ctx *gin.Context) {
 	panic("unimplemented")
@@ -66,7 +66,7 @@ func (c *CommunityController) Update(ctx *gin.Context) {
 // @Description			Deletes a community
 // @Produce				application/json
 // @Tags				Community
-// @Success				204 {object} response.Response{}
+// @Success				204 {object} dto.Response{}
 // @Router				/community/{communityId} [delete]
 func (c *CommunityController) Delete(ctx *gin.Context) {
 	communityId := ctx.Param("communityId")
@@ -81,7 +81,7 @@ func (c *CommunityController) Delete(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusNoContent, response.Response{})
+	ctx.JSON(http.StatusNoContent, dto.Response{})
 
 }
 
@@ -91,7 +91,7 @@ func (c *CommunityController) Delete(ctx *gin.Context) {
 // @Description			Returns the community matching the requested id
 // @Produce				application/json
 // @Tags				Community
-// @Success				200 {object} response.FindCommunityByIdResponse{}
+// @Success				200 {object} dto.FindCommunityByIdResponse{}
 // @Router				/community/{communityId} [get]
 func (c *CommunityController) FindById(ctx *gin.Context) {
 	communityId := ctx.Param("communityId")
@@ -106,7 +106,7 @@ func (c *CommunityController) FindById(ctx *gin.Context) {
 		return
 	}
 
-	webResponse := response.Response{
+	webResponse := dto.Response{
 		Data: community,
 	}
 	ctx.JSON(http.StatusOK, webResponse)
@@ -118,7 +118,7 @@ func (c *CommunityController) FindById(ctx *gin.Context) {
 // @Description			Returns an array of communities
 // @Produce				application/json
 // @Tags				Community
-// @Success				200 {object} response.FindManyCommunitiesResponse{}
+// @Success				200 {object} dto.FindManyCommunitiesResponse{}
 // @Router				/community [get]
 func (c *CommunityController) FindMany(ctx *gin.Context) {
 	communities, err := c.communityService.FindMany()

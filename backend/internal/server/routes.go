@@ -46,7 +46,7 @@ func NewRouter(
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	router.GET("/", func(ctx *gin.Context) {
-		ctx.JSON(http.StatusOK, "Welcome")
+		ctx.JSON(http.StatusOK, "Yorgut")
 	})
 
 	v1 := router.Group("/api/v1")
@@ -58,7 +58,7 @@ func NewRouter(
 			users.PUT("", userController.Update)
 			users.GET("/:userId", userController.FindById)
 			users.DELETE("/:userId", userController.Delete)
-			users.GET("/:userId/memberships", userController.FindCommunitiesMemberOf)
+			users.GET("/:userId/memberships", userController.FindMemberships)
 			users.POST("/:userId/join/:communityId", userController.JoinCommunity)
 		}
 

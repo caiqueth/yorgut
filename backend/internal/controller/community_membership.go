@@ -2,8 +2,7 @@ package controller
 
 import (
 	"net/http"
-	"yorgut/internal/dto/request"
-	"yorgut/internal/dto/response"
+	"yorgut/internal/dto"
 	"yorgut/internal/service"
 
 	"github.com/gin-gonic/gin"
@@ -22,13 +21,13 @@ func NewCommunityMembershipController(service service.CommunityMembershipService
 // Create				godoc
 // @Summary				Create Community Membership
 // @Decription			Save membership in Db.
-// @Param				community body request.CreateCommunityMembershipRequest true "Create Community Membership"
+// @Param				community body dto.CreateCommunityMembershipRequest true "Create Community Membership"
 // @Produce				application/json
 // @Tags				CommunityMembership
-// @Success				201 {object} response.Response{}
+// @Success				201 {object} dto.Response{}
 // @Router				/community_membership [post]
 func (cm *CommunityMembershipController) Create(ctx *gin.Context) {
-	createMembershipRequest := request.CreateCommunityMembershipRequest{}
+	createMembershipRequest := dto.CreateCommunityMembershipRequest{}
 
 	err := ctx.ShouldBindJSON(&createMembershipRequest)
 
@@ -42,7 +41,7 @@ func (cm *CommunityMembershipController) Create(ctx *gin.Context) {
 		return
 	}
 
-	webResponse := response.Response{
+	webResponse := dto.Response{
 		Data: nil,
 	}
 
@@ -57,7 +56,7 @@ func (cm *CommunityMembershipController) Create(ctx *gin.Context) {
 // @Param				communityId path string true "id of the community"
 // @Produce				application/json
 // @Tags				CommunityMembership
-// @Success				204 {object} response.Response{}
+// @Success				204 {object} dto.Response{}
 // @Router				/community_membership/{userId}/{communityId} [delete]
 func (cm *CommunityMembershipController) Delete(ctx *gin.Context) {
 	panic("unimplemented")
@@ -69,7 +68,7 @@ func (cm *CommunityMembershipController) Delete(ctx *gin.Context) {
 // @Param				userId path uint true "id of the user"
 // @Produce				application/json
 // @Tags				CommunityMembership
-// @Success				200 {object} response.Response{}
+// @Success				200 {object} dto.Response{}
 // @Router				/community_membership/{userId} [get]
 func (cm *CommunityMembershipController) FindOfUser(ctx *gin.Context) {
 	panic("unimplemented")
