@@ -697,6 +697,35 @@ const docTemplate = `{
                 }
             }
         },
+        "/user/{userId}/friends": {
+            "get": {
+                "description": "Returns a list of friends",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Gets a list of friends of the user.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "user id",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.FindFriendshipOfUserResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/user/{userId}/join/{communityId}": {
             "post": {
                 "description": "Joins a community.",
@@ -757,6 +786,35 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/dto.FindUserMembershipsResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/{userId}/photoAlbums": {
+            "get": {
+                "description": "Returns a list of photo albums",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Gets a list of photo albums of the user.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "user id",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.FindPhotoAlbumOfUserResponse"
                         }
                     }
                 }
@@ -907,8 +965,30 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.FindFriendshipOfUserResponse": {
+            "type": "object",
+            "properties": {
+                "friendships": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.FriendshipDto"
+                    }
+                }
+            }
+        },
         "dto.FindManyCommunitiesResponse": {
             "type": "object"
+        },
+        "dto.FindPhotoAlbumOfUserResponse": {
+            "type": "object",
+            "properties": {
+                "photoAlbums": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.PhotoAlbumDto"
+                    }
+                }
+            }
         },
         "dto.FindUserByIdResponse": {
             "type": "object",
@@ -944,6 +1024,31 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/dto.CommunityDto"
                     }
+                }
+            }
+        },
+        "dto.FriendshipDto": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "userRequestedID": {
+                    "type": "integer"
+                },
+                "userRequesteeID": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.PhotoAlbumDto": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "userID": {
+                    "type": "integer"
                 }
             }
         },

@@ -154,12 +154,56 @@ func (uc *UserController) Update(ctx *gin.Context) {
 
 }
 
+// FindPhotoAlbums	godoc
+// @Summary					Gets a list of photo albums of the user.
+// @Param					userId path string true "user id"
+// @Description				Returns a list of photo albums
+// @Produce					application/json
+// @Tags					User
+// @Success					200 {object} dto.FindPhotoAlbumOfUserResponse{}
+// @Router					/user/{userId}/photoAlbums [get]
 func (uc *UserController) FindPhotoAlbums(ctx *gin.Context) {
-	panic("unimplemented")
+	userId := ctx.Param("userId")
+	id, err := strconv.Atoi(userId)
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	photoAlbums, err := uc.userService.FindUserPhotoAlbums(id)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, photoAlbums)
 }
 
+// FindFriends	godoc
+// @Summary					Gets a list of friends of the user.
+// @Param					userId path string true "user id"
+// @Description				Returns a list of friends
+// @Produce					application/json
+// @Tags					User
+// @Success					200 {object} dto.FindFriendshipOfUserResponse{}
+// @Router					/user/{userId}/friends [get]
 func (uc *UserController) FindFriends(ctx *gin.Context) {
-	panic("unimplemented")
+	userId := ctx.Param("userId")
+	id, err := strconv.Atoi(userId)
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	friendships, err := uc.userService.FindFriendshipsOfUser(id)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, friendships)
 }
 
 func (uc *UserController) FindAuthoredTestimonials(ctx *gin.Context) {

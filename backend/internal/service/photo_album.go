@@ -10,7 +10,7 @@ import (
 )
 
 type PhotoAlbumService struct {
-	PhotoAlbumRepository repository.PhotoAlbumRepository
+	photoAlbumRepository repository.PhotoAlbumRepository
 	UserRepository       repository.UserRepository
 	Validate             *validator.Validate
 }
@@ -22,7 +22,7 @@ func (p *PhotoAlbumService) Create(photoAlbum dto.CreatePhotoAlbumRequest) error
 	}
 	photoAlbumModel := model.NewPhotoAlbum(owner, photoAlbum.Name)
 
-	err = p.PhotoAlbumRepository.Create(photoAlbumModel)
+	err = p.photoAlbumRepository.Create(photoAlbumModel)
 	if err != nil {
 		return err
 	}
@@ -30,15 +30,23 @@ func (p *PhotoAlbumService) Create(photoAlbum dto.CreatePhotoAlbumRequest) error
 }
 
 func (p *PhotoAlbumService) Delete(id uint) error {
-	err := p.PhotoAlbumRepository.Delete(id)
+	err := p.photoAlbumRepository.Delete(id)
 	if err != nil {
 		return err
 	}
 	return err
 }
 
-func (p *PhotoAlbumService) FindOfUser(userId int) (dto.FindPhotoAlmbumOfUserResponse, error) {
-	panic("unimplemented")
+func (p *PhotoAlbumService) FindOfUser(userId int) (*dto.FindPhotoAlbumOfUserResponse, error) {
+	photoAlbums, err := p.photoAlbumRepository.FindOfUser(userId)
+	if err != nil {
+		return nil, err
+	}
+
+	resp := &dto.FindPhotoAlbumOfUserResponse{}
+	resp.FromPhotoAlbums(photoAlbums)
+
+	return resp, nil
 }
 
 func NewPhotoAlbumService(
@@ -46,7 +54,7 @@ func NewPhotoAlbumService(
 	validate *validator.Validate,
 ) *PhotoAlbumService {
 	return &PhotoAlbumService{
-		PhotoAlbumRepository: photoAlbumRepository,
+		photoAlbumRepository: photoAlbumRepository,
 		Validate:             validate,
 	}
 }

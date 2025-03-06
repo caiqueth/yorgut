@@ -59,6 +59,8 @@ func NewRouter(
 			users.GET("/:userId", userController.FindById)
 			users.DELETE("/:userId", userController.Delete)
 			users.GET("/:userId/memberships", userController.FindMemberships)
+			users.GET("/:userId/friends", userController.FindFriends)
+			users.GET("/:userId/photoAlbums", userController.FindPhotoAlbums)
 			users.POST("/:userId/join/:communityId", userController.JoinCommunity)
 		}
 

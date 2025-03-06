@@ -12,6 +12,8 @@ type UserService struct {
 	userRepository                repository.UserRepository
 	communityRepository           repository.CommunityRepository
 	communityMembershipRepository repository.CommunityMembershipRepository
+	photoAlbumRepository          repository.PhotoAlbumRepository
+	friendshipRepository          repository.FriendshipRepository
 	Validate                      *validator.Validate
 }
 
@@ -90,6 +92,30 @@ func (u *UserService) FindUserOwnedCommunities(userId uint) (*dto.FindUserCommun
 
 }
 
+func (u *UserService) FindUserPhotoAlbums(userId int) (*dto.FindPhotoAlbumOfUserResponse, error) {
+	photoAlbums, err := u.photoAlbumRepository.FindOfUser(userId)
+	if err != nil {
+		return nil, err
+	}
+
+	resp := &dto.FindPhotoAlbumOfUserResponse{}
+	resp.FromPhotoAlbums(photoAlbums)
+
+	return resp, nil
+}
+
+func (u *UserService) FindFriendshipsOfUser(userId int) (*dto.FindFriendshipOfUserResponse, error) {
+	friendships, err := u.friendshipRepository.FindOfUser(userId)
+	if err != nil {
+		return nil, err
+	}
+
+	resp := &dto.FindFriendshipOfUserResponse{}
+	resp.FromFriendships(friendships)
+
+	return resp, nil
+}
+
 func (u *UserService) FindUserMemberships(userId uint) (*dto.FindUserMembershipsResponse, error) {
 	memberships, err := u.communityMembershipRepository.FindOfUser(userId)
 	if err != nil {
@@ -123,12 +149,16 @@ func NewUserService(
 	userRepository repository.UserRepository,
 	communityRepository repository.CommunityRepository,
 	communityMembershipRepository repository.CommunityMembershipRepository,
+	photoAlbumRepository repository.PhotoAlbumRepository,
+	friendshipRepository repository.FriendshipRepository,
 	validate *validator.Validate,
 ) *UserService {
 	return &UserService{
 		userRepository:                userRepository,
 		communityRepository:           communityRepository,
 		communityMembershipRepository: communityMembershipRepository,
+		photoAlbumRepository:          photoAlbumRepository,
+		friendshipRepository:          friendshipRepository,
 		Validate:                      validate,
 	}
 }

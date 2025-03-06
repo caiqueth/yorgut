@@ -92,7 +92,21 @@ definitions:
       pictureUrl:
         type: string
     type: object
+  dto.FindFriendshipOfUserResponse:
+    properties:
+      friendships:
+        items:
+          $ref: '#/definitions/dto.FriendshipDto'
+        type: array
+    type: object
   dto.FindManyCommunitiesResponse:
+    type: object
+  dto.FindPhotoAlbumOfUserResponse:
+    properties:
+      photoAlbums:
+        items:
+          $ref: '#/definitions/dto.PhotoAlbumDto'
+        type: array
     type: object
   dto.FindUserByIdResponse:
     properties:
@@ -117,6 +131,22 @@ definitions:
         items:
           $ref: '#/definitions/dto.CommunityDto'
         type: array
+    type: object
+  dto.FriendshipDto:
+    properties:
+      createdAt:
+        type: string
+      userRequestedID:
+        type: integer
+      userRequesteeID:
+        type: integer
+    type: object
+  dto.PhotoAlbumDto:
+    properties:
+      name:
+        type: string
+      userID:
+        type: integer
     type: object
   dto.Response:
     properties:
@@ -574,6 +604,25 @@ paths:
       summary: Get Single user by id.
       tags:
       - User
+  /user/{userId}/friends:
+    get:
+      description: Returns a list of friends
+      parameters:
+      - description: user id
+        in: path
+        name: userId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.FindFriendshipOfUserResponse'
+      summary: Gets a list of friends of the user.
+      tags:
+      - User
   /user/{userId}/join/{communityId}:
     post:
       description: Joins a community.
@@ -615,6 +664,25 @@ paths:
           schema:
             $ref: '#/definitions/dto.FindUserMembershipsResponse'
       summary: Gets a list of communities that user is member of.
+      tags:
+      - User
+  /user/{userId}/photoAlbums:
+    get:
+      description: Returns a list of photo albums
+      parameters:
+      - description: user id
+        in: path
+        name: userId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.FindPhotoAlbumOfUserResponse'
+      summary: Gets a list of photo albums of the user.
       tags:
       - User
 schemes:
