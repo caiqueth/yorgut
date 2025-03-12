@@ -13,6 +13,10 @@ build:
 run:
 	@go run cmd/api/main.go
 
+# Fill the database with test data
+seed:
+	@go run cmd/seed/main.go
+
 # Test the application
 test:
 	@echo "Testing..."

@@ -7,7 +7,7 @@ interface IProfileHeaderProps {
   userId: number;
 }
 export const ProfileHeader: React.FC<IProfileHeaderProps> = ({ userId }) => {
-  const user = useUser(userId);
+  const { data: user } = useUser(userId);
   const userStatistics = useUserStatistics(userId);
 
   return (
@@ -15,7 +15,7 @@ export const ProfileHeader: React.FC<IProfileHeaderProps> = ({ userId }) => {
       <Paper sx={{ backgroundColor: "white", p: 1 }}>
         <Stack direction={"row"} sx={{ width: "100%", padding: 0 }} alignItems={"end"}>
           <Typography variant={"h5"} sx={{ "&::first-letter": { fontSize: "200%" } }}>
-            {user.firstName} {user.lastName}
+            {user?.firstName} {user?.lastName}
           </Typography>
         </Stack>
         <Stack direction={"row"} gap={1}>
