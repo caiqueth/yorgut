@@ -1,56 +1,6 @@
 package dto
 
-import (
-	"time"
-	"yorgut/internal/model"
-)
-
-type CreateUserRequest struct {
-	FirstName string
-	LastName  string
-	Email     string
-	BirthDate time.Time
-}
-
-type UpdateUserRequest struct {
-	FirstName string
-	LastName  string
-	Email     string
-	BirthDate time.Time
-}
-
-type UserDto struct {
-	ID        uint      `json:"id"`
-	Email     string    `json:"email"`
-	FirstName string    `json:"firstName"`
-	LastName  string    `json:"lastName"`
-	BirthDate time.Time `json:"birthDate"`
-	CreatedAt time.Time `json:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
-}
-
-type CommunityDto struct {
-	Name        string
-	Description string
-	CreatedBy   uint
-	PictureUrl  string
-}
-
-type FindUserByIdResponse struct {
-	UserDto
-}
-
-type FindManyUsersResponse struct {
-	Users []UserDto `json:"users"`
-}
-
-type FindUserCommunitiesResponse struct {
-	Communities []CommunityDto `json:"communities"`
-}
-
-type FindUserMembershipsResponse struct {
-	Communities []CommunityDto `json:"communities"`
-}
+import "yorgut/internal/model"
 
 // Mappers
 func (r *FindUserByIdResponse) FromUser(user *model.User) {
@@ -83,6 +33,29 @@ func (r *FindUserMembershipsResponse) FromMemberships(memberships []model.Commun
 			Description: m.Community.Description,
 			CreatedBy:   m.Community.CreatedByID,
 			PictureUrl:  m.Community.PictureUrl,
+		}
+	}
+}
+
+func (r *FindPhotoAlbumOfUserResponse) FromPhotoAlbums(photoAlbums []model.PhotoAlbum) {
+	r.PhotoAlbums = make([]PhotoAlbumDto, len(photoAlbums))
+
+	for i, pa := range photoAlbums {
+		r.PhotoAlbums[i] = PhotoAlbumDto{
+			Name:   pa.Name,
+			UserID: pa.UserID,
+		}
+	}
+}
+
+func (r *FindFriendshipOfUserResponse) FromFriendships(friendships []model.Friendship) {
+	r.Friendships = make([]FriendshipDto, len(friendships))
+
+	for i, f := range friendships {
+		r.Friendships[i] = FriendshipDto{
+			UserRequestedID: f.UserRequestedID,
+			UserRequesteeID: f.UserRequesteeID,
+			CreatedAt:       f.CreatedAt,
 		}
 	}
 }

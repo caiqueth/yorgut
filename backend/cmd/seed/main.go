@@ -15,18 +15,23 @@ func main() {
 
 	userRepo := repository.NewUserRepository(db)
 	communityRepo := repository.NewCommunityRepository(db)
+	communityMembershipRepo := repository.NewCommunityMembershipRepository(db)
 	friendshipRepo := repository.NewFriendshipRepository(db)
 
 	seedUsers(userRepo)
-	seedCommunities(communityRepo)
+	seedCommunities(communityRepo, userRepo)
 	seedFriendships(friendshipRepo, userRepo)
+	seedMemberships(communityMembershipRepo, userRepo, communityRepo)
 
 	fmt.Println("✅ Seeding complete!")
 }
 
 func seedUsers(ur *repository.UserRepository) {
 
-	users := seed.GetUsersSeed()
+	users, err := ur.FindMany()
+	if err != nil {
+		panic(err)
+	}
 
 	for _, user := range users {
 		err := ur.Create(user)
@@ -40,13 +45,19 @@ func seedUsers(ur *repository.UserRepository) {
 
 }
 
-func seedCommunities(r *repository.CommunityRepository) {
-	owners := seed.GetUsersSeed()
+func seedCommunities(
+	cr *repository.CommunityRepository,
+	ur *repository.UserRepository,
+) {
+	owners, err := ur.FindMany()
+	if err != nil {
+		panic(err)
+	}
 
 	communities := seed.GetCommunitiesSeed(owners)
 
 	for _, community := range communities {
-		err := r.Create(community)
+		err := cr.Create(community)
 		if err != nil {
 			log.Printf("❌ Failed to insert community %s: %v\n", community.Name, err)
 		} else {
@@ -73,12 +84,12 @@ func seedFriendships(
 				continue
 			}
 
-			if fr.AreFriends(user.ID, friend.ID) {
+			if fr.UsersAreFriends(user.ID, friend.ID) {
 				continue
 			}
 
 			friendship := model.NewFriendship(user, friend)
-			friendship.Accepted = true
+			friendship.Accepted = seed.RandomBoolean()
 
 			err := fr.Create(friendship)
 			if err != nil {
@@ -90,4 +101,34 @@ func seedFriendships(
 
 	}
 
+}
+
+func seedMemberships(
+	cmr *repository.CommunityMembershipRepository,
+	ur *repository.UserRepository,
+	cr *repository.CommunityRepository,
+) {
+	users, err := ur.FindMany()
+	if err != nil {
+		panic(err)
+	}
+
+	communities, err := cr.FindMany()
+	if err != nil {
+		panic(err)
+	}
+
+	for _, user := range users {
+		for _, community := range communities {
+			if seed.RandomBoolean() {
+				membership := model.NewCommunityMembership(community, user)
+				err := cmr.Create(membership)
+				if err != nil {
+					log.Printf("❌ Failed to create %s membership for user %s: %v\n", community.Name, user.FirstName, err)
+				} else {
+					log.Printf("✅ %s Membership created for user %s\n", community.Name, user.FirstName)
+				}
+			}
+		}
+	}
 }
