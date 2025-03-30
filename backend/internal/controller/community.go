@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 	"yorgut/internal/dto"
+	"yorgut/internal/helpers"
 
 	"yorgut/internal/service"
 
@@ -23,18 +24,28 @@ func NewCommunityController(service service.CommunityService) *CommunityControll
 // Create				godoc
 // @Summary				Create Community
 // @Decription			Save community in Db.
-// @Param				community body dto.CreateCommunityRequest true "Create Community"
+// @Param				name formData string true "Community Name"
+// @Param				description formData string true "Community Description"
+// @Param				createdById formData int true "ID of Creator"
+// @Param				picture formData file true "Community Picture"
 // @Produce				application/json
 // @Tags				Community
 // @Success				201 {object} dto.Response{}
 // @Router				/community [post]
 func (c *CommunityController) Create(ctx *gin.Context) {
-	createCommunityRequest := dto.CreateCommunityRequest{}
-
-	err := ctx.ShouldBindJSON(&createCommunityRequest)
-	if err != nil {
-		panic(err)
+	createCommunityRequest := dto.CreateCommunityRequest{
+		Name:        ctx.PostForm("name"),
+		Description: ctx.PostForm("description"),
+		CreatedByID: uint(helpers.MustParseUint(ctx.PostForm("createdById"))),
 	}
+
+	file, err := ctx.FormFile("picture")
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Failed to get picture file"})
+		return
+	}
+
+	createCommunityRequest.Picture = file
 
 	err = c.communityService.Create(createCommunityRequest)
 	if err != nil {

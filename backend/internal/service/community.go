@@ -2,7 +2,9 @@ package service
 
 import (
 	"errors"
+	"path"
 	"yorgut/internal/dto"
+	"yorgut/internal/helpers"
 	"yorgut/internal/model"
 	"yorgut/internal/repository"
 
@@ -15,13 +17,28 @@ type CommunityService struct {
 	Validate            *validator.Validate
 }
 
-func (c *CommunityService) Create(community dto.CreateCommunityRequest) error {
-	owner, err := c.userRepository.FindById(community.CreatedByID)
+func (c *CommunityService) Create(request dto.CreateCommunityRequest) error {
+	owner, err := c.userRepository.FindById(request.CreatedByID)
 	if err != nil {
 		return errors.New("could not find specified community owner")
 	}
 
-	communityModel := model.NewCommunity(community.Name, community.Description, community.PictureUrl, owner)
+	picture, err := helpers.FileToBytes(request.Picture)
+	if err != nil {
+		return err
+	}
+
+	imageHasValidExtension := helpers.CheckValidImage(picture)
+	if !imageHasValidExtension {
+		return errors.New("invalid image format")
+	}
+
+	storedFileName, err := helpers.WriteFileToLocalStorage(path.Join(helpers.GetUploadsPath(), "community_pictures"), picture)
+	if err != nil {
+		return err
+	}
+
+	communityModel := model.NewCommunity(request.Name, request.Description, storedFileName, owner)
 	err = c.communityRepository.Create(communityModel)
 	if err != nil {
 		return err

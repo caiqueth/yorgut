@@ -12,6 +12,6 @@ type CommunityRepository struct {
 
 func NewCommunityRepository(Db *gorm.DB) *CommunityRepository {
 	return &CommunityRepository{
-		Repository: Repository[*model.Community]{Db: Db},
+		Repository: Repository[*model.Community]{db: Db},
 	}
 }

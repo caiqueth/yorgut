@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 	"log"
-	"time"
 	"yorgut/internal/database"
 	"yorgut/internal/model"
 	"yorgut/internal/repository"
+	"yorgut/internal/seed"
 )
 
 func main() {
@@ -15,63 +15,77 @@ func main() {
 
 	userRepo := repository.NewUserRepository(db)
 	communityRepo := repository.NewCommunityRepository(db)
+	friendshipRepo := repository.NewFriendshipRepository(db)
 
 	seedUsers(userRepo)
-	seedFriendships(communityRepo, userRepo)
+	seedCommunities(communityRepo)
+	seedFriendships(friendshipRepo, userRepo)
 
 	fmt.Println("✅ Seeding complete!")
 }
 
-func seedUsers(r *repository.UserRepository) {
+func seedUsers(ur *repository.UserRepository) {
 
-	users := []*model.User{
-		model.NewUser("Caique", "Test", "caique@test.com", time.Date(1950, 12, 9, 0, 0, 0, 0, time.UTC)),
-		model.NewUser("Lígia", "Test", "ligia@test.com", time.Date(1950, 1, 10, 0, 0, 0, 0, time.UTC)),
-		model.NewUser("Aline", "Test", "aline@test.com", time.Date(1950, 10, 5, 0, 0, 0, 0, time.UTC)),
-		model.NewUser("Renato", "Test", "renato@test.com", time.Date(1950, 3, 20, 0, 0, 0, 0, time.UTC)),
-		model.NewUser("Diego", "Test", "diego@test.com", time.Date(1950, 10, 23, 0, 0, 0, 0, time.UTC)),
-		model.NewUser("Luciana", "Test", "luciana@test.com", time.Date(1950, 5, 4, 0, 0, 0, 0, time.UTC)),
-		model.NewUser("Weslley", "Test", "weslley@test.com", time.Date(1950, 10, 8, 0, 0, 0, 0, time.UTC)),
-		model.NewUser("Carol", "Test", "carol@test.com", time.Date(1950, 12, 26, 0, 0, 0, 0, time.UTC)),
-	}
+	users := seed.GetUsersSeed()
 
 	for _, user := range users {
-		err := r.Create(user)
+		err := ur.Create(user)
 		if err != nil {
 			log.Printf("❌ Failed to insert user %s: %v\n", user.FirstName, err)
 		} else {
-			fmt.Printf("✅ Inserted user: %s\n", user.FirstName)
+			log.Printf("✅ Inserted user: %s\n", user.FirstName)
 		}
 
 	}
 
 }
 
-func seedFriendships(r *repository.CommunityRepository, ur *repository.UserRepository) {
-	userId := 1
-	owner, err := ur.FindById(uint(userId))
-	if err != nil {
-		log.Printf("❌ Failed to find user %s: %v\n", 1, err)
-	}
+func seedCommunities(r *repository.CommunityRepository) {
+	owners := seed.GetUsersSeed()
 
-	communities := []*model.Community{
-		model.NewCommunity("Deus me disse: desce e arrasa", "Descricao", "https://example.test.com", owner),
-		model.NewCommunity("Eu nunca terminei uma borracha", "Descricao", "https://example.test.com", owner),
-		model.NewCommunity("Tocava campainha e corria", "Descricao", "https://example.test.com", owner),
-		model.NewCommunity("Só mais 5 minutinhos", "Descricao", "https://example.test.com", owner),
-		model.NewCommunity("Não sei individualizar duplas", "Descricao", "https://example.test.com", owner),
-		model.NewCommunity("Tive medo da Gina dos palitos", "Descricao", "https://example.test.com", owner),
-		model.NewCommunity("Eu odeio acordar cedo", "Descricao", "https://example.test.com", owner),
-		model.NewCommunity("Queria sorvete, mas era feijão", "Descricao", "https://example.test.com", owner),
-		model.NewCommunity("Eu colho flores e o Tony Ramos", "Descricao", "https://example.test.com", owner),
-	}
+	communities := seed.GetCommunitiesSeed(owners)
 
 	for _, community := range communities {
 		err := r.Create(community)
 		if err != nil {
 			log.Printf("❌ Failed to insert community %s: %v\n", community.Name, err)
 		} else {
-			fmt.Printf("✅ Inserted community: %s\n", community.Name)
+			log.Printf("✅ Inserted community: %s\n", community.Name)
+		}
+
+	}
+
+}
+
+func seedFriendships(
+	fr *repository.FriendshipRepository,
+	ur *repository.UserRepository,
+) {
+	users, err := ur.FindMany()
+	if err != nil {
+		panic(err)
+	}
+
+	for _, user := range users {
+		for _, friend := range users {
+
+			if user.ID == friend.ID || user.ID > friend.ID {
+				continue
+			}
+
+			if fr.AreFriends(user.ID, friend.ID) {
+				continue
+			}
+
+			friendship := model.NewFriendship(user, friend)
+			friendship.Accepted = true
+
+			err := fr.Create(friendship)
+			if err != nil {
+				log.Printf("❌ Failed to create friendship between %s and %s: %v\n", user.FirstName, friend.FirstName, err)
+			} else {
+				log.Printf("✅ Friendship created between %s and %s\n", user.FirstName, friend.FirstName)
+			}
 		}
 
 	}

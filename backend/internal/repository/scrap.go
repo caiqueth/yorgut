@@ -16,6 +16,6 @@ func (s *ScrapRepository) FindOfUserRecipient(userId int) {
 
 func NewScrapRepository(Db *gorm.DB) *ScrapRepository {
 	return &ScrapRepository{
-		Repository: Repository[*model.Scrap]{Db: Db},
+		Repository: Repository[*model.Scrap]{db: Db},
 	}
 }

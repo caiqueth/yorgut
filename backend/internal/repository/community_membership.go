@@ -12,7 +12,7 @@ type CommunityMembershipRepository struct {
 
 func (c *CommunityMembershipRepository) FindOfUser(id uint) ([]model.CommunityMembership, error) {
 	var memberships []model.CommunityMembership
-	result := c.Db.Preload("Community").Where("user_id = ?", id).Find(&memberships)
+	result := c.db.Preload("Community").Where("user_id = ?", id).Find(&memberships)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -21,7 +21,7 @@ func (c *CommunityMembershipRepository) FindOfUser(id uint) ([]model.CommunityMe
 
 func (c *CommunityMembershipRepository) FindOfCommunity(id uint) ([]model.CommunityMembership, error) {
 	var memberships []model.CommunityMembership
-	result := c.Db.Preload("Community").Where("community_id = ?", id).Find(&memberships)
+	result := c.db.Preload("Community").Where("community_id = ?", id).Find(&memberships)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -30,6 +30,6 @@ func (c *CommunityMembershipRepository) FindOfCommunity(id uint) ([]model.Commun
 
 func NewCommunityMembershipRepository(Db *gorm.DB) *CommunityMembershipRepository {
 	return &CommunityMembershipRepository{
-		Repository: Repository[*model.CommunityMembership]{Db: Db},
+		Repository: Repository[*model.CommunityMembership]{db: Db},
 	}
 }

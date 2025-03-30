@@ -20,6 +20,6 @@ func (t *TestimonialRepository) FindOfUserRecipient(userId int) {
 
 func NewTestimonialRepository(Db *gorm.DB) *TestimonialRepository {
 	return &TestimonialRepository{
-		Repository: Repository[*model.Testimonial]{Db: Db},
+		Repository: Repository[*model.Testimonial]{db: Db},
 	}
 }

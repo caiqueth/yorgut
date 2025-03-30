@@ -18,17 +18,6 @@ definitions:
       userID:
         type: integer
     type: object
-  dto.CreateCommunityRequest:
-    properties:
-      createdByID:
-        type: integer
-      description:
-        type: string
-      name:
-        type: string
-      pictureUrl:
-        type: string
-    type: object
   dto.CreateFriendshipRequest:
     properties:
       userRequested:
@@ -174,12 +163,26 @@ paths:
       - Community
     post:
       parameters:
-      - description: Create Community
-        in: body
-        name: community
+      - description: Community Name
+        in: formData
+        name: name
         required: true
-        schema:
-          $ref: '#/definitions/dto.CreateCommunityRequest'
+        type: string
+      - description: Community Description
+        in: formData
+        name: description
+        required: true
+        type: string
+      - description: ID of Creator
+        in: formData
+        name: createdById
+        required: true
+        type: integer
+      - description: Community Picture
+        in: formData
+        name: picture
+        required: true
+        type: file
       produces:
       - application/json
       responses:

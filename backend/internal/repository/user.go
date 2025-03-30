@@ -12,14 +12,14 @@ type UserRepository struct {
 
 func NewUserRepository(Db *gorm.DB) *UserRepository {
 	return &UserRepository{
-		Repository: Repository[*model.User]{Db: Db},
+		Repository: Repository[*model.User]{db: Db},
 	}
 }
 
 func (u *UserRepository) FindUserOwnedCommunities(userId uint) ([]model.Community, error) {
 	var communities []model.Community
 
-	result := u.Db.Where("created_by_id = ?", userId).Find(&communities)
+	result := u.db.Where("created_by_id = ?", userId).Find(&communities)
 
 	if result.Error != nil {
 		return nil, result.Error

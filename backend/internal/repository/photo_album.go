@@ -12,7 +12,7 @@ type PhotoAlbumRepository struct {
 
 func (p *PhotoAlbumRepository) FindOfUser(userId int) ([]model.PhotoAlbum, error) {
 	var ents []model.PhotoAlbum
-	result := p.Db.Where("user_id = ?", userId).Find(&ents)
+	result := p.db.Where("user_id = ?", userId).Find(&ents)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -21,6 +21,6 @@ func (p *PhotoAlbumRepository) FindOfUser(userId int) ([]model.PhotoAlbum, error
 
 func NewPhotoAlbumRepository(Db *gorm.DB) *PhotoAlbumRepository {
 	return &PhotoAlbumRepository{
-		Repository: Repository[*model.PhotoAlbum]{Db: Db},
+		Repository: Repository[*model.PhotoAlbum]{db: Db},
 	}
 }

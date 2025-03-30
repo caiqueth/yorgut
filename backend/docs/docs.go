@@ -62,13 +62,32 @@ const docTemplate = `{
                 "summary": "Create Community",
                 "parameters": [
                     {
-                        "description": "Create Community",
-                        "name": "community",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.CreateCommunityRequest"
-                        }
+                        "type": "string",
+                        "description": "Community Name",
+                        "name": "name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Community Description",
+                        "name": "description",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ID of Creator",
+                        "name": "createdById",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "Community Picture",
+                        "name": "picture",
+                        "in": "formData",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -847,23 +866,6 @@ const docTemplate = `{
                 },
                 "userID": {
                     "type": "integer"
-                }
-            }
-        },
-        "dto.CreateCommunityRequest": {
-            "type": "object",
-            "properties": {
-                "createdByID": {
-                    "type": "integer"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "pictureUrl": {
-                    "type": "string"
                 }
             }
         },

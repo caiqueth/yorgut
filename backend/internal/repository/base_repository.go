@@ -8,11 +8,11 @@ import (
 )
 
 type Repository[T any] struct {
-	Db *gorm.DB
+	db *gorm.DB
 }
 
 func (r *Repository[T]) Create(entity T) error {
-	result := r.Db.Create(&entity)
+	result := r.db.Create(&entity)
 	if result.Error != nil {
 		return fmt.Errorf("error creating entity: %v", result.Error)
 	}
@@ -21,7 +21,7 @@ func (r *Repository[T]) Create(entity T) error {
 
 func (r *Repository[T]) Delete(id uint) error {
 	var ent T
-	result := r.Db.Where("id = ?", id).Delete(&ent)
+	result := r.db.Where("id = ?", id).Delete(&ent)
 	if result.Error != nil {
 		return result.Error
 	}
@@ -30,7 +30,7 @@ func (r *Repository[T]) Delete(id uint) error {
 
 func (r *Repository[T]) FindById(id uint) (T, error) {
 	var ent T
-	result := r.Db.Find(&ent, id)
+	result := r.db.Find(&ent, id)
 	if result != nil {
 		return ent, nil
 	} else {
@@ -40,7 +40,7 @@ func (r *Repository[T]) FindById(id uint) (T, error) {
 
 func (r *Repository[T]) FindMany() ([]T, error) {
 	var ents []T
-	results := r.Db.Find(&ents)
+	results := r.db.Find(&ents)
 	if results.Error != nil {
 		return nil, results.Error
 	}
@@ -49,7 +49,7 @@ func (r *Repository[T]) FindMany() ([]T, error) {
 
 func (r *Repository[T]) Update(ent T) error {
 	updateEntity := ent
-	result := r.Db.Model(&ent).Updates(updateEntity)
+	result := r.db.Model(&ent).Updates(updateEntity)
 	if result.Error != nil {
 		return result.Error
 	}

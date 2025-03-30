@@ -1,10 +1,12 @@
 package dto
 
+import "mime/multipart"
+
 type CreateCommunityRequest struct {
-	Name        string
-	Description string
-	PictureUrl  string
-	CreatedByID uint
+	Name        string                `form:"name" binding:"required" example:"My Community"`
+	Description string                `form:"description" binding:"required" example:"This is a test community"`
+	Picture     *multipart.FileHeader `form:"picture" swaggerignore:"true"`
+	CreatedByID uint                  `form:"createdById" binding:"required" example:"1"`
 }
 
 type UpdateCommunityRequest struct {

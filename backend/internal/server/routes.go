@@ -3,6 +3,7 @@ package server
 import (
 	"net/http"
 	"yorgut/internal/controller"
+	"yorgut/internal/helpers"
 
 	_ "yorgut/docs"
 
@@ -35,6 +36,8 @@ func NewRouter(
 	testimonialController *controller.TestimonialController,
 ) *gin.Engine {
 	router := gin.Default()
+
+	router.Static("/uploads", helpers.GetUploadsPath())
 
 	router.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:3000"},
