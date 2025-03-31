@@ -2,6 +2,7 @@ package controller
 
 import (
 	"net/http"
+	"strconv"
 	"yorgut/internal/dto"
 	"yorgut/internal/service"
 
@@ -35,7 +36,7 @@ func (cm *CommunityMembershipController) Create(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	}
 
-	err = cm.CommunityMembershipService.Create(createMembershipRequest)
+	err = cm.CommunityMembershipService.CreateCommunityMembership(createMembershipRequest)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -59,7 +60,36 @@ func (cm *CommunityMembershipController) Create(ctx *gin.Context) {
 // @Success				204 {object} dto.Response{}
 // @Router				/community_membership/{userId}/{communityId} [delete]
 func (cm *CommunityMembershipController) Delete(ctx *gin.Context) {
-	panic("unimplemented")
+	communityId, err := strconv.Atoi(ctx.Param("communityId"))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	userId, err := strconv.Atoi(ctx.Param("userId"))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	communityMembershipId, err := cm.CommunityMembershipService.FindCommunityMembership(uint(communityId), uint(userId))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	err = cm.CommunityMembershipService.DeleteCommunityMembership(*communityMembershipId)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	webResponse := dto.Response{
+		Data: nil,
+	}
+
+	ctx.JSON(http.StatusCreated, webResponse)
+
 }
 
 // Create				godoc

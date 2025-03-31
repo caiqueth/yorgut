@@ -22,26 +22,26 @@ type UserService struct {
 }
 
 type ScrapService struct {
-	ScrapRepository repository.ScrapRepository
-	UserRepository  repository.UserRepository
+	scrapRepository repository.ScrapRepository
+	userRepository  repository.UserRepository
 	Validate        *validator.Validate
 }
 
 type PhotoService struct {
-	PhotoRepository      repository.PhotoRepository
-	PhotoAlbumRepository repository.PhotoAlbumRepository
+	photoRepository      repository.PhotoRepository
+	photoAlbumRepository repository.PhotoAlbumRepository
 	Validate             *validator.Validate
 }
 
 type PhotoAlbumService struct {
 	photoAlbumRepository repository.PhotoAlbumRepository
-	UserRepository       repository.UserRepository
+	userRepository       repository.UserRepository
 	Validate             *validator.Validate
 }
 
 type FriendshipService struct {
-	FriendshipRepository repository.FriendshipRepository
-	UserRepository       repository.UserRepository
+	friendshipRepository repository.FriendshipRepository
+	userRepository       repository.UserRepository
 	Validate             *validator.Validate
 }
 
@@ -52,9 +52,9 @@ type CommunityService struct {
 }
 
 type CommunityMembershipService struct {
-	CommunityMembershipRepository repository.CommunityMembershipRepository
-	CommunityRepository           repository.CommunityRepository
-	UserRepository                repository.UserRepository
+	communityMembershipRepository repository.CommunityMembershipRepository
+	communityRepository           repository.CommunityRepository
+	userRepository                repository.UserRepository
 	Validate                      *validator.Validate
 }
 
@@ -63,7 +63,7 @@ func NewCommunityMembershipService(
 	validate *validator.Validate,
 ) *CommunityMembershipService {
 	return &CommunityMembershipService{
-		CommunityMembershipRepository: communityMembershipRepository,
+		communityMembershipRepository: communityMembershipRepository,
 		Validate:                      validate,
 	}
 }
@@ -85,7 +85,7 @@ func NewFriendshipService(
 	validate *validator.Validate,
 ) *FriendshipService {
 	return &FriendshipService{
-		FriendshipRepository: friendshipRepository,
+		friendshipRepository: friendshipRepository,
 		Validate:             validate,
 	}
 }
@@ -102,14 +102,14 @@ func NewPhotoAlbumService(
 
 func NewPhotoService(photoRepository repository.PhotoRepository, validate *validator.Validate) *PhotoService {
 	return &PhotoService{
-		PhotoRepository: photoRepository,
+		photoRepository: photoRepository,
 		Validate:        validate,
 	}
 }
 
 func NewScrapService(scrapRepository repository.ScrapRepository, validate *validator.Validate) *ScrapService {
 	return &ScrapService{
-		ScrapRepository: scrapRepository,
+		scrapRepository: scrapRepository,
 		Validate:        validate,
 	}
 }

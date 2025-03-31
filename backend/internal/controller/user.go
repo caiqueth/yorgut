@@ -36,7 +36,7 @@ func (uc *UserController) Create(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}
 
-	err = uc.userService.Create(createUserRequest)
+	err = uc.userService.CreateUser(createUserRequest)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -66,7 +66,7 @@ func (uc *UserController) FindById(ctx *gin.Context) {
 		return
 	}
 
-	user, err := uc.userService.FindById(uint(id))
+	user, err := uc.userService.FindUserById(uint(id))
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -88,7 +88,7 @@ func (uc *UserController) FindById(ctx *gin.Context) {
 // @Success				200 {object} dto.Response{}
 // @Router				/user [get]
 func (uc *UserController) FindMany(ctx *gin.Context) {
-	users, err := uc.userService.FindMany()
+	users, err := uc.userService.FindManyUsers()
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -114,7 +114,7 @@ func (uc *UserController) Delete(ctx *gin.Context) {
 		return
 	}
 
-	uc.userService.Delete(uint(id))
+	uc.userService.DeleteUser(uint(id))
 
 	webResponse := dto.Response{
 		Data: nil,
@@ -140,7 +140,7 @@ func (uc *UserController) Update(ctx *gin.Context) {
 		return
 	}
 
-	err = uc.userService.Update(request)
+	err = uc.userService.UpdateUser(request)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

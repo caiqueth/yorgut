@@ -14,6 +14,10 @@ type CreateCommunityMembershipRequest struct {
 	UserID      uint
 }
 
+type CommunityMembershipResponse struct {
+	ID uint
+}
+
 type FindCommunityMembershipOfUserResponse struct {
 }
 
@@ -52,6 +56,7 @@ type CreateFriendshipRequest struct {
 type FindFriendshipOfUserResponse struct {
 	Friendships []FriendshipDto `json:"friendships"`
 }
+
 type PhotoAlbumDto struct {
 	UserID uint
 	Name   string

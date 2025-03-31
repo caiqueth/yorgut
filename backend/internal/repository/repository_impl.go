@@ -23,6 +23,15 @@ func (c *CommunityMembershipRepository) FindOfUser(id uint) ([]model.CommunityMe
 	return memberships, nil
 }
 
+func (c *CommunityMembershipRepository) FindOfUserAndCommunity(communityId uint, userId uint) (*model.CommunityMembership, error) {
+	var membership model.CommunityMembership
+	result := c.db.Where("user_id = ? and communityId = ?", userId, communityId).First(&membership)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &membership, nil
+}
+
 func (c *CommunityMembershipRepository) FindOfCommunity(id uint) ([]model.CommunityMembership, error) {
 	var memberships []model.CommunityMembership
 	result := c.db.Preload("Community").Where("community_id = ?", id).Find(&memberships)

@@ -47,7 +47,7 @@ func (c *CommunityController) Create(ctx *gin.Context) {
 
 	createCommunityRequest.Picture = file
 
-	err = c.communityService.Create(createCommunityRequest)
+	err = c.communityService.CreateCommunity(createCommunityRequest)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -86,7 +86,7 @@ func (c *CommunityController) Delete(ctx *gin.Context) {
 		panic(err)
 	}
 
-	err = c.communityService.Delete(uint(id))
+	err = c.communityService.DeleteCommunity(uint(id))
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -111,7 +111,7 @@ func (c *CommunityController) FindById(ctx *gin.Context) {
 		panic(err)
 	}
 
-	community, err := c.communityService.FindById(uint(id))
+	community, err := c.communityService.FindCommunityById(uint(id))
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -132,7 +132,7 @@ func (c *CommunityController) FindById(ctx *gin.Context) {
 // @Success				200 {object} dto.FindManyCommunitiesResponse{}
 // @Router				/community [get]
 func (c *CommunityController) FindMany(ctx *gin.Context) {
-	communities, err := c.communityService.FindMany()
+	communities, err := c.communityService.FindManyCommunities()
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
