@@ -1,5 +1,5 @@
 import React from "react";
-import { useUserCommunities, useUserStatistics } from "api/user/queries";
+import { useUserMemberships, useUserStatistics } from "api/user/queries";
 import { isStripedRow } from "helpers/isStripedRow";
 import { Link } from "react-router-dom";
 import { palette } from "theme";
@@ -11,7 +11,7 @@ interface ICommunitiesListProps {
 }
 export const CommunitiesList: React.FC<ICommunitiesListProps> = ({ userId }) => {
   const userStatistics = useUserStatistics(userId);
-  const communities = useUserCommunities(userId);
+  const { data: memberships } = useUserMemberships(userId);
 
   return (
     <Paper>
@@ -21,16 +21,16 @@ export const CommunitiesList: React.FC<ICommunitiesListProps> = ({ userId }) => 
         </Typography>
       </Box>
       <Grid container direction={"row"}>
-        {communities.map((community, idx) => (
+        {memberships?.map((membership, idx) => (
           <Grid
             size={4}
-            key={community.id}
+            key={membership.id}
             sx={{ p: 1, backgroundColor: isStripedRow(idx, 3) ? palette.darkBlue : palette.mediumBlue }}
           >
             <Stack alignItems={"center"} flexDirection={"column"} sx={{ textAlign: "center" }}>
-              <Link to={`/communities/${community.id}`}>
-                <img height={64} src={community.picture} alt="image not found" />
-                <Typography variant={"body2"}>{`${community.name} (${community.members})`}</Typography>
+              <Link to={`/communities/${membership.id}`}>
+                <img height={64} src={membership.picture} alt="image not found" />
+                <Typography variant={"body2"}>{`${membership.name} (${membership.members})`}</Typography>
               </Link>
             </Stack>
           </Grid>

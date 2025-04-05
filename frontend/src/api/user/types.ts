@@ -7,3 +7,18 @@ export interface IUser {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface IFriend {
+  id: string;
+  firstName: string;
+  birthDate: Date;
+  profilePicture: string;
+  frienshipsCount: number;
+}
+
+export interface ICommunity {
+  id: number;
+  name: string;
+  picture: string;
+  members: number;
+}

@@ -12,7 +12,7 @@ interface IFriendsListProps {
 }
 export const FriendsList: React.FC<IFriendsListProps> = ({ userId }) => {
   const userStatistics = useUserStatistics(userId);
-  const friends = useUserFriends(userId);
+  const { data: friends } = useUserFriends(userId);
   const navigate = useNavigate();
 
   const handleGoToFriends = () => {
@@ -28,7 +28,7 @@ export const FriendsList: React.FC<IFriendsListProps> = ({ userId }) => {
           </Typography>
         </Box>
         <Grid container direction={"row"}>
-          {friends.map((friend, idx) => {
+          {friends?.map((friend, idx) => {
             return (
               <Grid
                 size={3}
@@ -38,7 +38,7 @@ export const FriendsList: React.FC<IFriendsListProps> = ({ userId }) => {
                 <Stack alignItems={"center"} flexDirection={"column"} sx={{ textAlign: "center" }}>
                   <Link to={`/profile/${friend.id}`}>
                     <img height={64} src={friend.profilePicture} alt="image not found" />
-                    <Typography variant={"body2"}>{`${friend.name} (${friend.friends})`}</Typography>
+                    <Typography variant={"body2"}>{`${friend.firstName} (${friend.frienshipsCount})`}</Typography>
                   </Link>
                 </Stack>
               </Grid>
