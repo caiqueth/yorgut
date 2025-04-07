@@ -28,10 +28,7 @@ func main() {
 
 func seedUsers(ur *repository.UserRepository) {
 
-	users, err := ur.FindMany()
-	if err != nil {
-		panic(err)
-	}
+	users := seed.GetUsersSeed()
 
 	for _, user := range users {
 		err := ur.Create(user)

@@ -7,7 +7,8 @@ import (
 )
 
 func RandomChoice[T any](arr []T) T {
-	return arr[rand.IntN(len(arr))]
+	max := len(arr)
+	return arr[rand.IntN(max)]
 }
 
 func RandomBoolean() bool {
