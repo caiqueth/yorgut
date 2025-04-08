@@ -22,10 +22,14 @@ type FindCommunityMembershipOfUserResponse struct {
 }
 
 type CreateCommunityRequest struct {
-	Name        string                `form:"name" binding:"required" example:"My Community"`
+	Name        string `form:"name" binding:"required" example:"My Community"`
+	CreatedByID uint   `form:"createdById" binding:"required" example:"1"`
+}
+
+type CreateCommunityProfileRequest struct {
+	CommunityID uint
 	Description string                `form:"description" binding:"required" example:"This is a test community"`
 	Picture     *multipart.FileHeader `form:"picture" swaggerignore:"true"`
-	CreatedByID uint                  `form:"createdById" binding:"required" example:"1"`
 }
 
 type UpdateCommunityRequest struct {
@@ -34,10 +38,8 @@ type UpdateCommunityRequest struct {
 }
 
 type FindCommunityByIdResponse struct {
-	Name        string
-	Description string
-	CreatedBy   uint
-	PictureUrl  string
+	Name      string
+	CreatedBy uint
 }
 
 type FindManyCommunitiesResponse struct{}
@@ -122,10 +124,8 @@ type UserDto struct {
 }
 
 type CommunityDto struct {
-	Name        string
-	Description string
-	CreatedBy   uint
-	PictureUrl  string
+	Name      string
+	CreatedBy uint
 }
 
 type FindUserByIdResponse struct {

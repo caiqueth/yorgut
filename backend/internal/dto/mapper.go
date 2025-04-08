@@ -17,10 +17,8 @@ func (r *FindUserCommunitiesResponse) FromCommunities(communities []model.Commun
 	r.Communities = make([]CommunityDto, len(communities))
 	for i, c := range communities {
 		r.Communities[i] = CommunityDto{
-			Name:        c.Name,
-			Description: c.Description,
-			CreatedBy:   c.CreatedByID,
-			PictureUrl:  c.PictureUrl,
+			Name:      c.Name,
+			CreatedBy: c.CreatedByID,
 		}
 	}
 }
@@ -29,10 +27,8 @@ func (r *FindUserMembershipsResponse) FromMemberships(memberships []model.Commun
 	r.Communities = make([]CommunityDto, len(memberships))
 	for i, m := range memberships {
 		r.Communities[i] = CommunityDto{
-			Name:        m.Community.Name,
-			Description: m.Community.Description,
-			CreatedBy:   m.Community.CreatedByID,
-			PictureUrl:  m.Community.PictureUrl,
+			Name:      m.Community.Name,
+			CreatedBy: m.Community.CreatedByID,
 		}
 	}
 }

@@ -57,6 +57,12 @@ type CommunityService struct {
 	Validate            *validator.Validate
 }
 
+type CommunityProfileService struct {
+	communityProfileRepository repository.CommunityProfileRepository
+	communityRepository        repository.CommunityRepository
+	Validate                   *validator.Validate
+}
+
 type CommunityMembershipService struct {
 	communityMembershipRepository repository.CommunityMembershipRepository
 	communityRepository           repository.CommunityRepository
@@ -153,5 +159,16 @@ func NewUserProfileService(
 	return &UserProfileService{
 		userProfileRepository: userProfileRepository,
 		userRepository:        userRepository,
+	}
+}
+
+func NewCommunityProfileService(
+	communityProfileRepository repository.CommunityProfileRepository,
+	communityRepository repository.CommunityRepository,
+	validate *validator.Validate,
+) *CommunityProfileService {
+	return &CommunityProfileService{
+		communityProfileRepository: communityProfileRepository,
+		communityRepository:        communityRepository,
 	}
 }

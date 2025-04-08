@@ -315,17 +315,7 @@ func (c *CommunityService) CreateCommunity(request dto.CreateCommunityRequest) e
 		return errors.New("could not find specified community owner")
 	}
 
-	picture, err := helpers.FileToBytes(request.Picture)
-	if err != nil {
-		return err
-	}
-
-	storedFileName, err := helpers.PictureToLocalStorage(picture, "community_pictures")
-	if err != nil {
-		return err
-	}
-
-	communityModel := model.NewCommunity(request.Name, request.Description, *storedFileName, owner)
+	communityModel := model.NewCommunity(request.Name, owner)
 	err = c.communityRepository.Create(communityModel)
 	if err != nil {
 		return err
@@ -348,9 +338,8 @@ func (c *CommunityService) FindCommunityById(id uint) (dto.FindCommunityByIdResp
 	}
 
 	r := dto.FindCommunityByIdResponse{
-		Name:        community.Name,
-		Description: community.Description,
-		CreatedBy:   community.CreatedByID,
+		Name:      community.Name,
+		CreatedBy: community.CreatedByID,
 	}
 	return r, nil
 }
@@ -365,10 +354,8 @@ func (c *CommunityService) FindManyCommunities() (*dto.Response, error) {
 
 	for i, community := range communities {
 		communityDtos[i] = dto.CommunityDto{
-			Name:        community.Name,
-			Description: community.Description,
-			CreatedBy:   community.CreatedByID,
-			PictureUrl:  community.PictureUrl,
+			Name:      community.Name,
+			CreatedBy: community.CreatedByID,
 		}
 	}
 
@@ -379,6 +366,33 @@ func (c *CommunityService) FindManyCommunities() (*dto.Response, error) {
 
 func (c *CommunityService) UpdateCommunity(user dto.UpdateCommunityRequest) (dto.Response, error) {
 	panic("unimplemented")
+}
+
+// Community Profile
+func (c *CommunityProfileService) CreateCommunityProfile(request dto.CreateCommunityProfileRequest) error {
+	community, err := c.communityRepository.FindById(request.CommunityID)
+	if err != nil {
+		return errors.New("could not find specified community")
+	}
+
+	picture, err := helpers.FileToBytes(request.Picture)
+	if err != nil {
+		return err
+	}
+
+	storedFileName, err := helpers.UploadCommunityPicture(picture)
+	if err != nil {
+		return err
+	}
+
+	communityProfileModel := model.NewCommunityProfile(community)
+	model.AddCommunityProfilePicture(communityProfileModel, *storedFileName)
+
+	err = c.communityProfileRepository.Create(communityProfileModel)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // CommunityMembership

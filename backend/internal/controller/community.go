@@ -12,12 +12,17 @@ import (
 )
 
 type CommunityController struct {
-	communityService service.CommunityService
+	communityService        service.CommunityService
+	communityProfileService service.CommunityProfileService
 }
 
-func NewCommunityController(service service.CommunityService) *CommunityController {
+func NewCommunityController(
+	communityService service.CommunityService,
+	communityProfileService service.CommunityProfileService,
+) *CommunityController {
 	return &CommunityController{
-		communityService: service,
+		communityService:        communityService,
+		communityProfileService: communityProfileService,
 	}
 }
 
@@ -35,19 +40,10 @@ func NewCommunityController(service service.CommunityService) *CommunityControll
 func (c *CommunityController) Create(ctx *gin.Context) {
 	createCommunityRequest := dto.CreateCommunityRequest{
 		Name:        ctx.PostForm("name"),
-		Description: ctx.PostForm("description"),
 		CreatedByID: uint(helpers.MustParseUint(ctx.PostForm("createdById"))),
 	}
 
-	file, err := ctx.FormFile("picture")
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Failed to get picture file"})
-		return
-	}
-
-	createCommunityRequest.Picture = file
-
-	err = c.communityService.CreateCommunity(createCommunityRequest)
+	err := c.communityService.CreateCommunity(createCommunityRequest)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -139,4 +135,41 @@ func (c *CommunityController) FindMany(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, communities)
+}
+
+// CreateCommunityProfile				godoc
+// @Summary				Create Community Profile
+// @Decription			Save community profile in Db.
+// @Param				communityId formData string true "Community Name"
+// @Param				description formData string true "Community Description"
+// @Param				picture formData file true "Community Picture"
+// @Produce				application/json
+// @Tags				Community
+// @Success				201 {object} dto.Response{}
+// @Router				/community_profile [post]
+func (c *CommunityController) CreateCommunityProfile(ctx *gin.Context) {
+	request := dto.CreateCommunityProfileRequest{
+		CommunityID: helpers.MustParseUint(ctx.PostForm("communityId")),
+		Description: ctx.PostForm("description"),
+	}
+
+	file, err := ctx.FormFile("picture")
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Failed to get picture file"})
+		return
+	}
+
+	request.Picture = file
+
+	err = c.communityProfileService.CreateCommunityProfile(request)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	webResponse := dto.Response{
+		Data: nil,
+	}
+
+	ctx.JSON(http.StatusCreated, webResponse)
 }
