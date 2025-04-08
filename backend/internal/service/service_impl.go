@@ -3,7 +3,6 @@ package service
 import (
 	"errors"
 	"fmt"
-	"path"
 	"yorgut/internal/dto"
 	"yorgut/internal/helpers"
 	"yorgut/internal/model"
@@ -321,17 +320,12 @@ func (c *CommunityService) CreateCommunity(request dto.CreateCommunityRequest) e
 		return err
 	}
 
-	imageHasValidExtension := helpers.CheckValidImage(picture)
-	if !imageHasValidExtension {
-		return errors.New("invalid image format")
-	}
-
-	storedFileName, err := helpers.WriteFileToLocalStorage(path.Join(helpers.GetUploadsPath(), "community_pictures"), picture)
+	storedFileName, err := helpers.PictureToLocalStorage(picture, "community_pictures")
 	if err != nil {
 		return err
 	}
 
-	communityModel := model.NewCommunity(request.Name, request.Description, storedFileName, owner)
+	communityModel := model.NewCommunity(request.Name, request.Description, *storedFileName, owner)
 	err = c.communityRepository.Create(communityModel)
 	if err != nil {
 		return err

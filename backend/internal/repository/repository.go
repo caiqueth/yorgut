@@ -81,6 +81,10 @@ type CommunityRepository struct {
 	repository[*model.Community]
 }
 
+type CommunityProfileRepository struct {
+	repository[*model.CommunityProfile]
+}
+
 type PhotoAlbumRepository struct {
 	repository[*model.PhotoAlbum]
 }
@@ -113,6 +117,12 @@ func NewPhotoAlbumRepository(Db *gorm.DB) *PhotoAlbumRepository {
 func NewCommunityRepository(Db *gorm.DB) *CommunityRepository {
 	return &CommunityRepository{
 		repository: repository[*model.Community]{db: Db},
+	}
+}
+
+func NewCommunityProfileRepository(Db *gorm.DB) *CommunityProfileRepository {
+	return &CommunityProfileRepository{
+		repository: repository[*model.CommunityProfile]{db: Db},
 	}
 }
 

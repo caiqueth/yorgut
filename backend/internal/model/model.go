@@ -10,10 +10,17 @@ import (
 type Community struct {
 	gorm.Model
 	Name        string
-	Description string
-	PictureUrl  string
 	CreatedByID uint
-	CreatedBy   *User `gorm:"foreignKey:CreatedByID;references:ID"`
+	CreatedBy   *User             `gorm:"foreignKey:CreatedByID;references:ID"`
+	Profile     *CommunityProfile `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+}
+
+type CommunityProfile struct {
+	gorm.Model
+	Description    *string
+	ProfilePicture *string
+	CommunityID    uint       `gorm:"uniqueIndex"`
+	Community      *Community `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
 
 type CommunityMembership struct {
@@ -68,11 +75,19 @@ type Testimonial struct {
 	Approved        bool
 }
 
+type User struct {
+	gorm.Model
+	Email     string
+	FirstName string
+	LastName  string
+	BirthDate time.Time
+	Profile   *UserProfile `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+}
+
 type UserProfile struct {
 	gorm.Model
-
-	UserID             uint
-	User               *User `gorm:"foreignKey:UserID;references:ID"`
+	UserID             uint  `gorm:"uniqueIndex"`
+	User               *User `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 	ProfilePicture     *string
 	Description        *string
 	RelationshipStatus *string
@@ -93,20 +108,11 @@ type UserProfile struct {
 	Cuisine            *string
 }
 
-type User struct {
-	gorm.Model
-	Email     string
-	FirstName string
-	LastName  string
-	BirthDate time.Time
-}
-
 // Constructors
-func NewCommunity(name string, description string, pictureUrl string, createdBy *User) *Community {
+func NewCommunity(name string, createdBy *User) *Community {
 	return &Community{
 		Name:        name,
-		Description: description,
-		PictureUrl:  pictureUrl,
+		CreatedByID: createdBy.ID,
 		CreatedBy:   createdBy,
 	}
 }
@@ -180,6 +186,27 @@ func NewUserProfile(user *User, opts ...func(*UserProfile)) *UserProfile {
 	}
 
 	return profile
+}
+
+func NewCommunityProfile(community *Community, opts ...func(*CommunityProfile)) *CommunityProfile {
+	profile := &CommunityProfile{
+		Community:   community,
+		CommunityID: community.ID,
+	}
+
+	for _, opt := range opts {
+		opt(profile)
+	}
+
+	return profile
+}
+
+func AddUserProfilePicture(profile *UserProfile, profilePicturePath string) {
+	profile.ProfilePicture = &profilePicturePath
+}
+
+func AddCommunityProfilePicture(profile *CommunityProfile, profilePicturePath string) {
+	profile.ProfilePicture = &profilePicturePath
 }
 
 func NewUser(firstName string, lastName string, email string, birthDate time.Time) *User {

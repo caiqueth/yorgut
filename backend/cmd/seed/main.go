@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"yorgut/internal/database"
+	"yorgut/internal/helpers"
 	"yorgut/internal/model"
 	"yorgut/internal/repository"
 	"yorgut/internal/seed"
@@ -14,7 +15,9 @@ func main() {
 	database.Migrate(db)
 
 	userRepo := repository.NewUserRepository(db)
+	userProfileRepo := repository.NewUserProfileRepository(db)
 	communityRepo := repository.NewCommunityRepository(db)
+	communityProfileRepo := repository.NewCommunityProfileRepository(db)
 	communityMembershipRepo := repository.NewCommunityMembershipRepository(db)
 	friendshipRepo := repository.NewFriendshipRepository(db)
 
@@ -22,6 +25,8 @@ func main() {
 	seedCommunities(communityRepo, userRepo)
 	seedFriendships(friendshipRepo, userRepo)
 	seedMemberships(communityMembershipRepo, userRepo, communityRepo)
+	seedUserProfiles(userProfileRepo, userRepo)
+	seedCommunityProfiles(communityProfileRepo, communityRepo)
 
 	fmt.Println("✅ Seeding complete!")
 }
@@ -37,7 +42,6 @@ func seedUsers(ur *repository.UserRepository) {
 		} else {
 			log.Printf("✅ Inserted user: %s\n", user.FirstName)
 		}
-
 	}
 
 }
@@ -51,10 +55,13 @@ func seedCommunities(
 		panic(err)
 	}
 
-	communities := seed.GetCommunitiesSeed(owners)
+	communities := seed.GetCommunitiesSeed()
 
 	for _, community := range communities {
-		err := cr.Create(community)
+		err := cr.Create(model.NewCommunity(
+			community.Name,
+			seed.RandomChoice(owners),
+		))
 		if err != nil {
 			log.Printf("❌ Failed to insert community %s: %v\n", community.Name, err)
 		} else {
@@ -128,4 +135,82 @@ func seedMemberships(
 			}
 		}
 	}
+}
+
+func seedUserProfiles(
+	upr *repository.UserProfileRepository,
+	ur *repository.UserRepository,
+) {
+	users, err := ur.FindMany()
+	if err != nil {
+		panic(err)
+	}
+
+	for _, user := range users {
+		profile := model.NewUserProfile(user)
+
+		seedImagePath := seed.GetProfilePictureOf(user)
+		pictureAsBytes, err := helpers.ReadLocalFile(seedImagePath)
+		if err != nil {
+			log.Printf("❌ Failed to read profile picture: %s\n", seedImagePath)
+			continue
+		}
+
+		profilePicturePath, err := helpers.UploadProfilePicture(pictureAsBytes)
+		if err != nil {
+			log.Printf("❌ Failed to save profile picture to storage: %s. Error: %v\n", seedImagePath, err.Error())
+			continue
+		}
+
+		model.AddUserProfilePicture(profile, *profilePicturePath)
+		err = upr.Create(profile)
+
+		if err != nil {
+			log.Printf("❌ Failed to create profile for user %s: %v\n", user.FirstName, err)
+		} else {
+			log.Printf("✅ Profile created for user %s\n", user.FirstName)
+		}
+	}
+}
+
+func seedCommunityProfiles(
+	cpr *repository.CommunityProfileRepository,
+	cr *repository.CommunityRepository,
+) {
+	communities, err := cr.FindMany()
+	if err != nil {
+		panic(err)
+	}
+
+	for _, community := range communities {
+		profile := model.NewCommunityProfile(community)
+
+		seedImagePath, err := seed.GetCommunityPictureOf(community)
+		if err != nil {
+			log.Printf("❌ Could not find a matching picture file for the community: %s\n", community.Name)
+			continue
+		}
+
+		pictureAsBytes, err := helpers.ReadLocalFile(seedImagePath)
+		if err != nil {
+			log.Printf("❌ Failed to read community picture: %s\n", seedImagePath)
+			continue
+		}
+
+		communityPicturePath, err := helpers.UploadCommunityPicture(pictureAsBytes)
+		if err != nil {
+			log.Printf("❌ Failed to save community picture to storage: %s. Error: %v\n", seedImagePath, err.Error())
+			continue
+		}
+
+		model.AddCommunityProfilePicture(profile, *communityPicturePath)
+		err = cpr.Create(profile)
+
+		if err != nil {
+			log.Printf("❌ Failed to create profile for community %s: %v\n", community.Name, err)
+		} else {
+			log.Printf("✅ Profile created for community %s\n", community.Name)
+		}
+	}
+
 }

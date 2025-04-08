@@ -26,7 +26,9 @@ func DatabaseConnection() *gorm.DB {
 func Migrate(db *gorm.DB) {
 	db.AutoMigrate(
 		&model.User{},
+		&model.UserProfile{},
 		&model.Community{},
+		&model.CommunityProfile{},
 		&model.CommunityMembership{},
 		&model.Friendship{},
 		&model.PhotoAlbum{},

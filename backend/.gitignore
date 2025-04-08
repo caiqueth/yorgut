@@ -33,3 +33,6 @@ main
 
 # SQLite
 *.db
+
+# User Uploads
+storage/uploads/*

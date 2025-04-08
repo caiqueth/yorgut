@@ -21,6 +21,12 @@ type UserService struct {
 	Validate                      *validator.Validate
 }
 
+type UserProfileService struct {
+	userProfileRepository repository.UserProfileRepository
+	userRepository        repository.UserRepository
+	Validate              *validator.Validate
+}
+
 type ScrapService struct {
 	scrapRepository repository.ScrapRepository
 	userRepository  repository.UserRepository
@@ -136,5 +142,16 @@ func NewUserService(
 		photoAlbumRepository:          photoAlbumRepository,
 		friendshipRepository:          friendshipRepository,
 		Validate:                      validate,
+	}
+}
+
+func NewUserProfileService(
+	userProfileRepository repository.UserProfileRepository,
+	userRepository repository.UserRepository,
+	validate *validator.Validate,
+) *UserProfileService {
+	return &UserProfileService{
+		userProfileRepository: userProfileRepository,
+		userRepository:        userRepository,
 	}
 }

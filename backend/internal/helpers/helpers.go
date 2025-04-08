@@ -1,6 +1,7 @@
 package helpers
 
 import (
+	"errors"
 	"io"
 	"mime/multipart"
 	"net/http"
@@ -47,14 +48,49 @@ func CheckValidImage(d []byte) bool {
 	return validExtensions[contentType]
 }
 
-func WriteFileToLocalStorage(subDir string, file []byte) (string, error) {
-	storagePath := GetStoragePath()
-	fileName := path.Join(subDir, uuid.New().String())
+func ReadLocalFile(path string) ([]byte, error) {
+	dat, err := os.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+	return dat, nil
+}
 
-	err := os.WriteFile(path.Join(storagePath, fileName), file, 0644)
+func UploadFileToLocalStorage(subDir string, file []byte) (string, error) {
+	uploadsPath := GetUploadsPath()
+	fileDir := path.Join(uploadsPath, subDir)
+
+	if err := os.MkdirAll(fileDir, os.ModePerm); err != nil {
+		return "", err
+	}
+
+	fileName := path.Join(fileDir, uuid.New().String())
+
+	err := os.WriteFile(fileName, file, 0644)
 	if err != nil {
 		return "", err
 	}
 
 	return fileName, nil
+}
+
+func UploadPicture(picture []byte, subPath string) (*string, error) {
+	imageHasValidExtension := CheckValidImage(picture)
+	if !imageHasValidExtension {
+		return nil, errors.New("invalid image format")
+	}
+
+	storedFileName, err := UploadFileToLocalStorage(subPath, picture)
+	if err != nil {
+		return nil, err
+	}
+	return &storedFileName, nil
+}
+
+func UploadProfilePicture(picture []byte) (*string, error) {
+	return UploadPicture(picture, "profile_pictures")
+}
+
+func UploadCommunityPicture(picture []byte) (*string, error) {
+	return UploadPicture(picture, "community_pictures")
 }
