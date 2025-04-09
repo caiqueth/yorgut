@@ -2,7 +2,7 @@ import { doGet } from "api/http";
 
 import { useQuery } from "@tanstack/react-query";
 
-import { ICommunity, IFriend, IUser } from "./types";
+import { ICommunityMembershipsResponse, IFriendsResponse, IUser } from "./types";
 
 export const useUser = (userId: number) =>
   useQuery<IUser>({
@@ -37,15 +37,15 @@ export const useUserStatistics = (userId: number) => ({
 });
 
 export const useUserFriends = (userId: number) =>
-  useQuery<IFriend[]>({
-    queryKey: [`/user/${userId}/friends`, {}],
-    queryFn: ({ queryKey }) => doGet<IFriend[]>({ queryKey }),
+  useQuery<IFriendsResponse>({
+    queryKey: [`/api/user/${userId}/friends`, {}],
+    queryFn: ({ queryKey }) => doGet({ queryKey }),
   });
 
 export const useUserMemberships = (userId: number) =>
-  useQuery<ICommunity[]>({
-    queryKey: [`/user/${userId}/memberships`, {}],
-    queryFn: ({ queryKey }) => doGet<ICommunity[]>({ queryKey }),
+  useQuery<ICommunityMembershipsResponse>({
+    queryKey: [`/api/user/${userId}/memberships`, {}],
+    queryFn: ({ queryKey }) => doGet({ queryKey }),
   });
 
 export const useTodaysLuck = (userId: number) => "Boas notícias chegarão por e-mail";

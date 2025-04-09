@@ -48,7 +48,7 @@ func NewRouter(
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	router.GET("/", func(ctx *gin.Context) {
+	router.GET("/api", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, "Yorgut")
 	})
 

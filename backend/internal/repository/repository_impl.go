@@ -16,7 +16,7 @@ func (u *UserRepository) FindUserOwnedCommunities(userId uint) ([]model.Communit
 
 func (c *CommunityMembershipRepository) FindOfUser(id uint) ([]model.CommunityMembership, error) {
 	var memberships []model.CommunityMembership
-	result := c.db.Preload("Community").Where("user_id = ?", id).Find(&memberships)
+	result := c.db.Preload("Community").Preload("Community.Profile").Where("user_id = ?", id).Find(&memberships)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -41,13 +41,34 @@ func (c *CommunityMembershipRepository) FindOfCommunity(id uint) ([]model.Commun
 	return memberships, nil
 }
 
-func (f *FriendshipRepository) FindOfUser(userId int) ([]model.Friendship, error) {
+func (f *FriendshipRepository) FindFriendshipsOfUser(userId int) ([]model.Friendship, error) {
 	var ents []model.Friendship
 	result := f.db.Where("user_requested_id = ? or user_requestee_id = ?", userId, userId).Find(&ents)
 	if result.Error != nil {
 		return nil, result.Error
 	}
 	return ents, nil
+}
+
+func (f *FriendshipRepository) FindFriendsOfUser(userId uint) ([]model.User, error) {
+	var ents []model.Friendship
+	friends := []model.User{}
+	result := f.db.Preload("User").Where("user_requested_id = ? or user_requestee_id = ?", userId, userId).Find(&ents)
+
+	for _, fsp := range ents {
+		if fsp.UserRequestedID != userId {
+			friends = append(friends, *fsp.UserRequested)
+		}
+		if fsp.UserRequesteeID != userId {
+			friends = append(friends, *fsp.UserRequestee)
+		}
+	}
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return friends, nil
 }
 
 func (f *FriendshipRepository) UsersAreFriends(user1 uint, user2 uint) bool {
@@ -65,6 +86,15 @@ func (p *PhotoAlbumRepository) FindOfUser(userId int) ([]model.PhotoAlbum, error
 	result := p.db.Where("user_id = ?", userId).Find(&ents)
 	if result.Error != nil {
 		return nil, result.Error
+	}
+	return ents, nil
+}
+
+func (r *CommunityRepository) FindCommunitiesWithProfiles() ([]model.Community, error) {
+	var ents []model.Community
+	results := r.db.Preload("CommunityProfile").Find(&ents)
+	if results.Error != nil {
+		return nil, results.Error
 	}
 	return ents, nil
 }

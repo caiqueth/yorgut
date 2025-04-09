@@ -8,17 +8,21 @@ export interface IUser {
   updatedAt: string;
 }
 
-export interface IFriend {
-  id: string;
-  firstName: string;
-  birthDate: Date;
-  profilePicture: string;
-  frienshipsCount: number;
+export interface IFriendsResponse {
+  friends: {
+    id: string;
+    firstName: string;
+    birthDate: Date;
+    profilePicture: string;
+    frienshipsCount?: number;
+  }[];
 }
 
-export interface ICommunity {
-  id: number;
-  name: string;
-  picture: string;
-  members: number;
+export interface ICommunityMembershipsResponse {
+  communities: {
+    id: number;
+    name: string;
+    profilePicture: string;
+    members?: number;
+  }[];
 }

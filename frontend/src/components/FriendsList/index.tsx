@@ -28,7 +28,7 @@ export const FriendsList: React.FC<IFriendsListProps> = ({ userId }) => {
           </Typography>
         </Box>
         <Grid container direction={"row"}>
-          {friends?.map((friend, idx) => {
+          {friends?.friends?.map((friend, idx) => {
             return (
               <Grid
                 size={3}
@@ -37,7 +37,7 @@ export const FriendsList: React.FC<IFriendsListProps> = ({ userId }) => {
               >
                 <Stack alignItems={"center"} flexDirection={"column"} sx={{ textAlign: "center" }}>
                   <Link to={`/profile/${friend.id}`}>
-                    <img height={64} src={friend.profilePicture} alt="image not found" />
+                    <img height={64} src={`/${friend.profilePicture}`} alt="image not found" />
                     <Typography variant={"body2"}>{`${friend.firstName} (${friend.frienshipsCount})`}</Typography>
                   </Link>
                 </Stack>

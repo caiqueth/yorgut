@@ -38,8 +38,9 @@ type UpdateCommunityRequest struct {
 }
 
 type FindCommunityByIdResponse struct {
-	Name      string
-	CreatedBy uint
+	Name           string
+	CreatedBy      uint
+	ProfilePicture *string
 }
 
 type FindManyCommunitiesResponse struct{}
@@ -57,6 +58,10 @@ type CreateFriendshipRequest struct {
 
 type FindFriendshipOfUserResponse struct {
 	Friendships []FriendshipDto `json:"friendships"`
+}
+
+type FindFriendsOfUserResponse struct {
+	Friends []FriendDto `json:"friends"`
 }
 
 type PhotoAlbumDto struct {
@@ -123,9 +128,17 @@ type UserDto struct {
 	UpdatedAt time.Time `json:"updatedAt"`
 }
 
+type FriendDto struct {
+	ID             uint
+	FirstName      string    `json:"firstName"`
+	BirthDate      time.Time `json:"birthDate"`
+	ProfilePicture string    `json:"profilePicture"`
+}
+
 type CommunityDto struct {
-	Name      string
-	CreatedBy uint
+	Name           string
+	CreatedBy      uint
+	ProfilePicture *string
 }
 
 type FindUserByIdResponse struct {

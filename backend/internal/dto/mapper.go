@@ -27,8 +27,9 @@ func (r *FindUserMembershipsResponse) FromMemberships(memberships []model.Commun
 	r.Communities = make([]CommunityDto, len(memberships))
 	for i, m := range memberships {
 		r.Communities[i] = CommunityDto{
-			Name:      m.Community.Name,
-			CreatedBy: m.Community.CreatedByID,
+			Name:           m.Community.Name,
+			CreatedBy:      m.Community.CreatedByID,
+			ProfilePicture: m.Community.Profile.ProfilePicture,
 		}
 	}
 }
@@ -52,6 +53,19 @@ func (r *FindFriendshipOfUserResponse) FromFriendships(friendships []model.Frien
 			UserRequestedID: f.UserRequestedID,
 			UserRequesteeID: f.UserRequesteeID,
 			CreatedAt:       f.CreatedAt,
+		}
+	}
+}
+
+func (r *FindFriendsOfUserResponse) FromFriends(friends []model.User) {
+	r.Friends = make([]FriendDto, len(friends))
+
+	for i, f := range friends {
+		r.Friends[i] = FriendDto{
+			ID:             f.ID,
+			FirstName:      f.FirstName,
+			BirthDate:      f.BirthDate,
+			ProfilePicture: *f.Profile.ProfilePicture,
 		}
 	}
 }

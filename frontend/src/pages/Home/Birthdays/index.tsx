@@ -19,7 +19,7 @@ export const Birthdays: React.FC<IBirthdaysProps> = ({ userId }) => {
         </Typography>
       </Box>
       <Grid container direction={"row"}>
-        {friends?.map((friend, idx) => {
+        {friends?.friends?.map((friend, idx) => {
           return (
             <Grid
               size={12}

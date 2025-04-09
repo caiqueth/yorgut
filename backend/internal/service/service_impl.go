@@ -134,13 +134,25 @@ func (u *UserService) FindUserPhotoAlbums(userId int) (*dto.FindPhotoAlbumOfUser
 }
 
 func (u *UserService) FindFriendshipsOfUser(userId int) (*dto.FindFriendshipOfUserResponse, error) {
-	friendships, err := u.friendshipRepository.FindOfUser(userId)
+	friendships, err := u.friendshipRepository.FindFriendshipsOfUser(userId)
 	if err != nil {
 		return nil, err
 	}
 
 	resp := &dto.FindFriendshipOfUserResponse{}
 	resp.FromFriendships(friendships)
+
+	return resp, nil
+}
+
+func (u *UserService) FindFriendsOfUser(userId uint) (*dto.FindFriendsOfUserResponse, error) {
+	friends, err := u.friendshipRepository.FindFriendsOfUser(userId)
+	if err != nil {
+		return nil, err
+	}
+
+	resp := &dto.FindFriendsOfUserResponse{}
+	resp.FromFriends(friends)
 
 	return resp, nil
 }
@@ -338,14 +350,15 @@ func (c *CommunityService) FindCommunityById(id uint) (dto.FindCommunityByIdResp
 	}
 
 	r := dto.FindCommunityByIdResponse{
-		Name:      community.Name,
-		CreatedBy: community.CreatedByID,
+		Name:           community.Name,
+		CreatedBy:      community.CreatedByID,
+		ProfilePicture: community.Profile.ProfilePicture,
 	}
 	return r, nil
 }
 
 func (c *CommunityService) FindManyCommunities() (*dto.Response, error) {
-	communities, err := c.communityRepository.FindMany()
+	communities, err := c.communityRepository.FindCommunitiesWithProfiles()
 	if err != nil {
 		return nil, err
 	}
@@ -354,8 +367,9 @@ func (c *CommunityService) FindManyCommunities() (*dto.Response, error) {
 
 	for i, community := range communities {
 		communityDtos[i] = dto.CommunityDto{
-			Name:      community.Name,
-			CreatedBy: community.CreatedByID,
+			Name:           community.Name,
+			CreatedBy:      community.CreatedByID,
+			ProfilePicture: community.Profile.ProfilePicture,
 		}
 	}
 
