@@ -21,7 +21,7 @@ export const Home = () => {
         </Grid>
         <Grid size={6}>
           <Stack direction={"column"} gap={2}>
-            <Welcome />
+            <Welcome userId={userId} />
             <Birthdays userId={userId} />
           </Stack>
         </Grid>

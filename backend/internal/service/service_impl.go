@@ -108,6 +108,19 @@ func (u *UserService) FindUserById(id uint) (*dto.FindUserByIdResponse, error) {
 
 }
 
+func (u *UserService) FindUserWithProfileById(id uint) (*dto.FindUserWithProfileByIdResponse, error) {
+	userData, err := u.userRepository.FindUserWithProfile(id)
+	if err != nil {
+		return nil, err
+	}
+
+	resp := dto.FindUserWithProfileByIdResponse{}
+	resp.FromUser(userData)
+
+	return &resp, nil
+
+}
+
 func (u *UserService) FindUserOwnedCommunities(userId uint) (*dto.FindUserCommunitiesResponse, error) {
 	communities, err := u.userRepository.FindUserOwnedCommunities(userId)
 	if err != nil {

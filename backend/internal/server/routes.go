@@ -60,6 +60,7 @@ func NewRouter(
 			users.GET("", userController.FindMany)
 			users.PUT("", userController.Update)
 			users.GET("/:userId", userController.FindById)
+			users.GET("/:userId/profile", userController.FindWithProfileById)
 			users.DELETE("/:userId", userController.Delete)
 			users.GET("/:userId/memberships", userController.FindMemberships)
 			users.GET("/:userId/friends", userController.FindFriends)

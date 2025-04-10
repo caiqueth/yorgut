@@ -8,6 +8,34 @@ export interface IUserResponse {
   updatedAt: string;
 }
 
+export interface IUserProfileResponse {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  birthDate: string;
+  createdAt: string;
+  updatedAt: string;
+  profilePicture?: string;
+  description?: string;
+  relationshipStatus?: string;
+  interests?: string;
+  about?: string;
+  religion?: string;
+  humor?: string;
+  fashion?: string;
+  livesWith?: string;
+  birthCity?: string;
+  website?: string;
+  passions?: string;
+  sports?: string;
+  hobbies?: string;
+  books?: string;
+  music?: string;
+  movies?: string;
+  cuisine?: string;
+}
+
 export interface IFriendsResponse {
   friends: {
     id: string;

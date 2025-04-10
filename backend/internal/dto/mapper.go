@@ -13,6 +13,33 @@ func (r *FindUserByIdResponse) FromUser(user *model.User) {
 	r.UpdatedAt = user.UpdatedAt
 }
 
+func (r *FindUserWithProfileByIdResponse) FromUser(user *model.User) {
+	r.ID = user.ID
+	r.Email = user.Email
+	r.FirstName = user.FirstName
+	r.LastName = user.LastName
+	r.BirthDate = user.BirthDate
+	r.CreatedAt = user.CreatedAt
+	r.UpdatedAt = user.UpdatedAt
+	r.ProfilePicture = user.UserProfile.ProfilePicture
+	r.Description = user.UserProfile.Description
+	r.RelationshipStatus = user.UserProfile.RelationshipStatus
+	r.Interests = user.UserProfile.Interests
+	r.About = user.UserProfile.About
+	r.Religion = user.UserProfile.Religion
+	r.Humor = user.UserProfile.Humor
+	r.Fashion = user.UserProfile.Fashion
+	r.LivesWith = user.UserProfile.LivesWith
+	r.BirthCity = user.UserProfile.BirthCity
+	r.Website = user.UserProfile.Website
+	r.Passions = user.UserProfile.Passions
+	r.Sports = user.UserProfile.Sports
+	r.Hobbies = user.UserProfile.Hobbies
+	r.Books = user.UserProfile.Books
+	r.Music = user.UserProfile.Music
+	r.Movies = user.UserProfile.Movies
+	r.Cuisine = user.UserProfile.Cuisine
+}
 func (r *FindUserCommunitiesResponse) FromCommunities(communities []model.Community) {
 	r.Communities = make([]CommunityDto, len(communities))
 	for i, c := range communities {
@@ -65,7 +92,7 @@ func (r *FindFriendsOfUserResponse) FromFriends(friends []model.User) {
 			ID:             f.ID,
 			FirstName:      f.FirstName,
 			BirthDate:      f.BirthDate,
-			ProfilePicture: *f.Profile.ProfilePicture,
+			ProfilePicture: *f.UserProfile.ProfilePicture,
 		}
 	}
 }

@@ -1,9 +1,12 @@
+import React from "react";
 import { useTodaysLuck, useUser, useUserStatistics } from "api/user/queries";
 
 import { Box, Paper, Stack, Typography } from "@mui/material";
 
-export const Welcome = () => {
-  const userId = 1;
+interface IProps {
+  userId: number;
+}
+export const Welcome: React.FC<IProps> = ({ userId }) => {
   const { data: user } = useUser(userId);
   const userStatistics = useUserStatistics(userId);
   const todaysLuck = useTodaysLuck(userId);

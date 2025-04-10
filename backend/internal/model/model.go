@@ -77,11 +77,11 @@ type Testimonial struct {
 
 type User struct {
 	gorm.Model
-	Email     string
-	FirstName string
-	LastName  string
-	BirthDate time.Time
-	Profile   *UserProfile `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Email       string
+	FirstName   string
+	LastName    string
+	BirthDate   time.Time
+	UserProfile *UserProfile `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
 
 type UserProfile struct {

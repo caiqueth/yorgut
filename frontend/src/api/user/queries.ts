@@ -2,7 +2,7 @@ import { doGet } from "api/http";
 
 import { useQuery } from "@tanstack/react-query";
 
-import { ICommunityMembershipsResponse, IFriendsResponse, IUserResponse } from "./types";
+import { ICommunityMembershipsResponse, IFriendsResponse, IUserProfileResponse, IUserResponse } from "./types";
 
 export const useUser = (userId: number) =>
   useQuery<IUserResponse>({
@@ -10,6 +10,13 @@ export const useUser = (userId: number) =>
     queryFn: ({ queryKey }) => doGet<IUserResponse>({ queryKey }),
   });
 
+  export const useUserProfile = (userId: number) =>
+    useQuery<IUserProfileResponse>({
+      queryKey: [`/api/user/${userId}/profile`, {}],
+      queryFn: ({ queryKey }) => doGet<IUserProfileResponse>({ queryKey }),
+    });
+  
+  
 export const useUserStatistics = (userId: number) => ({
   userId: userId,
   totalProfileViews: 3558,

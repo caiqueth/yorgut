@@ -29,7 +29,7 @@ export const CommunitiesList: React.FC<ICommunitiesListProps> = ({ userId }) => 
           >
             <Stack alignItems={"center"} flexDirection={"column"} sx={{ textAlign: "center" }}>
               <Link to={`/communities/${membership.id}`}>
-                <img height={64} src={membership.profilePicture} alt="image not found" />
+                <img height={64} src={`/${membership.profilePicture}`} alt="image not found" />
                 <Typography variant={"body2"}>{`${membership.name} (${membership.members ?? 0})`}</Typography>
               </Link>
             </Stack>

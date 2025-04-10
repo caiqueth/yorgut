@@ -29,6 +29,7 @@ func NewServer() *http.Server {
 
 	// Repository
 	userRepository := repository.NewUserRepository(db)
+	userProfileRepository := repository.NewUserProfileRepository(db)
 	communityMembershipRepository := repository.NewCommunityMembershipRepository(db)
 	communityRepository := repository.NewCommunityRepository(db)
 	communityProfileRepository := repository.NewCommunityProfileRepository(db)
@@ -41,6 +42,7 @@ func NewServer() *http.Server {
 	// Service
 	userService := service.NewUserService(
 		*userRepository,
+		*userProfileRepository,
 		*communityRepository,
 		*communityMembershipRepository,
 		*photoAlbumRepository,

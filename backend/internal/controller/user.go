@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 	"yorgut/internal/dto"
+	"yorgut/internal/helpers"
 	"yorgut/internal/service"
 
 	"github.com/gin-gonic/gin"
@@ -67,6 +68,33 @@ func (uc *UserController) FindById(ctx *gin.Context) {
 	}
 
 	user, err := uc.userService.FindUserById(uint(id))
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, user)
+
+}
+
+// FindWithProfileById 	godoc
+// @Summary				Get Single user with it's profile by id.
+// @Param				userId path string true "get user by id"
+// @Description			Returns the user matching the requested id
+// @Produce				application/json
+// @Tags				User
+// @Success				200 {object} dto.FindUserWithProfileByIdResponse{}
+// @Router				/user/{userId}/profile [get]
+func (uc *UserController) FindWithProfileById(ctx *gin.Context) {
+	userId := ctx.Param("userId")
+	id, err := strconv.Atoi(userId)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	user, err := uc.userService.FindUserWithProfileById(uint(id))
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -183,18 +211,12 @@ func (uc *UserController) FindPhotoAlbums(ctx *gin.Context) {
 // @Description				Returns a list of friends
 // @Produce					application/json
 // @Tags					User
-// @Success					200 {object} dto.FindFriendshipOfUserResponse{}
+// @Success					200 {object} dto.FindFriendsOfUserResponse{}
 // @Router					/user/{userId}/friends [get]
 func (uc *UserController) FindFriends(ctx *gin.Context) {
-	userId := ctx.Param("userId")
-	id, err := strconv.Atoi(userId)
+	userId := helpers.MustParseUint(ctx.Param("userId"))
 
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	friendships, err := uc.userService.FindFriendshipsOfUser(id)
+	friendships, err := uc.userService.FindFriendsOfUser(userId)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

@@ -9,9 +9,12 @@ import { ProfilePicture } from "../../components/ProfilePicture";
 import { ProfileDetails } from "./ProfileDetails";
 import { ProfileHeader } from "./ProfileHeader";
 import { ProfileMenu } from "./ProfileMenu";
+import { useParams } from "react-router-dom";
 
 export const Profile: React.FC = () => {
-  const userId = 1;
+  const params = useParams();
+  const userId = parseInt(params.userId ?? "");
+
   return (
     <Box sx={{ width: "100%" }}>
       <Grid container spacing={2}>

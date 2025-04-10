@@ -128,8 +128,29 @@ type UserDto struct {
 	UpdatedAt time.Time `json:"updatedAt"`
 }
 
+type UserProfileDto struct {
+	ProfilePicture     *string `json:"profilePicture"`
+	Description        *string `json:"description"`
+	RelationshipStatus *string `json:"relationshipStatus"`
+	Interests          *string `json:"interests"`
+	About              *string `json:"about"`
+	Religion           *string `json:"religion"`
+	Humor              *string `json:"humor"`
+	Fashion            *string `json:"fashion"`
+	LivesWith          *string `json:"livesWith"`
+	BirthCity          *string `json:"birthCity"`
+	Website            *string `json:"website"`
+	Passions           *string `json:"passions"`
+	Sports             *string `json:"sports"`
+	Hobbies            *string `json:"hobbies"`
+	Books              *string `json:"books"`
+	Music              *string `json:"music"`
+	Movies             *string `json:"movies"`
+	Cuisine            *string `json:"cuisine"`
+}
+
 type FriendDto struct {
-	ID             uint
+	ID             uint      `json:"id"`
 	FirstName      string    `json:"firstName"`
 	BirthDate      time.Time `json:"birthDate"`
 	ProfilePicture string    `json:"profilePicture"`
@@ -143,6 +164,11 @@ type CommunityDto struct {
 
 type FindUserByIdResponse struct {
 	UserDto
+}
+
+type FindUserWithProfileByIdResponse struct {
+	UserDto
+	UserProfileDto
 }
 
 type FindManyUsersResponse struct {

@@ -53,7 +53,13 @@ func (f *FriendshipRepository) FindFriendshipsOfUser(userId int) ([]model.Friend
 func (f *FriendshipRepository) FindFriendsOfUser(userId uint) ([]model.User, error) {
 	var ents []model.Friendship
 	friends := []model.User{}
-	result := f.db.Preload("User").Where("user_requested_id = ? or user_requestee_id = ?", userId, userId).Find(&ents)
+	result := f.db.
+		Preload("UserRequested").
+		Preload("UserRequestee").
+		Preload("UserRequested.UserProfile").
+		Preload("UserRequestee.UserProfile").
+		Where("user_requested_id = ? or user_requestee_id = ? and accepted = ?", userId, userId, true).
+		Find(&ents)
 
 	for _, fsp := range ents {
 		if fsp.UserRequestedID != userId {
@@ -97,6 +103,15 @@ func (r *CommunityRepository) FindCommunitiesWithProfiles() ([]model.Community, 
 		return nil, results.Error
 	}
 	return ents, nil
+}
+
+func (r *UserRepository) FindUserWithProfile(userId uint) (*model.User, error) {
+	var ent model.User
+	results := r.db.Preload("UserProfile").Where("id = ?", userId).First(&ent)
+	if results.Error != nil {
+		return nil, results.Error
+	}
+	return &ent, nil
 }
 
 func (s *ScrapRepository) FindOfUserRecipient(userId int) {

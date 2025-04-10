@@ -29,7 +29,7 @@ export const Birthdays: React.FC<IBirthdaysProps> = ({ userId }) => {
               <Stack alignItems={"center"} flexDirection={"row"} sx={{ textAlign: "left" }} gap={1}>
                 <img height={64} src={friend.profilePicture} alt="image not found" />
                 <Typography variant={"body2"}>
-                  <Link to={`/profile/${friend.id}`}>{friend.firstName}</Link> {`${friend.birthDate.toDateString()}`}
+                  <Link to={`/profile/${friend.id}`}>{friend.firstName}</Link> {`${friend.birthDate}`}
                 </Typography>
               </Stack>
             </Grid>

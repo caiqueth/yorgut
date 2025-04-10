@@ -14,6 +14,7 @@ type TestimonialService struct {
 
 type UserService struct {
 	userRepository                repository.UserRepository
+	userProfileRepository         repository.UserProfileRepository
 	communityRepository           repository.CommunityRepository
 	communityMembershipRepository repository.CommunityMembershipRepository
 	photoAlbumRepository          repository.PhotoAlbumRepository
@@ -135,6 +136,7 @@ func NewTestimonialService(testimonialRepository repository.TestimonialRepositor
 
 func NewUserService(
 	userRepository repository.UserRepository,
+	userProfileRepository repository.UserProfileRepository,
 	communityRepository repository.CommunityRepository,
 	communityMembershipRepository repository.CommunityMembershipRepository,
 	photoAlbumRepository repository.PhotoAlbumRepository,
@@ -143,6 +145,7 @@ func NewUserService(
 ) *UserService {
 	return &UserService{
 		userRepository:                userRepository,
+		userProfileRepository:         userProfileRepository,
 		communityRepository:           communityRepository,
 		communityMembershipRepository: communityMembershipRepository,
 		photoAlbumRepository:          photoAlbumRepository,
