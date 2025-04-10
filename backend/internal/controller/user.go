@@ -73,10 +73,7 @@ func (uc *UserController) FindById(ctx *gin.Context) {
 		return
 	}
 
-	webResponse := dto.Response{
-		Data: user,
-	}
-	ctx.JSON(http.StatusOK, webResponse)
+	ctx.JSON(http.StatusOK, user)
 
 }
 

@@ -12,14 +12,24 @@ import (
 	"github.com/google/uuid"
 )
 
-func GetStoragePath() string {
+func AddRootToPath(relativePath string) string {
 	pwd, _ := os.Getwd()
-	return path.Join(pwd, "storage")
+	return path.Join(pwd, relativePath)
 }
 
-func GetUploadsPath() string {
-	storagePath := GetStoragePath()
-	return path.Join(storagePath, "uploads")
+func PathOrAbsolute(dir string, absolute bool) string {
+	if absolute {
+		return AddRootToPath(dir)
+	}
+	return dir
+}
+
+func GetStoragePath(absolute bool) string {
+	return PathOrAbsolute("storage", absolute)
+}
+
+func GetUploadsPath(absolute bool) string {
+	return PathOrAbsolute(path.Join("storage", "uploads"), absolute)
 }
 
 func MustParseUint(s string) uint {
@@ -56,31 +66,36 @@ func ReadLocalFile(path string) ([]byte, error) {
 	return dat, nil
 }
 
-func UploadFileToLocalStorage(subDir string, file []byte) (string, error) {
-	uploadsPath := GetUploadsPath()
-	fileDir := path.Join(uploadsPath, subDir)
+func UploadFileToLocalStorage(dir string, file []byte) (string, error) {
+	uploadsPathAbs := GetUploadsPath(true)
+	uploadsPathRel := GetUploadsPath(false)
 
-	if err := os.MkdirAll(fileDir, os.ModePerm); err != nil {
+	dirToWrite := path.Join(uploadsPathAbs, dir)
+
+	if err := os.MkdirAll(dirToWrite, os.ModePerm); err != nil {
 		return "", err
 	}
 
-	fileName := path.Join(fileDir, uuid.New().String())
+	fileName := uuid.New().String()
 
-	err := os.WriteFile(fileName, file, 0644)
+	fileLocation := path.Join(dirToWrite, fileName)
+	fileNameLocationRel := path.Join(uploadsPathRel, dir, fileName)
+
+	err := os.WriteFile(fileLocation, file, 0644)
 	if err != nil {
 		return "", err
 	}
 
-	return fileName, nil
+	return fileNameLocationRel, nil
 }
 
-func UploadPicture(picture []byte, subPath string) (*string, error) {
+func UploadPicture(picture []byte, dir string) (*string, error) {
 	imageHasValidExtension := CheckValidImage(picture)
 	if !imageHasValidExtension {
 		return nil, errors.New("invalid image format")
 	}
 
-	storedFileName, err := UploadFileToLocalStorage(subPath, picture)
+	storedFileName, err := UploadFileToLocalStorage(dir, picture)
 	if err != nil {
 		return nil, err
 	}

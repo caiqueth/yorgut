@@ -10,12 +10,12 @@ type Response struct {
 }
 
 type CreateCommunityMembershipRequest struct {
-	CommunityID uint
-	UserID      uint
+	CommunityID uint `json:"communityId"`
+	UserID      uint `json:"userId"`
 }
 
 type CommunityMembershipResponse struct {
-	ID uint
+	ID uint `json:"id"`
 }
 
 type FindCommunityMembershipOfUserResponse struct {
@@ -27,33 +27,33 @@ type CreateCommunityRequest struct {
 }
 
 type CreateCommunityProfileRequest struct {
-	CommunityID uint
+	CommunityID uint                  `json:"communityId"`
 	Description string                `form:"description" binding:"required" example:"This is a test community"`
 	Picture     *multipart.FileHeader `form:"picture" swaggerignore:"true"`
 }
 
 type UpdateCommunityRequest struct {
-	Name        string
-	Description string
+	Name        string `json:"name"`
+	Description string `json:"description"`
 }
 
 type FindCommunityByIdResponse struct {
-	Name           string
-	CreatedBy      uint
-	ProfilePicture *string
+	Name           string  `json:"name"`
+	CreatedBy      uint    `json:"createdBy"`
+	ProfilePicture *string `json:"profilePicture"`
 }
 
 type FindManyCommunitiesResponse struct{}
 
 type FriendshipDto struct {
-	UserRequestedID uint
-	UserRequesteeID uint
-	CreatedAt       time.Time
+	UserRequestedID uint      `json:"userRequestedId"`
+	UserRequesteeID uint      `json:"userRequesteeId"`
+	CreatedAt       time.Time `json:"createdAt"`
 }
 
 type CreateFriendshipRequest struct {
-	UserRequested uint
-	UserRequestee uint
+	UserRequested uint `json:"userRequested"`
+	UserRequestee uint `json:"userRequestee"`
 }
 
 type FindFriendshipOfUserResponse struct {
@@ -65,13 +65,13 @@ type FindFriendsOfUserResponse struct {
 }
 
 type PhotoAlbumDto struct {
-	UserID uint
-	Name   string
+	UserID uint   `json:"userId"`
+	Name   string `json:"name"`
 }
 
 type CreatePhotoAlbumRequest struct {
-	UserID uint
-	Name   string
+	UserID uint   `json:"userId"`
+	Name   string `json:"name"`
 }
 
 type FindPhotoAlbumOfUserResponse struct {
@@ -79,9 +79,9 @@ type FindPhotoAlbumOfUserResponse struct {
 }
 
 type CreatePhotoRequest struct {
-	PhotoAlbumID uint
-	URL          string
-	Caption      string
+	PhotoAlbumID uint   `json:"photoAlbumId"`
+	URL          string `json:"uRL"`
+	Caption      string `json:"caption"`
 }
 
 type FindPhotoOfUserResponse struct{}
@@ -89,33 +89,33 @@ type FindPhotoOfUserResponse struct{}
 type FindPhotoOfAlbumResponse struct{}
 
 type CreateScrapRequest struct {
-	UserAuthorID    uint
-	UserRecipientID uint
-	Content         string
+	UserAuthorID    uint   `json:"userAuthorId"`
+	UserRecipientID uint   `json:"userRecipientId"`
+	Content         string `json:"content"`
 }
 
 type FindScrapOfUserRecipientResponse struct{}
 
 type CreateTestimonialRequest struct {
-	UserAuthorID    uint
-	UserRecipientID uint
-	Content         string
+	UserAuthorID    uint   `json:"userAuthorId"`
+	UserRecipientID uint   `json:"userRecipientId"`
+	Content         string `json:"content"`
 }
 
 type FindTestimonialOfUserResponse struct{}
 
 type CreateUserRequest struct {
-	FirstName string
-	LastName  string
-	Email     string
-	BirthDate time.Time
+	FirstName string    `json:"firstName"`
+	LastName  string    `json:"lastName"`
+	Email     string    `json:"email"`
+	BirthDate time.Time `json:"birthDate"`
 }
 
 type UpdateUserRequest struct {
-	FirstName string
-	LastName  string
-	Email     string
-	BirthDate time.Time
+	FirstName string    `json:"firstName"`
+	LastName  string    `json:"lastName"`
+	Email     string    `json:"email"`
+	BirthDate time.Time `json:"birthDate"`
 }
 
 type UserDto struct {
@@ -136,9 +136,9 @@ type FriendDto struct {
 }
 
 type CommunityDto struct {
-	Name           string
-	CreatedBy      uint
-	ProfilePicture *string
+	Name           string  `json:"name"`
+	CreatedBy      uint    `json:"firstName"`
+	ProfilePicture *string `json:"profilePicture"`
 }
 
 type FindUserByIdResponse struct {

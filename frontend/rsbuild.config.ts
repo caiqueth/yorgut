@@ -8,6 +8,9 @@ export default defineConfig({
         target: "http://localhost:8080",
         pathRewrite: { "^/api": "/api/v1" }
       },
+      "/storage/uploads": {
+        target: "http://localhost:8080",
+      },
     }
   },
   html: {

@@ -2,12 +2,12 @@ import { doGet } from "api/http";
 
 import { useQuery } from "@tanstack/react-query";
 
-import { ICommunityMembershipsResponse, IFriendsResponse, IUser } from "./types";
+import { ICommunityMembershipsResponse, IFriendsResponse, IUserResponse } from "./types";
 
 export const useUser = (userId: number) =>
-  useQuery<IUser>({
-    queryKey: [`/user/${userId}`, {}],
-    queryFn: ({ queryKey }) => doGet<IUser>({ queryKey }),
+  useQuery<IUserResponse>({
+    queryKey: [`/api/user/${userId}`, {}],
+    queryFn: ({ queryKey }) => doGet<IUserResponse>({ queryKey }),
   });
 
 export const useUserStatistics = (userId: number) => ({
