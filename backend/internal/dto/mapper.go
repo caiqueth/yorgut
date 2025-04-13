@@ -54,6 +54,7 @@ func (r *FindUserMembershipsResponse) FromMemberships(memberships []model.Commun
 	r.Communities = make([]CommunityDto, len(memberships))
 	for i, m := range memberships {
 		r.Communities[i] = CommunityDto{
+			ID:             m.Community.ID,
 			Name:           m.Community.Name,
 			CreatedBy:      m.Community.CreatedByID,
 			ProfilePicture: m.Community.Profile.ProfilePicture,

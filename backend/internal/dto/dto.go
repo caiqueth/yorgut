@@ -157,6 +157,7 @@ type FriendDto struct {
 }
 
 type CommunityDto struct {
+	ID             uint    `json:"id"`
 	Name           string  `json:"name"`
 	CreatedBy      uint    `json:"firstName"`
 	ProfilePicture *string `json:"profilePicture"`

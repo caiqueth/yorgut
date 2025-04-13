@@ -21,16 +21,16 @@ export const CommunitiesList: React.FC<ICommunitiesListProps> = ({ userId }) => 
         </Typography>
       </Box>
       <Grid container direction={"row"}>
-        {memberships?.communities.map((membership, idx) => (
+        {memberships?.communities.map((community, idx) => (
           <Grid
             size={4}
             key={idx}
             sx={{ p: 1, backgroundColor: isStripedRow(idx, 3) ? palette.darkBlue : palette.mediumBlue }}
           >
             <Stack alignItems={"center"} flexDirection={"column"} sx={{ textAlign: "center" }}>
-              <Link to={`/communities/${membership.id}`}>
-                <img height={64} src={`/${membership.profilePicture}`} alt="image not found" />
-                <Typography variant={"body2"}>{`${membership.name} (${membership.members ?? 0})`}</Typography>
+              <Link to={`/communities/${community.id}`}>
+                <img height={64} src={`/${community.profilePicture}`} alt="image not found" />
+                <Typography variant={"body2"}>{`${community.name} (${community.members ?? 0})`}</Typography>
               </Link>
             </Stack>
           </Grid>
