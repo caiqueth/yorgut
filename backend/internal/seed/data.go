@@ -75,6 +75,7 @@ func GetUsersSeed() []*model.User {
 type CommunitySeed struct {
 	Name          string
 	ImageSeedPath string
+	Category      string
 }
 
 func GetCommunitiesSeed() []CommunitySeed {
@@ -82,38 +83,47 @@ func GetCommunitiesSeed() []CommunitySeed {
 		{
 			Name:          "Deus me disse: desce e arrasa",
 			ImageSeedPath: "arrasa.png",
+			Category:      "Computadores e Internet",
 		},
 		{
 			Name:          "Eu nunca terminei uma borracha",
 			ImageSeedPath: "borracha.png",
+			Category:      "Pessoas",
 		},
 		{
 			Name:          "Tocava campainha e corria",
 			ImageSeedPath: "campainha.png",
+			Category:      "Outros",
 		},
 		{
 			Name:          "Só mais 5 minutinhos",
 			ImageSeedPath: "cinco.png",
+			Category:      "Viagens",
 		},
 		{
 			Name:          "Não sei individualizar duplas",
 			ImageSeedPath: "duplas.png",
+			Category:      "Animais e bichos de estimacão",
 		},
 		{
 			Name:          "Tive medo da Gina dos palitos",
 			ImageSeedPath: "gina.png",
+			Category:      "Artes e Entretenimento",
 		},
 		{
 			Name:          "Eu odeio acordar cedo",
 			ImageSeedPath: "odeio_acordar_cedo.png",
+			Category:      "Ex-alunos e Escolas",
 		},
 		{
 			Name:          "Queria sorvete, mas era feijão",
 			ImageSeedPath: "sorvete.png",
+			Category:      "Romances e Relacionamentos",
 		},
 		{
 			Name:          "Eu colho flores e o Tony Ramos",
 			ImageSeedPath: "tony.png",
+			Category:      "Saúde, Bem-estar e Fitness",
 		},
 	}
 }

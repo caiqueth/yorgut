@@ -60,6 +60,7 @@ func seedCommunities(
 	for _, community := range communities {
 		err := cr.Create(model.NewCommunity(
 			community.Name,
+			community.Category,
 			seed.RandomChoice(owners),
 		))
 		if err != nil {

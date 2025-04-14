@@ -24,6 +24,7 @@ type FindCommunityMembershipOfUserResponse struct {
 type CreateCommunityRequest struct {
 	Name        string `form:"name" binding:"required" example:"My Community"`
 	CreatedByID uint   `form:"createdById" binding:"required" example:"1"`
+	Category    string `form:"category" binding:"required" example:"Computadores e Internet"`
 }
 
 type CreateCommunityProfileRequest struct {
@@ -58,6 +59,17 @@ type CreateFriendshipRequest struct {
 
 type FindFriendshipOfUserResponse struct {
 	Friendships []FriendshipDto `json:"friendships"`
+}
+
+type PendingFriendship struct {
+	ID             uint   `json:"id"`
+	FirstName      string `json:"firstName"`
+	LastName       string `json:"lastName"`
+	ProfilePicture string `json:"profilePicture"`
+}
+
+type FindPendingFriendshipOfUserResponse struct {
+	PendingFriendships []PendingFriendship `json:"pendingFriendships"`
 }
 
 type FindFriendsOfUserResponse struct {

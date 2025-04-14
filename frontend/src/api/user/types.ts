@@ -46,6 +46,15 @@ export interface IFriendsResponse {
   }[];
 }
 
+export interface IPendingFriendshipsResponse {
+  pendingFriendships: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    profilePicture: string;
+  }[];
+}
+
 export interface ICommunityMembershipsResponse {
   communities: {
     id: number;

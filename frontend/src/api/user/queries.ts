@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   ICommunityMembershipsResponse,
   IFriendsResponse,
+  IPendingFriendshipsResponse,
   IUserProfileResponse,
   IUserResponse,
 } from "./types";
@@ -19,6 +20,12 @@ export const useUserProfile = (userId: number) =>
   useQuery<IUserProfileResponse>({
     queryKey: [`/api/user/${userId}/profile`, {}],
     queryFn: ({ queryKey }) => doGet<IUserProfileResponse>({ queryKey }),
+  });
+
+export const useUserPendingFriendships = (userId: number) =>
+  useQuery<IPendingFriendshipsResponse>({
+    queryKey: [`/api/user/${userId}/friendships/pending`, {}],
+    queryFn: ({ queryKey }) => doGet<IPendingFriendshipsResponse>({ queryKey }),
   });
 
 export const useUserStatistics = (userId: number) => ({

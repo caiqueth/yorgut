@@ -146,14 +146,14 @@ func (u *UserService) FindUserPhotoAlbums(userId int) (*dto.FindPhotoAlbumOfUser
 	return resp, nil
 }
 
-func (u *UserService) FindFriendshipsOfUser(userId int) (*dto.FindFriendshipOfUserResponse, error) {
-	friendships, err := u.friendshipRepository.FindFriendshipsOfUser(userId)
+func (u *UserService) FindPendingFriendshipsOfUser(userId uint) (*dto.FindPendingFriendshipOfUserResponse, error) {
+	invites, err := u.friendshipRepository.FindPendingFriendshipsOfUser(userId, false)
 	if err != nil {
 		return nil, err
 	}
 
-	resp := &dto.FindFriendshipOfUserResponse{}
-	resp.FromFriendships(friendships)
+	resp := &dto.FindPendingFriendshipOfUserResponse{}
+	resp.FromUsers(invites)
 
 	return resp, nil
 }
@@ -335,12 +335,12 @@ func (f *FriendshipService) FindFriendshipsOfUser(userId uint) (dto.FindFriendsh
 
 // Community
 func (c *CommunityService) CreateCommunity(request dto.CreateCommunityRequest) error {
-	owner, err := c.userRepository.FindById(request.CreatedByID)
+	creator, err := c.userRepository.FindById(request.CreatedByID)
 	if err != nil {
-		return errors.New("could not find specified community owner")
+		return errors.New("could not find specified community creator")
 	}
 
-	communityModel := model.NewCommunity(request.Name, owner)
+	communityModel := model.NewCommunity(request.Name, request.Category, creator)
 	err = c.communityRepository.Create(communityModel)
 	if err != nil {
 		return err

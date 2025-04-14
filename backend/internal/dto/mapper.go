@@ -97,3 +97,16 @@ func (r *FindFriendsOfUserResponse) FromFriends(friends []model.User) {
 		}
 	}
 }
+
+func (r *FindPendingFriendshipOfUserResponse) FromUsers(users []model.User) {
+	r.PendingFriendships = make([]PendingFriendship, len(users))
+
+	for i, f := range users {
+		r.PendingFriendships[i] = PendingFriendship{
+			ID:             f.ID,
+			FirstName:      f.FirstName,
+			LastName:       f.LastName,
+			ProfilePicture: *f.UserProfile.ProfilePicture,
+		}
+	}
+}

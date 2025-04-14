@@ -225,6 +225,26 @@ func (uc *UserController) FindFriends(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, friendships)
 }
 
+// FindPendingFriendships	godoc
+// @Summary					Gets a list of friendship invites of the user.
+// @Param					userId path string true "user id"
+// @Description				Returns a list of users
+// @Produce					application/json
+// @Tags					User
+// @Success					200 {object} dto.FindFriendsOfUserResponse{}
+// @Router					/user/{userId}/friends [get]
+func (uc *UserController) FindPendingFriendships(ctx *gin.Context) {
+	userId := helpers.MustParseUint(ctx.Param("userId"))
+
+	friendships, err := uc.userService.FindPendingFriendshipsOfUser(userId)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, friendships)
+}
+
 func (uc *UserController) FindAuthoredTestimonials(ctx *gin.Context) {
 	panic("unimplemented")
 }

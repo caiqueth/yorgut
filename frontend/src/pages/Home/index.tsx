@@ -7,6 +7,7 @@ import { Box, Grid2 as Grid, Stack } from "@mui/material";
 import { Birthdays } from "./Birthdays";
 import { HomeMenu } from "./HomeMenu";
 import { Welcome } from "./Welcome";
+import { PendingInvites } from "./PendingInvites";
 
 export const Home = () => {
   const userId = 1;
@@ -22,6 +23,7 @@ export const Home = () => {
         <Grid size={6}>
           <Stack direction={"column"} gap={2}>
             <Welcome userId={userId} />
+            <PendingInvites userId={userId} />
             <Birthdays userId={userId} />
           </Stack>
         </Grid>

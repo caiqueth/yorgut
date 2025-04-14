@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { palette } from "theme";
 
 import { Box, Grid2 as Grid, Paper, Stack, Typography } from "@mui/material";
+import { BoxWithTitle } from "components/BoxWithTitle";
 
 interface IFriendsListProps {
   userId: number;
@@ -20,35 +21,43 @@ export const FriendsList: React.FC<IFriendsListProps> = ({ userId }) => {
   };
 
   return (
-    <Paper>
-      <Stack direction={"column"}>
-        <Box sx={{ textAlign: "center", width: "100%", backgroundColor: palette.lightBlue }}>
-          <Typography variant={"subtitle2"} fontWeight={"bold"}>
-            {`amigos (${userStatistics.totalFriends})`}
-          </Typography>
-        </Box>
+    <BoxWithTitle title={`amigos (${userStatistics.totalFriends})`}>
+      <Stack direction={"column"} alignItems={"center"}>
         <Grid container direction={"row"}>
-          {friends?.friends?.map((friend, idx) => {
-            return (
-              <Grid
-                size={3}
-                key={idx}
-                sx={{ p: 1, backgroundColor: isStripedRow(idx, 4) ? palette.darkBlue : palette.mediumBlue }}
+          {friends?.friends?.map((friend, idx) => (
+            <Grid
+              size={3}
+              key={idx}
+              sx={{
+                p: 1,
+                backgroundColor: isStripedRow(idx, 4)
+                  ? palette.darkBlue
+                  : palette.mediumBlue,
+              }}
+            >
+              <Stack
+                alignItems={"center"}
+                flexDirection={"column"}
+                sx={{ textAlign: "center" }}
               >
-                <Stack alignItems={"center"} flexDirection={"column"} sx={{ textAlign: "center" }}>
-                  <Link to={`/profile/${friend.id}`}>
-                    <img height={64} src={`/${friend.profilePicture}`} alt="image not found" />
-                    <Typography variant={"body2"}>{`${friend.firstName} (${friend.frienshipsCount})`}</Typography>
-                  </Link>
-                </Stack>
-              </Grid>
-            );
-          })}
+                <Link to={`/profile/${friend.id}`}>
+                  <img
+                    height={64}
+                    src={`/${friend.profilePicture}`}
+                    alt="image not found"
+                  />
+                  <Typography
+                    variant={"body2"}
+                  >{`${friend.firstName} (${friend.frienshipsCount})`}</Typography>
+                </Link>
+              </Stack>
+            </Grid>
+          ))}
         </Grid>
         <Box alignSelf={"center"}>
           <Button onClick={handleGoToFriends}>ver amigos</Button>
         </Box>
       </Stack>
-    </Paper>
+    </BoxWithTitle>
   );
 };

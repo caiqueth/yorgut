@@ -11,7 +11,10 @@ type Community struct {
 	gorm.Model
 	Name        string
 	CreatedByID uint
-	CreatedBy   *User             `gorm:"foreignKey:CreatedByID;references:ID"`
+	CreatedBy   *User `gorm:"foreignKey:CreatedByID;references:ID"`
+	Category    string
+	Owner       *User
+	MemberCount uint
 	Profile     *CommunityProfile `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
 
@@ -81,6 +84,7 @@ type User struct {
 	FirstName   string
 	LastName    string
 	BirthDate   time.Time
+	FriendCount uint
 	UserProfile *UserProfile `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
 
@@ -109,11 +113,18 @@ type UserProfile struct {
 }
 
 // Constructors
-func NewCommunity(name string, createdBy *User) *Community {
+func NewCommunity(
+	name string,
+	category string,
+	createdBy *User,
+) *Community {
 	return &Community{
 		Name:        name,
 		CreatedByID: createdBy.ID,
 		CreatedBy:   createdBy,
+		Category:    category,
+		Owner:       createdBy,
+		MemberCount: 0,
 	}
 }
 
@@ -211,9 +222,10 @@ func AddCommunityProfilePicture(profile *CommunityProfile, profilePicturePath st
 
 func NewUser(firstName string, lastName string, email string, birthDate time.Time) *User {
 	return &User{
-		FirstName: firstName,
-		LastName:  lastName,
-		Email:     email,
-		BirthDate: birthDate,
+		Email:       email,
+		FirstName:   firstName,
+		LastName:    lastName,
+		BirthDate:   birthDate,
+		FriendCount: 0,
 	}
 }
