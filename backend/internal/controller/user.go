@@ -245,14 +245,6 @@ func (uc *UserController) FindPendingFriendships(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, friendships)
 }
 
-func (uc *UserController) FindAuthoredTestimonials(ctx *gin.Context) {
-	panic("unimplemented")
-}
-
-func (uc *UserController) FindReceivedTestimonials(ctx *gin.Context) {
-	panic("unimplemented")
-}
-
 func (uc *UserController) FindCommunitiesOwned(ctx *gin.Context) {
 	userId, err := strconv.Atoi(ctx.Param("userId"))
 	if err != nil {
@@ -324,4 +316,12 @@ func (uc *UserController) FindMemberships(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, memberships)
+}
+
+func (uc *UserController) FindAuthoredTestimonials(ctx *gin.Context) {
+	panic("unimplemented")
+}
+
+func (uc *UserController) FindReceivedTestimonials(ctx *gin.Context) {
+	panic("unimplemented")
 }

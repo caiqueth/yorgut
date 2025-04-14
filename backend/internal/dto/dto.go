@@ -166,13 +166,15 @@ type FriendDto struct {
 	FirstName      string    `json:"firstName"`
 	BirthDate      time.Time `json:"birthDate"`
 	ProfilePicture string    `json:"profilePicture"`
+	FriendCount    uint      `json:"friendCount"`
 }
 
 type CommunityDto struct {
-	ID             uint    `json:"id"`
-	Name           string  `json:"name"`
-	CreatedBy      uint    `json:"firstName"`
-	ProfilePicture *string `json:"profilePicture"`
+	ID              uint    `json:"id"`
+	Name            string  `json:"name"`
+	CreatedBy       uint    `json:"firstName"`
+	ProfilePicture  *string `json:"profilePicture"`
+	MembershipCount uint    `json:"membershipCount"`
 }
 
 type FindUserByIdResponse struct {

@@ -109,3 +109,13 @@ func UploadProfilePicture(picture []byte) (*string, error) {
 func UploadCommunityPicture(picture []byte) (*string, error) {
 	return UploadPicture(picture, "community_pictures")
 }
+
+func SafeAdd(base uint, delta int) uint {
+	if delta < 0 {
+		if uint(-delta) > base {
+			return 0
+		}
+		return base - uint(-delta)
+	}
+	return base + uint(delta)
+}

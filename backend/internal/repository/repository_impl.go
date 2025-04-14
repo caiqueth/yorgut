@@ -1,6 +1,9 @@
 package repository
 
-import "yorgut/internal/model"
+import (
+	"yorgut/internal/helpers"
+	"yorgut/internal/model"
+)
 
 // Membership
 func (c *CommunityMembershipRepository) FindOfUser(id uint) ([]model.CommunityMembership, error) {
@@ -14,7 +17,9 @@ func (c *CommunityMembershipRepository) FindOfUser(id uint) ([]model.CommunityMe
 
 func (c *CommunityMembershipRepository) FindOfUserAndCommunity(communityId uint, userId uint) (*model.CommunityMembership, error) {
 	var membership model.CommunityMembership
-	result := c.db.Where("user_id = ? and communityId = ?", userId, communityId).First(&membership)
+	result := c.db.
+		Where("user_id = ? and communityId = ?", userId, communityId).
+		First(&membership)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -48,6 +53,15 @@ func (r *CommunityRepository) FindCommunitiesWithProfiles() ([]model.Community, 
 		return nil, results.Error
 	}
 	return ents, nil
+}
+
+func (r *CommunityRepository) IncrementCommunityMembers(community *model.Community, increment int) error {
+	community.MemberCount = helpers.SafeAdd(community.MemberCount, increment)
+	result := r.db.Model(&community).Updates(community)
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
 }
 
 // User

@@ -193,9 +193,37 @@ func (u *UserService) JoinCommunity(userId uint, communityId uint) error {
 		return err
 	}
 
-	m := model.NewCommunityMembership(community, user)
+	membership := model.NewCommunityMembership(community, user)
+	if err := u.communityMembershipRepository.Create(membership); err != nil {
+		return err
+	}
 
-	u.communityMembershipRepository.Create(m)
+	if err := u.communityRepository.IncrementCommunityMembers(community, 1); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (u *UserService) LeaveCommunity(userId uint, communityId uint) error {
+	membership, err := u.communityMembershipRepository.FindOfUserAndCommunity(communityId, userId)
+	if err != nil {
+		return err
+	}
+
+	community, err := u.communityRepository.FindById(communityId)
+	if err != nil {
+		return err
+	}
+
+	if err := u.communityMembershipRepository.Delete(membership.ID); err != nil {
+		return err
+	}
+
+	if err := u.communityRepository.IncrementCommunityMembers(community, -1); err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -213,8 +241,7 @@ func (s *ScrapService) CreateScrap(scrap dto.CreateScrapRequest) error {
 
 	scrapModel := model.NewScrap(author, recipient, scrap.Content)
 
-	err = s.scrapRepository.Create(scrapModel)
-	if err != nil {
+	if err := s.scrapRepository.Create(scrapModel); err != nil {
 		return err
 	}
 

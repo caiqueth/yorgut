@@ -40,6 +40,7 @@ func (r *FindUserWithProfileByIdResponse) FromUser(user *model.User) {
 	r.Movies = user.UserProfile.Movies
 	r.Cuisine = user.UserProfile.Cuisine
 }
+
 func (r *FindUserCommunitiesResponse) FromCommunities(communities []model.Community) {
 	r.Communities = make([]CommunityDto, len(communities))
 	for i, c := range communities {
@@ -54,10 +55,11 @@ func (r *FindUserMembershipsResponse) FromMemberships(memberships []model.Commun
 	r.Communities = make([]CommunityDto, len(memberships))
 	for i, m := range memberships {
 		r.Communities[i] = CommunityDto{
-			ID:             m.Community.ID,
-			Name:           m.Community.Name,
-			CreatedBy:      m.Community.CreatedByID,
-			ProfilePicture: m.Community.Profile.ProfilePicture,
+			ID:              m.Community.ID,
+			Name:            m.Community.Name,
+			CreatedBy:       m.Community.CreatedByID,
+			ProfilePicture:  m.Community.Profile.ProfilePicture,
+			MembershipCount: m.Community.MemberCount,
 		}
 	}
 }
@@ -94,6 +96,7 @@ func (r *FindFriendsOfUserResponse) FromFriends(friends []model.User) {
 			FirstName:      f.FirstName,
 			BirthDate:      f.BirthDate,
 			ProfilePicture: *f.UserProfile.ProfilePicture,
+			FriendCount:    f.FriendCount,
 		}
 	}
 }

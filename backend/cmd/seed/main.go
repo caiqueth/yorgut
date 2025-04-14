@@ -8,25 +8,44 @@ import (
 	"yorgut/internal/model"
 	"yorgut/internal/repository"
 	"yorgut/internal/seed"
+	"yorgut/internal/service"
+
+	"github.com/go-playground/validator/v10"
 )
 
 func main() {
 	db := database.DatabaseConnection()
 	database.Migrate(db)
 
-	userRepo := repository.NewUserRepository(db)
-	userProfileRepo := repository.NewUserProfileRepository(db)
-	communityRepo := repository.NewCommunityRepository(db)
-	communityProfileRepo := repository.NewCommunityProfileRepository(db)
-	communityMembershipRepo := repository.NewCommunityMembershipRepository(db)
-	friendshipRepo := repository.NewFriendshipRepository(db)
+	validate := validator.New()
 
-	seedUsers(userRepo)
-	seedCommunities(communityRepo, userRepo)
-	seedFriendships(friendshipRepo, userRepo)
-	seedMemberships(communityMembershipRepo, userRepo, communityRepo)
-	seedUserProfiles(userProfileRepo, userRepo)
-	seedCommunityProfiles(communityProfileRepo, communityRepo)
+	userRepository := repository.NewUserRepository(db)
+	userProfileRepository := repository.NewUserProfileRepository(db)
+	communityMembershipRepository := repository.NewCommunityMembershipRepository(db)
+	communityRepository := repository.NewCommunityRepository(db)
+	communityProfileRepository := repository.NewCommunityProfileRepository(db)
+	friendshipRepository := repository.NewFriendshipRepository(db)
+	photoAlbumRepository := repository.NewPhotoAlbumRepository(db)
+	// photoRepository := repository.NewPhotoRepository(db)
+	// scrapRepository := repository.NewScrapRepository(db)
+	// testimonialRepository := repository.NewTestimonialRepository(db)
+
+	userService := service.NewUserService(
+		*userRepository,
+		*userProfileRepository,
+		*communityRepository,
+		*communityMembershipRepository,
+		*photoAlbumRepository,
+		*friendshipRepository,
+		validate,
+	)
+
+	seedUsers(userRepository)
+	seedCommunities(communityRepository, userRepository)
+	seedFriendships(friendshipRepository, userRepository)
+	seedMemberships(userRepository, communityRepository, userService)
+	seedUserProfiles(userProfileRepository, userRepository)
+	seedCommunityProfiles(communityProfileRepository, communityRepository)
 
 	fmt.Println("✅ Seeding complete!")
 }
@@ -109,9 +128,9 @@ func seedFriendships(
 }
 
 func seedMemberships(
-	cmr *repository.CommunityMembershipRepository,
 	ur *repository.UserRepository,
 	cr *repository.CommunityRepository,
+	us *service.UserService,
 ) {
 	users, err := ur.FindMany()
 	if err != nil {
@@ -125,14 +144,11 @@ func seedMemberships(
 
 	for _, user := range users {
 		for _, community := range communities {
-			if seed.RandomBoolean() {
-				membership := model.NewCommunityMembership(community, user)
-				err := cmr.Create(membership)
-				if err != nil {
-					log.Printf("❌ Failed to create %s membership for user %s: %v\n", community.Name, user.FirstName, err)
-				} else {
-					log.Printf("✅ %s Membership created for user %s\n", community.Name, user.FirstName)
-				}
+			err := us.JoinCommunity(user.ID, community.ID)
+			if err != nil {
+				log.Printf("❌ Failed to create %s membership for user %s: %v\n", community.Name, user.FirstName, err)
+			} else {
+				log.Printf("✅ %s Membership created for user %s\n", community.Name, user.FirstName)
 			}
 		}
 	}

@@ -13,7 +13,8 @@ type Community struct {
 	CreatedByID uint
 	CreatedBy   *User `gorm:"foreignKey:CreatedByID;references:ID"`
 	Category    string
-	Owner       *User
+	OwnerID     uint
+	Owner       *User `gorm:"foreignKey:OwnerID;references:ID"`
 	MemberCount uint
 	Profile     *CommunityProfile `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
