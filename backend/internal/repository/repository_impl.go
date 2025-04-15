@@ -57,7 +57,7 @@ func (r *CommunityRepository) FindCommunitiesWithProfiles() ([]model.Community, 
 
 func (r *CommunityRepository) IncrementCommunityMembers(community *model.Community, increment int) error {
 	community.MemberCount = helpers.SafeAdd(community.MemberCount, increment)
-	result := r.db.Model(&community).Updates(community)
+	result := r.db.Model(community).Updates(community)
 	if result.Error != nil {
 		return result.Error
 	}

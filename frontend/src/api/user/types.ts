@@ -42,7 +42,7 @@ export interface IFriendsResponse {
     firstName: string;
     birthDate: Date;
     profilePicture: string;
-    frienshipsCount?: number;
+    frienshipCount?: number;
   }[];
 }
 
@@ -60,6 +60,6 @@ export interface ICommunityMembershipsResponse {
     id: number;
     name: string;
     profilePicture: string;
-    members?: number;
+    membershipCount: number;
   }[];
 }

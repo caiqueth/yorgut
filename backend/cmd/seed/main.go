@@ -1,8 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"log"
+	"os"
+	"path"
 	"yorgut/internal/database"
 	"yorgut/internal/helpers"
 	"yorgut/internal/model"
@@ -14,6 +15,9 @@ import (
 )
 
 func main() {
+	clearStorageFolder()
+	deleteDb()
+
 	db := database.DatabaseConnection()
 	database.Migrate(db)
 
@@ -47,7 +51,15 @@ func main() {
 	seedUserProfiles(userProfileRepository, userRepository)
 	seedCommunityProfiles(communityProfileRepository, communityRepository)
 
-	fmt.Println("✅ Seeding complete!")
+	log.Printf("✅ Seeding complete!")
+}
+
+func clearStorageFolder() {
+	os.RemoveAll(path.Join("storage", "uploads"))
+}
+
+func deleteDb() {
+	os.Remove("test.db")
 }
 
 func seedUsers(ur *repository.UserRepository) {
@@ -144,6 +156,9 @@ func seedMemberships(
 
 	for _, user := range users {
 		for _, community := range communities {
+			if !seed.RandomBoolean() {
+				continue
+			}
 			err := us.JoinCommunity(user.ID, community.ID)
 			if err != nil {
 				log.Printf("❌ Failed to create %s membership for user %s: %v\n", community.Name, user.FirstName, err)

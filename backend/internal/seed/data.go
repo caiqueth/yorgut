@@ -3,20 +3,24 @@ package seed
 import (
 	"errors"
 	"fmt"
-	"math/rand/v2"
+	"math/rand"
 	"path"
 	"strings"
 	"time"
 	"yorgut/internal/model"
 )
 
+var rng = rand.New(rand.NewSource(time.Now().UnixNano()))
+
 func RandomChoice[T any](arr []T) T {
-	max := len(arr)
-	return arr[rand.IntN(max)]
+	if len(arr) == 0 {
+		panic("RandomChoice called with empty slice")
+	}
+	return arr[rng.Intn(len(arr))]
 }
 
 func RandomBoolean() bool {
-	return rand.IntN(2) == 1
+	return rng.Intn(2) == 1
 }
 
 func GetUsersSeed() []*model.User {
