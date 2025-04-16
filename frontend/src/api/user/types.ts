@@ -42,7 +42,7 @@ export interface IFriendsResponse {
     firstName: string;
     birthDate: Date;
     profilePicture: string;
-    frienshipCount?: number;
+    friendCount: number;
   }[];
 }
 

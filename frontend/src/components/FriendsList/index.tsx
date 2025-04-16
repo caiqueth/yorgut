@@ -48,7 +48,7 @@ export const FriendsList: React.FC<IFriendsListProps> = ({ userId }) => {
                   />
                   <Typography
                     variant={"body2"}
-                  >{`${friend.firstName} (${friend.frienshipsCount})`}</Typography>
+                  >{`${friend.firstName} (${friend.friendCount})`}</Typography>
                 </Link>
               </Stack>
             </Grid>
