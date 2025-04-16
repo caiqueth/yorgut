@@ -3,6 +3,7 @@ import React, { use } from "react";
 import { Box, Paper, Table } from "@mui/material";
 import { StyledTableCell, StyledTableRow } from "./styles";
 import { useUserProfile } from "api/user/queries";
+import { ProfileTable } from "components/ProfileTable";
 
 interface IProfileDetailsProps {
   userId: number;
@@ -81,23 +82,5 @@ export const ProfileDetails: React.FC<IProfileDetailsProps> = ({ userId }) => {
     },
   ];
 
-  return (
-    <Paper>
-      <Box sx={{ width: "100%" }}>
-        <Table
-          size="small"
-          sx={{
-            width: "100%",
-          }}
-        >
-          {data.map(({ label, value }) => (
-            <StyledTableRow>
-              <StyledTableCell sx={{ width: 140 }}>{label}</StyledTableCell>
-              <StyledTableCell>{value}</StyledTableCell>
-            </StyledTableRow>
-          ))}
-        </Table>
-      </Box>
-    </Paper>
-  );
+  return <ProfileTable data={data} />;
 };

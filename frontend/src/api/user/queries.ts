@@ -4,8 +4,12 @@ import { useQuery } from "@tanstack/react-query";
 
 import {
   ICommunityMembershipsResponse,
+  ICommunityMembersResponse,
+  ICommunityProfileResponse,
+  ICommunityResponse,
   IFriendsResponse,
   IPendingFriendshipsResponse,
+  IRelatedCommunitiesResponse,
   IUserProfileResponse,
   IUserResponse,
 } from "./types";
@@ -68,3 +72,26 @@ export const useUserMemberships = (userId: number) =>
 
 export const useTodaysLuck = (userId: number) =>
   "Boas notícias chegarão por e-mail";
+
+export const useCommunity = (communityId: number) =>
+  useQuery<ICommunityResponse>({
+    queryKey: [`/api/community/${communityId}`, {}],
+    queryFn: ({ queryKey }) => doGet<ICommunityResponse>({ queryKey }),
+  });
+
+export const useRelatedCommunities = (communityId: number) =>
+  useQuery<IRelatedCommunitiesResponse>({
+    queryKey: [`/api/community/${communityId}/related`, {}],
+    queryFn: ({ queryKey }) => doGet<IRelatedCommunitiesResponse>({ queryKey }),
+  });
+export const useCommunityProfile = (communityId: number) =>
+  useQuery<ICommunityProfileResponse>({
+    queryKey: [`/api/community/${communityId}/profile`, {}],
+    queryFn: ({ queryKey }) => doGet<ICommunityProfileResponse>({ queryKey }),
+  });
+
+export const useCommunityMembers = (communityId: number) =>
+  useQuery<ICommunityMembersResponse>({
+    queryKey: [`/api/community/${communityId}/members`, {}],
+    queryFn: ({ queryKey }) => doGet<ICommunityMembersResponse>({ queryKey }),
+  });

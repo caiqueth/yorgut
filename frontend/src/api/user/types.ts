@@ -63,3 +63,23 @@ export interface ICommunityMembershipsResponse {
     membershipCount: number;
   }[];
 }
+
+export interface ICommunityResponse {
+  name: string;
+  memberCount: number;
+}
+
+export interface ICommunityProfileResponse {
+  description: string;
+  profilePicture: string;
+}
+
+export interface ICommunityMembersResponse {
+  members: any[];
+  count: number;
+}
+
+export interface IRelatedCommunitiesResponse {
+  communities: any[];
+  memberCount: number;
+}

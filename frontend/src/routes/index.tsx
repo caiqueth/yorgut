@@ -2,6 +2,7 @@ import { Home } from "pages/Home";
 import { Profile } from "pages/Profile";
 
 import { ProtectedRoute } from "./ProtectedRoute";
+import { Community } from "pages/Community";
 
 export const Routes = [
   {
@@ -67,6 +68,14 @@ export const Routes = [
       { path: "not-allowed", element: <></> },
       { path: "disconnected", element: <></> },
     ],
+  },
+  {
+    path: "/community/:communityId",
+    element: (
+      <ProtectedRoute>
+        <Community />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/community/:communityId",
