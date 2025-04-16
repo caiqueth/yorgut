@@ -4,8 +4,8 @@ export interface IUserResponse {
   firstName: string;
   lastName: string;
   birthDate: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface IUserProfileResponse {
@@ -14,8 +14,6 @@ export interface IUserProfileResponse {
   firstName: string;
   lastName: string;
   birthDate: string;
-  createdAt: string;
-  updatedAt: string;
   profilePicture?: string;
   description?: string;
   relationshipStatus?: string;
@@ -34,6 +32,8 @@ export interface IUserProfileResponse {
   music?: string;
   movies?: string;
   cuisine?: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface IFriendsResponse {

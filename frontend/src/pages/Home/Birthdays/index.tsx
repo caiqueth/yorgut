@@ -4,8 +4,9 @@ import { isStripedRow } from "helpers/isStripedRow";
 import { Link } from "react-router-dom";
 import { palette } from "theme";
 
-import { Box, Grid2 as Grid, Paper, Stack, Typography } from "@mui/material";
+import { Grid2 as Grid, Stack, Typography } from "@mui/material";
 import { BoxWithTitle } from "components/BoxWithTitle";
+import { dayjsFromDate } from "helpers/formatting/date";
 
 interface IBirthdaysProps {
   userId: number;
@@ -39,7 +40,7 @@ export const Birthdays: React.FC<IBirthdaysProps> = ({ userId }) => {
                 />
                 <Typography variant={"body2"}>
                   <Link to={`/profile/${friend.id}`}>{friend.firstName}</Link>{" "}
-                  {`${friend.birthDate}`}
+                  {`${dayjsFromDate(friend.birthDate, "D [de] MMMM")}`}
                 </Typography>
               </Stack>
             </Grid>

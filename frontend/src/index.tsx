@@ -5,12 +5,19 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 
 import "./index.css";
+import dayjs from "dayjs";
 
-const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
+require("dayjs/locale/pt-br");
+
+dayjs.locale("pt-br");
+
+const root = ReactDOM.createRoot(
+  document.getElementById("root") as HTMLElement,
+);
 root.render(
   <React.StrictMode>
     <BrowserRouter>
       <App />
     </BrowserRouter>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

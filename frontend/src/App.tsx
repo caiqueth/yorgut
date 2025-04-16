@@ -4,7 +4,11 @@ import { useNavigate, useRoutes } from "react-router-dom";
 import { Routes } from "routes";
 
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
-import { QueryCache, QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  QueryCache,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
 
 import { theme } from "./theme";
 
@@ -26,7 +30,7 @@ const App: React.FC = () => {
           }
         },
       }),
-    []
+    [],
   );
 
   const queryClient = useMemo(
@@ -35,7 +39,7 @@ const App: React.FC = () => {
         queryCache,
         defaultOptions: { queries: { retry: false } },
       }),
-    []
+    [],
   );
 
   return (
