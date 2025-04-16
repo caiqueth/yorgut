@@ -10,7 +10,7 @@ import { Welcome } from "./Welcome";
 import { PendingInvites } from "./PendingInvites";
 
 export const Home = () => {
-  const userId = 1;
+  const userId = 6;
   return (
     <Box sx={{ width: "100%" }}>
       <Grid container spacing={2}>

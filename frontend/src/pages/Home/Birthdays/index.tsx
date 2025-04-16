@@ -25,6 +25,7 @@ export const Birthdays: React.FC<IBirthdaysProps> = ({ userId }) => {
                 backgroundColor: isStripedRow(idx, 1)
                   ? palette.darkBlue
                   : palette.mediumBlue,
+                p: 1,
               }}
             >
               <Stack

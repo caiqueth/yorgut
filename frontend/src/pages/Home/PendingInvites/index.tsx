@@ -25,6 +25,7 @@ export const PendingInvites: React.FC<IPendingInvitesProps> = ({ userId }) => {
             backgroundColor: isStripedRow(idx, 1)
               ? palette.darkBlue
               : palette.mediumBlue,
+            px: 1,
           }}
         >
           <Stack direction={"row"} alignItems={"center"} gap={1}>
