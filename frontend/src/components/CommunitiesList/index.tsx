@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { palette } from "theme";
 
 import { Box, Grid2 as Grid, Paper, Stack, Typography } from "@mui/material";
+import { BoxWithTitle } from "components/BoxWithTitle";
 
 interface ICommunitiesListProps {
   userId: number;
@@ -16,18 +17,7 @@ export const CommunitiesList: React.FC<ICommunitiesListProps> = ({
   const { data: memberships } = useUserMemberships(userId);
 
   return (
-    <Paper>
-      <Box
-        sx={{
-          textAlign: "center",
-          width: "100%",
-          backgroundColor: palette.lightBlue,
-        }}
-      >
-        <Typography variant={"subtitle2"} fontWeight={"bold"}>
-          {`comunidades (${userStatistics.totalCommunities})`}
-        </Typography>
-      </Box>
+    <BoxWithTitle title={`comunidades (${userStatistics.totalCommunities})`}>
       <Grid container direction={"row"}>
         {memberships?.communities.map((community, idx) => (
           <Grid
@@ -59,6 +49,6 @@ export const CommunitiesList: React.FC<ICommunitiesListProps> = ({
           </Grid>
         ))}
       </Grid>
-    </Paper>
+    </BoxWithTitle>
   );
 };
