@@ -26,8 +26,8 @@ export const Welcome: React.FC<IProps> = ({ userId }) => {
           </Typography>
           <Box>
             <Typography variant={"body1"}>
-              Você está conectado a {userStatistics.undirectConnections} pessoas
-              através de {userStatistics.totalFriends} amigos
+              Você está conectado(a) a {userStatistics.undirectConnections}{" "}
+              pessoas através de {userStatistics.totalFriends} amigos
             </Typography>
             <Typography variant={"body1"}>
               Aumente sua rede agora mesmo!
