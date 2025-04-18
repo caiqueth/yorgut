@@ -2,8 +2,6 @@ import React from "react";
 
 import { Box, Grid2 as Grid, Stack } from "@mui/material";
 
-import { ProfilePicture } from "../../components/UserProfilePicture";
-
 import { ProfileDetails } from "./ProfileDetails";
 import { ProfileHeader } from "./ProfileHeader";
 import { ProfileMenu } from "./ProfileMenu";
