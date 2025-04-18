@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 	"path"
+	"time"
 	"yorgut/internal/database"
 	"yorgut/internal/helpers"
 	"yorgut/internal/model"
@@ -15,6 +16,8 @@ import (
 )
 
 func main() {
+	time.Local, _ = time.LoadLocation("America/Sao_Paulo")
+
 	clearStorageFolder()
 	deleteDb()
 

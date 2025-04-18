@@ -38,7 +38,7 @@ func gracefulShutdown(apiServer *http.Server, done chan bool) {
 }
 
 func main() {
-
+	time.Local, _ = time.LoadLocation("America/Sao_Paulo")
 	server := server.NewServer()
 
 	// Create a done channel to signal when the shutdown is complete

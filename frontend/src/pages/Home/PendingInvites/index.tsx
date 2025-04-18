@@ -5,6 +5,7 @@ import { BoxWithTitle } from "components/BoxWithTitle";
 import React from "react";
 import { palette } from "theme";
 import { isStripedRow } from "helpers/isStripedRow";
+import { Link } from "react-router-dom";
 
 interface IPendingInvitesProps {
   userId: number;
@@ -29,9 +30,11 @@ export const PendingInvites: React.FC<IPendingInvitesProps> = ({ userId }) => {
           }}
         >
           <Stack direction={"row"} alignItems={"center"} gap={1}>
-            <Box>
-              <img src={`${pf.profilePicture}`} height={64}></img>
-            </Box>
+            <Link to={`/profile/${pf.id}`}>
+              <Box>
+                <img src={`${pf.profilePicture}`} height={64}></img>
+              </Box>
+            </Link>
             <Box>
               <Stack direction={"column"}>
                 <Typography>
