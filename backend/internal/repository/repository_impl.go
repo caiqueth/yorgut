@@ -123,7 +123,7 @@ func (f *FriendshipRepository) FindFriendsOfUser(userId uint) ([]model.User, err
 		Preload("UserRequestee").
 		Preload("UserRequested.UserProfile").
 		Preload("UserRequestee.UserProfile").
-		Where("user_requested_id = ? or user_requestee_id = ? and accepted = ?", userId, userId, true).
+		Where("(user_requested_id = ? or user_requestee_id = ?) and accepted = ?", userId, userId, true).
 		Find(&ents)
 
 	if result.Error != nil {

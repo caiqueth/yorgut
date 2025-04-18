@@ -381,10 +381,6 @@ func (f *FriendshipService) DeleteFriendship(id uint) error {
 	return nil
 }
 
-func (f *FriendshipService) FindFriendshipsOfUser(userId uint) (dto.FindFriendshipOfUserResponse, error) {
-	panic("unimplemented")
-}
-
 // Community
 func (c *CommunityService) CreateCommunity(request dto.CreateCommunityRequest) error {
 	creator, err := c.userRepository.FindById(request.CreatedByID)
