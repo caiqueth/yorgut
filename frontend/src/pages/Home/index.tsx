@@ -10,7 +10,7 @@ import { Welcome } from "./Welcome";
 import { PendingInvites } from "./PendingInvites";
 
 export const Home = () => {
-  const userId = 6;
+  const userId = 2;
 
   return (
     <Box sx={{ width: "100%" }}>
