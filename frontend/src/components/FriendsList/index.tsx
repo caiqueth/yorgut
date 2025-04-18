@@ -23,7 +23,7 @@ export const FriendsList: React.FC<IFriendsListProps> = ({ userId }) => {
   return (
     <BoxWithTitle title={`amigos (${userStatistics.totalFriends})`}>
       <Stack direction={"column"} alignItems={"center"}>
-        <Grid container direction={"row"}>
+        <Grid container direction={"row"} width={"100%"}>
           {friends?.friends?.map((friend, idx) => (
             <Grid
               size={3}

@@ -21,13 +21,21 @@ const App: React.FC = () => {
   const queryCache = useMemo(
     () =>
       new QueryCache({
-        onError: (error: Error) => {
+        onError: (error) => {
           if (error.message.startsWith("Unauthorized")) {
             navigate("/disconnected");
+            return;
           }
           if (error.message.startsWith("Not allowed")) {
             navigate("/not-allowed");
+            return;
           }
+          if (error.message.startsWith("Not Found")) {
+            navigate("/not-found");
+            return;
+          }
+          // navigate("/bad-server");
+          // return;
         },
       }),
     [],
@@ -37,7 +45,11 @@ const App: React.FC = () => {
     () =>
       new QueryClient({
         queryCache,
-        defaultOptions: { queries: { retry: false } },
+        defaultOptions: {
+          queries: {
+            retry: false,
+          },
+        },
       }),
     [],
   );

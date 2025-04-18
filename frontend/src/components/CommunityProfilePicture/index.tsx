@@ -3,13 +3,14 @@ import { useCommunityProfile, useUserProfile } from "api/user/queries";
 
 import { Box } from "@mui/material";
 
-interface IProfilePictureProps {
+interface ICommunityProfilePictureProps {
   communityId: number;
 }
-export const ProfilePicture: React.FC<IProfilePictureProps> = ({
-  communityId,
-}) => {
+export const CommunityProfilePicture: React.FC<
+  ICommunityProfilePictureProps
+> = ({ communityId }) => {
   const { data: community } = useCommunityProfile(communityId);
+
   return (
     <Box>
       <Box

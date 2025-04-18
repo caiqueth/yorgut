@@ -4,7 +4,7 @@ import { Box, Grid2 as Grid, Stack } from "@mui/material";
 
 import { CommunitiesList } from "../../components/CommunitiesList";
 import { FriendsList } from "../../components/FriendsList";
-import { ProfilePicture } from "../../components/ProfilePicture";
+import { UserProfilePicture } from "../../components/UserProfilePicture";
 
 import { ProfileDetails } from "./ProfileDetails";
 import { ProfileHeader } from "./ProfileHeader";
@@ -20,7 +20,7 @@ export const Profile: React.FC = () => {
       <Grid container spacing={2}>
         <Grid size={2}>
           <Stack direction={"column"} gap={2}>
-            <ProfilePicture userId={userId} />
+            <UserProfilePicture userId={userId} />
             <ProfileMenu userId={userId} />
           </Stack>
         </Grid>

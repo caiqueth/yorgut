@@ -1,3 +1,16 @@
+@font-face {
+  font-family: "Verdana";
+  src:
+    local("Verdana"),
+    url(./assets/fonts/Verdana.ttf) format("truetype");
+  /* other formats include: 'woff2', 'truetype, 'opentype',
+                            'embedded-opentype', and 'svg' */
+}
+
+* {
+  font-family: "Verdana";
+}
+
 body {
   margin: 0;
   font-family:

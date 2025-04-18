@@ -1,6 +1,6 @@
 import { CommunitiesList } from "components/CommunitiesList";
 import { FriendsList } from "components/FriendsList";
-import { ProfilePicture } from "components/ProfilePicture";
+import { UserProfilePicture } from "components/UserProfilePicture";
 
 import { Box, Grid2 as Grid, Stack } from "@mui/material";
 
@@ -17,7 +17,7 @@ export const Home = () => {
       <Grid container spacing={2}>
         <Grid size={2}>
           <Stack direction={"column"} gap={2}>
-            <ProfilePicture userId={userId} />
+            <UserProfilePicture userId={userId} />
             <HomeMenu userId={userId} />
           </Stack>
         </Grid>

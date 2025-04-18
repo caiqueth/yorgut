@@ -2,7 +2,7 @@ import React from "react";
 
 import { Box, Grid2 as Grid, Stack } from "@mui/material";
 
-import { ProfilePicture } from "../../components/ProfilePicture";
+import { ProfilePicture } from "../../components/UserProfilePicture";
 
 import { ProfileDetails } from "./ProfileDetails";
 import { ProfileHeader } from "./ProfileHeader";
@@ -10,6 +10,7 @@ import { ProfileMenu } from "./ProfileMenu";
 import { useParams } from "react-router-dom";
 import { MembersList } from "components/MembersList";
 import { RelatedCommunitiesList } from "components/RelatedCommunitiesList";
+import { CommunityProfilePicture } from "components/CommunityProfilePicture";
 
 export const Community: React.FC = () => {
   const params = useParams();
@@ -20,7 +21,7 @@ export const Community: React.FC = () => {
       <Grid container spacing={2}>
         <Grid size={2}>
           <Stack direction={"column"} gap={2}>
-            <ProfilePicture communityId={communityId} />
+            <CommunityProfilePicture communityId={communityId} />
             <ProfileMenu communityId={communityId} />
           </Stack>
         </Grid>

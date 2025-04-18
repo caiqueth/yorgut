@@ -3,6 +3,8 @@ import { Profile } from "pages/Profile";
 
 import { ProtectedRoute } from "./ProtectedRoute";
 import { Community } from "pages/Community";
+import { NotFound } from "pages/NotFound";
+import { BadBadServer } from "pages/BadBadServer";
 
 export const Routes = [
   {
@@ -76,14 +78,6 @@ export const Routes = [
         <Community />
       </ProtectedRoute>
     ),
-  },
-  {
-    path: "/community/:communityId",
-    element: (
-      <ProtectedRoute>
-        <></>
-      </ProtectedRoute>
-    ),
     children: [
       {
         path: "topics",
@@ -104,5 +98,21 @@ export const Routes = [
         ],
       },
     ],
+  },
+  {
+    path: "/error",
+    element: <NotFound />,
+  },
+  {
+    path: "/not-found",
+    element: <NotFound />,
+  },
+  {
+    path: "/bad-server",
+    element: <BadBadServer />,
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ];
