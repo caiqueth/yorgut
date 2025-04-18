@@ -348,6 +348,31 @@ func (f *FriendshipService) CreateFriendship(friendship dto.CreateFriendshipRequ
 	return nil
 }
 
+// Friendship
+func (f *FriendshipService) ReplyFriendship(friendshipId uint, accepted bool) error {
+	friendship, err := f.friendshipRepository.FindPendingFriendshipWithUsersById(friendshipId)
+	if err != nil {
+		return err
+	}
+
+	if !accepted {
+		f.friendshipRepository.Delete(friendshipId)
+		return nil
+	}
+
+	friendship.Accepted = accepted
+	if err := f.friendshipRepository.Update(friendship); err != nil {
+		return err
+	}
+
+	if accepted {
+		f.userRepository.IncrementFriendCount(friendship.UserRequested, 1)
+		f.userRepository.IncrementFriendCount(friendship.UserRequestee, 1)
+	}
+
+	return nil
+}
+
 func (f *FriendshipService) DeleteFriendship(id uint) error {
 	err := f.friendshipRepository.Delete(id)
 	if err != nil {

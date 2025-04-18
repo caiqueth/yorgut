@@ -47,9 +47,15 @@ func main() {
 		validate,
 	)
 
+	frienshipService := service.NewFriendshipService(
+		*friendshipRepository,
+		*userRepository,
+		validate,
+	)
+
 	seedUsers(userRepository)
 	seedCommunities(communityRepository, userRepository)
-	seedFriendships(friendshipRepository, userRepository)
+	seedFriendships(friendshipRepository, userRepository, frienshipService)
 	seedMemberships(userRepository, communityRepository, userService)
 	seedUserProfiles(userProfileRepository, userRepository)
 	seedCommunityProfiles(communityProfileRepository, communityRepository)
@@ -119,6 +125,7 @@ func seedCommunities(
 func seedFriendships(
 	fr *repository.FriendshipRepository,
 	ur *repository.UserRepository,
+	fs *service.FriendshipService,
 ) {
 	users, err := ur.FindMany()
 	if err != nil {
@@ -136,10 +143,18 @@ func seedFriendships(
 				continue
 			}
 
+			// creates frienship request
 			friendship := model.NewFriendship(user, friend)
-			friendship.Accepted = seed.RandomBoolean()
-
 			err := fr.Create(friendship)
+
+			if seed.RandomBoolean() {
+				// ignore frienship request
+				continue
+			}
+
+			// reply frienship request with random response
+			fs.ReplyFriendship(friendship.ID, seed.RandomBoolean())
+
 			if err != nil {
 				log.Printf("❌ Failed to create friendship between %s and %s: %v\n", user.FirstName, friend.FirstName, err)
 			} else {

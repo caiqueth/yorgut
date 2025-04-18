@@ -6,6 +6,7 @@ export interface IUserResponse {
   birthDate: string;
   createdAt: Date;
   updatedAt: Date;
+  friendCount: number;
 }
 
 export interface IUserProfileResponse {

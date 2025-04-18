@@ -98,10 +98,12 @@ func NewCommunityService(
 
 func NewFriendshipService(
 	friendshipRepository repository.FriendshipRepository,
+	userRepository repository.UserRepository,
 	validate *validator.Validate,
 ) *FriendshipService {
 	return &FriendshipService{
 		friendshipRepository: friendshipRepository,
+		userRepository:       userRepository,
 		Validate:             validate,
 	}
 }

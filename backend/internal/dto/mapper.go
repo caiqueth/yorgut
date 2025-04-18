@@ -11,6 +11,7 @@ func (r *FindUserByIdResponse) FromUser(user *model.User) {
 	r.BirthDate = user.BirthDate
 	r.CreatedAt = user.CreatedAt
 	r.UpdatedAt = user.UpdatedAt
+	r.FriendCount = user.FriendCount
 }
 
 func (r *FindUserWithProfileByIdResponse) FromUser(user *model.User) {

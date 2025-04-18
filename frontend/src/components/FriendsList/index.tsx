@@ -1,5 +1,5 @@
 import React from "react";
-import { useUserFriends, useUserStatistics } from "api/user/queries";
+import { useUserFriends, useUser } from "api/user/queries";
 import { Button } from "components/Button";
 import { isStripedRow } from "helpers/isStripedRow";
 import { Link, useNavigate } from "react-router-dom";
@@ -12,7 +12,7 @@ interface IFriendsListProps {
   userId: number;
 }
 export const FriendsList: React.FC<IFriendsListProps> = ({ userId }) => {
-  const userStatistics = useUserStatistics(userId);
+  const { data: user } = useUser(userId);
   const { data: friends } = useUserFriends(userId);
   const navigate = useNavigate();
 
@@ -21,7 +21,7 @@ export const FriendsList: React.FC<IFriendsListProps> = ({ userId }) => {
   };
 
   return (
-    <BoxWithTitle title={`amigos (${userStatistics.totalFriends})`}>
+    <BoxWithTitle title={`amigos (${user?.friendCount})`}>
       <Stack direction={"column"} alignItems={"center"}>
         <Grid container direction={"row"} width={"100%"}>
           {friends?.friends?.map((friend, idx) => (

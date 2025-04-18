@@ -86,6 +86,15 @@ func (r *UserRepository) FindUserWithProfile(userId uint) (*model.User, error) {
 	return &ent, nil
 }
 
+func (r *UserRepository) IncrementFriendCount(user *model.User, increment int) error {
+	user.FriendCount = helpers.SafeAdd(user.FriendCount, increment)
+	result := r.db.Model(user).Updates(user)
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
+}
+
 // Friendship
 func (f *FriendshipRepository) FindPendingFriendshipsOfUser(userId uint, accepted bool) ([]model.User, error) {
 	var ents []model.Friendship
@@ -141,4 +150,21 @@ func (f *FriendshipRepository) UsersAreFriends(user1 uint, user2 uint) bool {
 	).Count(&count)
 
 	return count > 0
+}
+
+func (f *FriendshipRepository) FindPendingFriendshipWithUsersById(friendshipId uint) (*model.Friendship, error) {
+	var ent model.Friendship
+
+	result := f.db.
+		Preload("UserRequested").
+		Preload("UserRequestee").
+		Preload("UserRequested.UserProfile").
+		Preload("UserRequestee.UserProfile").
+		Where("id = ?", friendshipId).
+		First(&ent)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &ent, nil
 }
