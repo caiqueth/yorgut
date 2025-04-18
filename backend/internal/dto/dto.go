@@ -39,8 +39,12 @@ type UpdateCommunityRequest struct {
 }
 
 type FindCommunityByIdResponse struct {
-	Name           string  `json:"name"`
-	CreatedBy      uint    `json:"createdBy"`
+	Name      string `json:"name"`
+	CreatedBy uint   `json:"createdBy"`
+}
+
+type FindCommunityProfileByIdResponse struct {
+	Description    *string `json:"description"`
 	ProfilePicture *string `json:"profilePicture"`
 }
 

@@ -79,7 +79,8 @@ func (c *CommunityController) Delete(ctx *gin.Context) {
 	communityId := ctx.Param("communityId")
 	id, err := strconv.ParseUint(communityId, 0, 0)
 	if err != nil {
-		panic(err)
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
 
 	err = c.communityService.DeleteCommunity(uint(id))
@@ -104,7 +105,8 @@ func (c *CommunityController) FindById(ctx *gin.Context) {
 	communityId := ctx.Param("communityId")
 	id, err := strconv.ParseUint(communityId, 0, 0)
 	if err != nil {
-		panic(err)
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
 
 	community, err := c.communityService.FindCommunityById(uint(id))
@@ -113,10 +115,33 @@ func (c *CommunityController) FindById(ctx *gin.Context) {
 		return
 	}
 
-	webResponse := dto.Response{
-		Data: community,
+	ctx.JSON(http.StatusOK, community)
+
+}
+
+// FindProfileById		godoc
+// @Summary				Get Single community profile by its id.
+// @Param				communityId path string true "get community profile by id"
+// @Description			Returns the community profile matching the requested id
+// @Produce				application/json
+// @Tags				Community
+// @Success				200 {object} dto.FindCommunityProfileByIdResponse{}
+// @Router				/community/{communityId}/profile [get]
+func (c *CommunityController) FindProfileById(ctx *gin.Context) {
+	communityId := ctx.Param("communityId")
+	id, err := strconv.ParseUint(communityId, 0, 0)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
-	ctx.JSON(http.StatusOK, webResponse)
+
+	profile, err := c.communityService.FindCommunityProfileById(uint(id))
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, profile)
 
 }
 

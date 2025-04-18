@@ -389,12 +389,22 @@ func (c *CommunityService) FindCommunityById(id uint) (dto.FindCommunityByIdResp
 		return dto.FindCommunityByIdResponse{}, errors.New("could not find specified community id")
 	}
 
-	r := dto.FindCommunityByIdResponse{
-		Name:           community.Name,
-		CreatedBy:      community.CreatedByID,
-		ProfilePicture: community.Profile.ProfilePicture,
+	return dto.FindCommunityByIdResponse{
+		Name:      community.Name,
+		CreatedBy: community.CreatedByID,
+	}, nil
+}
+
+func (c *CommunityService) FindCommunityProfileById(id uint) (dto.FindCommunityProfileByIdResponse, error) {
+	profile, err := c.communityProfileRepository.FindById(id)
+	if err != nil {
+		return dto.FindCommunityProfileByIdResponse{}, errors.New("could not find specified community profile id")
 	}
-	return r, nil
+
+	return dto.FindCommunityProfileByIdResponse{
+		Description:    profile.Description,
+		ProfilePicture: profile.ProfilePicture,
+	}, nil
 }
 
 func (c *CommunityService) FindManyCommunities() (*dto.Response, error) {

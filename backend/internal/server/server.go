@@ -50,7 +50,7 @@ func NewServer() *http.Server {
 		validate,
 	)
 	communityMembershipService := service.NewCommunityMembershipService(*communityMembershipRepository, validate)
-	communityService := service.NewCommunityService(*communityRepository, *userRepository, validate)
+	communityService := service.NewCommunityService(*communityRepository, *communityProfileRepository, *userRepository, validate)
 	communityProfileService := service.NewCommunityProfileService(*communityProfileRepository, *communityRepository, validate)
 	friendshipService := service.NewFriendshipService(*friendshipRepository, validate)
 	photoAlbumService := service.NewPhotoAlbumService(*photoAlbumRepository, validate)

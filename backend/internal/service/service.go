@@ -53,9 +53,10 @@ type FriendshipService struct {
 }
 
 type CommunityService struct {
-	communityRepository repository.CommunityRepository
-	userRepository      repository.UserRepository
-	Validate            *validator.Validate
+	communityRepository        repository.CommunityRepository
+	communityProfileRepository repository.CommunityProfileRepository
+	userRepository             repository.UserRepository
+	Validate                   *validator.Validate
 }
 
 type CommunityProfileService struct {
@@ -83,13 +84,15 @@ func NewCommunityMembershipService(
 
 func NewCommunityService(
 	communityRepository repository.CommunityRepository,
+	communityProfileRepository repository.CommunityProfileRepository,
 	userRepository repository.UserRepository,
 	validate *validator.Validate,
 ) *CommunityService {
 	return &CommunityService{
-		communityRepository: communityRepository,
-		userRepository:      userRepository,
-		Validate:            validate,
+		communityRepository:        communityRepository,
+		communityProfileRepository: communityProfileRepository,
+		userRepository:             userRepository,
+		Validate:                   validate,
 	}
 }
 

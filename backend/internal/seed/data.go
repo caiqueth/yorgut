@@ -23,56 +23,63 @@ func RandomBoolean() bool {
 	return rng.Intn(2) == 1
 }
 
-func GetUsersSeed() []*model.User {
-	return []*model.User{
-		model.NewUser(
+type UserSeed struct {
+	FirstName string
+	LastName  string
+	Email     string
+	BirthDate time.Time
+}
+
+func GetUsersSeed() []*UserSeed {
+	return []*UserSeed{
+		{
 			"Caique",
 			"Test",
 			"caique@test.com",
 			time.Date(1950, 12, 9, 0, 0, 0, 0, time.Local),
-		),
-		model.NewUser(
+		},
+		{
 			"Lígia",
 			"Test",
 			"ligia@test.com",
 			time.Date(1950, 1, 10, 0, 0, 0, 0, time.Local),
-		),
-		model.NewUser(
+		},
+		{
 			"Aline",
 			"Test",
 			"aline@test.com",
 			time.Date(1950, 10, 5, 0, 0, 0, 0, time.Local),
-		),
-		model.NewUser(
+		},
+		{
 			"Renato",
 			"Test",
 			"renato@test.com",
 			time.Date(1950, 3, 20, 0, 0, 0, 0, time.Local),
-		),
-		model.NewUser(
+		},
+		{
 			"Diego",
 			"Test",
 			"diego@test.com",
 			time.Date(1950, 10, 23, 0, 0, 0, 0, time.Local),
-		),
-		model.NewUser(
+		},
+		{
 			"Luciana",
 			"Test",
 			"luciana@test.com",
 			time.Date(1950, 5, 4, 0, 0, 0, 0, time.Local),
-		),
-		model.NewUser(
+		},
+		{
 			"Weslley",
 			"Test",
 			"weslley@test.com",
 			time.Date(1950, 10, 8, 0, 0, 0, 0, time.Local),
-		),
-		model.NewUser(
+		},
+		{
 			"Carol",
 			"Test",
 			"carol@test.com",
 			time.Date(1950, 12, 26, 0, 0, 0, 0, time.Local),
-		),
+		},
 	}
 }
 

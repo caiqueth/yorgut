@@ -70,7 +70,16 @@ func seedUsers(ur *repository.UserRepository) {
 	users := seed.GetUsersSeed()
 
 	for _, user := range users {
-		err := ur.Create(user)
+		u := model.NewUser(
+			user.FirstName,
+			user.LastName,
+			user.Email,
+			user.BirthDate,
+		)
+		err := ur.Create(u)
+
+		model.NewUserProfile(u)
+
 		if err != nil {
 			log.Printf("❌ Failed to insert user %s: %v\n", user.FirstName, err)
 		} else {
