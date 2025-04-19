@@ -465,7 +465,7 @@ func (c *CommunityProfileService) CreateCommunityProfile(request dto.CreateCommu
 		return err
 	}
 
-	storedFileName, err := helpers.UploadCommunityPicture(picture)
+	storedFileName, err := helpers.UploadPicture(picture)
 	if err != nil {
 		return err
 	}

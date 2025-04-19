@@ -79,7 +79,7 @@ func (u *UserRepository) FindUserOwnedCommunities(userId uint) ([]model.Communit
 
 func (r *UserRepository) FindUserWithProfile(userId uint) (*model.User, error) {
 	var ent model.User
-	results := r.db.Preload("UserProfile").Where("id = ?", userId).First(&ent)
+	results := r.db.Preload("Profile").Where("id = ?", userId).First(&ent)
 	if results.Error != nil {
 		return nil, results.Error
 	}
@@ -101,7 +101,7 @@ func (f *FriendshipRepository) FindPendingFriendshipsOfUser(userId uint, accepte
 	invites := []model.User{}
 	result := f.db.
 		Preload("UserRequested").
-		Preload("UserRequested.UserProfile").
+		Preload("UserRequested.Profile").
 		Where("(user_requestee_id = ?) and accepted = ?", userId, accepted).
 		Find(&ents)
 
@@ -121,8 +121,8 @@ func (f *FriendshipRepository) FindFriendsOfUser(userId uint) ([]model.User, err
 	result := f.db.
 		Preload("UserRequested").
 		Preload("UserRequestee").
-		Preload("UserRequested.UserProfile").
-		Preload("UserRequestee.UserProfile").
+		Preload("UserRequested.Profile").
+		Preload("UserRequestee.Profile").
 		Where("(user_requested_id = ? or user_requestee_id = ?) and accepted = ?", userId, userId, true).
 		Find(&ents)
 
@@ -158,8 +158,8 @@ func (f *FriendshipRepository) FindPendingFriendshipWithUsersById(friendshipId u
 	result := f.db.
 		Preload("UserRequested").
 		Preload("UserRequestee").
-		Preload("UserRequested.UserProfile").
-		Preload("UserRequestee.UserProfile").
+		Preload("UserRequested.Profile").
+		Preload("UserRequestee.Profile").
 		Where("id = ?", friendshipId).
 		First(&ent)
 

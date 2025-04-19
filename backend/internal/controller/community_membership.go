@@ -91,15 +91,3 @@ func (cm *CommunityMembershipController) Delete(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, webResponse)
 
 }
-
-// Create				godoc
-// @Summary				Lists communities that a user is member of
-// @Decription			Lists all communities that a given user is member
-// @Param				userId path uint true "id of the user"
-// @Produce				application/json
-// @Tags				CommunityMembership
-// @Success				200 {object} dto.Response{}
-// @Router				/community_membership/{userId} [get]
-func (cm *CommunityMembershipController) FindOfUser(ctx *gin.Context) {
-	panic("unimplemented")
-}

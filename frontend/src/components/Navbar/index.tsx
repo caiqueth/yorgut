@@ -12,17 +12,29 @@ export const Navbar: React.FC = () => {
           <Link to="/">Home</Link>
         </Typography>
         <Typography variant={"body2"}>|</Typography>
-        <Typography variant={"body2"}>Amigos</Typography>
+        <Typography variant={"body2"}>
+          <Link to="/friends">Amigos</Link>
+        </Typography>
         <Typography variant={"body2"}>|</Typography>
-        <Typography variant={"body2"}>Mensagens</Typography>
+        <Typography variant={"body2"}>
+          <Link to="/scraps">Mensagens</Link>
+        </Typography>
         <Typography variant={"body2"}>|</Typography>
-        <Typography variant={"body2"}>Comunidades</Typography>
+        <Typography variant={"body2"}>
+          <Link to="/communities">Comunidades</Link>
+        </Typography>
         <Typography variant={"body2"}>|</Typography>
-        <Typography variant={"body2"}>Pesquisar</Typography>
+        <Typography variant={"body2"}>
+          <Link to="/search">Pesquisar</Link>
+        </Typography>
         <Typography variant={"body2"}>|</Typography>
-        <Typography variant={"body2"}>Mídia</Typography>
+        <Typography variant={"body2"}>
+          <Link to="/media">Mídia</Link>
+        </Typography>
         <Typography variant={"body2"}>|</Typography>
-        <Typography variant={"body2"}>O que há de novo</Typography>
+        <Typography variant={"body2"}>
+          <Link to="/news">O que há de novo</Link>
+        </Typography>
       </Stack>
     </Box>
   );

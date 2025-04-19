@@ -1,12 +1,10 @@
 package seed
 
 import (
-	"errors"
-	"fmt"
 	"math/rand"
 	"path"
-	"strings"
 	"time"
+	"yorgut/internal/helpers"
 	"yorgut/internal/model"
 )
 
@@ -23,132 +21,170 @@ func RandomBoolean() bool {
 	return rng.Intn(2) == 1
 }
 
-type UserSeed struct {
-	FirstName string
-	LastName  string
-	Email     string
-	BirthDate time.Time
+func uploadFromSeed(seedPath string) *string {
+	seedImagePath := path.Join("internal", "seed", seedPath)
+	pictureAsBytes, _ := helpers.ReadLocalFile(seedImagePath)
+	picturePath, _ := helpers.UploadPicture(pictureAsBytes)
+	return picturePath
 }
 
-func GetUsersSeed() []*UserSeed {
-	return []*UserSeed{
+func GetUsersSeed() []*model.User {
+	users := []*model.User{
 		{
-			"Caique",
-			"Test",
-			"caique@test.com",
-			time.Date(1950, 12, 9, 0, 0, 0, 0, time.Local),
+			Email:     "caique@test.com",
+			FirstName: "Caique",
+			LastName:  "Test",
+			BirthDate: time.Date(1950, 12, 9, 0, 0, 0, 0, time.Local),
+			Profile: &model.UserProfile{
+				ProfilePicture: uploadFromSeed("profile_pictures/caique.jpg"),
+			},
 		},
 		{
-			"Lígia",
-			"Test",
-			"ligia@test.com",
-			time.Date(1950, 1, 10, 0, 0, 0, 0, time.Local),
+			FirstName: "Lígia",
+			LastName:  "Test",
+			Email:     "ligia@test.com",
+			BirthDate: time.Date(1950, 1, 10, 0, 0, 0, 0, time.Local),
+			Profile: &model.UserProfile{
+				ProfilePicture: uploadFromSeed("profile_pictures/ligia.jpg"),
+			},
 		},
 		{
-			"Aline",
-			"Test",
-			"aline@test.com",
-			time.Date(1950, 10, 5, 0, 0, 0, 0, time.Local),
+			FirstName: "Aline",
+			LastName:  "Test",
+			Email:     "aline@test.com",
+			BirthDate: time.Date(1950, 10, 5, 0, 0, 0, 0, time.Local),
+			Profile: &model.UserProfile{
+				ProfilePicture: uploadFromSeed("profile_pictures/aline.jpg"),
+			},
 		},
 		{
-			"Renato",
-			"Test",
-			"renato@test.com",
-			time.Date(1950, 3, 20, 0, 0, 0, 0, time.Local),
+			FirstName: "Renato",
+			LastName:  "Test",
+			Email:     "renato@test.com",
+			BirthDate: time.Date(1950, 3, 20, 0, 0, 0, 0, time.Local),
+			Profile: &model.UserProfile{
+				ProfilePicture: uploadFromSeed("profile_pictures/renato.jpg"),
+			},
 		},
 		{
-			"Diego",
-			"Test",
-			"diego@test.com",
-			time.Date(1950, 10, 23, 0, 0, 0, 0, time.Local),
+			FirstName: "Diego",
+			LastName:  "Test",
+			Email:     "diego@test.com",
+			BirthDate: time.Date(1950, 10, 23, 0, 0, 0, 0, time.Local),
+			Profile: &model.UserProfile{
+				ProfilePicture: uploadFromSeed("profile_pictures/diego.jpg"),
+			},
 		},
 		{
-			"Luciana",
-			"Test",
-			"luciana@test.com",
-			time.Date(1950, 5, 4, 0, 0, 0, 0, time.Local),
+			FirstName: "Luciana",
+			LastName:  "Test",
+			Email:     "luciana@test.com",
+			BirthDate: time.Date(1950, 5, 4, 0, 0, 0, 0, time.Local),
+			Profile: &model.UserProfile{
+				ProfilePicture: uploadFromSeed("profile_pictures/luciana.jpg"),
+			},
 		},
 		{
-			"Weslley",
-			"Test",
-			"weslley@test.com",
-			time.Date(1950, 10, 8, 0, 0, 0, 0, time.Local),
+			FirstName: "Weslley",
+			LastName:  "Test",
+			Email:     "weslley@test.com",
+			BirthDate: time.Date(1950, 10, 8, 0, 0, 0, 0, time.Local),
+			Profile: &model.UserProfile{
+				ProfilePicture: uploadFromSeed("profile_pictures/weslley.jpg"),
+			},
 		},
 		{
-			"Carol",
-			"Test",
-			"carol@test.com",
-			time.Date(1950, 12, 26, 0, 0, 0, 0, time.Local),
+			FirstName: "Carol",
+			LastName:  "Test",
+			Email:     "carol@test.com",
+			BirthDate: time.Date(1950, 12, 26, 0, 0, 0, 0, time.Local),
+			Profile: &model.UserProfile{
+				ProfilePicture: uploadFromSeed("profile_pictures/carol.jpg"),
+			},
 		},
 	}
+
+	for _, user := range users {
+		user.FriendCount = 0
+	}
+
+	return users
 }
 
-type CommunitySeed struct {
-	Name          string
-	ImageSeedPath string
-	Category      string
-}
-
-func GetCommunitiesSeed() []CommunitySeed {
-	return []CommunitySeed{
+func GetCommunitiesSeed(owners []*model.User) []*model.Community {
+	communities := []*model.Community{
 		{
-			Name:          "Deus me disse: desce e arrasa",
-			ImageSeedPath: "arrasa.png",
-			Category:      "Computadores e Internet",
+			Name:     "Deus me disse: desce e arrasa",
+			Category: "Computadores e Internet",
+			Profile: &model.CommunityProfile{
+				ProfilePicture: uploadFromSeed("community_pictures/arrasa.png"),
+			},
 		},
 		{
-			Name:          "Eu nunca terminei uma borracha",
-			ImageSeedPath: "borracha.png",
-			Category:      "Pessoas",
+			Name:     "Eu nunca terminei uma borracha",
+			Category: "Pessoas",
+			Profile: &model.CommunityProfile{
+				ProfilePicture: uploadFromSeed("community_pictures/borracha.png"),
+			},
 		},
 		{
-			Name:          "Tocava campainha e corria",
-			ImageSeedPath: "campainha.png",
-			Category:      "Outros",
+			Name:     "Tocava campainha e corria",
+			Category: "Outros",
+			Profile: &model.CommunityProfile{
+				ProfilePicture: uploadFromSeed("community_pictures/campainha.png"),
+			},
 		},
 		{
-			Name:          "Só mais 5 minutinhos",
-			ImageSeedPath: "cinco.png",
-			Category:      "Viagens",
+			Name:     "Só mais 5 minutinhos",
+			Category: "Viagens",
+			Profile: &model.CommunityProfile{
+				ProfilePicture: uploadFromSeed("community_pictures/cinco.png"),
+			},
 		},
 		{
-			Name:          "Não sei individualizar duplas",
-			ImageSeedPath: "duplas.png",
-			Category:      "Animais e bichos de estimacão",
+			Name:     "Não sei individualizar duplas",
+			Category: "Animais e bichos de estimacão",
+			Profile: &model.CommunityProfile{
+				ProfilePicture: uploadFromSeed("community_pictures/duplas.png"),
+			},
 		},
 		{
-			Name:          "Tive medo da Gina dos palitos",
-			ImageSeedPath: "gina.png",
-			Category:      "Artes e Entretenimento",
+			Name:     "Tive medo da Gina dos palitos",
+			Category: "Artes e Entretenimento",
+			Profile: &model.CommunityProfile{
+				ProfilePicture: uploadFromSeed("community_pictures/gina.png"),
+			},
 		},
 		{
-			Name:          "Eu odeio acordar cedo",
-			ImageSeedPath: "odeio_acordar_cedo.png",
-			Category:      "Ex-alunos e Escolas",
+			Name:     "Eu odeio acordar cedo",
+			Category: "Ex-alunos e Escolas",
+			Profile: &model.CommunityProfile{
+				ProfilePicture: uploadFromSeed("community_pictures/odeio_acordar_cedo.png"),
+			},
 		},
 		{
-			Name:          "Queria sorvete, mas era feijão",
-			ImageSeedPath: "sorvete.png",
-			Category:      "Romances e Relacionamentos",
+			Name:     "Queria sorvete, mas era feijão",
+			Category: "Romances e Relacionamentos",
+			Profile: &model.CommunityProfile{
+				ProfilePicture: uploadFromSeed("community_pictures/sorvete.png"),
+			},
 		},
 		{
-			Name:          "Eu colho flores e o Tony Ramos",
-			ImageSeedPath: "tony.png",
-			Category:      "Saúde, Bem-estar e Fitness",
+			Name:     "Eu colho flores e o Tony Ramos",
+			Category: "Saúde, Bem-estar e Fitness",
+			Profile: &model.CommunityProfile{
+				ProfilePicture: uploadFromSeed("community_pictures/tony.png"),
+			},
 		},
 	}
-}
 
-func GetProfilePictureOf(user *model.User) string {
-	return path.Join("internal", "seed", "profile_pictures", fmt.Sprintf("%s.jpg", strings.ToLower(user.FirstName)))
-}
-
-func GetCommunityPictureOf(community *model.Community) (string, error) {
-	communitySeeds := GetCommunitiesSeed()
-	for _, cs := range communitySeeds {
-		if cs.Name == community.Name {
-			return path.Join("internal", "seed", "community_pictures", cs.ImageSeedPath), nil
-		}
+	for _, community := range communities {
+		owner := RandomChoice(owners)
+		community.Owner = owner
+		community.OwnerID = owner.ID
+		community.CreatedBy = owner
+		community.CreatedByID = owner.ID
+		community.MemberCount = 0
 	}
-	return "", errors.New("could not find seed")
+	return communities
 }

@@ -6,7 +6,6 @@ import (
 	"path"
 	"time"
 	"yorgut/internal/database"
-	"yorgut/internal/helpers"
 	"yorgut/internal/model"
 	"yorgut/internal/repository"
 	"yorgut/internal/seed"
@@ -30,7 +29,7 @@ func main() {
 	userProfileRepository := repository.NewUserProfileRepository(db)
 	communityMembershipRepository := repository.NewCommunityMembershipRepository(db)
 	communityRepository := repository.NewCommunityRepository(db)
-	communityProfileRepository := repository.NewCommunityProfileRepository(db)
+
 	friendshipRepository := repository.NewFriendshipRepository(db)
 	photoAlbumRepository := repository.NewPhotoAlbumRepository(db)
 	// photoRepository := repository.NewPhotoRepository(db)
@@ -57,8 +56,6 @@ func main() {
 	seedCommunities(communityRepository, userRepository)
 	seedFriendships(friendshipRepository, userRepository, frienshipService)
 	seedMemberships(userRepository, communityRepository, userService)
-	seedUserProfiles(userProfileRepository, userRepository)
-	seedCommunityProfiles(communityProfileRepository, communityRepository)
 
 	log.Printf("✅ Seeding complete!")
 }
@@ -72,27 +69,18 @@ func deleteDb() {
 }
 
 func seedUsers(ur *repository.UserRepository) {
-
 	users := seed.GetUsersSeed()
 
 	for _, user := range users {
-		u := model.NewUser(
-			user.FirstName,
-			user.LastName,
-			user.Email,
-			user.BirthDate,
-		)
-		err := ur.Create(u)
-
-		model.NewUserProfile(u)
+		err := ur.Create(user)
 
 		if err != nil {
 			log.Printf("❌ Failed to insert user %s: %v\n", user.FirstName, err)
 		} else {
 			log.Printf("✅ Inserted user: %s\n", user.FirstName)
 		}
-	}
 
+	}
 }
 
 func seedCommunities(
@@ -104,14 +92,10 @@ func seedCommunities(
 		panic(err)
 	}
 
-	communities := seed.GetCommunitiesSeed()
+	communities := seed.GetCommunitiesSeed(owners)
 
 	for _, community := range communities {
-		err := cr.Create(model.NewCommunity(
-			community.Name,
-			community.Category,
-			seed.RandomChoice(owners),
-		))
+		err := cr.Create(community)
 		if err != nil {
 			log.Printf("❌ Failed to insert community %s: %v\n", community.Name, err)
 		} else {
@@ -194,82 +178,4 @@ func seedMemberships(
 			}
 		}
 	}
-}
-
-func seedUserProfiles(
-	upr *repository.UserProfileRepository,
-	ur *repository.UserRepository,
-) {
-	users, err := ur.FindMany()
-	if err != nil {
-		panic(err)
-	}
-
-	for _, user := range users {
-		profile := model.NewUserProfile(user)
-
-		seedImagePath := seed.GetProfilePictureOf(user)
-		pictureAsBytes, err := helpers.ReadLocalFile(seedImagePath)
-		if err != nil {
-			log.Printf("❌ Failed to read profile picture: %s\n", seedImagePath)
-			continue
-		}
-
-		profilePicturePath, err := helpers.UploadProfilePicture(pictureAsBytes)
-		if err != nil {
-			log.Printf("❌ Failed to save profile picture to storage: %s. Error: %v\n", seedImagePath, err.Error())
-			continue
-		}
-
-		model.AddUserProfilePicture(profile, *profilePicturePath)
-		err = upr.Create(profile)
-
-		if err != nil {
-			log.Printf("❌ Failed to create profile for user %s: %v\n", user.FirstName, err)
-		} else {
-			log.Printf("✅ Profile created for user %s\n", user.FirstName)
-		}
-	}
-}
-
-func seedCommunityProfiles(
-	cpr *repository.CommunityProfileRepository,
-	cr *repository.CommunityRepository,
-) {
-	communities, err := cr.FindMany()
-	if err != nil {
-		panic(err)
-	}
-
-	for _, community := range communities {
-		profile := model.NewCommunityProfile(community)
-
-		seedImagePath, err := seed.GetCommunityPictureOf(community)
-		if err != nil {
-			log.Printf("❌ Could not find a matching picture file for the community: %s\n", community.Name)
-			continue
-		}
-
-		pictureAsBytes, err := helpers.ReadLocalFile(seedImagePath)
-		if err != nil {
-			log.Printf("❌ Failed to read community picture: %s\n", seedImagePath)
-			continue
-		}
-
-		communityPicturePath, err := helpers.UploadCommunityPicture(pictureAsBytes)
-		if err != nil {
-			log.Printf("❌ Failed to save community picture to storage: %s. Error: %v\n", seedImagePath, err.Error())
-			continue
-		}
-
-		model.AddCommunityProfilePicture(profile, *communityPicturePath)
-		err = cpr.Create(profile)
-
-		if err != nil {
-			log.Printf("❌ Failed to create profile for community %s: %v\n", community.Name, err)
-		} else {
-			log.Printf("✅ Profile created for community %s\n", community.Name)
-		}
-	}
-
 }

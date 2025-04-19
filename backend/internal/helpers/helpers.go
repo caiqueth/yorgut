@@ -66,20 +66,18 @@ func ReadLocalFile(path string) ([]byte, error) {
 	return dat, nil
 }
 
-func UploadFileToLocalStorage(dir string, file []byte) (string, error) {
+func UploadFileToLocalStorage(file []byte) (string, error) {
 	uploadsPathAbs := GetUploadsPath(true)
 	uploadsPathRel := GetUploadsPath(false)
 
-	dirToWrite := path.Join(uploadsPathAbs, dir)
-
-	if err := os.MkdirAll(dirToWrite, os.ModePerm); err != nil {
+	if err := os.MkdirAll(uploadsPathAbs, os.ModePerm); err != nil {
 		return "", err
 	}
 
 	fileName := uuid.New().String()
 
-	fileLocation := path.Join(dirToWrite, fileName)
-	fileNameLocationRel := path.Join(uploadsPathRel, dir, fileName)
+	fileLocation := path.Join(uploadsPathAbs, fileName)
+	fileNameLocationRel := path.Join(uploadsPathRel, fileName)
 
 	err := os.WriteFile(fileLocation, file, 0644)
 	if err != nil {
@@ -89,25 +87,17 @@ func UploadFileToLocalStorage(dir string, file []byte) (string, error) {
 	return fileNameLocationRel, nil
 }
 
-func UploadPicture(picture []byte, dir string) (*string, error) {
+func UploadPicture(picture []byte) (*string, error) {
 	imageHasValidExtension := CheckValidImage(picture)
 	if !imageHasValidExtension {
 		return nil, errors.New("invalid image format")
 	}
 
-	storedFileName, err := UploadFileToLocalStorage(dir, picture)
+	storedFileName, err := UploadFileToLocalStorage(picture)
 	if err != nil {
 		return nil, err
 	}
 	return &storedFileName, nil
-}
-
-func UploadProfilePicture(picture []byte) (*string, error) {
-	return UploadPicture(picture, "profile_pictures")
-}
-
-func UploadCommunityPicture(picture []byte) (*string, error) {
-	return UploadPicture(picture, "community_pictures")
 }
 
 func SafeAdd(base uint, delta int) uint {

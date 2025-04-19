@@ -84,6 +84,7 @@ export const useRelatedCommunities = (communityId: number) =>
     queryKey: [`/api/community/${communityId}/related`, {}],
     queryFn: ({ queryKey }) => doGet<IRelatedCommunitiesResponse>({ queryKey }),
   });
+
 export const useCommunityProfile = (communityId: number) =>
   useQuery<ICommunityProfileResponse>({
     queryKey: [`/api/community/${communityId}/profile`, {}],

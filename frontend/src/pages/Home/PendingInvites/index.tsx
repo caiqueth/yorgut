@@ -28,6 +28,7 @@ export const PendingInvites: React.FC<IPendingInvitesProps> = ({ userId }) => {
               : palette.mediumBlue,
             px: 1,
           }}
+          key={idx}
         >
           <Stack direction={"row"} alignItems={"center"} gap={1}>
             <Link to={`/profile/${pf.id}`}>

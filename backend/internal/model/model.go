@@ -86,7 +86,7 @@ type User struct {
 	LastName    string
 	BirthDate   time.Time
 	FriendCount uint
-	UserProfile *UserProfile `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Profile     *UserProfile `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
 
 type UserProfile struct {
@@ -187,16 +187,11 @@ func NewTestimonial(author *User, recipient *User, content string) *Testimonial 
 	}
 }
 
-func NewUserProfile(user *User, opts ...func(*UserProfile)) *UserProfile {
+func NewUserProfile(user *User) *UserProfile {
 	profile := &UserProfile{
 		User:   user,
 		UserID: user.ID,
 	}
-
-	for _, opt := range opts {
-		opt(profile)
-	}
-
 	return profile
 }
 

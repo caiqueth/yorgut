@@ -83,7 +83,6 @@ func NewRouter(
 		{
 			community_memberships.POST("", communityMembershipController.Create)
 			community_memberships.DELETE("/:userId/:communityId", communityMembershipController.Delete)
-			community_memberships.GET("/:userId", communityMembershipController.FindOfUser)
 		}
 
 		friendships := v1.Group("/friendship")

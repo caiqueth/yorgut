@@ -22,24 +22,24 @@ func (r *FindUserWithProfileByIdResponse) FromUser(user *model.User) {
 	r.BirthDate = user.BirthDate
 	r.CreatedAt = user.CreatedAt
 	r.UpdatedAt = user.UpdatedAt
-	r.ProfilePicture = user.UserProfile.ProfilePicture
-	r.Description = user.UserProfile.Description
-	r.RelationshipStatus = user.UserProfile.RelationshipStatus
-	r.Interests = user.UserProfile.Interests
-	r.About = user.UserProfile.About
-	r.Religion = user.UserProfile.Religion
-	r.Humor = user.UserProfile.Humor
-	r.Fashion = user.UserProfile.Fashion
-	r.LivesWith = user.UserProfile.LivesWith
-	r.BirthCity = user.UserProfile.BirthCity
-	r.Website = user.UserProfile.Website
-	r.Passions = user.UserProfile.Passions
-	r.Sports = user.UserProfile.Sports
-	r.Hobbies = user.UserProfile.Hobbies
-	r.Books = user.UserProfile.Books
-	r.Music = user.UserProfile.Music
-	r.Movies = user.UserProfile.Movies
-	r.Cuisine = user.UserProfile.Cuisine
+	r.ProfilePicture = user.Profile.ProfilePicture
+	r.Description = user.Profile.Description
+	r.RelationshipStatus = user.Profile.RelationshipStatus
+	r.Interests = user.Profile.Interests
+	r.About = user.Profile.About
+	r.Religion = user.Profile.Religion
+	r.Humor = user.Profile.Humor
+	r.Fashion = user.Profile.Fashion
+	r.LivesWith = user.Profile.LivesWith
+	r.BirthCity = user.Profile.BirthCity
+	r.Website = user.Profile.Website
+	r.Passions = user.Profile.Passions
+	r.Sports = user.Profile.Sports
+	r.Hobbies = user.Profile.Hobbies
+	r.Books = user.Profile.Books
+	r.Music = user.Profile.Music
+	r.Movies = user.Profile.Movies
+	r.Cuisine = user.Profile.Cuisine
 }
 
 func (r *FindUserCommunitiesResponse) FromCommunities(communities []model.Community) {
@@ -96,7 +96,7 @@ func (r *FindFriendsOfUserResponse) FromFriends(friends []model.User) {
 			ID:             f.ID,
 			FirstName:      f.FirstName,
 			BirthDate:      f.BirthDate,
-			ProfilePicture: *f.UserProfile.ProfilePicture,
+			ProfilePicture: *f.Profile.ProfilePicture,
 			FriendCount:    f.FriendCount,
 		}
 	}
@@ -110,7 +110,7 @@ func (r *FindPendingFriendshipOfUserResponse) FromUsers(users []model.User) {
 			ID:             f.ID,
 			FirstName:      f.FirstName,
 			LastName:       f.LastName,
-			ProfilePicture: *f.UserProfile.ProfilePicture,
+			ProfilePicture: *f.Profile.ProfilePicture,
 		}
 	}
 }
