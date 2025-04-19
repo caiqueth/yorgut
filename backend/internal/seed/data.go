@@ -10,6 +10,10 @@ import (
 
 var rng = rand.New(rand.NewSource(time.Now().UnixNano()))
 
+func ptr[T any](v T) *T {
+	return &v
+}
+
 func RandomChoice[T any](arr []T) T {
 	if len(arr) == 0 {
 		panic("RandomChoice called with empty slice")
@@ -36,7 +40,12 @@ func GetUsersSeed() []*model.User {
 			LastName:  "Test",
 			BirthDate: time.Date(1950, 12, 9, 0, 0, 0, 0, time.Local),
 			Profile: &model.UserProfile{
-				ProfilePicture: uploadFromSeed("profile_pictures/caique.jpg"),
+				ProfilePicture:     uploadFromSeed("profile_pictures/caique.jpg"),
+				Description:        ptr("Descrição para testes\nPulo de linha para testes"),
+				RelationshipStatus: ptr("casado (a)"),
+				Interests:          ptr("Videogames"),
+				Fashion:            ptr("Calça Baggy"),
+				Website:            ptr("github.com/caiqueth"),
 			},
 		},
 		{
