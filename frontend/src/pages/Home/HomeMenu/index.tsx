@@ -1,5 +1,5 @@
 import React from "react";
-import { LateralButtonList } from "components/LateralButtonList";
+import { LateralButtonList } from "components/molecules/LateralButtonList";
 import { useNavigate } from "react-router-dom";
 
 import { Box } from "@mui/material";

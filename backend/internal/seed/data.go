@@ -127,6 +127,7 @@ func GetCommunitiesSeed(owners []*model.User) []*model.Community {
 			Category: "Computadores e Internet",
 			Profile: &model.CommunityProfile{
 				ProfilePicture: uploadFromSeed("community_pictures/arrasa.png"),
+				Description:    ptr("Descrição da comunidade para testes."),
 			},
 		},
 		{
@@ -134,6 +135,7 @@ func GetCommunitiesSeed(owners []*model.User) []*model.Community {
 			Category: "Pessoas",
 			Profile: &model.CommunityProfile{
 				ProfilePicture: uploadFromSeed("community_pictures/borracha.png"),
+				Description:    ptr("Descrição da comunidade para testes."),
 			},
 		},
 		{
@@ -141,6 +143,7 @@ func GetCommunitiesSeed(owners []*model.User) []*model.Community {
 			Category: "Outros",
 			Profile: &model.CommunityProfile{
 				ProfilePicture: uploadFromSeed("community_pictures/campainha.png"),
+				Description:    ptr("Descrição da comunidade para testes."),
 			},
 		},
 		{
@@ -148,6 +151,7 @@ func GetCommunitiesSeed(owners []*model.User) []*model.Community {
 			Category: "Viagens",
 			Profile: &model.CommunityProfile{
 				ProfilePicture: uploadFromSeed("community_pictures/cinco.png"),
+				Description:    ptr("Descrição da comunidade para testes."),
 			},
 		},
 		{
@@ -155,6 +159,7 @@ func GetCommunitiesSeed(owners []*model.User) []*model.Community {
 			Category: "Animais e bichos de estimacão",
 			Profile: &model.CommunityProfile{
 				ProfilePicture: uploadFromSeed("community_pictures/duplas.png"),
+				Description:    ptr("Descrição da comunidade para testes."),
 			},
 		},
 		{
@@ -162,6 +167,7 @@ func GetCommunitiesSeed(owners []*model.User) []*model.Community {
 			Category: "Artes e Entretenimento",
 			Profile: &model.CommunityProfile{
 				ProfilePicture: uploadFromSeed("community_pictures/gina.png"),
+				Description:    ptr("Descrição da comunidade para testes."),
 			},
 		},
 		{
@@ -169,6 +175,7 @@ func GetCommunitiesSeed(owners []*model.User) []*model.Community {
 			Category: "Ex-alunos e Escolas",
 			Profile: &model.CommunityProfile{
 				ProfilePicture: uploadFromSeed("community_pictures/odeio_acordar_cedo.png"),
+				Description:    ptr("Descrição da comunidade para testes."),
 			},
 		},
 		{
@@ -176,6 +183,7 @@ func GetCommunitiesSeed(owners []*model.User) []*model.Community {
 			Category: "Romances e Relacionamentos",
 			Profile: &model.CommunityProfile{
 				ProfilePicture: uploadFromSeed("community_pictures/sorvete.png"),
+				Description:    ptr("Descrição da comunidade para testes."),
 			},
 		},
 		{
@@ -183,6 +191,7 @@ func GetCommunitiesSeed(owners []*model.User) []*model.Community {
 			Category: "Saúde, Bem-estar e Fitness",
 			Profile: &model.CommunityProfile{
 				ProfilePicture: uploadFromSeed("community_pictures/tony.png"),
+				Description:    ptr("Descrição da comunidade para testes."),
 			},
 		},
 	}

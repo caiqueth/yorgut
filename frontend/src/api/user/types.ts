@@ -75,9 +75,16 @@ export interface ICommunityProfileResponse {
   profilePicture: string;
 }
 
+export interface ICommunityMember {
+  id: number;
+  firstName: string;
+  profilePicture: string;
+  friendCount: number;
+}
+
 export interface ICommunityMembersResponse {
-  members: any[];
-  count: number;
+  members: ICommunityMember[];
+  memberCount: number;
 }
 
 export interface IRelatedCommunitiesResponse {

@@ -3,7 +3,7 @@ import React, { use } from "react";
 import { Box, Paper, Table } from "@mui/material";
 import { StyledTableCell, StyledTableRow } from "./styles";
 import { useUserProfile } from "api/user/queries";
-import { ProfileTable } from "components/ProfileTable";
+import { ProfileTable } from "components/organisms/ProfileTable";
 
 interface IProfileDetailsProps {
   userId: number;

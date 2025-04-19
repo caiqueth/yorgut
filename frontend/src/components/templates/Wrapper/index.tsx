@@ -1,6 +1,6 @@
 import React from "react";
-import { Navbar } from "components/Navbar";
-import { UserBar } from "components/UserBar";
+import { Navbar } from "components/organisms/Navbar";
+import { UserBar } from "components/organisms/UserBar";
 
 import { Stack } from "@mui/material";
 

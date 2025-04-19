@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Wrapper } from "components/Wrapper";
+import { Wrapper } from "components/templates/Wrapper";
 import { useNavigate, useRoutes } from "react-router-dom";
 import { Routes } from "routes";
 

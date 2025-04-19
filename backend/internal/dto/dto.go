@@ -48,6 +48,18 @@ type FindCommunityProfileByIdResponse struct {
 	ProfilePicture *string `json:"profilePicture"`
 }
 
+type CommunityMemberEntry struct {
+	ID             uint   `json:"id"`
+	FirstName      string `json:"firstName"`
+	ProfilePicture string `json:"profilePicture"`
+	FriendCount    uint   `json:"friendCount"`
+}
+
+type FindCommunityMembersResponse struct {
+	MemberCount uint                   `json:"memberCount"`
+	Members     []CommunityMemberEntry `json:"members"`
+}
+
 type FindManyCommunitiesResponse struct{}
 
 type FriendshipDto struct {

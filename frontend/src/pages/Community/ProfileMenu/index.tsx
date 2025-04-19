@@ -1,5 +1,5 @@
 import React from "react";
-import { LateralButtonList } from "components/LateralButtonList";
+import { LateralButtonList } from "components/molecules/LateralButtonList";
 
 import { Box } from "@mui/material";
 

@@ -35,6 +35,15 @@ func (c *CommunityMembershipRepository) FindOfCommunity(id uint) ([]model.Commun
 	return memberships, nil
 }
 
+func (c *CommunityMembershipRepository) FindMembersOfCommunity(communityId uint) ([]model.CommunityMembership, error) {
+	var members []model.CommunityMembership
+	result := c.db.Preload("User").Preload("User.Profile").Where("community_id = ?", communityId).Find(&members)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return members, nil
+}
+
 // PhotoAlbum
 func (p *PhotoAlbumRepository) FindOfUser(userId int) ([]model.PhotoAlbum, error) {
 	var ents []model.PhotoAlbum

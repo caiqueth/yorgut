@@ -1,22 +1,19 @@
 import React from "react";
-import { useUserProfile } from "api/user/queries";
 
 import { Box } from "@mui/material";
 
-interface IUserProfilePictureProps {
-  userId: number;
+interface IProfilePictureProps {
+  imageSrc: string;
 }
-export const UserProfilePicture: React.FC<IUserProfilePictureProps> = ({
-  userId,
+export const ProfilePicture: React.FC<IProfilePictureProps> = ({
+  imageSrc,
 }) => {
-  const { data: user } = useUserProfile(userId);
-
   return (
     <Box>
       <Box
         sx={{
           boxShadow: "inset 1px 1px 20px 14px rgba(255,255,255,1)",
-          background: `url(/${user?.profilePicture}) no-repeat center top`,
+          background: `url(${imageSrc}) no-repeat center top`,
           backgroundSize: "cover",
           display: "block",
           width: "100%",

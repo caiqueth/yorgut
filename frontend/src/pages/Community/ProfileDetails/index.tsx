@@ -1,6 +1,6 @@
 import React from "react";
 
-import { ProfileTable } from "components/ProfileTable";
+import { ProfileTable } from "components/organisms/ProfileTable";
 import { useCommunityProfile } from "api/user/queries";
 
 interface IProfileDetailsProps {

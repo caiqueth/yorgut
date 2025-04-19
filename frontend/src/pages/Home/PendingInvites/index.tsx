@@ -1,7 +1,7 @@
 import { Box, Stack, Typography } from "@mui/material";
-import { Button } from "components/Button";
+import { Button } from "components/atoms/Button";
 import { useUserPendingFriendships } from "api/user/queries";
-import { BoxWithTitle } from "components/BoxWithTitle";
+import { BoxWithTitle } from "components/molecules/BoxWithTitle";
 import React from "react";
 import { palette } from "theme";
 import { isStripedRow } from "helpers/isStripedRow";

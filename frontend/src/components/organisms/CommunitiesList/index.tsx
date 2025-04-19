@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { palette } from "theme";
 
 import { Box, Grid2 as Grid, Paper, Stack, Typography } from "@mui/material";
-import { BoxWithTitle } from "components/BoxWithTitle";
+import { BoxWithTitle } from "components/molecules/BoxWithTitle";
 
 interface ICommunitiesListProps {
   userId: number;

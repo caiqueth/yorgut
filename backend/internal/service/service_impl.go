@@ -449,8 +449,31 @@ func (c *CommunityService) FindManyCommunities() (*dto.Response, error) {
 	}, nil
 }
 
-func (c *CommunityService) UpdateCommunity(user dto.UpdateCommunityRequest) (dto.Response, error) {
-	panic("unimplemented")
+func (c *CommunityService) FindCommunityMembers(communityId uint) (*dto.FindCommunityMembersResponse, error) {
+	memberships, err := c.membershipRepository.FindMembersOfCommunity(communityId)
+	if err != nil {
+		return nil, err
+	}
+
+	community, err := c.communityRepository.FindById(communityId)
+	if err != nil {
+		return nil, err
+	}
+
+	members := []dto.CommunityMemberEntry{}
+	for _, membership := range memberships {
+		members = append(members, dto.CommunityMemberEntry{
+			ID:             membership.UserID,
+			FirstName:      membership.User.FirstName,
+			ProfilePicture: *membership.User.Profile.ProfilePicture,
+			FriendCount:    membership.User.FriendCount,
+		})
+	}
+
+	return &dto.FindCommunityMembersResponse{
+		MemberCount: community.MemberCount,
+		Members:     members,
+	}, nil
 }
 
 // Community Profile

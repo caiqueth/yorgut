@@ -145,6 +145,32 @@ func (c *CommunityController) FindProfileById(ctx *gin.Context) {
 
 }
 
+// FindMembers			godoc
+// @Summary				Get community members.
+// @Param				communityId path string true "get community members by id"
+// @Description			Returns a list of the community members matching the requested id and a few stats
+// @Produce				application/json
+// @Tags				Community
+// @Success				200 {object} dto.FindCommunityMembersResponse{}
+// @Router				/community/{communityId}/members [get]
+func (c *CommunityController) FindMembers(ctx *gin.Context) {
+	communityId := ctx.Param("communityId")
+	id, err := strconv.ParseUint(communityId, 0, 0)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	members, err := c.communityService.FindCommunityMembers(uint(id))
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, members)
+
+}
+
 // FindMany				godoc
 // @Summary				Get Multiple communities.
 // @Description			Returns an array of communities
