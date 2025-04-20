@@ -1,6 +1,6 @@
 import { doGet, doPost } from "api/http";
 
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import {
   ICommunityMembershipsResponse,
@@ -16,7 +16,7 @@ import {
 
 export const useLoggedUser = () => {
   return {
-    userId: 7,
+    userId: 2,
   };
 };
 
@@ -77,6 +77,7 @@ export const useUserMemberships = (userId: number) =>
   });
 
 export const useJoinCommunity = () => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({
       userId,
@@ -85,10 +86,19 @@ export const useJoinCommunity = () => {
       userId: number;
       communityId: number;
     }) => doPost({ url: `/api/user/${userId}/join/${communityId}`, body: {} }),
+    onSettled: (_data, _error, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: [`/api/user/${variables.userId}/memberships`],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`/api/community/${variables.communityId}/members`],
+      });
+    },
   });
 };
 
 export const useLeaveCommunity = () => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({
       userId,
@@ -97,8 +107,17 @@ export const useLeaveCommunity = () => {
       userId: number;
       communityId: number;
     }) => doPost({ url: `/api/user/${userId}/leave/${communityId}`, body: {} }),
+    onSettled: (_data, _error, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: [`/api/user/${variables.userId}/memberships`],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`/api/community/${variables.communityId}/members`],
+      });
+    },
   });
 };
+
 export const useTodaysLuck = (userId: number) =>
   "Boas notícias chegarão por e-mail";
 

@@ -15,7 +15,7 @@ interface IProfileMenuProps {
 export const ProfileMenu: React.FC<IProfileMenuProps> = ({ communityId }) => {
   const { userId } = useLoggedUser();
   const [isMemberOf, setIsMemberOf] = useState(false);
-  const { data: memberships, isPending } = useUserMemberships(userId);
+  const { data: memberships, isFetching } = useUserMemberships(userId);
   const { mutate: joinCommunity } = useJoinCommunity();
   const { mutate: leaveCommunity } = useLeaveCommunity();
 
@@ -26,16 +26,16 @@ export const ProfileMenu: React.FC<IProfileMenuProps> = ({ communityId }) => {
     setIsMemberOf(
       memberships?.communities.some((x) => x.id === communityId) ?? false,
     );
-  }, [isPending]);
+  }, [isFetching]);
 
   const itemsList = [
     {
       text: isMemberOf ? "deixar comunidade" : "juntar-se à comunidade",
-      avatar: "➖",
+      avatar: isMemberOf ? "➖" : "➕",
       onClick: () =>
         isMemberOf ? handleLeaveCommunity() : handleJoinCommunity(),
     },
-    { text: "convidar amigos", avatar: "➕", onClick: () => null },
+    { text: "convidar amigos", avatar: "📧", onClick: () => null },
     { text: "denunciar abuso", avatar: "⚠️", onClick: () => null },
     { text: "fórum", avatar: "📫", onClick: () => null },
     { text: "enquetes", avatar: "📔", onClick: () => null },
