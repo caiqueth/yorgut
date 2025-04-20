@@ -292,6 +292,36 @@ func (uc *UserController) JoinCommunity(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, dto.Response{})
 }
 
+// LeaveCommunity	godoc
+// @Summary			User leaves a community.
+// @Param			userId path string true "user Id"
+// @Param			communityId path string true "community Id"
+// @Description		Leaves a community.
+// @Produce			application/json
+// @Tags			User
+// @Success			201 {object} dto.Response{}
+// @Router			/user/{userId}/leave/{communityId} [post]
+func (uc *UserController) LeaveCommunity(ctx *gin.Context) {
+	userId, err := strconv.Atoi(ctx.Param("userId"))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	communityId, err := strconv.Atoi(ctx.Param("communityId"))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	err = uc.userService.LeaveCommunity(uint(userId), uint(communityId))
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusCreated, dto.Response{})
+}
+
 // FindCommunitiesMemberOf	godoc
 // @Summary					Gets a list of communities that user is member of.
 // @Param					userId path string true "get user memberships by id"

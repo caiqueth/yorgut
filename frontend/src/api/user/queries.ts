@@ -1,6 +1,6 @@
-import { doGet } from "api/http";
+import { doGet, doPost } from "api/http";
 
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 import {
   ICommunityMembershipsResponse,
@@ -14,21 +14,27 @@ import {
   IUserResponse,
 } from "./types";
 
+export const useLoggedUser = () => {
+  return {
+    userId: 7,
+  };
+};
+
 export const useUser = (userId: number) =>
   useQuery<IUserResponse>({
-    queryKey: [`/api/user/${userId}`, {}],
+    queryKey: [`/api/user/${userId}`],
     queryFn: ({ queryKey }) => doGet<IUserResponse>({ queryKey }),
   });
 
 export const useUserProfile = (userId: number) =>
   useQuery<IUserProfileResponse>({
-    queryKey: [`/api/user/${userId}/profile`, {}],
+    queryKey: [`/api/user/${userId}/profile`],
     queryFn: ({ queryKey }) => doGet<IUserProfileResponse>({ queryKey }),
   });
 
 export const useUserPendingFriendships = (userId: number) =>
   useQuery<IPendingFriendshipsResponse>({
-    queryKey: [`/api/user/${userId}/friendships/pending`, {}],
+    queryKey: [`/api/user/${userId}/friendships/pending`],
     queryFn: ({ queryKey }) => doGet<IPendingFriendshipsResponse>({ queryKey }),
   });
 
@@ -60,39 +66,62 @@ export const useUserStatistics = (userId: number) => ({
 
 export const useUserFriends = (userId: number) =>
   useQuery<IFriendsResponse>({
-    queryKey: [`/api/user/${userId}/friends`, {}],
+    queryKey: [`/api/user/${userId}/friends`],
     queryFn: ({ queryKey }) => doGet({ queryKey }),
   });
 
 export const useUserMemberships = (userId: number) =>
   useQuery<ICommunityMembershipsResponse>({
-    queryKey: [`/api/user/${userId}/memberships`, {}],
+    queryKey: [`/api/user/${userId}/memberships`],
     queryFn: ({ queryKey }) => doGet({ queryKey }),
   });
 
+export const useJoinCommunity = () => {
+  return useMutation({
+    mutationFn: ({
+      userId,
+      communityId,
+    }: {
+      userId: number;
+      communityId: number;
+    }) => doPost({ url: `/api/user/${userId}/join/${communityId}`, body: {} }),
+  });
+};
+
+export const useLeaveCommunity = () => {
+  return useMutation({
+    mutationFn: ({
+      userId,
+      communityId,
+    }: {
+      userId: number;
+      communityId: number;
+    }) => doPost({ url: `/api/user/${userId}/leave/${communityId}`, body: {} }),
+  });
+};
 export const useTodaysLuck = (userId: number) =>
   "Boas notícias chegarão por e-mail";
 
 export const useCommunity = (communityId: number) =>
   useQuery<ICommunityResponse>({
-    queryKey: [`/api/community/${communityId}`, {}],
+    queryKey: [`/api/community/${communityId}`],
     queryFn: ({ queryKey }) => doGet<ICommunityResponse>({ queryKey }),
   });
 
 export const useRelatedCommunities = (communityId: number) =>
   useQuery<IRelatedCommunitiesResponse>({
-    queryKey: [`/api/community/${communityId}/related`, {}],
+    queryKey: [`/api/community/${communityId}/related`],
     queryFn: ({ queryKey }) => doGet<IRelatedCommunitiesResponse>({ queryKey }),
   });
 
 export const useCommunityProfile = (communityId: number) =>
   useQuery<ICommunityProfileResponse>({
-    queryKey: [`/api/community/${communityId}/profile`, {}],
+    queryKey: [`/api/community/${communityId}/profile`],
     queryFn: ({ queryKey }) => doGet<ICommunityProfileResponse>({ queryKey }),
   });
 
 export const useCommunityMembers = (communityId: number) =>
   useQuery<ICommunityMembersResponse>({
-    queryKey: [`/api/community/${communityId}/members`, {}],
+    queryKey: [`/api/community/${communityId}/members`],
     queryFn: ({ queryKey }) => doGet<ICommunityMembersResponse>({ queryKey }),
   });

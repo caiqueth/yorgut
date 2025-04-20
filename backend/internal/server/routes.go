@@ -67,6 +67,7 @@ func NewRouter(
 			users.GET("/:userId/friendships/pending", userController.FindPendingFriendships)
 			users.GET("/:userId/photoAlbums", userController.FindPhotoAlbums)
 			users.POST("/:userId/join/:communityId", userController.JoinCommunity)
+			users.POST("/:userId/leave/:communityId", userController.LeaveCommunity)
 		}
 
 		communities := v1.Group("/community")

@@ -8,9 +8,10 @@ import { Birthdays } from "./Birthdays";
 import { HomeMenu } from "./HomeMenu";
 import { Welcome } from "./Welcome";
 import { PendingInvites } from "./PendingInvites";
+import { useLoggedUser } from "api/user/queries";
 
 export const Home = () => {
-  const userId = 7;
+  const { userId } = useLoggedUser();
 
   return (
     <Box sx={{ width: "100%" }}>

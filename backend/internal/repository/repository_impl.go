@@ -18,7 +18,7 @@ func (c *CommunityMembershipRepository) FindOfUser(id uint) ([]model.CommunityMe
 func (c *CommunityMembershipRepository) FindOfUserAndCommunity(communityId uint, userId uint) (*model.CommunityMembership, error) {
 	var membership model.CommunityMembership
 	result := c.db.
-		Where("user_id = ? and communityId = ?", userId, communityId).
+		Where("user_id = ? and community_id = ?", userId, communityId).
 		First(&membership)
 	if result.Error != nil {
 		return nil, result.Error
