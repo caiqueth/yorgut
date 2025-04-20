@@ -17,8 +17,7 @@ import (
 func main() {
 	time.Local, _ = time.LoadLocation("America/Sao_Paulo")
 
-	clearStorageFolder()
-	deleteDb()
+	localReset()
 
 	db := database.DatabaseConnection()
 	database.Migrate(db)
@@ -66,6 +65,11 @@ func clearStorageFolder() {
 
 func deleteDb() {
 	os.Remove("test.db")
+}
+
+func localReset() {
+	clearStorageFolder()
+	deleteDb()
 }
 
 func seedUsers(ur *repository.UserRepository) {

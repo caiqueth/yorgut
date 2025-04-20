@@ -30,7 +30,7 @@ export const ProfileMenu: React.FC<IProfileMenuProps> = ({ communityId }) => {
 
   const itemsList = [
     {
-      text: isMemberOf ? "deixar comunidade" : "juntar-se à comunidade",
+      text: isMemberOf ? "deixar comunidade" : "participar",
       avatar: isMemberOf ? "➖" : "➕",
       onClick: () =>
         isMemberOf ? handleLeaveCommunity() : handleJoinCommunity(),
