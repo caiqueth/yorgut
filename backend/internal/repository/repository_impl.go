@@ -177,3 +177,13 @@ func (f *FriendshipRepository) FindPendingFriendshipWithUsersById(friendshipId u
 	}
 	return &ent, nil
 }
+
+// Scrap
+func (s *ScrapRepository) FindOfUserRecipient(userId uint) ([]model.Scrap, error) {
+	var scraps []model.Scrap
+	result := s.db.Where("user_recipient_id = ?", userId).Order("created_at desc").Find(&scraps)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return scraps, nil
+}

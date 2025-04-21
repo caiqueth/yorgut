@@ -128,9 +128,10 @@ func NewPhotoService(photoRepository repository.PhotoRepository, validate *valid
 	}
 }
 
-func NewScrapService(scrapRepository repository.ScrapRepository, validate *validator.Validate) *ScrapService {
+func NewScrapService(scrapRepository repository.ScrapRepository, userRepository repository.UserRepository, validate *validator.Validate) *ScrapService {
 	return &ScrapService{
 		scrapRepository: scrapRepository,
+		userRepository:  userRepository,
 		Validate:        validate,
 	}
 }

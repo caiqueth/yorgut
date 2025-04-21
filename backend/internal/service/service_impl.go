@@ -256,8 +256,24 @@ func (s *ScrapService) DeleteScrap(id uint) error {
 	return nil
 }
 
-func (s *ScrapService) FindScrapOfUserRecipient(userId int) (dto.FindScrapOfUserRecipientResponse, error) {
-	panic("unimplemented")
+func (s *ScrapService) FindScrapOfUserRecipient(userId uint) (*dto.FindScrapOfUserRecipientResponse, error) {
+	scraps, err := s.scrapRepository.FindOfUserRecipient(userId)
+	if err != nil {
+		return nil, err
+	}
+
+	response := dto.FindScrapOfUserRecipientResponse{
+		Scraps: []dto.ScrapDto{},
+	}
+
+	for _, scrap := range scraps {
+		response.Scraps = append(response.Scraps, dto.ScrapDto{
+			ID:      scrap.ID,
+			Content: scrap.Content,
+		})
+	}
+
+	return &response, nil
 }
 
 // Photo

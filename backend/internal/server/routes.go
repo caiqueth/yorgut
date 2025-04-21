@@ -39,6 +39,7 @@ func NewRouter(
 
 	router.Static("/storage/uploads", helpers.GetUploadsPath(true))
 
+	// router.Use(JWTMiddleware())
 	router.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:3000"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"},
@@ -107,6 +108,7 @@ func NewRouter(
 
 		scraps := v1.Group("/scrap")
 		{
+			scraps.GET("/:userId", scrapController.FindMany)
 			scraps.POST("", scrapController.Create)
 			scraps.DELETE("", scrapController.Delete)
 		}

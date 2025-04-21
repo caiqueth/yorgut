@@ -122,7 +122,13 @@ type CreateScrapRequest struct {
 	Content         string `json:"content"`
 }
 
-type FindScrapOfUserRecipientResponse struct{}
+type ScrapDto struct {
+	ID      uint   `json:"id"`
+	Content string `json:"content"`
+}
+type FindScrapOfUserRecipientResponse struct {
+	Scraps []ScrapDto `json:"scraps"`
+}
 
 type CreateTestimonialRequest struct {
 	UserAuthorID    uint   `json:"userAuthorId"`

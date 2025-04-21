@@ -91,3 +91,16 @@ export interface IRelatedCommunitiesResponse {
   communities: any[];
   memberCount: number;
 }
+
+export interface ICreateScrapRequest {
+  userAuthorId: number;
+  userRecipientId: number;
+  content: string;
+}
+
+export interface IScrapsResponse {
+  scraps: {
+    id: number;
+    content: string;
+  }[];
+}

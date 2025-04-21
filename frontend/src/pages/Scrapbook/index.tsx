@@ -5,21 +5,38 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useLoggedUser } from "api/user/queries";
+import {
+  useLoggedUser,
+  useScraps,
+  useSendScrap,
+  useUser,
+} from "api/user/queries";
+import { Button } from "components/atoms/Button";
 import { BoxWithTitle } from "components/molecules/BoxWithTitle";
 import { StripedGrid } from "components/molecules/StripedGrid";
 import { UserProfilePicture } from "components/organisms/UserProfilePicture";
 import { Menu } from "pages/Home/components/Menu";
-import React from "react";
+import React, { useState } from "react";
 
 interface IProps {}
 export const Scrapbook: React.FC<IProps> = () => {
   const { userId } = useLoggedUser();
+  const { mutate: sendScrap } = useSendScrap();
+  const { data: scraps } = useScraps(userId);
 
-  const items: React.ReactNode[] = [
-    <Typography>Teste de recado 1</Typography>,
-    <Typography>Teste de recado 2</Typography>,
-  ];
+  const [scrapContent, setScrapContent] = useState<string>("");
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    sendScrap({
+      userAuthorId: userId,
+      userRecipientId: userId,
+      content: scrapContent,
+    });
+  };
+
+  const items =
+    scraps?.scraps.map((s) => <Typography>{s.content}</Typography>) ?? [];
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -32,10 +49,19 @@ export const Scrapbook: React.FC<IProps> = () => {
         </Grid>
         <Grid size={10}>
           <Stack direction={"column"} gap={1}>
-            <Box sx={{ width: "100%" }}>
-              <Typography>Deixar um recado</Typography>
-              <TextField multiline rows={6} fullWidth></TextField>
-            </Box>
+            <form onSubmit={handleSubmit}>
+              <Box sx={{ width: "100%" }}>
+                <Typography>Deixar um recado</Typography>
+                <TextField
+                  value={scrapContent}
+                  onChange={(e) => setScrapContent(e.target.value)}
+                  multiline
+                  rows={6}
+                  fullWidth
+                ></TextField>
+              </Box>
+              <Button type="submit">Enviar</Button>
+            </form>
             <BoxWithTitle title="meus recados">
               <StripedGrid items={items} elementsPerRow={1} />
             </BoxWithTitle>

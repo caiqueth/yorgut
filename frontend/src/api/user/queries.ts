@@ -7,9 +7,11 @@ import {
   ICommunityMembersResponse,
   ICommunityProfileResponse,
   ICommunityResponse,
+  ICreateScrapRequest,
   IFriendsResponse,
   IPendingFriendshipsResponse,
   IRelatedCommunitiesResponse,
+  IScrapsResponse,
   IUserProfileResponse,
   IUserResponse,
 } from "./types";
@@ -118,6 +120,25 @@ export const useLeaveCommunity = () => {
     },
   });
 };
+
+export const useSendScrap = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: ICreateScrapRequest) =>
+      doPost({ url: `/api/scrap`, body: payload }),
+    onSettled: (_data, _error, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: [`/api/scrap/${variables.userRecipientId}`],
+      });
+    },
+  });
+};
+
+export const useScraps = (userId: number) =>
+  useQuery<IScrapsResponse>({
+    queryKey: [`/api/scrap/${userId}`],
+    queryFn: ({ queryKey }) => doGet<IScrapsResponse>({ queryKey }),
+  });
 
 export const useTodaysLuck = (userId: number) =>
   "Boas notícias chegarão por e-mail";

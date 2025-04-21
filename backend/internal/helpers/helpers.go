@@ -9,8 +9,11 @@ import (
 	"path"
 	"strconv"
 
+	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
+
+var ContextTokenKey = os.Getenv("CONTEXT_TOKEN_KEY")
 
 func AddRootToPath(relativePath string) string {
 	pwd, _ := os.Getwd()
@@ -108,4 +111,12 @@ func SafeAdd(base uint, delta int) uint {
 		return base - uint(-delta)
 	}
 	return base + uint(delta)
+}
+
+func GetJWTToken(c *gin.Context) (string, bool) {
+	token, exists := c.Get(ContextTokenKey)
+	if !exists {
+		return "", false
+	}
+	return token.(string), true
 }

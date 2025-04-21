@@ -55,7 +55,7 @@ func NewServer() *http.Server {
 	friendshipService := service.NewFriendshipService(*friendshipRepository, *userRepository, validate)
 	photoAlbumService := service.NewPhotoAlbumService(*photoAlbumRepository, validate)
 	photoService := service.NewPhotoService(*photoRepository, validate)
-	scrapService := service.NewScrapService(*scrapRepository, validate)
+	scrapService := service.NewScrapService(*scrapRepository, *userRepository, validate)
 	testimonialService := service.NewTestimonialService(*testimonialRepository, validate)
 
 	// Controllers
