@@ -1,7 +1,5 @@
-import React, { use } from "react";
+import React from "react";
 
-import { Box, Paper, Table } from "@mui/material";
-import { StyledTableCell, StyledTableRow } from "./styles";
 import { useUserProfile } from "api/user/queries";
 import { ProfileTable } from "components/organisms/ProfileTable";
 
