@@ -36,7 +36,12 @@ export const Scrapbook: React.FC<IProps> = () => {
   };
 
   const items =
-    scraps?.scraps.map((s) => <Typography>{s.content}</Typography>) ?? [];
+    scraps?.scraps.map((s) => (
+      <Stack direction={"row"} gap={1} alignItems={"center"}>
+        <img src={s.authorProfilePicture} height={40} />
+        <Typography>{s.content}</Typography>
+      </Stack>
+    )) ?? [];
 
   return (
     <Box sx={{ width: "100%" }}>

@@ -102,5 +102,8 @@ export interface IScrapsResponse {
   scraps: {
     id: number;
     content: string;
+    authorId: number;
+    authorName: string;
+    authorProfilePicture: string;
   }[];
 }

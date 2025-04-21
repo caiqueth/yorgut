@@ -268,8 +268,11 @@ func (s *ScrapService) FindScrapOfUserRecipient(userId uint) (*dto.FindScrapOfUs
 
 	for _, scrap := range scraps {
 		response.Scraps = append(response.Scraps, dto.ScrapDto{
-			ID:      scrap.ID,
-			Content: scrap.Content,
+			ID:                   scrap.ID,
+			Content:              scrap.Content,
+			AuthorID:             scrap.UserAuthorID,
+			AuthorName:           scrap.UserAuthor.FirstName,
+			AuthorProfilePicture: *scrap.UserAuthor.Profile.ProfilePicture,
 		})
 	}
 
