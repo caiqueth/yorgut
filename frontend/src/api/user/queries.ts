@@ -17,6 +17,7 @@ import {
 export const useLoggedUser = () => {
   return {
     userId: 2,
+    email: "usuario@email.com",
   };
 };
 
