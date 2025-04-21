@@ -6,35 +6,41 @@ O.G. Social Media Backend
   - Login endpoint
   - JWT configuration and validation pattern
 - Communities:
-  - "Create Community" endpoint
-  - "Update Community" endpoint
+  - Create Community endpoint.
+  - Update Community endpoint.
   - Split communities in two types:
-    - Public or Private.
+    - Public or Private:
       - Public communities can be joined by anyone. Also, their forums can be viewed by anyone, be it a member or not.
       - Private communities can be joined by anyone, but the owner must accept any new memberships. Also, their forums can only be read by community members.
-  - "Community Members" endpoint
+  - Community Members endpoint:
     - Split in two: one that shows the last 8 logged in and another that paginates over all members.
+  - Forum:
+    - Create Forum model and endpoints:
+      - A Forum is FK of a Community
+      - A Forum has its own children: "Topics"
+      - A Topic has its own children: "Posts"
 - User:
-  - "My Friends" endpoint
-    - Split in two: one that shows the last 8 logged in and another that paginates over all friends.
-  - "My Communities" endpoint
-    - Split in two: one that shows random 8 and another that paginates over all communities.
-  - "Scrapbook"
+  - My Friends:
+    - Split in two endpoints: one that shows the last 8 logged in and another that paginates over all friends.
+  - My Communities:
+    - Split in two endpoints: one that shows random 8 and another that paginates over all communities.
+  - Scrapbook:
     - List all user's scraps.
     - Create scrap.
-  - "General Search" endpoint
+  - General Search endpoint:
     - Search for other users and communities.
 - Profile:
-  - "Friends" page
-    - Paginate over all friends of a given user
-  - "Communities" page
-    - List communities joined paginated
-    - List communities owned paginated
-    - Create Testimonial endpoint
-    - List last N Testimonials endpoint
-    - List Testimonials paginated
+  - "Friends" page:
+    - Paginate over all friends of a given user.
+  - "Communities" page:
+    - List communities joined paginated.
+    - List communities owned paginated.
+    - Create Testimonial endpoint.
+    - List last N Testimonials endpoint.
+    - List Testimonials paginated.
+    - Voting in Trustworthy (😀), Cool (🧊), Sexy (❤️) endpoint.
+    - Create fanship (?) model and crud.
 - Others:
-  - Voting in Trustworthy (😀), Cool (🧊), Sexy (❤️) endpoint
-  - Create fanship (?) model and crud
-- Add unittests
-- Change Sqlite to Postgres for production
+  - Home screen data endpoint.
+- Add unittests.
+- Change Sqlite to Postgres for production.
