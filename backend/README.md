@@ -3,37 +3,38 @@ O.G. Social Media Backend
 
 # TODO
 - Authentication
+  - Login endpoint
+  - JWT configuration and validation pattern
 - Communities:
-    - "Create Community" page
-    - Split communities in two types:
-        - Public or Private.
-            - Public communities can be joined by anyone. Also, their forums can be viewed by anyone, be it a member or not.
-            - Private communities can be joined by anyone, but the owner must accept any new memberships. Also, their forums can only be read by community members.
-    - "Community Members" page
-        - In the members list of a community, a button "see members" must lead to a page listing all members of given community.
+  - "Create Community" endpoint
+  - "Update Community" endpoint
+  - Split communities in two types:
+    - Public or Private.
+      - Public communities can be joined by anyone. Also, their forums can be viewed by anyone, be it a member or not.
+      - Private communities can be joined by anyone, but the owner must accept any new memberships. Also, their forums can only be read by community members.
+  - "Community Members" endpoint
+    - Split in two: one that shows the last 8 logged in and another that paginates over all members.
 - User:
-    - "My Friends" screen
-        - Make a screen to list a user's friends. Lacking references, but should be a simple list with a "remove friend" button.
-    - "My Communities" screen
-        - Same as "My friends"
-    - "Scrapbook" page
-        - List all user's scraps. Should also contain a text box on top to write a new scrap. The scrapbook can be Public or Private:
-            - Public means anyone can read the scraps the user has received.
-            - Private means only the receiver can read its scraps.
-            - User must be able to toggle between these options anytime.
-    - "Search" page
-        - Users should be able to search for other users and communities. Probablt not much more than that.
+  - "My Friends" endpoint
+    - Split in two: one that shows the last 8 logged in and another that paginates over all friends.
+  - "My Communities" endpoint
+    - Split in two: one that shows random 8 and another that paginates over all communities.
+  - "Scrapbook"
+    - List all user's scraps.
+    - Create scrap.
+  - "General Search" endpoint
+    - Search for other users and communities.
 - Profile:
-    - "Friends" page
-        - In an User Profile, below the friends list, must be a button "see friends" that leads to a full list of the user's friends.
-    - "Communities" page
-        - In an User Profile, below the communities list, must be a button "see communities" that leads to a full list of the user's communities.
-    - "Write Testimonial" page
-    - "Testimonials" component
-    - "Testimonials" page
+  - "Friends" page
+    - Paginate over all friends of a given user
+  - "Communities" page
+    - List communities joined paginated
+    - List communities owned paginated
+    - Create Testimonial endpoint
+    - List last N Testimonials endpoint
+    - List Testimonials paginated
 - Others:
-    - Enable voting in Cool (🧊), Lovable (❤️), Trustworthy (😀)
-    - Enable being a fan of someone (probably just like a friendship/membership... fanship?)
-    - Add those cool first letters typography
+  - Voting in Trustworthy (😀), Cool (🧊), Sexy (❤️) endpoint
+  - Create fanship (?) model and crud
 - Add unittests
 - Change Sqlite to Postgres for production
