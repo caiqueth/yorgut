@@ -14,6 +14,7 @@ import { UserPhotoAlbumsList } from "pages/Profile/PhotoAlbums";
 import { UserScrapList } from "pages/Profile/Scraps";
 import { UserVideosList } from "pages/Profile/Videos";
 import { UserTestimonialsList } from "pages/Profile/Testimonials";
+import { RelatedCommunities } from "pages/Community/Related";
 
 export const Routes = [
   {
@@ -129,6 +130,14 @@ export const Routes = [
         element: (
           <ProtectedRoute>
             <CommunityMembers />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "related",
+        element: (
+          <ProtectedRoute>
+            <RelatedCommunities />
           </ProtectedRoute>
         ),
       },
