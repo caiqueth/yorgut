@@ -1,8 +1,11 @@
-import { Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import { useLoggedUser } from "api/user/queries";
+import { Link } from "react-router-dom";
 
 export const UserBar: React.FC = () => {
   const { email } = useLoggedUser();
+
+  const handleLogout = () => {};
 
   return (
     <Stack
@@ -14,9 +17,13 @@ export const UserBar: React.FC = () => {
         <strong>{email}</strong>
       </Typography>
       <Typography variant={"body2"}>|</Typography>
-      <Typography variant={"body2"}>Minha conta</Typography>
+      <Typography variant={"body2"}>
+        <Link to="/my-account">Minha conta</Link>
+      </Typography>
       <Typography variant={"body2"}>|</Typography>
-      <Typography variant={"body2"}>Ajuda</Typography>
+      <Typography variant={"body2"}>
+        <Link to="/help">Ajuda</Link>
+      </Typography>
       <Typography variant={"body2"}>|</Typography>
       <Typography variant={"body2"}>Sair</Typography>
     </Stack>

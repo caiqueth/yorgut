@@ -18,6 +18,10 @@ import { RelatedCommunities } from "pages/Community/Related";
 import { Friends } from "pages/Friends";
 import { Communities } from "pages/Communities";
 import { Search } from "pages/Search";
+import { MyAccount } from "pages/MyAccount";
+import { Help } from "pages/Help";
+import { WhatsNew } from "pages/WhatsNew";
+import { Media } from "pages/Media";
 
 export const Routes = [
   {
@@ -49,6 +53,38 @@ export const Routes = [
     element: (
       <ProtectedRoute>
         <Search />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/my-account",
+    element: (
+      <ProtectedRoute>
+        <MyAccount />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/help",
+    element: (
+      <ProtectedRoute>
+        <Help />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/whats-new",
+    element: (
+      <ProtectedRoute>
+        <WhatsNew />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/media",
+    element: (
+      <ProtectedRoute>
+        <Media />
       </ProtectedRoute>
     ),
   },

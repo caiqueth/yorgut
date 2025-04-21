@@ -33,7 +33,7 @@ export const Navbar: React.FC = () => {
         </Typography>
         <Typography variant={"body2"}>|</Typography>
         <Typography variant={"body2"}>
-          <Link to="/news">O que há de novo</Link>
+          <Link to="/whats-new">O que há de novo</Link>
         </Typography>
       </Stack>
     </Box>
