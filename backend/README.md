@@ -42,5 +42,13 @@ O.G. Social Media Backend
     - Create fanship (?) model and crud.
 - Others:
   - Home screen data endpoint.
+    - Indirect Connections
+    - Direct Connections (Friends)
+    - Number of Fans
+    - Number of Scraps
+    - Profile Views - Total
+    - Profile Views - Last 7 days
+    - Last 10 visitors
+    - Today's Luck
 - Add unittests.
 - Change Sqlite to Postgres for production.
