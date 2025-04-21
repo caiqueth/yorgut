@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Box, Stack } from "@mui/material";
 import { BoxWithTitle } from "components/molecules/BoxWithTitle";
 import { StripedGrid } from "components/molecules/StripedGrid";
+import { PicAndText } from "components/atoms/PicAndText";
 
 interface IMembersListProps {
   communityId: number;
@@ -18,11 +19,13 @@ export const MembersList: React.FC<IMembersListProps> = ({ communityId }) => {
   };
 
   const items =
-    members?.members.map((member) => ({
-      imageSrc: `/${member.profilePicture}`,
-      url: `/profile/${member.id}`,
-      text: `${member.firstName} (${member.friendCount})`,
-    })) ?? [];
+    members?.members.map((m) => (
+      <PicAndText
+        imageSrc={`/${m.profilePicture}`}
+        url={`/profile/${m.id}`}
+        text={`${m.firstName} (${m.friendCount})`}
+      />
+    )) ?? [];
 
   return (
     <BoxWithTitle title={`membros (${members?.memberCount})`}>

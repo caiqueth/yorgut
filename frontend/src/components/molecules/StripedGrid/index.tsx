@@ -1,16 +1,11 @@
 import React from "react";
 import { isStripedRow } from "helpers/isStripedRow";
-import { Link } from "react-router-dom";
 import { palette } from "theme";
 
-import { Grid2 as Grid, Stack, Typography } from "@mui/material";
+import { Grid2 as Grid } from "@mui/material";
 
 interface IStripedGridProps {
-  items: {
-    imageSrc: string;
-    url: string;
-    text: string;
-  }[];
+  items: React.ReactNode[];
   elementsPerRow?: number;
 }
 export const StripedGrid: React.FC<IStripedGridProps> = ({
@@ -19,7 +14,7 @@ export const StripedGrid: React.FC<IStripedGridProps> = ({
 }) => {
   return (
     <Grid container direction={"row"} width={"100%"}>
-      {items?.map(({ imageSrc, url, text }, idx) => (
+      {items.map((item, idx) => (
         <Grid
           size={Math.ceil(12 / elementsPerRow)}
           key={idx}
@@ -30,16 +25,7 @@ export const StripedGrid: React.FC<IStripedGridProps> = ({
               : palette.mediumBlue,
           }}
         >
-          <Stack
-            alignItems={"center"}
-            flexDirection={"column"}
-            sx={{ textAlign: "center" }}
-          >
-            <Link to={url}>
-              <img height={64} src={imageSrc} alt="image not found" />
-              <Typography variant={"body2"}>{text}</Typography>
-            </Link>
-          </Stack>
+          {item}
         </Grid>
       ))}
     </Grid>

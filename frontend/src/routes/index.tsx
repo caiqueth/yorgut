@@ -11,6 +11,9 @@ import { ProfileDetails as UserProfileDetails } from "pages/Profile/ProfileDetai
 import { UserFriendsList } from "pages/Profile/Friends";
 import { UserCommunitiesList } from "pages/Profile/Communities";
 import { UserPhotoAlbumsList } from "pages/Profile/PhotoAlbums";
+import { UserScrapList } from "pages/Profile/Scraps";
+import { UserVideosList } from "pages/Profile/Videos";
+import { UserTestimonialsList } from "pages/Profile/Testimonials";
 
 export const Routes = [
   {
@@ -34,6 +37,14 @@ export const Routes = [
         element: <UserProfileDetails />,
       },
       {
+        path: "scraps",
+        element: (
+          <ProtectedRoute>
+            <UserScrapList />
+          </ProtectedRoute>
+        ),
+      },
+      {
         path: "friends",
         element: (
           <ProtectedRoute>
@@ -46,6 +57,22 @@ export const Routes = [
         element: (
           <ProtectedRoute>
             <UserCommunitiesList />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "videos",
+        element: (
+          <ProtectedRoute>
+            <UserVideosList />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "testimonials",
+        element: (
+          <ProtectedRoute>
+            <UserTestimonialsList />
           </ProtectedRoute>
         ),
       },

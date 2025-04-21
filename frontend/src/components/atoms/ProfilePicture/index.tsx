@@ -11,7 +11,7 @@ export const ProfilePicture: React.FC<IProfilePictureProps> = ({
   return (
     <Box
       sx={{
-        boxShadow: "inset 1px 1px 20px 14px rgba(255,255,255,1)",
+        boxShadow: "inset 1px 1px 20px 12px rgba(255,255,255,1)",
         background: `url(${imageSrc}) no-repeat center top`,
         backgroundSize: "cover",
         display: "block",

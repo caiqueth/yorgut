@@ -1,13 +1,11 @@
 import React from "react";
 import { useUserFriends, useUser } from "api/user/queries";
 import { Button } from "components/atoms/Button";
-import { isStripedRow } from "helpers/isStripedRow";
-import { Link, useNavigate } from "react-router-dom";
-import { palette } from "theme";
-
-import { Box, Grid2 as Grid, Paper, Stack, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { Box, Stack } from "@mui/material";
 import { BoxWithTitle } from "components/molecules/BoxWithTitle";
 import { StripedGrid } from "components/molecules/StripedGrid";
+import { PicAndText } from "components/atoms/PicAndText";
 
 interface IFriendsListProps {
   userId: number;
@@ -22,11 +20,13 @@ export const FriendsList: React.FC<IFriendsListProps> = ({ userId }) => {
   };
 
   const items =
-    friends?.friends.map((f) => ({
-      imageSrc: `/${f.profilePicture}`,
-      url: `/profile/${f.id}`,
-      text: `${f.firstName} (${f.friendCount})`,
-    })) ?? [];
+    friends?.friends.map((f) => (
+      <PicAndText
+        imageSrc={`/${f.profilePicture}`}
+        url={`/profile/${f.id}`}
+        text={`${f.firstName} (${f.friendCount})`}
+      />
+    )) ?? [];
 
   return (
     <BoxWithTitle title={`amigos (${user?.friendCount})`}>
