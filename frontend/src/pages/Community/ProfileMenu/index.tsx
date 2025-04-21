@@ -8,6 +8,7 @@ import {
   useLoggedUser,
   useUserMemberships,
 } from "api/user/queries";
+import { useNavigate } from "react-router-dom";
 
 interface IProfileMenuProps {
   communityId: number;
@@ -19,6 +20,8 @@ export const ProfileMenu: React.FC<IProfileMenuProps> = ({ communityId }) => {
   const { mutate: joinCommunity } = useJoinCommunity();
   const { mutate: leaveCommunity } = useLeaveCommunity();
 
+  const navigate = useNavigate();
+  const handleGoToCommunity = () => navigate(`/community/${communityId}`);
   const handleJoinCommunity = () => joinCommunity({ userId, communityId });
   const handleLeaveCommunity = () => leaveCommunity({ userId, communityId });
 
@@ -29,6 +32,7 @@ export const ProfileMenu: React.FC<IProfileMenuProps> = ({ communityId }) => {
   }, [isFetching]);
 
   const itemsList = [
+    { text: "perfil", avatar: "🏘️", onClick: () => handleGoToCommunity() },
     {
       text: isMemberOf ? "deixar comunidade" : "participar",
       avatar: isMemberOf ? "➖" : "➕",

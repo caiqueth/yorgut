@@ -6,8 +6,8 @@ import { ProfileHeader } from "./ProfileHeader";
 import { ProfileMenu } from "./ProfileMenu";
 import { Outlet, useParams } from "react-router-dom";
 import { MembersList } from "components/organisms/MembersList";
-import { RelatedCommunitiesList } from "components/organisms/RelatedCommunitiesList";
-import { CommunityProfilePicture } from "components/organisms/CommunityProfilePicture";
+import { RelatedCommunitiesList } from "pages/Community/components/RelatedCommunitiesList";
+import { CommunityProfilePicture } from "./components/ProfilePicture";
 
 export const Community: React.FC = () => {
   const params = useParams();

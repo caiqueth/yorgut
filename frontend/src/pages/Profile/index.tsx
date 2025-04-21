@@ -2,8 +2,8 @@ import React from "react";
 
 import { Box, Grid2 as Grid, Stack } from "@mui/material";
 
-import { CommunitiesList } from "../../components/organisms/CommunitiesList";
-import { FriendsList } from "../../components/organisms/FriendsList";
+import { CommunitiesList } from "./components/CommunitiesList";
+import { FriendsList } from "./components/FriendsList";
 import { UserProfilePicture } from "../../components/organisms/UserProfilePicture";
 
 import { ProfileHeader } from "./ProfileHeader";

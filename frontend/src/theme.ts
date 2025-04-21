@@ -42,5 +42,12 @@ export const theme: ThemeOptions = {
         },
       },
     },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#fafafa",
+        },
+      },
+    },
   },
 };
