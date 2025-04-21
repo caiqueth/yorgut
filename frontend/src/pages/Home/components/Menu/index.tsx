@@ -7,7 +7,7 @@ import { Box } from "@mui/material";
 interface IHomeMenuProps {
   userId: number;
 }
-export const HomeMenu: React.FC<IHomeMenuProps> = ({ userId }) => {
+export const Menu: React.FC<IHomeMenuProps> = ({ userId }) => {
   const navigate = useNavigate();
   const handleGoToProfile = () => {
     navigate(`/profile/${userId}`);

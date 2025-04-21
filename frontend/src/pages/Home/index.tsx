@@ -4,10 +4,10 @@ import { UserProfilePicture } from "components/organisms/UserProfilePicture";
 
 import { Box, Grid2 as Grid, Stack } from "@mui/material";
 
-import { Birthdays } from "./Birthdays";
-import { HomeMenu } from "./HomeMenu";
-import { Welcome } from "./Welcome";
-import { PendingInvites } from "./PendingInvites";
+import { Birthdays } from "./components/Birthdays";
+import { Menu } from "./components/Menu";
+import { Welcome } from "./components/Welcome";
+import { PendingInvites } from "./components/PendingInvites";
 import { useLoggedUser } from "api/user/queries";
 
 export const Home = () => {
@@ -19,7 +19,7 @@ export const Home = () => {
         <Grid size={2}>
           <Stack direction={"column"} gap={2}>
             <UserProfilePicture userId={userId} />
-            <HomeMenu userId={userId} />
+            <Menu userId={userId} />
           </Stack>
         </Grid>
         <Grid size={6}>

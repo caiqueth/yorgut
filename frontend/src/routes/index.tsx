@@ -22,6 +22,7 @@ import { MyAccount } from "pages/MyAccount";
 import { Help } from "pages/Help";
 import { WhatsNew } from "pages/WhatsNew";
 import { Media } from "pages/Media";
+import { Scrapbook } from "pages/Scrapbook";
 
 export const Routes = [
   {
@@ -45,6 +46,14 @@ export const Routes = [
     element: (
       <ProtectedRoute>
         <Communities />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/scraps",
+    element: (
+      <ProtectedRoute>
+        <Scrapbook />
       </ProtectedRoute>
     ),
   },
