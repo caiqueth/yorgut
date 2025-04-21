@@ -6,10 +6,9 @@ import { CommunitiesList } from "../../components/organisms/CommunitiesList";
 import { FriendsList } from "../../components/organisms/FriendsList";
 import { UserProfilePicture } from "../../components/organisms/UserProfilePicture";
 
-import { ProfileDetails } from "./ProfileDetails";
 import { ProfileHeader } from "./ProfileHeader";
 import { ProfileMenu } from "./ProfileMenu";
-import { useParams } from "react-router-dom";
+import { Outlet, useParams } from "react-router-dom";
 
 export const Profile: React.FC = () => {
   const params = useParams();
@@ -27,7 +26,7 @@ export const Profile: React.FC = () => {
         <Grid size={6}>
           <Stack direction={"column"} gap={2}>
             <ProfileHeader userId={userId} />
-            <ProfileDetails userId={userId} />
+            <Outlet />
           </Stack>
         </Grid>
         <Grid size={4}>

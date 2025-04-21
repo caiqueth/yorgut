@@ -6,6 +6,7 @@ import { palette } from "theme";
 
 import { Box, Grid2 as Grid, Paper, Stack, Typography } from "@mui/material";
 import { BoxWithTitle } from "components/molecules/BoxWithTitle";
+import { StripedGrid } from "components/molecules/StripedGrid";
 
 interface ICommunitiesListProps {
   userId: number;
@@ -16,39 +17,16 @@ export const CommunitiesList: React.FC<ICommunitiesListProps> = ({
   const userStatistics = useUserStatistics(userId);
   const { data: memberships } = useUserMemberships(userId);
 
+  const items =
+    memberships?.communities.map((c) => ({
+      imageSrc: `/${c.profilePicture}`,
+      url: `/community/${c.id}`,
+      text: `${c.name} (${c.membershipCount ?? 0})`,
+    })) ?? [];
+
   return (
     <BoxWithTitle title={`comunidades (${userStatistics.totalCommunities})`}>
-      <Grid container direction={"row"}>
-        {memberships?.communities.map((community, idx) => (
-          <Grid
-            size={4}
-            key={idx}
-            sx={{
-              p: 1,
-              backgroundColor: isStripedRow(idx, 3)
-                ? palette.darkBlue
-                : palette.mediumBlue,
-            }}
-          >
-            <Stack
-              alignItems={"center"}
-              flexDirection={"column"}
-              sx={{ textAlign: "center" }}
-            >
-              <Link to={`/community/${community.id}`}>
-                <img
-                  height={64}
-                  src={`/${community.profilePicture}`}
-                  alt="image not found"
-                />
-                <Typography
-                  variant={"body2"}
-                >{`${community.name} (${community.membershipCount ?? 0})`}</Typography>
-              </Link>
-            </Stack>
-          </Grid>
-        ))}
-      </Grid>
+      <StripedGrid items={items} elementsPerRow={3} />
     </BoxWithTitle>
   );
 };

@@ -5,7 +5,7 @@ import { Box, Grid2 as Grid, Stack } from "@mui/material";
 import { ProfileDetails } from "./ProfileDetails";
 import { ProfileHeader } from "./ProfileHeader";
 import { ProfileMenu } from "./ProfileMenu";
-import { useParams } from "react-router-dom";
+import { Outlet, useParams } from "react-router-dom";
 import { MembersList } from "components/organisms/MembersList";
 import { RelatedCommunitiesList } from "components/organisms/RelatedCommunitiesList";
 import { CommunityProfilePicture } from "components/organisms/CommunityProfilePicture";
@@ -26,7 +26,7 @@ export const Community: React.FC = () => {
         <Grid size={6}>
           <Stack direction={"column"} gap={2}>
             <ProfileHeader communityId={communityId} />
-            <ProfileDetails communityId={communityId} />
+            <Outlet />
           </Stack>
         </Grid>
         <Grid size={4}>

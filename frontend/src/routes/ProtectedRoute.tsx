@@ -10,7 +10,9 @@ const useAuth = () => ({
 interface IProtectedRouteProps {
   children: React.ReactNode;
 }
-export const ProtectedRoute: React.FC<IProtectedRouteProps> = ({ children }) => {
+export const ProtectedRoute: React.FC<IProtectedRouteProps> = ({
+  children,
+}) => {
   const auth = useAuth();
 
   if (auth.isLoading)

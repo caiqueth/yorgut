@@ -2,11 +2,13 @@ import React from "react";
 
 import { useUserProfile } from "api/user/queries";
 import { ProfileTable } from "components/organisms/ProfileTable";
+import { useParams } from "react-router-dom";
 
-interface IProfileDetailsProps {
-  userId: number;
-}
-export const ProfileDetails: React.FC<IProfileDetailsProps> = ({ userId }) => {
+interface IProfileDetailsProps {}
+export const ProfileDetails: React.FC<IProfileDetailsProps> = () => {
+  const params = useParams();
+  const userId = parseInt(params.communityId ?? "");
+
   const { data: userProfile } = useUserProfile(userId);
 
   const data = [

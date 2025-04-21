@@ -5,6 +5,12 @@ import { ProtectedRoute } from "./ProtectedRoute";
 import { Community } from "pages/Community";
 import { NotFound } from "pages/NotFound";
 import { BadBadServer } from "pages/BadBadServer";
+import { CommunityMembers } from "pages/Community/Members";
+import { ProfileDetails as CommunityProfileDetails } from "pages/Community/ProfileDetails";
+import { ProfileDetails as UserProfileDetails } from "pages/Profile/ProfileDetails";
+import { UserFriendsList } from "pages/Profile/Friends";
+import { UserCommunitiesList } from "pages/Profile/Communities";
+import { UserPhotoAlbumsList } from "pages/Profile/PhotoAlbums";
 
 export const Routes = [
   {
@@ -24,10 +30,14 @@ export const Routes = [
     ),
     children: [
       {
+        index: true,
+        element: <UserProfileDetails />,
+      },
+      {
         path: "friends",
         element: (
           <ProtectedRoute>
-            <></>
+            <UserFriendsList />
           </ProtectedRoute>
         ),
       },
@@ -35,7 +45,7 @@ export const Routes = [
         path: "communities",
         element: (
           <ProtectedRoute>
-            <></>
+            <UserCommunitiesList />
           </ProtectedRoute>
         ),
       },
@@ -43,7 +53,7 @@ export const Routes = [
         path: "albums",
         element: (
           <ProtectedRoute>
-            <></>
+            <UserPhotoAlbumsList />
           </ProtectedRoute>
         ),
         children: [
@@ -79,6 +89,22 @@ export const Routes = [
       </ProtectedRoute>
     ),
     children: [
+      {
+        index: true,
+        element: (
+          <ProtectedRoute>
+            <CommunityProfileDetails />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "members",
+        element: (
+          <ProtectedRoute>
+            <CommunityMembers />
+          </ProtectedRoute>
+        ),
+      },
       {
         path: "topics",
         element: (

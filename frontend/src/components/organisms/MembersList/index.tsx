@@ -27,7 +27,7 @@ export const MembersList: React.FC<IMembersListProps> = ({ communityId }) => {
   return (
     <BoxWithTitle title={`membros (${members?.memberCount})`}>
       <Stack direction={"column"} alignItems={"center"}>
-        <StripedGrid items={items} />
+        <StripedGrid items={items} elementsPerRow={4} />
         <Box alignSelf={"center"}>
           <Button onClick={handleGoToMembers}>ver membros</Button>
         </Box>
