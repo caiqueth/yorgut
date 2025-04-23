@@ -1,11 +1,17 @@
 import { Box, Stack, Typography } from "@mui/material";
 import { useLoggedUser } from "api/user/queries";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { googleLogout } from "@react-oauth/google";
 
 export const UserBar: React.FC = () => {
   const { email } = useLoggedUser();
 
-  const handleLogout = () => {};
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    googleLogout();
+    navigate("/login");
+  };
 
   return (
     <Stack
@@ -25,7 +31,11 @@ export const UserBar: React.FC = () => {
         <Link to="/help">Ajuda</Link>
       </Typography>
       <Typography variant={"body2"}>|</Typography>
-      <Typography variant={"body2"}>Sair</Typography>
+      <Typography variant={"body2"}>
+        <Link to="#" onClick={() => handleLogout()}>
+          Sair
+        </Link>
+      </Typography>
     </Stack>
   );
 };

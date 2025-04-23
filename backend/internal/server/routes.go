@@ -39,7 +39,7 @@ func NewRouter(
 
 	router.Static("/storage/uploads", helpers.GetUploadsPath(true))
 
-	// router.Use(JWTMiddleware())
+	router.Use(JWTMiddleware())
 	router.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:3000"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"},

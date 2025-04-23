@@ -23,6 +23,7 @@ import { Help } from "pages/Help";
 import { WhatsNew } from "pages/WhatsNew";
 import { Media } from "pages/Media";
 import { Scrapbook } from "pages/Scrapbook";
+import { Login } from "pages/Login";
 
 export const Routes = [
   {
@@ -30,6 +31,14 @@ export const Routes = [
     element: (
       <ProtectedRoute>
         <Home />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/login",
+    element: (
+      <ProtectedRoute>
+        <Login />
       </ProtectedRoute>
     ),
   },

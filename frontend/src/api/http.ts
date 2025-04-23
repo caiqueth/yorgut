@@ -1,6 +1,9 @@
 const getAuthorizationHeaders = () => {
   try {
-    return JSON.parse(localStorage.getItem("token") ?? "");
+    const token = JSON.parse(localStorage.getItem("token") ?? "");
+    return {
+      Authorization: "Bearer " + token,
+    };
   } catch (e) {
     return {};
   }
