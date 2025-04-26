@@ -36,11 +36,7 @@ export const Routes = [
   },
   {
     path: "/login",
-    element: (
-      <ProtectedRoute>
-        <Login />
-      </ProtectedRoute>
-    ),
+    element: <Login />,
   },
   {
     path: "/friends",
