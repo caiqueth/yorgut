@@ -2,13 +2,11 @@ package server
 
 import (
 	"net/http"
-	"os"
 	"strings"
+	"yorgut/internal/helpers"
 
 	"github.com/gin-gonic/gin"
 )
-
-var ContextTokenKey = os.Getenv("CONTEXT_TOKEN_KEY")
 
 func JWTMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -29,7 +27,7 @@ func JWTMiddleware() gin.HandlerFunc {
 		// Do something to validate the token...
 
 		// Store the token in the context
-		c.Set(ContextTokenKey, token)
+		helpers.SetJWTToken(c, token)
 
 		c.Next()
 	}

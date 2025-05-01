@@ -204,7 +204,7 @@ type CommunityDto struct {
 	MembershipCount uint    `json:"membershipCount"`
 }
 
-type FindUserByIdResponse struct {
+type FindUserResponse struct {
 	UserDto
 }
 

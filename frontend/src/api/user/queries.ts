@@ -15,35 +15,6 @@ import {
   IUserProfileResponse,
   IUserResponse,
 } from "./types";
-import { parseJwt } from "helpers/parseJwt";
-
-interface IToken {
-  iss: string;
-  azp: string;
-  aud: string;
-  sub: string;
-  email: string;
-  email_verified: boolean;
-  nbf: number;
-  name: string;
-  picture: string;
-  given_name: string;
-  family_name: string;
-  iat: number;
-  exp: number;
-  jti: string;
-}
-
-export const useLoggedUser = () => {
-  const token = localStorage.getItem("token");
-  try {
-    if (!token) throw new Error("Could not find token in localStorage");
-    return parseJwt(token) as IToken;
-  } catch (e) {
-    console.error("Error parsing JWT Token =>", e);
-    return {} as IToken;
-  }
-};
 
 export const useUser = (userId: number) =>
   useQuery<IUserResponse>({
@@ -95,9 +66,9 @@ export const useUserFriends = (userId: number) =>
     queryFn: ({ queryKey }) => doGet({ queryKey }),
   });
 
-export const useUserMemberships = (userId: number) =>
+export const useUserMemberships = () =>
   useQuery<ICommunityMembershipsResponse>({
-    queryKey: [`/api/user/${userId}/memberships`],
+    queryKey: [`/api/user/memberships`],
     queryFn: ({ queryKey }) => doGet({ queryKey }),
   });
 

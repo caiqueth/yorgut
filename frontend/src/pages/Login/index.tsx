@@ -3,17 +3,21 @@ import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 import whoDoYouKnow from "../../assets/images/who_do_you_know.jpg";
 
-const onSuccess = (credentialResponse: CredentialResponse) => {
-  const navigate = useNavigate();
-  localStorage.setItem("token", JSON.stringify(credentialResponse.credential));
-  navigate("/");
-};
-
-const onError = () => {
-  console.log("Login Failed");
-};
-
 export const Login = () => {
+  const navigate = useNavigate();
+
+  const onSuccess = (credentialResponse: CredentialResponse) => {
+    localStorage.setItem(
+      "token",
+      JSON.stringify(credentialResponse.credential),
+    );
+    navigate("/");
+  };
+
+  const onError = () => {
+    console.log("Login Failed");
+  };
+
   return (
     <Grid container spacing={4}>
       <Grid size={8}>

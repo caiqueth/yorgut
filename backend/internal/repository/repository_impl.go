@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"fmt"
 	"yorgut/internal/helpers"
 	"yorgut/internal/model"
 )
@@ -74,6 +75,16 @@ func (r *CommunityRepository) IncrementCommunityMembers(community *model.Communi
 }
 
 // User
+func (r *repository[T]) FindByEmail(email string) (T, error) {
+	var ent T
+	result := r.db.Where("user_email = ?", email).First(&ent, email)
+	if result != nil {
+		return ent, nil
+	} else {
+		return ent, fmt.Errorf("user with e-mail %v not found", email)
+	}
+}
+
 func (u *UserRepository) FindUserOwnedCommunities(userId uint) ([]model.Community, error) {
 	var communities []model.Community
 

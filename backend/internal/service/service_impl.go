@@ -95,13 +95,26 @@ func (u *UserService) UpdateUser(user dto.UpdateUserRequest) error {
 	return nil
 }
 
-func (u *UserService) FindUserById(id uint) (*dto.FindUserByIdResponse, error) {
+func (u *UserService) FindUserById(id uint) (*dto.FindUserResponse, error) {
 	userData, err := u.userRepository.FindById(id)
 	if err != nil {
 		return nil, err
 	}
 
-	resp := dto.FindUserByIdResponse{}
+	resp := dto.FindUserResponse{}
+	resp.FromUser(userData)
+
+	return &resp, nil
+
+}
+
+func (u *UserService) FindUserByEmail(email string) (*dto.FindUserResponse, error) {
+	userData, err := u.userRepository.FindByEmail(email)
+	if err != nil {
+		return nil, err
+	}
+
+	resp := dto.FindUserResponse{}
 	resp.FromUser(userData)
 
 	return &resp, nil

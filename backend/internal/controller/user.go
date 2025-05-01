@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 	"yorgut/internal/dto"
@@ -68,6 +69,33 @@ func (uc *UserController) FindById(ctx *gin.Context) {
 	}
 
 	user, err := uc.userService.FindUserById(uint(id))
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, user)
+
+}
+
+// FindWithToken		godoc
+// @Summary				Get Single user with the token.
+// @Param				userId path string true "get user by id"
+// @Description			Returns the user matching the requested id
+// @Produce				application/json
+// @Tags				User
+// @Success				200 {object} dto.FindUserByIdResponse{}
+// @Router				/user/me [get]
+func (uc *UserController) FindWithToken(ctx *gin.Context) {
+
+	email, ok := helpers.GetEmailFromToken(ctx)
+	if !ok {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "error getting user email"})
+		return
+	}
+
+	user, err := uc.userService.FindUserByEmail(email)
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -329,10 +357,14 @@ func (uc *UserController) LeaveCommunity(ctx *gin.Context) {
 // @Produce					application/json
 // @Tags					User
 // @Success					200 {object} dto.FindUserMembershipsResponse{}
-// @Router					/user/{userId}/memberships [get]
+// @Router					/user/memberships [get]
 func (uc *UserController) FindMemberships(ctx *gin.Context) {
-	userId := ctx.Param("userId")
-	id, err := strconv.Atoi(userId)
+	rep, exists := ctx.Get("user_token")
+	if !exists {
+		panic("token does not exist")
+	}
+	fmt.Printf(rep)
+	id, err := strconv.Atoi("1")
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

@@ -3,7 +3,7 @@ package dto
 import "yorgut/internal/model"
 
 // Mappers
-func (r *FindUserByIdResponse) FromUser(user *model.User) {
+func (r *FindUserResponse) FromUser(user *model.User) {
 	r.ID = user.ID
 	r.Email = user.Email
 	r.FirstName = user.FirstName

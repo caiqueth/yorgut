@@ -32,10 +32,8 @@ export const UserBar: React.FC = () => {
         <Link to="/help">Ajuda</Link>
       </Typography>
       <Typography variant={"body2"}>|</Typography>
-      <Typography variant={"body2"}>
-        <Link to="#" onClick={() => handleLogout()}>
-          Sair
-        </Link>
+      <Typography variant={"body2"} onClick={() => handleLogout()}>
+        <a href="">Sair</a>
       </Typography>
     </Stack>
   );
