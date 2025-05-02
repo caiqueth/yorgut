@@ -6,10 +6,8 @@ import {
   Typography,
 } from "@mui/material";
 import {
-  useLoggedUser,
   useScraps,
   useSendScrap,
-  useUser,
 } from "api/user/queries";
 import { Button } from "components/atoms/Button";
 import { BoxWithTitle } from "components/molecules/BoxWithTitle";
@@ -20,17 +18,16 @@ import React, { useState } from "react";
 
 interface IProps {}
 export const Scrapbook: React.FC<IProps> = () => {
-  const { userId } = useLoggedUser();
   const { mutate: sendScrap } = useSendScrap();
-  const { data: scraps } = useScraps(userId);
+  const { data: scraps } = useScraps();
 
   const [scrapContent, setScrapContent] = useState<string>("");
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
     sendScrap({
-      userAuthorId: userId,
-      userRecipientId: userId,
+      userAuthorId: 1,
+      userRecipientId: 1,
       content: scrapContent,
     });
   };

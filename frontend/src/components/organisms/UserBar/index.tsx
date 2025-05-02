@@ -1,10 +1,9 @@
 import { Stack, Typography } from "@mui/material";
-import { useLoggedUser } from "api/user/queries";
 import { Link, useNavigate } from "react-router-dom";
 import { googleLogout } from "@react-oauth/google";
 
 export const UserBar: React.FC = () => {
-  const { email } = useLoggedUser();
+  const email = "";
 
   const navigate = useNavigate();
 

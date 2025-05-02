@@ -24,10 +24,15 @@ func JWTMiddleware() gin.HandlerFunc {
 
 		token := parts[1]
 
-		// Do something to validate the token...
+		// Parse the Token
+		parsed, err := helpers.ParseToken(token)
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Could not parse the token"})
+			return
+		}
 
 		// Store the token in the context
-		helpers.SetJWTToken(c, token)
+		helpers.SetJWTToken(c, parsed)
 
 		c.Next()
 	}

@@ -3,10 +3,13 @@ package service
 import (
 	"errors"
 	"fmt"
+	"sync"
 	"yorgut/internal/dto"
 	"yorgut/internal/helpers"
 	"yorgut/internal/model"
 )
+
+var userIDCache = sync.Map{}
 
 // Testimonial
 func (t *TestimonialService) CreateTestimonial(testimonial dto.CreateTestimonialRequest) error {
@@ -109,16 +112,23 @@ func (u *UserService) FindUserById(id uint) (*dto.FindUserResponse, error) {
 }
 
 func (u *UserService) FindUserByEmail(email string) (*dto.FindUserResponse, error) {
-	userData, err := u.userRepository.FindByEmail(email)
+	user, err := u.userRepository.FindByEmail(email)
 	if err != nil {
 		return nil, err
 	}
 
 	resp := dto.FindUserResponse{}
-	resp.FromUser(userData)
+	resp.FromUser(user)
 
 	return &resp, nil
 
+}
+
+func (u *UserService) FindUserIdFromEmail(email string) (uint, error) {
+	if val, ok := userIDCache.Load(email); ok {
+		return val.(uint), nil
+	}
+	return 0, fmt.Errorf("could not find userID for %v", email)
 }
 
 func (u *UserService) FindUserWithProfileById(id uint) (*dto.FindUserWithProfileByIdResponse, error) {

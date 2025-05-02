@@ -10,23 +10,23 @@ import (
 )
 
 type Token struct {
-	iss            string
-	azp            string
-	aud            string
-	sub            string
-	email          string
-	email_verified bool
-	nbf            int
-	name           string
-	picture        string
-	given_name     string
-	family_name    string
-	iat            int
-	exp            int
-	jti            string
+	Iss            string
+	Azp            string
+	Aud            string
+	Sub            string
+	Email          string
+	Email_verified bool
+	Nbf            int
+	Name           string
+	Picture        string
+	Given_name     string
+	Family_name    string
+	Iat            int
+	Exp            int
+	Jti            string
 }
 
-func parseToken(token string) (*Token, error) {
+func ParseToken(token string) (*Token, error) {
 	parts := strings.Split(token, ".")
 	if len(parts) != 3 {
 		return nil, errors.New("invalid token format")
@@ -52,22 +52,20 @@ func parseToken(token string) (*Token, error) {
 	return claims, nil
 }
 
-func GetJWTToken(c *gin.Context) (*Token, bool) {
-	token, err := parseToken(c.GetString("user_token"))
-	if err != nil {
-		return nil, false
-	}
-	return token, true
+func ValidateToken(token Token) Token {
+	return token
 }
 
-func SetJWTToken(c *gin.Context, token string) {
+func SetJWTToken(c *gin.Context, token *Token) {
 	c.Set("user_token", token)
 }
 
-func GetEmailFromToken(c *gin.Context) (string, bool) {
-	token, ok := GetJWTToken(c)
-	if !ok {
-		return "", false
+func GetTokenFromContext(c *gin.Context) (*Token, bool) {
+	value, exists := c.Get("user_token")
+	if !exists {
+		return nil, false
 	}
-	return token.email, true
+
+	token, ok := value.(*Token)
+	return token, ok
 }

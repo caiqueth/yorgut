@@ -60,6 +60,12 @@ export const useUserStatistics = (userId: number) => ({
   ],
 });
 
+export const useLoggedUser = () =>
+  useQuery({
+    queryKey: [`/api/user/me`],
+    queryFn: ({ queryKey }) => doGet({ queryKey }),
+  });
+
 export const useUserFriends = (userId: number) =>
   useQuery<IFriendsResponse>({
     queryKey: [`/api/user/${userId}/friends`],
@@ -127,9 +133,9 @@ export const useSendScrap = () => {
   });
 };
 
-export const useScraps = (userId: number) =>
+export const useScraps = () =>
   useQuery<IScrapsResponse>({
-    queryKey: [`/api/scrap/${userId}`],
+    queryKey: [`/api/scrap`],
     queryFn: ({ queryKey }) => doGet<IScrapsResponse>({ queryKey }),
   });
 

@@ -1,5 +1,5 @@
 import { Box, Stack, Typography } from "@mui/material";
-import { useLoggedUser, useUserFriends } from "api/user/queries";
+import { useUserFriends } from "api/user/queries";
 import { BoxWithTitle } from "components/molecules/BoxWithTitle";
 import { StripedGrid } from "components/molecules/StripedGrid";
 import React from "react";
@@ -7,7 +7,7 @@ import React from "react";
 interface IProps {}
 
 export const Friends: React.FC<IProps> = () => {
-  const { userId } = useLoggedUser();
+  const userId = 1;
 
   const { data } = useUserFriends(userId);
 

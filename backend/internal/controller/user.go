@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 	"yorgut/internal/dto"
@@ -88,14 +87,13 @@ func (uc *UserController) FindById(ctx *gin.Context) {
 // @Success				200 {object} dto.FindUserByIdResponse{}
 // @Router				/user/me [get]
 func (uc *UserController) FindWithToken(ctx *gin.Context) {
-
-	email, ok := helpers.GetEmailFromToken(ctx)
+	tkn, ok := helpers.GetTokenFromContext(ctx)
 	if !ok {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "error getting user email"})
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "could not find auth token"})
 		return
 	}
 
-	user, err := uc.userService.FindUserByEmail(email)
+	user, err := uc.userService.FindUserByEmail(tkn.Email)
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -359,11 +357,6 @@ func (uc *UserController) LeaveCommunity(ctx *gin.Context) {
 // @Success					200 {object} dto.FindUserMembershipsResponse{}
 // @Router					/user/memberships [get]
 func (uc *UserController) FindMemberships(ctx *gin.Context) {
-	rep, exists := ctx.Get("user_token")
-	if !exists {
-		panic("token does not exist")
-	}
-	fmt.Printf(rep)
 	id, err := strconv.Atoi("1")
 
 	if err != nil {

@@ -35,7 +35,7 @@ func uploadFromSeed(seedPath string) *string {
 func GetUsersSeed() []*model.User {
 	users := []*model.User{
 		{
-			Email:     "caique@test.com",
+			Email:     "caiqueth@gmail.com",
 			FirstName: "Caique",
 			LastName:  "Test",
 			BirthDate: time.Date(1950, 12, 9, 0, 0, 0, 0, time.Local),

@@ -9,7 +9,7 @@ export const Login = () => {
   const onSuccess = (credentialResponse: CredentialResponse) => {
     localStorage.setItem(
       "token",
-      JSON.stringify(credentialResponse.credential),
+      credentialResponse.credential ?? "",
     );
     navigate("/");
   };

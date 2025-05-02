@@ -64,7 +64,7 @@ func clearStorageFolder() {
 }
 
 func deleteDb() {
-	os.Remove("test.db")
+	os.Remove(os.Getenv("BLUEPRINT_DB_URL"))
 }
 
 func localReset() {

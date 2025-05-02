@@ -11,7 +11,9 @@ import { PendingInvites } from "./components/PendingInvites";
 import { useLoggedUser } from "api/user/queries";
 
 export const Home = () => {
-  const { userId } = useLoggedUser();
+  const userId = 1;
+  const { data } = useLoggedUser();
+  console.log(data);
 
   return (
     <Box sx={{ width: "100%" }}>

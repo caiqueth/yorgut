@@ -5,7 +5,6 @@ import { Box } from "@mui/material";
 import {
   useJoinCommunity,
   useLeaveCommunity,
-  useLoggedUser,
   useUserMemberships,
 } from "api/user/queries";
 import { useNavigate } from "react-router-dom";
@@ -14,9 +13,9 @@ interface IProfileMenuProps {
   communityId: number;
 }
 export const ProfileMenu: React.FC<IProfileMenuProps> = ({ communityId }) => {
-  const { userId } = useLoggedUser();
+  const userId  = 1
   const [isMemberOf, setIsMemberOf] = useState(false);
-  const { data: memberships, isFetching } = useUserMemberships(userId);
+  const { data: memberships, isFetching } = useUserMemberships();
   const { mutate: joinCommunity } = useJoinCommunity();
   const { mutate: leaveCommunity } = useLeaveCommunity();
 

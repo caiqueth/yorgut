@@ -6,7 +6,5 @@ interface IProps {}
 export const CommunityMembers: React.FC<IProps> = () => {
   const params = useParams();
   const communityId = parseInt(params.communityId ?? "");
-  console.log(communityId);
-
   return <Box>Membos da comunidade {communityId}</Box>;
 };
