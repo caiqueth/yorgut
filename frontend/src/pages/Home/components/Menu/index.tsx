@@ -5,25 +5,24 @@ import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/material";
 
 interface IHomeMenuProps {
-  userId: number;
 }
-export const Menu: React.FC<IHomeMenuProps> = ({ userId }) => {
+export const Menu: React.FC<IHomeMenuProps> = () => {
   const navigate = useNavigate();
 
   const handleGoToProfile = () => {
-    navigate(`/profile/${userId}`);
+    navigate(`/profile`);
   };
 
   const handleGoToAlbums = () => {
-    navigate(`/profile/${userId}/albums`);
+    navigate(`/profile/albums`);
   };
 
   const handleGoToScraps = () => {
-    navigate(`/profile/${userId}/scraps`);
+    navigate(`/profile/scraps`);
   };
 
   const handleGoToTestimonials = () => {
-    navigate(`/profile/${userId}/testimonials`);
+    navigate(`/profile/testimonials`);
   };
 
   const handleGoToMyAccount = () => {

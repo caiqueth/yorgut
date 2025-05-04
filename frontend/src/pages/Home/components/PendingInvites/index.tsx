@@ -7,11 +7,9 @@ import { palette } from "theme";
 import { isStripedRow } from "helpers/isStripedRow";
 import { Link } from "react-router-dom";
 
-interface IPendingInvitesProps {
-  userId: number;
-}
-export const PendingInvites: React.FC<IPendingInvitesProps> = ({ userId }) => {
-  const { data } = useUserPendingFriendships(userId);
+interface IPendingInvitesProps { };
+export const PendingInvites: React.FC<IPendingInvitesProps> = () => {
+  const { data } = useUserPendingFriendships();
 
   if (!data) return null;
   if (data.pendingFriendships.length <= 0) return null;

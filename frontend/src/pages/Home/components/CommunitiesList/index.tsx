@@ -4,14 +4,10 @@ import { BoxWithTitle } from "components/molecules/BoxWithTitle";
 import { StripedGrid } from "components/molecules/StripedGrid";
 import { PicAndText } from "components/atoms/PicAndText";
 
-interface ICommunitiesListProps {
-  userId: number;
-}
-export const CommunitiesList: React.FC<ICommunitiesListProps> = ({
-  userId,
-}) => {
-  const userStatistics = useUserStatistics(userId);
-  const { data: memberships } = useUserMemberships(userId);
+interface ICommunitiesListProps { };
+export const CommunitiesList: React.FC<ICommunitiesListProps> = () => {
+  const userStatistics = useUserStatistics();
+  const { data: memberships } = useUserMemberships();
 
   const items =
     memberships?.communities.map((c) => (

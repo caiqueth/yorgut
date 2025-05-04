@@ -20,10 +20,10 @@ interface IToken {
 export const useToken = () => {
   const token = localStorage.getItem("token");
   try {
-    if (!token) throw new Error("Could not find token in localStorage");
+    if (!token) return;
     return parseJwt(token) as IToken;
   } catch (e) {
     console.error("Error parsing JWT Token =>", e);
-    return {} as IToken;
+    return;
   }
 };

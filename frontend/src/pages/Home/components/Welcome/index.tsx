@@ -5,12 +5,12 @@ import { Box, Paper, Stack, Typography } from "@mui/material";
 import { dayjsFromDate } from "helpers/formatting/date";
 
 interface IProps {
-  userId: number;
+
 }
-export const Welcome: React.FC<IProps> = ({ userId }) => {
-  const { data: user } = useUser(userId);
-  const userStatistics = useUserStatistics(userId);
-  const todaysLuck = useTodaysLuck(userId);
+export const Welcome: React.FC<IProps> = () => {
+  const { data: user } = useUser();
+  const userStatistics = useUserStatistics();
+  const todaysLuck = useTodaysLuck();
 
   if (!user) return null;
 

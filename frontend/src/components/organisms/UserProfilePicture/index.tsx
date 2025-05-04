@@ -3,13 +3,11 @@ import { useUserProfile } from "api/user/queries";
 
 import { ProfilePicture } from "components/atoms/ProfilePicture";
 
-interface IUserProfilePictureProps {
-  userId: number;
-}
+interface IUserProfilePictureProps { };
 export const UserProfilePicture: React.FC<IUserProfilePictureProps> = ({
-  userId,
+
 }) => {
-  const { data: user } = useUserProfile(userId);
+  const { data: user } = useUserProfile();
 
   if (!user?.profilePicture) return null;
 

@@ -13,7 +13,6 @@ interface IProfileMenuProps {
   communityId: number;
 }
 export const ProfileMenu: React.FC<IProfileMenuProps> = ({ communityId }) => {
-  const userId  = 1
   const [isMemberOf, setIsMemberOf] = useState(false);
   const { data: memberships, isFetching } = useUserMemberships();
   const { mutate: joinCommunity } = useJoinCommunity();
@@ -21,8 +20,8 @@ export const ProfileMenu: React.FC<IProfileMenuProps> = ({ communityId }) => {
 
   const navigate = useNavigate();
   const handleGoToCommunity = () => navigate(`/community/${communityId}`);
-  const handleJoinCommunity = () => joinCommunity({ userId, communityId });
-  const handleLeaveCommunity = () => leaveCommunity({ userId, communityId });
+  const handleJoinCommunity = () => joinCommunity({ communityId });
+  const handleLeaveCommunity = () => leaveCommunity({ communityId });
 
   useEffect(() => {
     setIsMemberOf(

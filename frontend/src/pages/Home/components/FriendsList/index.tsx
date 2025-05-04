@@ -7,12 +7,11 @@ import { BoxWithTitle } from "components/molecules/BoxWithTitle";
 import { StripedGrid } from "components/molecules/StripedGrid";
 import { PicAndText } from "components/atoms/PicAndText";
 
-interface IFriendsListProps {
-  userId: number;
-}
-export const FriendsList: React.FC<IFriendsListProps> = ({ userId }) => {
-  const { data: user } = useUser(userId);
-  const { data: friends } = useUserFriends(userId);
+interface IFriendsListProps { };
+
+export const FriendsList: React.FC<IFriendsListProps> = () => {
+  const { data: user } = useUser();
+  const { data: friends } = useUserFriends();
   const navigate = useNavigate();
 
   const handleGoToFriends = () => {

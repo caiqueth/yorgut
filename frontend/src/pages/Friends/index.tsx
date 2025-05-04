@@ -4,12 +4,10 @@ import { BoxWithTitle } from "components/molecules/BoxWithTitle";
 import { StripedGrid } from "components/molecules/StripedGrid";
 import React from "react";
 
-interface IProps {}
+interface IProps { }
 
 export const Friends: React.FC<IProps> = () => {
-  const userId = 1;
-
-  const { data } = useUserFriends(userId);
+  const { data } = useUserFriends();
 
   const items =
     data?.friends.map((f) => (

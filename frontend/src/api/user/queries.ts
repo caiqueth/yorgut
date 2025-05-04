@@ -16,26 +16,31 @@ import {
   IUserResponse,
 } from "./types";
 
-export const useUser = (userId: number) =>
+export const useUser = () =>
   useQuery<IUserResponse>({
-    queryKey: [`/api/user/${userId}`],
+    queryKey: [`/api/user`],
     queryFn: ({ queryKey }) => doGet<IUserResponse>({ queryKey }),
   });
 
-export const useUserProfile = (userId: number) =>
+export const useUserData = () =>
+  useQuery({
+    queryKey: [`/api/user/me`],
+    queryFn: ({ queryKey }) => doGet({ queryKey }),
+  });
+
+export const useUserProfile = () =>
   useQuery<IUserProfileResponse>({
-    queryKey: [`/api/user/${userId}/profile`],
+    queryKey: [`/api/user/profile`],
     queryFn: ({ queryKey }) => doGet<IUserProfileResponse>({ queryKey }),
   });
 
-export const useUserPendingFriendships = (userId: number) =>
+export const useUserPendingFriendships = () =>
   useQuery<IPendingFriendshipsResponse>({
-    queryKey: [`/api/user/${userId}/friendships/pending`],
+    queryKey: [`/api/user/friendships/pending`],
     queryFn: ({ queryKey }) => doGet<IPendingFriendshipsResponse>({ queryKey }),
   });
 
-export const useUserStatistics = (userId: number) => ({
-  userId: userId,
+export const useUserStatistics = () => ({
   totalProfileViews: 3558,
   lastWeekProfileViews: 45,
   totalFriends: 111,
@@ -60,15 +65,9 @@ export const useUserStatistics = (userId: number) => ({
   ],
 });
 
-export const useLoggedUser = () =>
-  useQuery({
-    queryKey: [`/api/user/me`],
-    queryFn: ({ queryKey }) => doGet({ queryKey }),
-  });
-
-export const useUserFriends = (userId: number) =>
+export const useUserFriends = () =>
   useQuery<IFriendsResponse>({
-    queryKey: [`/api/user/${userId}/friends`],
+    queryKey: [`/api/user/friends`],
     queryFn: ({ queryKey }) => doGet({ queryKey }),
   });
 
@@ -81,16 +80,11 @@ export const useUserMemberships = () =>
 export const useJoinCommunity = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({
-      userId,
-      communityId,
-    }: {
-      userId: number;
-      communityId: number;
-    }) => doPost({ url: `/api/user/${userId}/join/${communityId}`, body: {} }),
+    mutationFn: ({ communityId }: { communityId: number }) =>
+      doPost({ url: `/api/user/join/${communityId}`, body: {} }),
     onSettled: (_data, _error, variables) => {
       queryClient.invalidateQueries({
-        queryKey: [`/api/user/${variables.userId}/memberships`],
+        queryKey: [`/api/user/memberships`],
       });
       queryClient.invalidateQueries({
         queryKey: [`/api/community/${variables.communityId}/members`],
@@ -102,16 +96,11 @@ export const useJoinCommunity = () => {
 export const useLeaveCommunity = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({
-      userId,
-      communityId,
-    }: {
-      userId: number;
-      communityId: number;
-    }) => doPost({ url: `/api/user/${userId}/leave/${communityId}`, body: {} }),
+    mutationFn: ({ communityId }: { communityId: number }) =>
+      doPost({ url: `/api/user/leave/${communityId}`, body: {} }),
     onSettled: (_data, _error, variables) => {
       queryClient.invalidateQueries({
-        queryKey: [`/api/user/${variables.userId}/memberships`],
+        queryKey: [`/api/user/memberships`],
       });
       queryClient.invalidateQueries({
         queryKey: [`/api/community/${variables.communityId}/members`],
@@ -139,8 +128,7 @@ export const useScraps = () =>
     queryFn: ({ queryKey }) => doGet<IScrapsResponse>({ queryKey }),
   });
 
-export const useTodaysLuck = (userId: number) =>
-  "Boas notícias chegarão por e-mail";
+export const useTodaysLuck = () => "Boas notícias chegarão por e-mail";
 
 export const useCommunity = (communityId: number) =>
   useQuery<ICommunityResponse>({

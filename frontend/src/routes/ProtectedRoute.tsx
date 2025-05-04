@@ -1,11 +1,5 @@
-import { Disconnected } from "pages/Disconnected";
-
-import { Backdrop, CircularProgress } from "@mui/material";
-
-const useAuth = () => ({
-  isLoading: false,
-  isAuthenticated: true,
-});
+import { useToken } from "hooks/useToken";
+import { useNavigate } from "react-router-dom";
 
 interface IProtectedRouteProps {
   children: React.ReactNode;
@@ -13,18 +7,23 @@ interface IProtectedRouteProps {
 export const ProtectedRoute: React.FC<IProtectedRouteProps> = ({
   children,
 }) => {
-  const auth = useAuth();
+  const navigate = useNavigate();
+  const token = useToken();
 
-  if (auth.isLoading)
-    return (
-      <Backdrop open>
-        <CircularProgress />
-      </Backdrop>
-    );
-
-  if (!auth.isAuthenticated) {
-    return <Disconnected />;
+  if (!token) {
+    navigate("/login")
   }
 
-  return <>{children}</>;
+  // if (auth.isLoading)
+  //   return (
+  //     <Backdrop open>
+  //       <CircularProgress />
+  //     </Backdrop>
+  //   );
+
+  // if (!auth.isAuthenticated) {
+  //   return <Disconnected />;
+  // }
+
+  return children;
 };

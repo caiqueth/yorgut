@@ -16,7 +16,7 @@ import { UserProfilePicture } from "components/organisms/UserProfilePicture";
 import { Menu } from "pages/Home/components/Menu";
 import React, { useState } from "react";
 
-interface IProps {}
+interface IProps { }
 export const Scrapbook: React.FC<IProps> = () => {
   const { mutate: sendScrap } = useSendScrap();
   const { data: scraps } = useScraps();
@@ -45,8 +45,8 @@ export const Scrapbook: React.FC<IProps> = () => {
       <Grid container spacing={2}>
         <Grid size={2}>
           <Stack direction={"column"} gap={2}>
-            <UserProfilePicture userId={userId} />
-            <Menu userId={userId} />
+            <UserProfilePicture />
+            <Menu />
           </Stack>
         </Grid>
         <Grid size={10}>

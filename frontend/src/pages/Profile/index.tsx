@@ -19,7 +19,7 @@ export const Profile: React.FC = () => {
       <Grid container spacing={2}>
         <Grid size={2}>
           <Stack direction={"column"} gap={2}>
-            <UserProfilePicture userId={userId} />
+            <UserProfilePicture />
             <ProfileMenu userId={userId} />
           </Stack>
         </Grid>

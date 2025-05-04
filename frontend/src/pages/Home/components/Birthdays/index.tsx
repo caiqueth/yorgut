@@ -35,11 +35,9 @@ const Item: React.FC<ItemProps> = ({
   );
 };
 
-interface IBirthdaysProps {
-  userId: number;
-}
-export const Birthdays: React.FC<IBirthdaysProps> = ({ userId }) => {
-  const { data: friends } = useUserFriends(userId);
+interface IBirthdaysProps { };
+export const Birthdays: React.FC<IBirthdaysProps> = () => {
+  const { data: friends } = useUserFriends();
 
   const items =
     friends?.friends.map((f) => (
