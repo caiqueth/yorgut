@@ -111,16 +111,12 @@ func (u *UserService) FindUserById(id uint) (*dto.FindUserResponse, error) {
 
 }
 
-func (u *UserService) FindUserByEmail(email string) (*dto.FindUserResponse, error) {
+func (u *UserService) FindUserByEmail(email string) (*model.User, error) {
 	user, err := u.userRepository.FindByEmail(email)
 	if err != nil {
 		return nil, err
 	}
-
-	resp := dto.FindUserResponse{}
-	resp.FromUser(user)
-
-	return &resp, nil
+	return user, nil
 
 }
 
@@ -157,7 +153,7 @@ func (u *UserService) FindUserOwnedCommunities(userId uint) (*dto.FindUserCommun
 
 }
 
-func (u *UserService) FindUserPhotoAlbums(userId int) (*dto.FindPhotoAlbumOfUserResponse, error) {
+func (u *UserService) FindUserPhotoAlbums(userId uint) (*dto.FindPhotoAlbumOfUserResponse, error) {
 	photoAlbums, err := u.photoAlbumRepository.FindOfUser(userId)
 	if err != nil {
 		return nil, err
@@ -357,7 +353,7 @@ func (p *PhotoAlbumService) DeletePhotoAlbum(id uint) error {
 	return err
 }
 
-func (p *PhotoAlbumService) FindPhotoAlbumOfUser(userId int) (*dto.FindPhotoAlbumOfUserResponse, error) {
+func (p *PhotoAlbumService) FindPhotoAlbumOfUser(userId uint) (*dto.FindPhotoAlbumOfUserResponse, error) {
 	photoAlbums, err := p.photoAlbumRepository.FindOfUser(userId)
 	if err != nil {
 		return nil, err

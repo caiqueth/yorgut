@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strings"
 	"yorgut/internal/helpers"
+	"yorgut/internal/service"
 
 	"github.com/gin-gonic/gin"
 )
@@ -34,6 +35,21 @@ func JWTMiddleware() gin.HandlerFunc {
 		// Store the token in the context
 		helpers.SetJWTToken(c, parsed)
 
+		c.Next()
+	}
+}
+
+func InjectUserMiddleware(userService *service.UserService) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		email := helpers.GetUserEmail(c)
+
+		user, err := userService.FindUserByEmail(email)
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "User fetch failed"})
+			return
+		}
+
+		c.Set("user", user)
 		c.Next()
 	}
 }

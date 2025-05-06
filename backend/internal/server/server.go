@@ -78,6 +78,7 @@ func NewServer() *http.Server {
 		photoController,
 		scrapController,
 		testimonialController,
+		userService,
 	)
 
 	// Declare Server config

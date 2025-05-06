@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"yorgut/internal/controller"
 	"yorgut/internal/helpers"
+	"yorgut/internal/service"
 
 	_ "yorgut/docs"
 
@@ -34,10 +35,13 @@ func NewRouter(
 	photoController *controller.PhotoController,
 	scrapController *controller.ScrapController,
 	testimonialController *controller.TestimonialController,
+	userService *service.UserService,
 ) *gin.Engine {
 	router := gin.Default()
 
 	router.Static("/storage/uploads", helpers.GetUploadsPath(true))
+
+	userInjector := InjectUserMiddleware(userService)
 
 	router.Use(JWTMiddleware())
 	router.Use(cors.New(cors.Config{
@@ -55,21 +59,21 @@ func NewRouter(
 
 	v1 := router.Group("/api/v1")
 	{
-		users := v1.Group("/user")
+		users := v1.Group("/user", userInjector)
 		{
 			users.POST("", userController.Create)
 			users.GET("", userController.FindMany)
 			users.PUT("", userController.Update)
+			users.DELETE("", userController.Delete)
 			users.GET("/me", userController.FindWithToken)
 			users.GET("/:userId", userController.FindById)
-			users.GET("/:userId/profile", userController.FindWithProfileById)
-			users.DELETE("/:userId", userController.Delete)
-			users.GET("/:userId/memberships", userController.FindMemberships)
-			users.GET("/:userId/friends", userController.FindFriends)
-			users.GET("/:userId/friendships/pending", userController.FindPendingFriendships)
-			users.GET("/:userId/photoAlbums", userController.FindPhotoAlbums)
-			users.POST("/:userId/join/:communityId", userController.JoinCommunity)
-			users.POST("/:userId/leave/:communityId", userController.LeaveCommunity)
+			users.GET("/profile", userController.FindUserProfile)
+			users.GET("/memberships", userController.FindMemberships)
+			users.GET("/friends", userController.FindFriends)
+			users.GET("/friendships/pending", userController.FindPendingFriendships)
+			users.GET("/photoAlbums", userController.FindPhotoAlbums)
+			users.POST("/join/:communityId", userController.JoinCommunity)
+			users.POST("/leave/:communityId", userController.LeaveCommunity)
 		}
 
 		communities := v1.Group("/community")

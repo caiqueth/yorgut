@@ -46,7 +46,7 @@ func (c *CommunityMembershipRepository) FindMembersOfCommunity(communityId uint)
 }
 
 // PhotoAlbum
-func (p *PhotoAlbumRepository) FindOfUser(userId int) ([]model.PhotoAlbum, error) {
+func (p *PhotoAlbumRepository) FindOfUser(userId uint) ([]model.PhotoAlbum, error) {
 	var ents []model.PhotoAlbum
 	result := p.db.Where("user_id = ?", userId).Find(&ents)
 	if result.Error != nil {

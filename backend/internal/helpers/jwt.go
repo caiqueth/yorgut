@@ -4,10 +4,13 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"errors"
+	"net/http"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 )
+
+var USER_TOKEN_KEY string = "user_token"
 
 type Token struct {
 	Iss            string
@@ -57,15 +60,25 @@ func ValidateToken(token Token) Token {
 }
 
 func SetJWTToken(c *gin.Context, token *Token) {
-	c.Set("user_token", token)
+	c.Set(USER_TOKEN_KEY, token)
 }
 
 func GetTokenFromContext(c *gin.Context) (*Token, bool) {
-	value, exists := c.Get("user_token")
+	value, exists := c.Get(USER_TOKEN_KEY)
 	if !exists {
 		return nil, false
 	}
 
 	token, ok := value.(*Token)
 	return token, ok
+}
+
+func GetUserEmail(c *gin.Context) string {
+	tkn, ok := GetTokenFromContext(c)
+	if !ok {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "could not find auth token"})
+		return ""
+	}
+
+	return tkn.Email
 }

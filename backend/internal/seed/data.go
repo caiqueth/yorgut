@@ -51,7 +51,7 @@ func GetUsersSeed() []*model.User {
 		{
 			FirstName: "Lígia",
 			LastName:  "Test",
-			Email:     "ligia@test.com",
+			Email:     "ligiasalton@gmail.com",
 			BirthDate: time.Date(1950, 1, 10, 0, 0, 0, 0, time.Local),
 			Profile: &model.UserProfile{
 				ProfilePicture: uploadFromSeed("profile_pictures/ligia.jpg"),
