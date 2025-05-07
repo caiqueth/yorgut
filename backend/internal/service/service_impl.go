@@ -57,7 +57,7 @@ func (u *UserService) DeleteUser(id uint) error {
 	return nil
 }
 
-func (u *UserService) FindManyUsers() (*dto.Response, error) {
+func (u *UserService) FindManyUsers() (*dto.FindManyUsersResponse, error) {
 	users, err := u.userRepository.FindMany()
 	if err != nil {
 		return nil, err
@@ -77,8 +77,8 @@ func (u *UserService) FindManyUsers() (*dto.Response, error) {
 		}
 	}
 
-	return &dto.Response{
-		Data: map[string][]dto.UserDto{"users": userDtos},
+	return &dto.FindManyUsersResponse{
+		Users: userDtos,
 	}, nil
 }
 

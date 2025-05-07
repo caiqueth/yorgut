@@ -5,10 +5,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import {
-  useScraps,
-  useSendScrap,
-} from "api/user/queries";
+
 import { Button } from "components/atoms/Button";
 import { BoxWithTitle } from "components/molecules/BoxWithTitle";
 import { StripedGrid } from "components/molecules/StripedGrid";

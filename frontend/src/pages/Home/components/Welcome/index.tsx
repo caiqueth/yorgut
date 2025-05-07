@@ -1,15 +1,19 @@
 import React from "react";
-import { useTodaysLuck, useUser, useUserStatistics } from "api/user/queries";
+import { useTodaysLuck, useUserStatistics } from "api/user/queries";
 
 import { Box, Paper, Stack, Typography } from "@mui/material";
 import { dayjsFromDate } from "helpers/formatting/date";
+import { useMe } from "api/me/queries";
 
 interface IProps {
 
 }
 export const Welcome: React.FC<IProps> = () => {
-  const { data: user } = useUser();
-  const userStatistics = useUserStatistics();
+  const { data: user } = useMe();
+
+  if (!user) return null;
+
+  const userStatistics = useUserStatistics(user.id);
   const todaysLuck = useTodaysLuck();
 
   if (!user) return null;

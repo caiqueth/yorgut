@@ -1,24 +1,24 @@
 import { Box, Stack, Typography } from "@mui/material";
 import { Button } from "components/atoms/Button";
-import { useUserPendingFriendships } from "api/user/queries";
 import { BoxWithTitle } from "components/molecules/BoxWithTitle";
 import React from "react";
 import { palette } from "theme";
 import { isStripedRow } from "helpers/isStripedRow";
 import { Link } from "react-router-dom";
+import { useMeFriendsPending } from "api/me/queries";
 
 interface IPendingInvitesProps { };
 export const PendingInvites: React.FC<IPendingInvitesProps> = () => {
-  const { data } = useUserPendingFriendships();
+  const { data } = useMeFriendsPending();
 
   if (!data) return null;
-  if (data.pendingFriendships.length <= 0) return null;
+  if (data.friends.length <= 0) return null;
 
   return (
     <BoxWithTitle
-      title={`novos pedidos de amizade (${data.pendingFriendships.length})`}
+      title={`novos pedidos de amizade (${data.friends.length})`}
     >
-      {data?.pendingFriendships.map((pf, idx) => (
+      {data?.friends.map((pf, idx) => (
         <Box
           sx={{
             backgroundColor: isStripedRow(idx, 1)
@@ -37,7 +37,7 @@ export const PendingInvites: React.FC<IPendingInvitesProps> = () => {
             <Box>
               <Stack direction={"column"}>
                 <Typography>
-                  {pf.firstName} {pf.lastName}
+                  {pf.firstName}
                 </Typography>
                 <Typography>{pf.firstName} é seu(sua) amigo(a)?</Typography>
                 <Box>

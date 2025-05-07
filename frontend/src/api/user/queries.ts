@@ -1,46 +1,55 @@
-import { doGet, doPost } from "api/http";
+import { doGet } from "api/http";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
 import {
-  ICommunityMembershipsResponse,
-  ICommunityMembersResponse,
-  ICommunityProfileResponse,
-  ICommunityResponse,
-  ICreateScrapRequest,
-  IFriendsResponse,
-  IPendingFriendshipsResponse,
-  IRelatedCommunitiesResponse,
-  IScrapsResponse,
+  IUserFriendsResponse,
+  IUserMembershipsResponse,
+  IUserPhotoAlbumsResponse,
   IUserProfileResponse,
   IUserResponse,
+  IUsersResponse,
 } from "./types";
 
-export const useUser = () =>
-  useQuery<IUserResponse>({
-    queryKey: [`/api/user`],
-    queryFn: ({ queryKey }) => doGet<IUserResponse>({ queryKey }),
+const basePath = "/api/users";
+
+export const useUsers = () =>
+  useQuery<IUsersResponse>({
+    queryKey: [`${basePath}`],
+    queryFn: ({ queryKey }) => doGet({ queryKey }),
   });
 
-export const useUserData = () =>
-  useQuery({
-    queryKey: [`/api/user/me`],
+export const useUser = (userId: number) =>
+  useQuery<IUserResponse>({
+    queryKey: [`${basePath}/${userId}`],
+    queryFn: ({ queryKey }) => doGet({ queryKey }),
+  });
+
+export const useUserFriends = (userId: number) =>
+  useQuery<IUserFriendsResponse>({
+    queryKey: [`${basePath}/${userId}/friends`],
+    queryFn: ({ queryKey }) => doGet({ queryKey }),
+  });
+
+export const useUserMemberships = (userId: number) =>
+  useQuery<IUserMembershipsResponse>({
+    queryKey: [`${basePath}/${userId}/memberships`],
+    queryFn: ({ queryKey }) => doGet({ queryKey }),
+  });
+
+export const useUserPhotoAlbums = (userId: number) =>
+  useQuery<IUserPhotoAlbumsResponse>({
+    queryKey: [`${basePath}/${userId}/photoAlbums`],
     queryFn: ({ queryKey }) => doGet({ queryKey }),
   });
 
 export const useUserProfile = (userId: number) =>
   useQuery<IUserProfileResponse>({
-    queryKey: [`/api/user/${userId}/profile`],
-    queryFn: ({ queryKey }) => doGet<IUserProfileResponse>({ queryKey }),
+    queryKey: [`${basePath}/${userId}/profile`],
+    queryFn: ({ queryKey }) => doGet({ queryKey }),
   });
 
-export const useUserPendingFriendships = () =>
-  useQuery<IPendingFriendshipsResponse>({
-    queryKey: [`/api/user/friendships/pending`],
-    queryFn: ({ queryKey }) => doGet<IPendingFriendshipsResponse>({ queryKey }),
-  });
-
-export const useUserStatistics = () => ({
+export const useUserStatistics = (userId: number) => ({
   totalProfileViews: 3558,
   lastWeekProfileViews: 45,
   totalFriends: 111,
@@ -54,108 +63,15 @@ export const useUserStatistics = () => ({
   cool: 1,
   beautiful: 1,
   profileLastVisitors: [
-    { name: "Aline", birthDay: new Date(), friends: 123 },
-    { name: "Caique", birthDay: new Date(), friends: 123 },
-    { name: "Carol", birthDay: new Date(), friends: 123 },
-    { name: "Diego", birthDay: new Date(), friends: 123 },
-    { name: "Lígia", birthDay: new Date(), friends: 123 },
-    { name: "Luciana", birthDay: new Date(), friends: 123 },
-    { name: "Renato", birthDay: new Date(), friends: 123 },
-    { name: "Weslley", birthDay: new Date(), friends: 123 },
+    { name: "Aline" },
+    { name: "Caique" },
+    { name: "Carol" },
+    { name: "Diego" },
+    { name: "Lígia" },
+    { name: "Luciana" },
+    { name: "Renato" },
+    { name: "Weslley" },
   ],
 });
 
-export const useUserFriends = () =>
-  useQuery<IFriendsResponse>({
-    queryKey: [`/api/user/friends`],
-    queryFn: ({ queryKey }) => doGet({ queryKey }),
-  });
-
-export const useUserMemberships = () =>
-  useQuery<ICommunityMembershipsResponse>({
-    queryKey: [`/api/user/memberships`],
-    queryFn: ({ queryKey }) => doGet({ queryKey }),
-  });
-
-export const useJoinCommunity = () => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: ({ communityId }: { communityId: number }) =>
-      doPost({ url: `/api/user/join/${communityId}`, body: {} }),
-    onSettled: (_data, _error, variables) => {
-      queryClient.invalidateQueries({
-        queryKey: [`/api/user/memberships`],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [`/api/community/${variables.communityId}/members`],
-      });
-    },
-  });
-};
-
-export const useLeaveCommunity = () => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: ({ communityId }: { communityId: number }) =>
-      doPost({ url: `/api/user/leave/${communityId}`, body: {} }),
-    onSettled: (_data, _error, variables) => {
-      queryClient.invalidateQueries({
-        queryKey: [`/api/user/memberships`],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [`/api/community/${variables.communityId}/members`],
-      });
-    },
-  });
-};
-
-export const useSendScrap = () => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (payload: ICreateScrapRequest) =>
-      doPost({ url: `/api/scrap`, body: payload }),
-    onSettled: (_data, _error, variables) => {
-      queryClient.invalidateQueries({
-        queryKey: [`/api/scrap/${variables.userRecipientId}`],
-      });
-    },
-  });
-};
-
-export const useScraps = (userId: number) =>
-  useQuery<IScrapsResponse>({
-    queryKey: [`/api/scrap/user/${userId}`],
-    queryFn: ({ queryKey }) => doGet<IScrapsResponse>({ queryKey }),
-  });
-
-export const useScrapsOfUser = (userId: number) =>
-  useQuery<IScrapsResponse>({
-    queryKey: [`/api/scrap/user/${userId}`],
-    queryFn: ({ queryKey }) => doGet<IScrapsResponse>({ queryKey }),
-  });
-
-export const useTodaysLuck = () => "Boas notícias chegarão por e-mail";
-
-export const useCommunity = (communityId: number) =>
-  useQuery<ICommunityResponse>({
-    queryKey: [`/api/community/${communityId}`],
-    queryFn: ({ queryKey }) => doGet<ICommunityResponse>({ queryKey }),
-  });
-
-export const useRelatedCommunities = (communityId: number) =>
-  useQuery<IRelatedCommunitiesResponse>({
-    queryKey: [`/api/community/${communityId}/related`],
-    queryFn: ({ queryKey }) => doGet<IRelatedCommunitiesResponse>({ queryKey }),
-  });
-
-export const useCommunityProfile = (communityId: number) =>
-  useQuery<ICommunityProfileResponse>({
-    queryKey: [`/api/community/${communityId}/profile`],
-    queryFn: ({ queryKey }) => doGet<ICommunityProfileResponse>({ queryKey }),
-  });
-
-export const useCommunityMembers = (communityId: number) =>
-  useQuery<ICommunityMembersResponse>({
-    queryKey: [`/api/community/${communityId}/members`],
-    queryFn: ({ queryKey }) => doGet<ICommunityMembersResponse>({ queryKey }),
-  });
+export const useTodaysLuck = () => `Boas notícias chegarão por e-mail.`;

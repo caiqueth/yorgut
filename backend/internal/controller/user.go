@@ -56,7 +56,7 @@ func (uc *UserController) Create(ctx *gin.Context) {
 // @Description			Returns a list of users
 // @Produce				application/json
 // @Tags				Users
-// @Success				200 {object} dto.Response{}
+// @Success				200 {object} dto.FindManyUsersResponse{}
 // @Router				/users [get]
 func (uc *UserController) FindMany(ctx *gin.Context) {
 	users, err := uc.userService.FindManyUsers()

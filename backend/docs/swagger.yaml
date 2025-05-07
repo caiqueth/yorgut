@@ -113,6 +113,13 @@ definitions:
     type: object
   dto.FindManyCommunitiesResponse:
     type: object
+  dto.FindManyUsersResponse:
+    properties:
+      users:
+        items:
+          $ref: '#/definitions/dto.UserDto'
+        type: array
+    type: object
   dto.FindPhotoAlbumOfUserResponse:
     properties:
       photoAlbums:
@@ -244,6 +251,25 @@ definitions:
         type: string
       id:
         type: integer
+    type: object
+  dto.UserDto:
+    properties:
+      birthDate:
+        type: string
+      createdAt:
+        type: string
+      email:
+        type: string
+      firstName:
+        type: string
+      friendCount:
+        type: integer
+      id:
+        type: integer
+      lastName:
+        type: string
+      updatedAt:
+        type: string
     type: object
 host: localhost:8080
 info:
@@ -520,6 +546,19 @@ paths:
       tags:
       - Me
   /me/friends:
+    get:
+      description: Returns a list of friends
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.FindFriendsOfUserResponse'
+      summary: Gets a list of friends of the user.
+      tags:
+      - Me
+  /me/friends/pending:
     get:
       description: Returns a list of users
       produces:
@@ -817,7 +856,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.Response'
+            $ref: '#/definitions/dto.FindManyUsersResponse'
       summary: Gets a list of users.
       tags:
       - Users

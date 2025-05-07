@@ -421,6 +421,26 @@ const docTemplate = `{
         },
         "/me/friends": {
             "get": {
+                "description": "Returns a list of friends",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Me"
+                ],
+                "summary": "Gets a list of friends of the user.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.FindFriendsOfUserResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/me/friends/pending": {
+            "get": {
                 "description": "Returns a list of users",
                 "produces": [
                     "application/json"
@@ -876,7 +896,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.Response"
+                            "$ref": "#/definitions/dto.FindManyUsersResponse"
                         }
                     }
                 }
@@ -1233,6 +1253,17 @@ const docTemplate = `{
         "dto.FindManyCommunitiesResponse": {
             "type": "object"
         },
+        "dto.FindManyUsersResponse": {
+            "type": "object",
+            "properties": {
+                "users": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.UserDto"
+                    }
+                }
+            }
+        },
         "dto.FindPhotoAlbumOfUserResponse": {
             "type": "object",
             "properties": {
@@ -1432,6 +1463,35 @@ const docTemplate = `{
                 },
                 "id": {
                     "type": "integer"
+                }
+            }
+        },
+        "dto.UserDto": {
+            "type": "object",
+            "properties": {
+                "birthDate": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "friendCount": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
                 }
             }
         }

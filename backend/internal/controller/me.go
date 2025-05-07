@@ -125,7 +125,7 @@ func (uc *MeController) FindMyFriends(ctx *gin.Context) {
 // @Produce					application/json
 // @Tags					Me
 // @Success					200 {object} dto.FindFriendsOfUserResponse{}
-// @Router					/me/friends [get]
+// @Router					/me/friends/pending [get]
 func (uc *MeController) FindMyPendingFriendships(ctx *gin.Context) {
 	user := ctx.MustGet("user").(*model.User)
 	friendships, err := uc.userService.FindPendingFriendshipsOfUser(user.ID)

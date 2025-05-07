@@ -63,7 +63,7 @@ func NewRouter(
 			me.GET("/profile", meController.FindMyProfile)
 			me.GET("/memberships", meController.FindMyMemberships)
 			me.GET("/friends", meController.FindMyFriends)
-			me.GET("/friendships/pending", meController.FindMyPendingFriendships)
+			me.GET("/friends/pending", meController.FindMyPendingFriendships)
 			me.GET("/photoAlbums", meController.FindMyPhotoAlbums)
 			me.POST("/join/:communityId", meController.JoinCommunity)
 			me.POST("/leave/:communityId", meController.LeaveCommunity)

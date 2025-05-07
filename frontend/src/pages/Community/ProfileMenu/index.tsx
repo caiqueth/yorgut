@@ -3,18 +3,18 @@ import { LateralButtonList } from "components/molecules/LateralButtonList";
 
 import { Box } from "@mui/material";
 import {
-  useJoinCommunity,
-  useLeaveCommunity,
   useUserMemberships,
 } from "api/user/queries";
 import { useNavigate } from "react-router-dom";
+import { useJoinCommunity, useLeaveCommunity } from "api/me/queries";
+import { useCommunityMembers } from "api/community/queries";
 
 interface IProfileMenuProps {
   communityId: number;
 }
 export const ProfileMenu: React.FC<IProfileMenuProps> = ({ communityId }) => {
   const [isMemberOf, setIsMemberOf] = useState(false);
-  const { data: memberships, isFetching } = useUserMemberships();
+  const { data: memberships, isFetching } = useCommunityMembers();
   const { mutate: joinCommunity } = useJoinCommunity();
   const { mutate: leaveCommunity } = useLeaveCommunity();
 

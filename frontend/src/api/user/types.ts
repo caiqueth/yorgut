@@ -1,108 +1,79 @@
+export interface IUsersResponse {
+  users: {
+    birthDate: string;
+    createdAt: string;
+    email: string;
+    firstName: string;
+    friendCount: number;
+    id: number;
+    lastName: string;
+    updatedAt: string;
+  }[];
+}
+
 export interface IUserResponse {
-  id: string;
+  birthDate: string;
+  createdAt: string;
   email: string;
   firstName: string;
-  lastName: string;
-  birthDate: string;
-  createdAt: Date;
-  updatedAt: Date;
   friendCount: number;
+  id: number;
+  lastName: string;
+  updatedAt: string;
+}
+
+export interface IUserFriendsResponse {
+  friends: {
+    birthDate: string;
+    firstName: string;
+    friendCount: number;
+    id: number;
+    profilePicture: string;
+  }[];
+}
+
+export interface IUserMembershipsResponse {
+  communities: {
+    firstName: number;
+    id: number;
+    membershipCount: number;
+    name: string;
+    profilePicture: string;
+  }[];
+}
+
+export interface IUserPhotoAlbumsResponse {
+  photoAlbums: {
+    name: string;
+    userId: number;
+  }[];
 }
 
 export interface IUserProfileResponse {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
+  about: string;
+  birthCity: string;
   birthDate: string;
-  profilePicture?: string;
-  description?: string;
-  relationshipStatus?: string;
-  interests?: string;
-  about?: string;
-  religion?: string;
-  humor?: string;
-  fashion?: string;
-  livesWith?: string;
-  birthCity?: string;
-  website?: string;
-  passions?: string;
-  sports?: string;
-  hobbies?: string;
-  books?: string;
-  music?: string;
-  movies?: string;
-  cuisine?: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-export interface IFriendsResponse {
-  friends: {
-    id: string;
-    firstName: string;
-    birthDate: Date;
-    profilePicture: string;
-    friendCount: number;
-  }[];
-}
-
-export interface IPendingFriendshipsResponse {
-  pendingFriendships: {
-    id: string;
-    firstName: string;
-    lastName: string;
-    profilePicture: string;
-  }[];
-}
-
-export interface ICommunityMembershipsResponse {
-  communities: {
-    id: number;
-    name: string;
-    profilePicture: string;
-    membershipCount: number;
-  }[];
-}
-
-export interface ICommunityResponse {
-  name: string;
-  memberCount: number;
-}
-
-export interface ICommunityProfileResponse {
+  books: string;
+  createdAt: string;
+  cuisine: string;
   description: string;
-  profilePicture: string;
-}
-
-export interface ICommunityMember {
-  id: number;
+  email: string;
+  fashion: string;
   firstName: string;
-  profilePicture: string;
   friendCount: number;
-}
-
-export interface ICommunityMembersResponse {
-  members: ICommunityMember[];
-  memberCount: number;
-}
-
-export interface IRelatedCommunitiesResponse {
-  communities: any[];
-  memberCount: number;
-}
-
-export interface ICreateScrapRequest {
-  userRecipientId: number;
-  content: string;
-}
-
-export interface IScrapsResponse {
-  scraps: {
-    id: number;
-    content: string;
-    authorId: number;
-    authorName: string;
-    authorProfilePicture: string;
-  }[];
+  hobbies: string;
+  humor: string;
+  id: number;
+  interests: string;
+  lastName: string;
+  livesWith: string;
+  movies: string;
+  music: string;
+  passions: string;
+  profilePicture: string;
+  relationshipStatus: string;
+  religion: string;
+  sports: string;
+  updatedAt: string;
+  website: string;
 }
