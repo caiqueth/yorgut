@@ -9,6 +9,15 @@ type Response struct {
 	Data interface{} `json:"data,omitempty"`
 }
 
+type FindUserByIdResponse struct {
+	ID          uint
+	Email       string
+	FirstName   string
+	LastName    string
+	BirthDate   time.Time
+	FriendCount uint
+}
+
 type CreateCommunityMembershipRequest struct {
 	CommunityID uint `json:"communityId"`
 	UserID      uint `json:"userId"`
@@ -117,7 +126,6 @@ type FindPhotoOfUserResponse struct{}
 type FindPhotoOfAlbumResponse struct{}
 
 type CreateScrapRequest struct {
-	UserAuthorID    uint   `json:"userAuthorId"`
 	UserRecipientID uint   `json:"userRecipientId"`
 	Content         string `json:"content"`
 }

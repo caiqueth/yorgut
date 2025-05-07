@@ -2,20 +2,33 @@ basePath: /api/v1
 definitions:
   dto.CommunityDto:
     properties:
-      createdBy:
+      firstName:
         type: integer
-      description:
-        type: string
+      id:
+        type: integer
+      membershipCount:
+        type: integer
       name:
         type: string
-      pictureUrl:
+      profilePicture:
+        type: string
+    type: object
+  dto.CommunityMemberEntry:
+    properties:
+      firstName:
+        type: string
+      friendCount:
+        type: integer
+      id:
+        type: integer
+      profilePicture:
         type: string
     type: object
   dto.CreateCommunityMembershipRequest:
     properties:
-      communityID:
+      communityId:
         type: integer
-      userID:
+      userId:
         type: integer
     type: object
   dto.CreateFriendshipRequest:
@@ -29,34 +42,32 @@ definitions:
     properties:
       name:
         type: string
-      userID:
+      userId:
         type: integer
     type: object
   dto.CreatePhotoRequest:
     properties:
       caption:
         type: string
-      photoAlbumID:
+      photoAlbumId:
         type: integer
-      url:
+      uRL:
         type: string
     type: object
   dto.CreateScrapRequest:
     properties:
       content:
         type: string
-      userAuthorID:
-        type: integer
-      userRecipientID:
+      userRecipientId:
         type: integer
     type: object
   dto.CreateTestimonialRequest:
     properties:
       content:
         type: string
-      userAuthorID:
+      userAuthorId:
         type: integer
-      userRecipientID:
+      userRecipientId:
         type: integer
     type: object
   dto.CreateUserRequest:
@@ -74,18 +85,30 @@ definitions:
     properties:
       createdBy:
         type: integer
-      description:
-        type: string
       name:
         type: string
-      pictureUrl:
+    type: object
+  dto.FindCommunityMembersResponse:
+    properties:
+      memberCount:
+        type: integer
+      members:
+        items:
+          $ref: '#/definitions/dto.CommunityMemberEntry'
+        type: array
+    type: object
+  dto.FindCommunityProfileByIdResponse:
+    properties:
+      description:
+        type: string
+      profilePicture:
         type: string
     type: object
-  dto.FindFriendshipOfUserResponse:
+  dto.FindFriendsOfUserResponse:
     properties:
-      friendships:
+      friends:
         items:
-          $ref: '#/definitions/dto.FriendshipDto'
+          $ref: '#/definitions/dto.FriendDto'
         type: array
     type: object
   dto.FindManyCommunitiesResponse:
@@ -97,7 +120,21 @@ definitions:
           $ref: '#/definitions/dto.PhotoAlbumDto'
         type: array
     type: object
-  dto.FindUserByIdResponse:
+  dto.FindScrapOfUserRecipientResponse:
+    properties:
+      scraps:
+        items:
+          $ref: '#/definitions/dto.ScrapDto'
+        type: array
+    type: object
+  dto.FindUserMembershipsResponse:
+    properties:
+      communities:
+        items:
+          $ref: '#/definitions/dto.CommunityDto'
+        type: array
+    type: object
+  dto.FindUserResponse:
     properties:
       birthDate:
         type: string
@@ -107,6 +144,8 @@ definitions:
         type: string
       firstName:
         type: string
+      friendCount:
+        type: integer
       id:
         type: integer
       lastName:
@@ -114,32 +153,97 @@ definitions:
       updatedAt:
         type: string
     type: object
-  dto.FindUserMembershipsResponse:
+  dto.FindUserWithProfileByIdResponse:
     properties:
-      communities:
-        items:
-          $ref: '#/definitions/dto.CommunityDto'
-        type: array
-    type: object
-  dto.FriendshipDto:
-    properties:
+      about:
+        type: string
+      birthCity:
+        type: string
+      birthDate:
+        type: string
+      books:
+        type: string
       createdAt:
         type: string
-      userRequestedID:
+      cuisine:
+        type: string
+      description:
+        type: string
+      email:
+        type: string
+      fashion:
+        type: string
+      firstName:
+        type: string
+      friendCount:
         type: integer
-      userRequesteeID:
+      hobbies:
+        type: string
+      humor:
+        type: string
+      id:
         type: integer
+      interests:
+        type: string
+      lastName:
+        type: string
+      livesWith:
+        type: string
+      movies:
+        type: string
+      music:
+        type: string
+      passions:
+        type: string
+      profilePicture:
+        type: string
+      relationshipStatus:
+        type: string
+      religion:
+        type: string
+      sports:
+        type: string
+      updatedAt:
+        type: string
+      website:
+        type: string
+    type: object
+  dto.FriendDto:
+    properties:
+      birthDate:
+        type: string
+      firstName:
+        type: string
+      friendCount:
+        type: integer
+      id:
+        type: integer
+      profilePicture:
+        type: string
     type: object
   dto.PhotoAlbumDto:
     properties:
       name:
         type: string
-      userID:
+      userId:
         type: integer
     type: object
   dto.Response:
     properties:
       data: {}
+    type: object
+  dto.ScrapDto:
+    properties:
+      authorId:
+        type: integer
+      authorName:
+        type: string
+      authorProfilePicture:
+        type: string
+      content:
+        type: string
+      id:
+        type: integer
     type: object
 host: localhost:8080
 info:
@@ -242,6 +346,45 @@ paths:
       summary: Get Single community by id.
       tags:
       - Community
+  /community/{communityId}/members:
+    get:
+      description: Returns a list of the community members matching the requested
+        id and a few stats
+      parameters:
+      - description: get community members by id
+        in: path
+        name: communityId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.FindCommunityMembersResponse'
+      summary: Get community members.
+      tags:
+      - Community
+  /community/{communityId}/profile:
+    get:
+      description: Returns the community profile matching the requested id
+      parameters:
+      - description: get community profile by id
+        in: path
+        name: communityId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.FindCommunityProfileByIdResponse'
+      summary: Get Single community profile by its id.
+      tags:
+      - Community
   /community_membership:
     post:
       parameters:
@@ -259,24 +402,6 @@ paths:
           schema:
             $ref: '#/definitions/dto.Response'
       summary: Create Community Membership
-      tags:
-      - CommunityMembership
-  /community_membership/{userId}:
-    get:
-      parameters:
-      - description: id of the user
-        in: path
-        name: userId
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/dto.Response'
-      summary: Lists communities that a user is member of
       tags:
       - CommunityMembership
   /community_membership/{userId}/{communityId}:
@@ -302,6 +427,34 @@ paths:
       summary: Delete Community Membership
       tags:
       - CommunityMembership
+  /community_profile:
+    post:
+      parameters:
+      - description: Community Name
+        in: formData
+        name: communityId
+        required: true
+        type: string
+      - description: Community Description
+        in: formData
+        name: description
+        required: true
+        type: string
+      - description: Community Picture
+        in: formData
+        name: picture
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.Response'
+      summary: Create Community Profile
+      tags:
+      - Community
   /friendship:
     post:
       description: Creates a Friendship.
@@ -341,6 +494,121 @@ paths:
       summary: Delete Friendship by id.
       tags:
       - Friendship
+  /me:
+    get:
+      description: Returns the user matching the requested id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.FindUserResponse'
+      summary: Get Single user by id.
+      tags:
+      - User
+    put:
+      description: Returns null
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Response'
+      summary: Update user
+      tags:
+      - User
+  /me/friends:
+    get:
+      description: Returns a list of users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.FindFriendsOfUserResponse'
+      summary: Gets a list of friendship invites of the user.
+      tags:
+      - User
+  /me/join/{communityId}:
+    post:
+      description: Joins a community.
+      parameters:
+      - description: community Id
+        in: path
+        name: communityId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.Response'
+      summary: User joins a community.
+      tags:
+      - User
+  /me/leave/{communityId}:
+    post:
+      description: Leaves a community.
+      parameters:
+      - description: community Id
+        in: path
+        name: communityId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.Response'
+      summary: User leaves a community.
+      tags:
+      - User
+  /me/memberships:
+    get:
+      description: Returns a list of communities
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.FindUserMembershipsResponse'
+      summary: Gets a list of communities that user is member of.
+      tags:
+      - User
+  /me/photoAlbums:
+    get:
+      description: Returns a list of photo albums
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.FindPhotoAlbumOfUserResponse'
+      summary: Gets a list of photo albums of the user.
+      tags:
+      - User
+  /me/profile:
+    get:
+      description: Returns the user matching the token
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.FindUserWithProfileByIdResponse'
+      summary: Get logged user with it's profile by their Token.
+      tags:
+      - User
   /photo:
     post:
       description: Creates a Photo.
@@ -482,6 +750,19 @@ paths:
       summary: Delete Scrap by id.
       tags:
       - Scrap
+  /scrap/user/{userId}:
+    get:
+      description: Returns a list of scraps
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.FindScrapOfUserRecipientResponse'
+      summary: Gets a list of scraps of a user.
+      tags:
+      - User
   /testimonial:
     post:
       description: Creates a Testimonial.
@@ -521,7 +802,7 @@ paths:
       summary: Delete Testimonial by id.
       tags:
       - Testimonial
-  /user:
+  /users:
     get:
       description: Returns a list of users
       produces:
@@ -552,43 +833,7 @@ paths:
       summary: Create user
       tags:
       - User
-    put:
-      description: Returns null
-      parameters:
-      - description: update user
-        in: path
-        name: userId
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/dto.Response'
-      summary: Update user
-      tags:
-      - User
-  /user/{userId}:
-    delete:
-      description: Deletes the user matching the requested id
-      parameters:
-      - description: delete user by id
-        in: path
-        name: userId
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/dto.Response'
-      summary: Delete User by id
-      tags:
-      - User
+  /users/{userId}:
     get:
       description: Returns the user matching the requested id
       parameters:
@@ -603,11 +848,30 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.FindUserByIdResponse'
+            $ref: '#/definitions/dto.FindUserResponse'
       summary: Get Single user by id.
       tags:
       - User
-  /user/{userId}/friends:
+  /users/{userId}/profile:
+    get:
+      description: Returns the user matching the requested id
+      parameters:
+      - description: get user by id
+        in: path
+        name: userId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.FindUserWithProfileByIdResponse'
+      summary: Get Single user with it's profile by id.
+      tags:
+      - User
+  /users/friends:
     get:
       description: Returns a list of friends
       parameters:
@@ -622,35 +886,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.FindFriendshipOfUserResponse'
+            $ref: '#/definitions/dto.FindFriendsOfUserResponse'
       summary: Gets a list of friends of the user.
       tags:
       - User
-  /user/{userId}/join/{communityId}:
-    post:
-      description: Joins a community.
-      parameters:
-      - description: user Id
-        in: path
-        name: userId
-        required: true
-        type: string
-      - description: community Id
-        in: path
-        name: communityId
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            $ref: '#/definitions/dto.Response'
-      summary: User joins a community.
-      tags:
-      - User
-  /user/{userId}/memberships:
+  /users/memberships:
     get:
       description: Returns a list of communities
       parameters:
@@ -669,7 +909,7 @@ paths:
       summary: Gets a list of communities that user is member of.
       tags:
       - User
-  /user/{userId}/photoAlbums:
+  /users/photoAlbums:
     get:
       description: Returns a list of photo albums
       parameters:

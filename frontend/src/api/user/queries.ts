@@ -28,9 +28,9 @@ export const useUserData = () =>
     queryFn: ({ queryKey }) => doGet({ queryKey }),
   });
 
-export const useUserProfile = () =>
+export const useUserProfile = (userId: number) =>
   useQuery<IUserProfileResponse>({
-    queryKey: [`/api/user/profile`],
+    queryKey: [`/api/user/${userId}/profile`],
     queryFn: ({ queryKey }) => doGet<IUserProfileResponse>({ queryKey }),
   });
 
@@ -122,9 +122,15 @@ export const useSendScrap = () => {
   });
 };
 
-export const useScraps = () =>
+export const useScraps = (userId: number) =>
   useQuery<IScrapsResponse>({
-    queryKey: [`/api/scrap`],
+    queryKey: [`/api/scrap/user/${userId}`],
+    queryFn: ({ queryKey }) => doGet<IScrapsResponse>({ queryKey }),
+  });
+
+export const useScrapsOfUser = (userId: number) =>
+  useQuery<IScrapsResponse>({
+    queryKey: [`/api/scrap/user/${userId}`],
     queryFn: ({ queryKey }) => doGet<IScrapsResponse>({ queryKey }),
   });
 

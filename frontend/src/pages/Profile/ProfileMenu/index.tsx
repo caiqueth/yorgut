@@ -15,7 +15,9 @@ export const ProfileMenu: React.FC<IProfileMenuProps> = ({ userId }) => {
   };
 
   const itemsList = [
-    { text: "recados", avatar: "📝", onClick: () => handleGoToRoute("scraps") },
+    {
+      text: "recados", avatar: "📝", onClick: () => handleGoToRoute(`/profile/${userId}/scraps`)
+    },
     { text: "álbum", avatar: "📷", onClick: () => handleGoToRoute("albums") },
     { text: "vídeos", avatar: "📹", onClick: () => handleGoToRoute("videos") },
     {

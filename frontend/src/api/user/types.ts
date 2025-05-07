@@ -93,7 +93,6 @@ export interface IRelatedCommunitiesResponse {
 }
 
 export interface ICreateScrapRequest {
-  userAuthorId: number;
   userRecipientId: number;
   content: string;
 }

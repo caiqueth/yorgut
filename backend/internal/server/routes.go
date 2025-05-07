@@ -17,16 +17,13 @@ import (
 // @title Yorgut APIs
 // @version 1.0
 // @description Our very own OG Social Media.
-
 // @in header
-
 // @name token// @license.name Apache 2.0
-
 // @host localhost:8080
 // @BasePath /api/v1
-
 // @schemes http
 func NewRouter(
+	meController *controller.MeController,
 	userController *controller.UserController,
 	communityController *controller.CommunityController,
 	communityMembershipController *controller.CommunityMembershipController,
@@ -42,8 +39,8 @@ func NewRouter(
 	router.Static("/storage/uploads", helpers.GetUploadsPath(true))
 
 	userInjector := InjectUserMiddleware(userService)
+	jwtInjector := JWTMiddleware()
 
-	router.Use(JWTMiddleware())
 	router.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:3000"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"},
@@ -57,23 +54,30 @@ func NewRouter(
 		ctx.JSON(http.StatusOK, "Yorgut")
 	})
 
-	v1 := router.Group("/api/v1")
+	v1 := router.Group("/api/v1", jwtInjector, userInjector)
 	{
-		users := v1.Group("/user", userInjector)
+		me := v1.Group("/me")
+		{
+			me.GET("", meController.FindMe)
+			me.PUT("", meController.UpdateMe)
+			me.GET("/profile", meController.FindMyProfile)
+			me.GET("/memberships", meController.FindMyMemberships)
+			me.GET("/friends", meController.FindMyFriends)
+			me.GET("/friendships/pending", meController.FindMyPendingFriendships)
+			me.GET("/photoAlbums", meController.FindMyPhotoAlbums)
+			me.POST("/join/:communityId", meController.JoinCommunity)
+			me.POST("/leave/:communityId", meController.LeaveCommunity)
+		}
+
+		users := v1.Group("/users")
 		{
 			users.POST("", userController.Create)
 			users.GET("", userController.FindMany)
-			users.PUT("", userController.Update)
-			users.DELETE("", userController.Delete)
-			users.GET("/me", userController.FindWithToken)
 			users.GET("/:userId", userController.FindById)
-			users.GET("/profile", userController.FindUserProfile)
-			users.GET("/memberships", userController.FindMemberships)
-			users.GET("/friends", userController.FindFriends)
-			users.GET("/friendships/pending", userController.FindPendingFriendships)
-			users.GET("/photoAlbums", userController.FindPhotoAlbums)
-			users.POST("/join/:communityId", userController.JoinCommunity)
-			users.POST("/leave/:communityId", userController.LeaveCommunity)
+			users.GET("/:userId/profile", userController.FindUserProfile)
+			users.GET("/:userId/memberships", userController.FindMemberships)
+			users.GET("/:userId/friends", userController.FindFriends)
+			users.GET("/:userId/photoAlbums", userController.FindPhotoAlbums)
 		}
 
 		communities := v1.Group("/community")
@@ -113,7 +117,7 @@ func NewRouter(
 
 		scraps := v1.Group("/scrap")
 		{
-			scraps.GET("/:userId", scrapController.FindMany)
+			scraps.GET("/user/:userId", scrapController.FindMany)
 			scraps.POST("", scrapController.Create)
 			scraps.DELETE("", scrapController.Delete)
 		}

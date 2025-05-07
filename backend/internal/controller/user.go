@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strconv"
 	"yorgut/internal/dto"
-	"yorgut/internal/model"
+	"yorgut/internal/helpers"
 	"yorgut/internal/service"
 
 	"github.com/gin-gonic/gin"
@@ -27,7 +27,7 @@ func NewUserController(service service.UserService) *UserController {
 // @Produce			application/json
 // @Tags			User
 // @Success			201 {object} dto.Response{}
-// @Router			/user [post]
+// @Router			/users [post]
 func (uc *UserController) Create(ctx *gin.Context) {
 	createUserRequest := dto.CreateUserRequest{}
 
@@ -51,14 +51,32 @@ func (uc *UserController) Create(ctx *gin.Context) {
 
 }
 
+// FindMany				godoc
+// @Summary				Gets a list of users.
+// @Description			Returns a list of users
+// @Produce				application/json
+// @Tags				User
+// @Success				200 {object} dto.Response{}
+// @Router				/users [get]
+func (uc *UserController) FindMany(ctx *gin.Context) {
+	users, err := uc.userService.FindManyUsers()
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, users)
+
+}
+
 // FindById 			godoc
 // @Summary				Get Single user by id.
 // @Param				userId path string true "get user by id"
 // @Description			Returns the user matching the requested id
 // @Produce				application/json
 // @Tags				User
-// @Success				200 {object} dto.FindUserByIdResponse{}
-// @Router				/user/{userId} [get]
+// @Success				200 {object} dto.FindUserResponse{}
+// @Router				/users/{userId} [get]
 func (uc *UserController) FindById(ctx *gin.Context) {
 	userId := ctx.Param("userId")
 	id, err := strconv.Atoi(userId)
@@ -78,19 +96,6 @@ func (uc *UserController) FindById(ctx *gin.Context) {
 
 }
 
-// FindWithToken		godoc
-// @Summary				Get Single user with the token.
-// @Param				userId path string true "get user by id"
-// @Description			Returns the user matching the requested id
-// @Produce				application/json
-// @Tags				User
-// @Success				200 {object} dto.FindUserByIdResponse{}
-// @Router				/user/me [get]
-func (uc *UserController) FindWithToken(ctx *gin.Context) {
-	user := ctx.MustGet("user").(*model.User)
-	ctx.JSON(http.StatusOK, user)
-}
-
 // FindUserProfile 	godoc
 // @Summary				Get Single user with it's profile by id.
 // @Param				userId path string true "get user by id"
@@ -98,11 +103,10 @@ func (uc *UserController) FindWithToken(ctx *gin.Context) {
 // @Produce				application/json
 // @Tags				User
 // @Success				200 {object} dto.FindUserWithProfileByIdResponse{}
-// @Router				/user/profile [get]
+// @Router				/users/{userId}/profile [get]
 func (uc *UserController) FindUserProfile(ctx *gin.Context) {
-	user := ctx.MustGet("user").(*model.User)
-
-	userWithProfile, err := uc.userService.FindUserWithProfileById(user.ID)
+	userId := helpers.MustParseUint(ctx.Param("userId"))
+	userWithProfile, err := uc.userService.FindUserWithProfileById(userId)
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -113,92 +117,24 @@ func (uc *UserController) FindUserProfile(ctx *gin.Context) {
 
 }
 
-// FindMany				godoc
-// @Summary				Gets a list of users.
-// @Description			Returns a list of users
-// @Produce				application/json
-// @Tags				User
-// @Success				200 {object} dto.Response{}
-// @Router				/user [get]
-func (uc *UserController) FindMany(ctx *gin.Context) {
-	users, err := uc.userService.FindManyUsers()
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	ctx.JSON(http.StatusOK, users)
-
-}
-
-// Delete 		godoc
-// @Summary			Delete User by id
-// @Param			userId path string true "delete user by id"
-// @Description		Deletes the user matching the requested id
-// @Produce			application/json
-// @Tags			User
-// @Success			200 {object} dto.Response{}
-// @Router			/user [delete]
-func (uc *UserController) Delete(ctx *gin.Context) {
-	user := ctx.MustGet("user").(*model.User)
-	uc.userService.DeleteUser(user.ID)
-
-	webResponse := dto.Response{
-		Data: nil,
-	}
-	ctx.JSON(http.StatusOK, webResponse)
-
-}
-
-// Update 			godoc
-// @Summary			Update user
-// @Param			userId path string true "update user"
-// @Description		Returns null
-// @Produce			application/json
-// @Tags			User
-// @Success			200 {object} dto.Response{}
-// @Router			/user [put]
-func (uc *UserController) Update(ctx *gin.Context) {
-	// THIS ENDPOINT IS BROKEN
-	request := dto.UpdateUserRequest{}
-
-	err := ctx.ShouldBindJSON(&request)
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	err = uc.userService.UpdateUser(request)
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	webResponse := dto.Response{
-		Data: nil,
-	}
-
-	ctx.JSON(http.StatusOK, webResponse)
-
-}
-
-// FindPhotoAlbums	godoc
-// @Summary					Gets a list of photo albums of the user.
-// @Param					userId path string true "user id"
-// @Description				Returns a list of photo albums
+// FindMemberships	godoc
+// @Summary					Gets a list of communities that user is member of.
+// @Param					userId path string true "get user memberships by id"
+// @Description				Returns a list of communities
 // @Produce					application/json
 // @Tags					User
-// @Success					200 {object} dto.FindPhotoAlbumOfUserResponse{}
-// @Router					/user/photoAlbums [get]
-func (uc *UserController) FindPhotoAlbums(ctx *gin.Context) {
-	user := ctx.MustGet("user").(*model.User)
-	photoAlbums, err := uc.userService.FindUserPhotoAlbums(user.ID)
+// @Success					200 {object} dto.FindUserMembershipsResponse{}
+// @Router					/users/memberships [get]
+func (uc *UserController) FindMemberships(ctx *gin.Context) {
+	userId := helpers.MustParseUint(ctx.Param("userId"))
+
+	memberships, err := uc.userService.FindUserMemberships(userId)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	ctx.JSON(http.StatusOK, photoAlbums)
+	ctx.JSON(http.StatusOK, memberships)
 }
 
 // FindFriends	godoc
@@ -208,10 +144,10 @@ func (uc *UserController) FindPhotoAlbums(ctx *gin.Context) {
 // @Produce					application/json
 // @Tags					User
 // @Success					200 {object} dto.FindFriendsOfUserResponse{}
-// @Router					/user/friends [get]
+// @Router					/users/friends [get]
 func (uc *UserController) FindFriends(ctx *gin.Context) {
-	user := ctx.MustGet("user").(*model.User)
-	friendships, err := uc.userService.FindFriendsOfUser(user.ID)
+	userId := helpers.MustParseUint(ctx.Param("userId"))
+	friendships, err := uc.userService.FindFriendsOfUser(userId)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -220,108 +156,21 @@ func (uc *UserController) FindFriends(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, friendships)
 }
 
-// FindPendingFriendships	godoc
-// @Summary					Gets a list of friendship invites of the user.
+// FindPhotoAlbums	godoc
+// @Summary					Gets a list of photo albums of the user.
 // @Param					userId path string true "user id"
-// @Description				Returns a list of users
+// @Description				Returns a list of photo albums
 // @Produce					application/json
 // @Tags					User
-// @Success					200 {object} dto.FindFriendsOfUserResponse{}
-// @Router					/user/friends [get]
-func (uc *UserController) FindPendingFriendships(ctx *gin.Context) {
-	user := ctx.MustGet("user").(*model.User)
-	friendships, err := uc.userService.FindPendingFriendshipsOfUser(user.ID)
+// @Success					200 {object} dto.FindPhotoAlbumOfUserResponse{}
+// @Router					/users/photoAlbums [get]
+func (uc *UserController) FindPhotoAlbums(ctx *gin.Context) {
+	userId := helpers.MustParseUint(ctx.Param("userId"))
+	photoAlbums, err := uc.userService.FindUserPhotoAlbums(userId)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	ctx.JSON(http.StatusOK, friendships)
-}
-
-func (uc *UserController) FindCommunitiesOwned(ctx *gin.Context) {
-	userId, err := strconv.Atoi(ctx.Param("userId"))
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	communities, err := uc.userService.FindUserOwnedCommunities(uint(userId))
-
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	ctx.JSON(http.StatusOK, communities)
-}
-
-// JoinCommunity	godoc
-// @Summary			User joins a community.
-// @Param			userId path string true "user Id"
-// @Param			communityId path string true "community Id"
-// @Description		Joins a community.
-// @Produce			application/json
-// @Tags			User
-// @Success			201 {object} dto.Response{}
-// @Router			/user/join/{communityId} [post]
-func (uc *UserController) JoinCommunity(ctx *gin.Context) {
-	user := ctx.MustGet("user").(*model.User)
-	communityId, err := strconv.Atoi(ctx.Param("communityId"))
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	err = uc.userService.JoinCommunity(user.ID, uint(communityId))
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-	ctx.JSON(http.StatusCreated, dto.Response{})
-}
-
-// LeaveCommunity	godoc
-// @Summary			User leaves a community.
-// @Param			userId path string true "user Id"
-// @Param			communityId path string true "community Id"
-// @Description		Leaves a community.
-// @Produce			application/json
-// @Tags			User
-// @Success			201 {object} dto.Response{}
-// @Router			/user/leave/{communityId} [post]
-func (uc *UserController) LeaveCommunity(ctx *gin.Context) {
-	user := ctx.MustGet("user").(*model.User)
-	communityId, err := strconv.Atoi(ctx.Param("communityId"))
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	err = uc.userService.LeaveCommunity(user.ID, uint(communityId))
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-	ctx.JSON(http.StatusCreated, dto.Response{})
-}
-
-// FindCommunitiesMemberOf	godoc
-// @Summary					Gets a list of communities that user is member of.
-// @Param					userId path string true "get user memberships by id"
-// @Description				Returns a list of communities
-// @Produce					application/json
-// @Tags					User
-// @Success					200 {object} dto.FindUserMembershipsResponse{}
-// @Router					/user/memberships [get]
-func (uc *UserController) FindMemberships(ctx *gin.Context) {
-	user := ctx.MustGet("user").(*model.User)
-
-	memberships, err := uc.userService.FindUserMemberships(user.ID)
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	ctx.JSON(http.StatusOK, memberships)
+	ctx.JSON(http.StatusOK, photoAlbums)
 }

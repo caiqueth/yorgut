@@ -15,19 +15,22 @@ import { StripedGrid } from "components/molecules/StripedGrid";
 import { UserProfilePicture } from "components/organisms/UserProfilePicture";
 import { Menu } from "pages/Home/components/Menu";
 import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 
 interface IProps { }
 export const Scrapbook: React.FC<IProps> = () => {
+  const params = useParams();
+  const userId = parseInt(params.userId ?? "");
+
   const { mutate: sendScrap } = useSendScrap();
-  const { data: scraps } = useScraps();
+  const { data: scraps } = useScraps(userId);
 
   const [scrapContent, setScrapContent] = useState<string>("");
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
     sendScrap({
-      userAuthorId: 1,
-      userRecipientId: 1,
+      userRecipientId: userId,
       content: scrapContent,
     });
   };

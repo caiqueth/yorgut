@@ -59,6 +59,7 @@ func NewServer() *http.Server {
 	testimonialService := service.NewTestimonialService(*testimonialRepository, validate)
 
 	// Controllers
+	meController := controller.NewMeController(*userService)
 	userController := controller.NewUserController(*userService)
 	communityMembershipController := controller.NewCommunityMembershipController(*communityMembershipService)
 	communityController := controller.NewCommunityController(*communityService, *communityProfileService)
@@ -70,6 +71,7 @@ func NewServer() *http.Server {
 
 	// Router
 	routes := NewRouter(
+		meController,
 		userController,
 		communityController,
 		communityMembershipController,

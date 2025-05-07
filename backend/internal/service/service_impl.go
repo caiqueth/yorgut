@@ -247,18 +247,18 @@ func (u *UserService) LeaveCommunity(userId uint, communityId uint) error {
 }
 
 // Scrap
-func (s *ScrapService) CreateScrap(scrap dto.CreateScrapRequest) error {
-	author, err := s.userRepository.FindById(scrap.UserAuthorID)
+func (s *ScrapService) CreateScrap(userAuthorID uint, userRecipientID uint, content string) error {
+	author, err := s.userRepository.FindById(userAuthorID)
 	if err != nil {
 		return errors.New("author not found")
 	}
 
-	recipient, err := s.userRepository.FindById(scrap.UserRecipientID)
+	recipient, err := s.userRepository.FindById(userRecipientID)
 	if err != nil {
 		return errors.New("recipient not found")
 	}
 
-	scrapModel := model.NewScrap(author, recipient, scrap.Content)
+	scrapModel := model.NewScrap(author, recipient, content)
 
 	if err := s.scrapRepository.Create(scrapModel); err != nil {
 		return err

@@ -156,6 +156,64 @@ const docTemplate = `{
                 }
             }
         },
+        "/community/{communityId}/members": {
+            "get": {
+                "description": "Returns a list of the community members matching the requested id and a few stats",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Community"
+                ],
+                "summary": "Get community members.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "get community members by id",
+                        "name": "communityId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.FindCommunityMembersResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/community/{communityId}/profile": {
+            "get": {
+                "description": "Returns the community profile matching the requested id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Community"
+                ],
+                "summary": "Get Single community profile by its id.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "get community profile by id",
+                        "name": "communityId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.FindCommunityProfileByIdResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/community_membership": {
             "post": {
                 "produces": [
@@ -179,34 +237,6 @@ const docTemplate = `{
                 "responses": {
                     "201": {
                         "description": "Created",
-                        "schema": {
-                            "$ref": "#/definitions/dto.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/community_membership/{userId}": {
-            "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "CommunityMembership"
-                ],
-                "summary": "Lists communities that a user is member of",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "id of the user",
-                        "name": "userId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/dto.Response"
                         }
@@ -242,6 +272,48 @@ const docTemplate = `{
                 "responses": {
                     "204": {
                         "description": "No Content",
+                        "schema": {
+                            "$ref": "#/definitions/dto.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/community_profile": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Community"
+                ],
+                "summary": "Create Community Profile",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Community Name",
+                        "name": "communityId",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Community Description",
+                        "name": "description",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "Community Picture",
+                        "name": "picture",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
                         "schema": {
                             "$ref": "#/definitions/dto.Response"
                         }
@@ -304,6 +376,182 @@ const docTemplate = `{
                         "description": "No Content",
                         "schema": {
                             "$ref": "#/definitions/dto.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/me": {
+            "get": {
+                "description": "Returns the user matching the requested id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get Single user by id.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.FindUserResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Returns null",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Update user",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/me/friends": {
+            "get": {
+                "description": "Returns a list of users",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Gets a list of friendship invites of the user.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.FindFriendsOfUserResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/me/join/{communityId}": {
+            "post": {
+                "description": "Joins a community.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "User joins a community.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "community Id",
+                        "name": "communityId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/dto.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/me/leave/{communityId}": {
+            "post": {
+                "description": "Leaves a community.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "User leaves a community.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "community Id",
+                        "name": "communityId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/dto.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/me/memberships": {
+            "get": {
+                "description": "Returns a list of communities",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Gets a list of communities that user is member of.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.FindUserMembershipsResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/me/photoAlbums": {
+            "get": {
+                "description": "Returns a list of photo albums",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Gets a list of photo albums of the user.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.FindPhotoAlbumOfUserResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/me/profile": {
+            "get": {
+                "description": "Returns the user matching the token",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get logged user with it's profile by their Token.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.FindUserWithProfileByIdResponse"
                         }
                     }
                 }
@@ -496,6 +744,26 @@ const docTemplate = `{
                 }
             }
         },
+        "/scrap/user/{userId}": {
+            "get": {
+                "description": "Returns a list of scraps",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Gets a list of scraps of a user.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.FindScrapOfUserRecipientResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/scrap/{scrapId}": {
             "delete": {
                 "description": "Deletes a Scrap.",
@@ -585,7 +853,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user": {
+        "/users": {
             "get": {
                 "description": "Returns a list of users",
                 "produces": [
@@ -595,33 +863,6 @@ const docTemplate = `{
                     "User"
                 ],
                 "summary": "Gets a list of users.",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/dto.Response"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "description": "Returns null",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "Update user",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "update user",
-                        "name": "userId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -660,63 +901,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/{userId}": {
-            "get": {
-                "description": "Returns the user matching the requested id",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "Get Single user by id.",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "get user by id",
-                        "name": "userId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/dto.FindUserByIdResponse"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "description": "Deletes the user matching the requested id",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "Delete User by id",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "delete user by id",
-                        "name": "userId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/dto.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/user/{userId}/friends": {
+        "/users/friends": {
             "get": {
                 "description": "Returns a list of friends",
                 "produces": [
@@ -739,49 +924,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.FindFriendshipOfUserResponse"
+                            "$ref": "#/definitions/dto.FindFriendsOfUserResponse"
                         }
                     }
                 }
             }
         },
-        "/user/{userId}/join/{communityId}": {
-            "post": {
-                "description": "Joins a community.",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "User joins a community.",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "user Id",
-                        "name": "userId",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "community Id",
-                        "name": "communityId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "$ref": "#/definitions/dto.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/user/{userId}/memberships": {
+        "/users/memberships": {
             "get": {
                 "description": "Returns a list of communities",
                 "produces": [
@@ -810,7 +959,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/{userId}/photoAlbums": {
+        "/users/photoAlbums": {
             "get": {
                 "description": "Returns a list of photo albums",
                 "produces": [
@@ -838,22 +987,100 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/users/{userId}": {
+            "get": {
+                "description": "Returns the user matching the requested id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get Single user by id.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "get user by id",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.FindUserResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{userId}/profile": {
+            "get": {
+                "description": "Returns the user matching the requested id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get Single user with it's profile by id.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "get user by id",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.FindUserWithProfileByIdResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
         "dto.CommunityDto": {
             "type": "object",
             "properties": {
-                "createdBy": {
+                "firstName": {
                     "type": "integer"
                 },
-                "description": {
-                    "type": "string"
+                "id": {
+                    "type": "integer"
+                },
+                "membershipCount": {
+                    "type": "integer"
                 },
                 "name": {
                     "type": "string"
                 },
-                "pictureUrl": {
+                "profilePicture": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.CommunityMemberEntry": {
+            "type": "object",
+            "properties": {
+                "firstName": {
+                    "type": "string"
+                },
+                "friendCount": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "profilePicture": {
                     "type": "string"
                 }
             }
@@ -861,10 +1088,10 @@ const docTemplate = `{
         "dto.CreateCommunityMembershipRequest": {
             "type": "object",
             "properties": {
-                "communityID": {
+                "communityId": {
                     "type": "integer"
                 },
-                "userID": {
+                "userId": {
                     "type": "integer"
                 }
             }
@@ -886,7 +1113,7 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
-                "userID": {
+                "userId": {
                     "type": "integer"
                 }
             }
@@ -897,10 +1124,10 @@ const docTemplate = `{
                 "caption": {
                     "type": "string"
                 },
-                "photoAlbumID": {
+                "photoAlbumId": {
                     "type": "integer"
                 },
-                "url": {
+                "uRL": {
                     "type": "string"
                 }
             }
@@ -911,10 +1138,7 @@ const docTemplate = `{
                 "content": {
                     "type": "string"
                 },
-                "userAuthorID": {
-                    "type": "integer"
-                },
-                "userRecipientID": {
+                "userRecipientId": {
                     "type": "integer"
                 }
             }
@@ -925,10 +1149,10 @@ const docTemplate = `{
                 "content": {
                     "type": "string"
                 },
-                "userAuthorID": {
+                "userAuthorId": {
                     "type": "integer"
                 },
-                "userRecipientID": {
+                "userRecipientId": {
                     "type": "integer"
                 }
             }
@@ -956,24 +1180,43 @@ const docTemplate = `{
                 "createdBy": {
                     "type": "integer"
                 },
-                "description": {
-                    "type": "string"
-                },
                 "name": {
-                    "type": "string"
-                },
-                "pictureUrl": {
                     "type": "string"
                 }
             }
         },
-        "dto.FindFriendshipOfUserResponse": {
+        "dto.FindCommunityMembersResponse": {
             "type": "object",
             "properties": {
-                "friendships": {
+                "memberCount": {
+                    "type": "integer"
+                },
+                "members": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/dto.FriendshipDto"
+                        "$ref": "#/definitions/dto.CommunityMemberEntry"
+                    }
+                }
+            }
+        },
+        "dto.FindCommunityProfileByIdResponse": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "profilePicture": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.FindFriendsOfUserResponse": {
+            "type": "object",
+            "properties": {
+                "friends": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.FriendDto"
                     }
                 }
             }
@@ -992,29 +1235,14 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.FindUserByIdResponse": {
+        "dto.FindScrapOfUserRecipientResponse": {
             "type": "object",
             "properties": {
-                "birthDate": {
-                    "type": "string"
-                },
-                "createdAt": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "firstName": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "lastName": {
-                    "type": "string"
-                },
-                "updatedAt": {
-                    "type": "string"
+                "scraps": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.ScrapDto"
+                    }
                 }
             }
         },
@@ -1029,17 +1257,135 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.FriendshipDto": {
+        "dto.FindUserResponse": {
             "type": "object",
             "properties": {
+                "birthDate": {
+                    "type": "string"
+                },
                 "createdAt": {
                     "type": "string"
                 },
-                "userRequestedID": {
+                "email": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "friendCount": {
                     "type": "integer"
                 },
-                "userRequesteeID": {
+                "id": {
                     "type": "integer"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.FindUserWithProfileByIdResponse": {
+            "type": "object",
+            "properties": {
+                "about": {
+                    "type": "string"
+                },
+                "birthCity": {
+                    "type": "string"
+                },
+                "birthDate": {
+                    "type": "string"
+                },
+                "books": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "cuisine": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "fashion": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "friendCount": {
+                    "type": "integer"
+                },
+                "hobbies": {
+                    "type": "string"
+                },
+                "humor": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "interests": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "livesWith": {
+                    "type": "string"
+                },
+                "movies": {
+                    "type": "string"
+                },
+                "music": {
+                    "type": "string"
+                },
+                "passions": {
+                    "type": "string"
+                },
+                "profilePicture": {
+                    "type": "string"
+                },
+                "relationshipStatus": {
+                    "type": "string"
+                },
+                "religion": {
+                    "type": "string"
+                },
+                "sports": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "website": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.FriendDto": {
+            "type": "object",
+            "properties": {
+                "birthDate": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "friendCount": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "profilePicture": {
+                    "type": "string"
                 }
             }
         },
@@ -1049,7 +1395,7 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
-                "userID": {
+                "userId": {
                     "type": "integer"
                 }
             }
@@ -1058,6 +1404,26 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "data": {}
+            }
+        },
+        "dto.ScrapDto": {
+            "type": "object",
+            "properties": {
+                "authorId": {
+                    "type": "integer"
+                },
+                "authorName": {
+                    "type": "string"
+                },
+                "authorProfilePicture": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                }
             }
         }
     }
