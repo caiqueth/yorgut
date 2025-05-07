@@ -24,7 +24,7 @@ func NewMeController(service service.UserService) *MeController {
 // @Summary				Get Single user by id.
 // @Description			Returns the user matching the requested id
 // @Produce				application/json
-// @Tags				User
+// @Tags				Me
 // @Success				200 {object} dto.FindUserResponse{}
 // @Router				/me [get]
 func (uc *MeController) FindMe(ctx *gin.Context) {
@@ -36,7 +36,7 @@ func (uc *MeController) FindMe(ctx *gin.Context) {
 // @Summary			Update user
 // @Description		Returns null
 // @Produce			application/json
-// @Tags			User
+// @Tags			Me
 // @Success			200 {object} dto.Response{}
 // @Router			/me [put]
 func (uc *MeController) UpdateMe(ctx *gin.Context) {
@@ -67,7 +67,7 @@ func (uc *MeController) UpdateMe(ctx *gin.Context) {
 // @Summary					Get logged user with it's profile by their Token.
 // @Description				Returns the user matching the token
 // @Produce					application/json
-// @Tags					User
+// @Tags					Me
 // @Success					200 {object} dto.FindUserWithProfileByIdResponse{}
 // @Router					/me/profile [get]
 func (uc *MeController) FindMyProfile(ctx *gin.Context) {
@@ -87,7 +87,7 @@ func (uc *MeController) FindMyProfile(ctx *gin.Context) {
 // @Summary					Gets a list of photo albums of the user.
 // @Description				Returns a list of photo albums
 // @Produce					application/json
-// @Tags					User
+// @Tags					Me
 // @Success					200 {object} dto.FindPhotoAlbumOfUserResponse{}
 // @Router					/me/photoAlbums [get]
 func (uc *MeController) FindMyPhotoAlbums(ctx *gin.Context) {
@@ -105,7 +105,7 @@ func (uc *MeController) FindMyPhotoAlbums(ctx *gin.Context) {
 // @Summary			Gets a list of friends of the user.
 // @Description		Returns a list of friends
 // @Produce			application/json
-// @Tags			User
+// @Tags			Me
 // @Success			200 {object} dto.FindFriendsOfUserResponse{}
 // @Router			/me/friends [get]
 func (uc *MeController) FindMyFriends(ctx *gin.Context) {
@@ -123,7 +123,7 @@ func (uc *MeController) FindMyFriends(ctx *gin.Context) {
 // @Summary					Gets a list of friendship invites of the user.
 // @Description				Returns a list of users
 // @Produce					application/json
-// @Tags					User
+// @Tags					Me
 // @Success					200 {object} dto.FindFriendsOfUserResponse{}
 // @Router					/me/friends [get]
 func (uc *MeController) FindMyPendingFriendships(ctx *gin.Context) {
@@ -142,7 +142,7 @@ func (uc *MeController) FindMyPendingFriendships(ctx *gin.Context) {
 // @Param			communityId path string true "community Id"
 // @Description		Joins a community.
 // @Produce			application/json
-// @Tags			User
+// @Tags			Me
 // @Success			201 {object} dto.Response{}
 // @Router			/me/join/{communityId} [post]
 func (uc *MeController) JoinCommunity(ctx *gin.Context) {
@@ -166,7 +166,7 @@ func (uc *MeController) JoinCommunity(ctx *gin.Context) {
 // @Param			communityId path string true "community Id"
 // @Description		Leaves a community.
 // @Produce			application/json
-// @Tags			User
+// @Tags			Me
 // @Success			201 {object} dto.Response{}
 // @Router			/me/leave/{communityId} [post]
 func (uc *MeController) LeaveCommunity(ctx *gin.Context) {
@@ -189,7 +189,7 @@ func (uc *MeController) LeaveCommunity(ctx *gin.Context) {
 // @Summary					Gets a list of communities that user is member of.
 // @Description				Returns a list of communities
 // @Produce					application/json
-// @Tags					User
+// @Tags					Me
 // @Success					200 {object} dto.FindUserMembershipsResponse{}
 // @Router					/me/memberships [get]
 func (uc *MeController) FindMyMemberships(ctx *gin.Context) {

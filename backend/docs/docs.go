@@ -388,7 +388,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User"
+                    "Me"
                 ],
                 "summary": "Get Single user by id.",
                 "responses": {
@@ -406,7 +406,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User"
+                    "Me"
                 ],
                 "summary": "Update user",
                 "responses": {
@@ -426,7 +426,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User"
+                    "Me"
                 ],
                 "summary": "Gets a list of friendship invites of the user.",
                 "responses": {
@@ -446,7 +446,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User"
+                    "Me"
                 ],
                 "summary": "User joins a community.",
                 "parameters": [
@@ -475,7 +475,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User"
+                    "Me"
                 ],
                 "summary": "User leaves a community.",
                 "parameters": [
@@ -504,7 +504,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User"
+                    "Me"
                 ],
                 "summary": "Gets a list of communities that user is member of.",
                 "responses": {
@@ -524,7 +524,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User"
+                    "Me"
                 ],
                 "summary": "Gets a list of photo albums of the user.",
                 "responses": {
@@ -544,7 +544,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User"
+                    "Me"
                 ],
                 "summary": "Get logged user with it's profile by their Token.",
                 "responses": {
@@ -751,9 +751,18 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User"
+                    "Scrap"
                 ],
                 "summary": "Gets a list of scraps of a user.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -777,7 +786,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "delete Scrap by id",
+                        "description": "Scrap ID",
                         "name": "scrapId",
                         "in": "path",
                         "required": true
@@ -860,7 +869,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User"
+                    "Users"
                 ],
                 "summary": "Gets a list of users.",
                 "responses": {
@@ -877,7 +886,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User"
+                    "Users"
                 ],
                 "summary": "Create user",
                 "parameters": [
@@ -901,93 +910,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/friends": {
-            "get": {
-                "description": "Returns a list of friends",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "Gets a list of friends of the user.",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "user id",
-                        "name": "userId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/dto.FindFriendsOfUserResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/users/memberships": {
-            "get": {
-                "description": "Returns a list of communities",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "Gets a list of communities that user is member of.",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "get user memberships by id",
-                        "name": "userId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/dto.FindUserMembershipsResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/users/photoAlbums": {
-            "get": {
-                "description": "Returns a list of photo albums",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "Gets a list of photo albums of the user.",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "user id",
-                        "name": "userId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/dto.FindPhotoAlbumOfUserResponse"
-                        }
-                    }
-                }
-            }
-        },
         "/users/{userId}": {
             "get": {
                 "description": "Returns the user matching the requested id",
@@ -995,13 +917,13 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User"
+                    "Users"
                 ],
                 "summary": "Get Single user by id.",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "get user by id",
+                        "description": "User ID",
                         "name": "userId",
                         "in": "path",
                         "required": true
@@ -1017,6 +939,93 @@ const docTemplate = `{
                 }
             }
         },
+        "/users/{userId}/friends": {
+            "get": {
+                "description": "Returns a list of friends",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Gets a list of friends of the user.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.FindFriendsOfUserResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{userId}/memberships": {
+            "get": {
+                "description": "Returns a list of communities",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Gets a list of communities that user is member of.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.FindUserMembershipsResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{userId}/photoAlbums": {
+            "get": {
+                "description": "Returns a list of photo albums",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Gets a list of photo albums of the user.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.FindPhotoAlbumOfUserResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/users/{userId}/profile": {
             "get": {
                 "description": "Returns the user matching the requested id",
@@ -1024,13 +1033,13 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User"
+                    "Users"
                 ],
                 "summary": "Get Single user with it's profile by id.",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "get user by id",
+                        "description": "User ID",
                         "name": "userId",
                         "in": "path",
                         "required": true

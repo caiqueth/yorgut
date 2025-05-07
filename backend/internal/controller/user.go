@@ -25,7 +25,7 @@ func NewUserController(service service.UserService) *UserController {
 // @Decription		Save user in Db.
 // @Param			user body dto.CreateUserRequest true "Create User"
 // @Produce			application/json
-// @Tags			User
+// @Tags			Users
 // @Success			201 {object} dto.Response{}
 // @Router			/users [post]
 func (uc *UserController) Create(ctx *gin.Context) {
@@ -55,7 +55,7 @@ func (uc *UserController) Create(ctx *gin.Context) {
 // @Summary				Gets a list of users.
 // @Description			Returns a list of users
 // @Produce				application/json
-// @Tags				User
+// @Tags				Users
 // @Success				200 {object} dto.Response{}
 // @Router				/users [get]
 func (uc *UserController) FindMany(ctx *gin.Context) {
@@ -71,10 +71,10 @@ func (uc *UserController) FindMany(ctx *gin.Context) {
 
 // FindById 			godoc
 // @Summary				Get Single user by id.
-// @Param				userId path string true "get user by id"
+// @Param				userId path string true "User ID"
 // @Description			Returns the user matching the requested id
 // @Produce				application/json
-// @Tags				User
+// @Tags				Users
 // @Success				200 {object} dto.FindUserResponse{}
 // @Router				/users/{userId} [get]
 func (uc *UserController) FindById(ctx *gin.Context) {
@@ -98,10 +98,10 @@ func (uc *UserController) FindById(ctx *gin.Context) {
 
 // FindUserProfile 	godoc
 // @Summary				Get Single user with it's profile by id.
-// @Param				userId path string true "get user by id"
+// @Param				userId path string true "User ID"
 // @Description			Returns the user matching the requested id
 // @Produce				application/json
-// @Tags				User
+// @Tags				Users
 // @Success				200 {object} dto.FindUserWithProfileByIdResponse{}
 // @Router				/users/{userId}/profile [get]
 func (uc *UserController) FindUserProfile(ctx *gin.Context) {
@@ -119,12 +119,12 @@ func (uc *UserController) FindUserProfile(ctx *gin.Context) {
 
 // FindMemberships	godoc
 // @Summary					Gets a list of communities that user is member of.
-// @Param					userId path string true "get user memberships by id"
+// @Param					userId path string true "User ID"
 // @Description				Returns a list of communities
 // @Produce					application/json
-// @Tags					User
+// @Tags					Users
 // @Success					200 {object} dto.FindUserMembershipsResponse{}
-// @Router					/users/memberships [get]
+// @Router					/users/{userId}/memberships [get]
 func (uc *UserController) FindMemberships(ctx *gin.Context) {
 	userId := helpers.MustParseUint(ctx.Param("userId"))
 
@@ -139,12 +139,12 @@ func (uc *UserController) FindMemberships(ctx *gin.Context) {
 
 // FindFriends	godoc
 // @Summary					Gets a list of friends of the user.
-// @Param					userId path string true "user id"
+// @Param					userId path string true "User ID"
 // @Description				Returns a list of friends
 // @Produce					application/json
-// @Tags					User
+// @Tags					Users
 // @Success					200 {object} dto.FindFriendsOfUserResponse{}
-// @Router					/users/friends [get]
+// @Router					/users/{userId}/friends [get]
 func (uc *UserController) FindFriends(ctx *gin.Context) {
 	userId := helpers.MustParseUint(ctx.Param("userId"))
 	friendships, err := uc.userService.FindFriendsOfUser(userId)
@@ -158,12 +158,12 @@ func (uc *UserController) FindFriends(ctx *gin.Context) {
 
 // FindPhotoAlbums	godoc
 // @Summary					Gets a list of photo albums of the user.
-// @Param					userId path string true "user id"
+// @Param					userId path string true "User ID"
 // @Description				Returns a list of photo albums
 // @Produce					application/json
-// @Tags					User
+// @Tags					Users
 // @Success					200 {object} dto.FindPhotoAlbumOfUserResponse{}
-// @Router					/users/photoAlbums [get]
+// @Router					/users/{userId}/photoAlbums [get]
 func (uc *UserController) FindPhotoAlbums(ctx *gin.Context) {
 	userId := helpers.MustParseUint(ctx.Param("userId"))
 	photoAlbums, err := uc.userService.FindUserPhotoAlbums(userId)

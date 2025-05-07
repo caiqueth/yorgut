@@ -54,7 +54,7 @@ func (s *ScrapController) Create(ctx *gin.Context) {
 
 // Delete 				godoc
 // @Summary				Delete Scrap by id.
-// @Param				scrapId path string true "delete Scrap by id"
+// @Param				scrapId path string true "Scrap ID"
 // @Description			Deletes a Scrap.
 // @Produce				application/json
 // @Tags				Scrap
@@ -66,9 +66,10 @@ func (s *ScrapController) Delete(ctx *gin.Context) {
 
 // FindScraps			godoc
 // @Summary				Gets a list of scraps of a user.
+// @Param				userId path string true "User ID"
 // @Description			Returns a list of scraps
 // @Produce				application/json
-// @Tags				User
+// @Tags				Scrap
 // @Success				200 {object} dto.FindScrapOfUserRecipientResponse{}
 // @Router				/scrap/user/{userId} [get]
 func (s *ScrapController) FindMany(ctx *gin.Context) {

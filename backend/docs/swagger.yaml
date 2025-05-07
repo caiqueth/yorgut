@@ -506,7 +506,7 @@ paths:
             $ref: '#/definitions/dto.FindUserResponse'
       summary: Get Single user by id.
       tags:
-      - User
+      - Me
     put:
       description: Returns null
       produces:
@@ -518,7 +518,7 @@ paths:
             $ref: '#/definitions/dto.Response'
       summary: Update user
       tags:
-      - User
+      - Me
   /me/friends:
     get:
       description: Returns a list of users
@@ -531,7 +531,7 @@ paths:
             $ref: '#/definitions/dto.FindFriendsOfUserResponse'
       summary: Gets a list of friendship invites of the user.
       tags:
-      - User
+      - Me
   /me/join/{communityId}:
     post:
       description: Joins a community.
@@ -550,7 +550,7 @@ paths:
             $ref: '#/definitions/dto.Response'
       summary: User joins a community.
       tags:
-      - User
+      - Me
   /me/leave/{communityId}:
     post:
       description: Leaves a community.
@@ -569,7 +569,7 @@ paths:
             $ref: '#/definitions/dto.Response'
       summary: User leaves a community.
       tags:
-      - User
+      - Me
   /me/memberships:
     get:
       description: Returns a list of communities
@@ -582,7 +582,7 @@ paths:
             $ref: '#/definitions/dto.FindUserMembershipsResponse'
       summary: Gets a list of communities that user is member of.
       tags:
-      - User
+      - Me
   /me/photoAlbums:
     get:
       description: Returns a list of photo albums
@@ -595,7 +595,7 @@ paths:
             $ref: '#/definitions/dto.FindPhotoAlbumOfUserResponse'
       summary: Gets a list of photo albums of the user.
       tags:
-      - User
+      - Me
   /me/profile:
     get:
       description: Returns the user matching the token
@@ -608,7 +608,7 @@ paths:
             $ref: '#/definitions/dto.FindUserWithProfileByIdResponse'
       summary: Get logged user with it's profile by their Token.
       tags:
-      - User
+      - Me
   /photo:
     post:
       description: Creates a Photo.
@@ -735,7 +735,7 @@ paths:
     delete:
       description: Deletes a Scrap.
       parameters:
-      - description: delete Scrap by id
+      - description: Scrap ID
         in: path
         name: scrapId
         required: true
@@ -753,6 +753,12 @@ paths:
   /scrap/user/{userId}:
     get:
       description: Returns a list of scraps
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -762,7 +768,7 @@ paths:
             $ref: '#/definitions/dto.FindScrapOfUserRecipientResponse'
       summary: Gets a list of scraps of a user.
       tags:
-      - User
+      - Scrap
   /testimonial:
     post:
       description: Creates a Testimonial.
@@ -814,7 +820,7 @@ paths:
             $ref: '#/definitions/dto.Response'
       summary: Gets a list of users.
       tags:
-      - User
+      - Users
     post:
       parameters:
       - description: Create User
@@ -832,12 +838,12 @@ paths:
             $ref: '#/definitions/dto.Response'
       summary: Create user
       tags:
-      - User
+      - Users
   /users/{userId}:
     get:
       description: Returns the user matching the requested id
       parameters:
-      - description: get user by id
+      - description: User ID
         in: path
         name: userId
         required: true
@@ -851,31 +857,12 @@ paths:
             $ref: '#/definitions/dto.FindUserResponse'
       summary: Get Single user by id.
       tags:
-      - User
-  /users/{userId}/profile:
-    get:
-      description: Returns the user matching the requested id
-      parameters:
-      - description: get user by id
-        in: path
-        name: userId
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/dto.FindUserWithProfileByIdResponse'
-      summary: Get Single user with it's profile by id.
-      tags:
-      - User
-  /users/friends:
+      - Users
+  /users/{userId}/friends:
     get:
       description: Returns a list of friends
       parameters:
-      - description: user id
+      - description: User ID
         in: path
         name: userId
         required: true
@@ -889,12 +876,12 @@ paths:
             $ref: '#/definitions/dto.FindFriendsOfUserResponse'
       summary: Gets a list of friends of the user.
       tags:
-      - User
-  /users/memberships:
+      - Users
+  /users/{userId}/memberships:
     get:
       description: Returns a list of communities
       parameters:
-      - description: get user memberships by id
+      - description: User ID
         in: path
         name: userId
         required: true
@@ -908,12 +895,12 @@ paths:
             $ref: '#/definitions/dto.FindUserMembershipsResponse'
       summary: Gets a list of communities that user is member of.
       tags:
-      - User
-  /users/photoAlbums:
+      - Users
+  /users/{userId}/photoAlbums:
     get:
       description: Returns a list of photo albums
       parameters:
-      - description: user id
+      - description: User ID
         in: path
         name: userId
         required: true
@@ -927,7 +914,26 @@ paths:
             $ref: '#/definitions/dto.FindPhotoAlbumOfUserResponse'
       summary: Gets a list of photo albums of the user.
       tags:
-      - User
+      - Users
+  /users/{userId}/profile:
+    get:
+      description: Returns the user matching the requested id
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.FindUserWithProfileByIdResponse'
+      summary: Get Single user with it's profile by id.
+      tags:
+      - Users
 schemes:
 - http
 swagger: "2.0"
