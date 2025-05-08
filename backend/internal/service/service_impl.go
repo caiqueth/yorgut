@@ -300,6 +300,7 @@ func (s *ScrapService) FindScrapOfUserRecipient(userId uint) (*dto.FindScrapOfUs
 			AuthorID:             scrap.UserAuthorID,
 			AuthorName:           scrap.UserAuthor.FirstName,
 			AuthorProfilePicture: *scrap.UserAuthor.Profile.ProfilePicture,
+			CreatedAt:            scrap.CreatedAt,
 		})
 	}
 

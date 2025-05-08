@@ -64,7 +64,7 @@ func (s *ScrapController) Delete(ctx *gin.Context) {
 	panic("unimplemented")
 }
 
-// FindScraps			godoc
+// FindOfUser			godoc
 // @Summary				Gets a list of scraps of a user.
 // @Param				userId path string true "User ID"
 // @Description			Returns a list of scraps
@@ -72,7 +72,7 @@ func (s *ScrapController) Delete(ctx *gin.Context) {
 // @Tags				Scrap
 // @Success				200 {object} dto.FindScrapOfUserRecipientResponse{}
 // @Router				/scrap/user/{userId} [get]
-func (s *ScrapController) FindMany(ctx *gin.Context) {
+func (s *ScrapController) FindOfUser(ctx *gin.Context) {
 	userId := helpers.MustParseUint(ctx.Param("userId"))
 	scraps, err := s.scrapService.FindScrapOfUserRecipient(userId)
 

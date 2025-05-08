@@ -1495,6 +1495,9 @@ const docTemplate = `{
                 "content": {
                     "type": "string"
                 },
+                "createdAt": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
                 }

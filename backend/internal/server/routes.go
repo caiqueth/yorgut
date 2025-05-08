@@ -119,7 +119,7 @@ func NewRouter(
 
 		scraps := v1.Group("/scrap")
 		{
-			scraps.GET("/user/:userId", scrapController.FindMany)
+			scraps.GET("/user/:userId", scrapController.FindOfUser)
 			scraps.POST("", scrapController.Create)
 			scraps.DELETE("", scrapController.Delete)
 		}

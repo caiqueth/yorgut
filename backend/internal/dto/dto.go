@@ -133,11 +133,12 @@ type CreateScrapRequest struct {
 }
 
 type ScrapDto struct {
-	ID                   uint   `json:"id"`
-	Content              string `json:"content"`
-	AuthorID             uint   `json:"authorId"`
-	AuthorName           string `json:"authorName"`
-	AuthorProfilePicture string `json:"authorProfilePicture"`
+	ID                   uint      `json:"id"`
+	Content              string    `json:"content"`
+	AuthorID             uint      `json:"authorId"`
+	AuthorName           string    `json:"authorName"`
+	AuthorProfilePicture string    `json:"authorProfilePicture"`
+	CreatedAt            time.Time `json:"createdAt"`
 }
 
 type FindScrapOfUserRecipientResponse struct {
