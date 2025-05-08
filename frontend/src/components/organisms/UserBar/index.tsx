@@ -4,9 +4,7 @@ import { googleLogout } from "@react-oauth/google";
 import { useMe } from "api/me/queries";
 
 export const UserBar: React.FC = () => {
-  const { data: user } = useMe()
-
-  if (!user) return null;
+  const { data: user } = useMe();
 
   const navigate = useNavigate();
 
@@ -23,7 +21,7 @@ export const UserBar: React.FC = () => {
       sx={{ width: "100%", justifyContent: "end" }}
     >
       <Typography variant={"body2"}>
-        <strong>{user.email}</strong>
+        <strong>{user?.email}</strong>
       </Typography>
       <Typography variant={"body2"}>|</Typography>
       <Typography variant={"body2"}>
