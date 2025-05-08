@@ -3,26 +3,30 @@ import { LateralButtonList } from "components/molecules/LateralButtonList";
 import { useNavigate } from "react-router-dom";
 
 import { Box } from "@mui/material";
+import { useMe } from "api/me/queries";
 
 interface IHomeMenuProps {
 }
 export const Menu: React.FC<IHomeMenuProps> = () => {
   const navigate = useNavigate();
+  const { data: user } = useMe();
+
+  if (!user) return null;
 
   const handleGoToProfile = () => {
-    navigate(`/profile`);
+    navigate(`/profile/${user.id}`);
   };
 
   const handleGoToAlbums = () => {
-    navigate(`/profile/albums`);
+    navigate(`/profile/${user.id}/albums`);
   };
 
   const handleGoToScraps = () => {
-    navigate(`/profile/scraps`);
+    navigate(`/profile/${user.id}/scraps`);
   };
 
   const handleGoToTestimonials = () => {
-    navigate(`/profile/testimonials`);
+    navigate(`/profile/${user.id}/testimonials`);
   };
 
   const handleGoToMyAccount = () => {

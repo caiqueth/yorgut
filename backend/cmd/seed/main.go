@@ -123,7 +123,7 @@ func seedFriendships(
 	for _, user := range users {
 		for _, friend := range users {
 
-			if user.ID == friend.ID || user.ID > friend.ID {
+			if user.ID == friend.ID {
 				continue
 			}
 

@@ -100,6 +100,48 @@ const docTemplate = `{
                 }
             }
         },
+        "/community/profile": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Community"
+                ],
+                "summary": "Create Community Profile",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Community Name",
+                        "name": "communityId",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Community Description",
+                        "name": "description",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "Community Picture",
+                        "name": "picture",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/dto.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/community/{communityId}": {
             "get": {
                 "description": "Returns the community matching the requested id",
@@ -113,7 +155,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "get community by id",
+                        "description": "Community ID",
                         "name": "communityId",
                         "in": "path",
                         "required": true
@@ -140,7 +182,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "delete community by id",
+                        "description": "Community ID",
                         "name": "communityId",
                         "in": "path",
                         "required": true
@@ -169,7 +211,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "get community members by id",
+                        "description": "Community ID",
                         "name": "communityId",
                         "in": "path",
                         "required": true
@@ -198,7 +240,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "get community profile by id",
+                        "description": "Community ID",
                         "name": "communityId",
                         "in": "path",
                         "required": true
@@ -209,6 +251,26 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/dto.FindCommunityProfileByIdResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/community/{communityId}/related": {
+            "get": {
+                "description": "Returns an array of communities",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Community"
+                ],
+                "summary": "Get Related communities.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.FindManyCommunitiesResponse"
                         }
                     }
                 }
@@ -272,48 +334,6 @@ const docTemplate = `{
                 "responses": {
                     "204": {
                         "description": "No Content",
-                        "schema": {
-                            "$ref": "#/definitions/dto.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/community_profile": {
-            "post": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Community"
-                ],
-                "summary": "Create Community Profile",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Community Name",
-                        "name": "communityId",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Community Description",
-                        "name": "description",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "file",
-                        "description": "Community Picture",
-                        "name": "picture",
-                        "in": "formData",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
                         "schema": {
                             "$ref": "#/definitions/dto.Response"
                         }
@@ -472,7 +492,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "community Id",
+                        "description": "Community ID",
                         "name": "communityId",
                         "in": "path",
                         "required": true
@@ -501,7 +521,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "community Id",
+                        "description": "Community ID",
                         "name": "communityId",
                         "in": "path",
                         "required": true
@@ -1092,6 +1112,9 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
+                "owner": {
+                    "type": "integer"
+                },
                 "profilePicture": {
                     "type": "string"
                 }
@@ -1251,7 +1274,15 @@ const docTemplate = `{
             }
         },
         "dto.FindManyCommunitiesResponse": {
-            "type": "object"
+            "type": "object",
+            "properties": {
+                "communities": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.CommunityDto"
+                    }
+                }
+            }
         },
         "dto.FindManyUsersResponse": {
             "type": "object",
@@ -1294,6 +1325,9 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/dto.CommunityDto"
                     }
+                },
+                "membershipCount": {
+                    "type": "integer"
                 }
             }
         },

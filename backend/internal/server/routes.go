@@ -89,6 +89,8 @@ func NewRouter(
 			communities.GET("/:communityId", communityController.FindById)
 			communities.GET("/:communityId/members", communityController.FindMembers)
 			communities.GET("/:communityId/profile", communityController.FindProfileById)
+			communities.GET("/:communityId/related", communityController.FindRelated)
+			communities.POST("/profile", communityController.CreateCommunityProfile)
 		}
 
 		community_memberships := v1.Group("/community_membership")

@@ -13,10 +13,8 @@ export const Welcome: React.FC<IProps> = () => {
 
   if (!user) return null;
 
-  const userStatistics = useUserStatistics(user.id);
+  const userStatistics = useUserStatistics();
   const todaysLuck = useTodaysLuck();
-
-  if (!user) return null;
 
   return (
     <Box>

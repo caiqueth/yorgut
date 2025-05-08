@@ -29,7 +29,11 @@ func NewMeController(service service.UserService) *MeController {
 // @Router				/me [get]
 func (uc *MeController) FindMe(ctx *gin.Context) {
 	user := ctx.MustGet("user").(*model.User)
-	ctx.JSON(http.StatusOK, user)
+
+	resp := dto.FindUserResponse{}
+	resp.FromUser(user)
+
+	ctx.JSON(http.StatusOK, resp)
 }
 
 // Update 			godoc
@@ -139,7 +143,7 @@ func (uc *MeController) FindMyPendingFriendships(ctx *gin.Context) {
 
 // JoinCommunity	godoc
 // @Summary			User joins a community.
-// @Param			communityId path string true "community Id"
+// @Param			communityId path string true "Community ID"
 // @Description		Joins a community.
 // @Produce			application/json
 // @Tags			Me
@@ -163,7 +167,7 @@ func (uc *MeController) JoinCommunity(ctx *gin.Context) {
 
 // LeaveCommunity	godoc
 // @Summary			User leaves a community.
-// @Param			communityId path string true "community Id"
+// @Param			communityId path string true "Community ID"
 // @Description		Leaves a community.
 // @Produce			application/json
 // @Tags			Me
@@ -200,6 +204,8 @@ func (uc *MeController) FindMyMemberships(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+
+	memberships.MembershipCount = uc.userService.CountUserMemberships(user.ID)
 
 	ctx.JSON(http.StatusOK, memberships)
 }

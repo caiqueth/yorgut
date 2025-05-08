@@ -54,6 +54,7 @@ func (r *FindUserCommunitiesResponse) FromCommunities(communities []model.Commun
 
 func (r *FindUserMembershipsResponse) FromMemberships(memberships []model.CommunityMembership) {
 	r.Communities = make([]CommunityDto, len(memberships))
+	r.MembershipCount = 0
 	for i, m := range memberships {
 		r.Communities[i] = CommunityDto{
 			ID:              m.Community.ID,
@@ -111,6 +112,19 @@ func (r *FindPendingFriendshipOfUserResponse) FromUsers(users []model.User) {
 			FirstName:      f.FirstName,
 			LastName:       f.LastName,
 			ProfilePicture: *f.Profile.ProfilePicture,
+		}
+	}
+}
+
+func (r *FindManyCommunitiesResponse) FromCommunities(communities []model.Community) {
+	r.Communities = make([]CommunityDto, len(communities))
+	for i, c := range communities {
+		r.Communities[i] = CommunityDto{
+			ID:             c.ID,
+			Name:           c.Name,
+			CreatedBy:      c.CreatedByID,
+			ProfilePicture: c.Profile.ProfilePicture,
+			OwnerID:        c.OwnerID,
 		}
 	}
 }

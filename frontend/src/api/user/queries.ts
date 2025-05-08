@@ -49,7 +49,7 @@ export const useUserProfile = (userId: number) =>
     queryFn: ({ queryKey }) => doGet({ queryKey }),
   });
 
-export const useUserStatistics = (userId: number) => ({
+export const useUserStatistics = () => ({
   totalProfileViews: 3558,
   lastWeekProfileViews: 45,
   totalFriends: 111,

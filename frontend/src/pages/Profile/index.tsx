@@ -4,7 +4,7 @@ import { Box, Grid2 as Grid, Stack } from "@mui/material";
 
 import { CommunitiesList } from "./components/CommunitiesList";
 import { FriendsList } from "./components/FriendsList";
-import { UserProfilePicture } from "../../components/organisms/UserProfilePicture";
+import { UserProfilePicture } from "components/molecules/UserProfilePicture";
 
 import { ProfileHeader } from "./ProfileHeader";
 import { ProfileMenu } from "./ProfileMenu";

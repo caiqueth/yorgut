@@ -16,6 +16,15 @@ func (c *CommunityMembershipRepository) FindOfUser(id uint) ([]model.CommunityMe
 	return memberships, nil
 }
 
+func (c *CommunityMembershipRepository) CountOfUser(id uint) (int64, error) {
+	var count int64
+	result := c.db.Model(&model.CommunityMembership{}).Where("user_id = ?", id).Count(&count)
+	if result.Error != nil {
+		return 0, result.Error
+	}
+	return count, nil
+}
+
 func (c *CommunityMembershipRepository) FindOfUserAndCommunity(communityId uint, userId uint) (*model.CommunityMembership, error) {
 	var membership model.CommunityMembership
 	result := c.db.
@@ -58,7 +67,7 @@ func (p *PhotoAlbumRepository) FindOfUser(userId uint) ([]model.PhotoAlbum, erro
 // Community
 func (r *CommunityRepository) FindCommunitiesWithProfiles() ([]model.Community, error) {
 	var ents []model.Community
-	results := r.db.Preload("CommunityProfile").Find(&ents)
+	results := r.db.Preload("Profile").Find(&ents)
 	if results.Error != nil {
 		return nil, results.Error
 	}
@@ -164,8 +173,8 @@ func (f *FriendshipRepository) FindFriendsOfUser(userId uint) ([]model.User, err
 
 func (f *FriendshipRepository) UsersAreFriends(user1 uint, user2 uint) bool {
 	var count int64
-	f.db.Where(
-		"(user_requested_id = ? and user_requestee_id = ?) or (user_requested_id = ? and user_requestee_id = ?)",
+	f.db.Model(&model.Friendship{}).Where(
+		"((user_requested_id = ? and user_requestee_id = ?) or (user_requested_id = ? and user_requestee_id = ?)) and accepted = true",
 		user1, user2, user2, user1,
 	).Count(&count)
 

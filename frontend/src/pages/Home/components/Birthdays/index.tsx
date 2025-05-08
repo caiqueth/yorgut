@@ -1,14 +1,14 @@
 import React from "react";
-import { useUserFriends } from "api/user/queries";
 import { Link } from "react-router-dom";
 
-import { Grid2 as Grid, Stack, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import { BoxWithTitle } from "components/molecules/BoxWithTitle";
 import { dayjsFromDate } from "helpers/formatting/date";
 import { StripedGrid } from "components/molecules/StripedGrid";
+import { useMeFriends } from "api/me/queries";
 
 interface ItemProps {
-  id: string;
+  id: number;
   firstName: string;
   profilePicture: string;
   birthDate: Date;
@@ -37,7 +37,7 @@ const Item: React.FC<ItemProps> = ({
 
 interface IBirthdaysProps { };
 export const Birthdays: React.FC<IBirthdaysProps> = () => {
-  const { data: friends } = useUserFriends();
+  const { data: friends } = useMeFriends();
 
   const items =
     friends?.friends.map((f) => (

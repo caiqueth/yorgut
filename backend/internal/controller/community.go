@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 	"yorgut/internal/dto"
@@ -69,7 +70,7 @@ func (c *CommunityController) Update(ctx *gin.Context) {
 
 // Delete 				godoc
 // @Summary				Delete community by id.
-// @Param				communityId path string true "delete community by id"
+// @Param				communityId path string true "Community ID"
 // @Description			Deletes a community
 // @Produce				application/json
 // @Tags				Community
@@ -95,7 +96,7 @@ func (c *CommunityController) Delete(ctx *gin.Context) {
 
 // FindById				godoc
 // @Summary				Get Single community by id.
-// @Param				communityId path string true "get community by id"
+// @Param				communityId path string true "Community ID"
 // @Description			Returns the community matching the requested id
 // @Produce				application/json
 // @Tags				Community
@@ -121,7 +122,7 @@ func (c *CommunityController) FindById(ctx *gin.Context) {
 
 // FindProfileById		godoc
 // @Summary				Get Single community profile by its id.
-// @Param				communityId path string true "get community profile by id"
+// @Param				communityId path string true "Community ID"
 // @Description			Returns the community profile matching the requested id
 // @Produce				application/json
 // @Tags				Community
@@ -147,7 +148,7 @@ func (c *CommunityController) FindProfileById(ctx *gin.Context) {
 
 // FindMembers			godoc
 // @Summary				Get community members.
-// @Param				communityId path string true "get community members by id"
+// @Param				communityId path string true "Community ID"
 // @Description			Returns a list of the community members matching the requested id and a few stats
 // @Produce				application/json
 // @Tags				Community
@@ -188,6 +189,27 @@ func (c *CommunityController) FindMany(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, communities)
 }
 
+// FindRelated			godoc
+// @Summary				Get Related communities.
+// @Description			Returns an array of communities
+// @Produce				application/json
+// @Tags				Community
+// @Success				200 {object} dto.FindManyCommunitiesResponse{}
+// @Router				/community/{communityId}/related [get]
+func (c *CommunityController) FindRelated(ctx *gin.Context) {
+	// For now, I don't have a behavior for this, so we just list all communities
+	communityId := helpers.MustParseUint(ctx.Param("communityId"))
+	fmt.Println(communityId)
+
+	communities, err := c.communityService.FindManyCommunities()
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, communities)
+}
+
 // CreateCommunityProfile				godoc
 // @Summary				Create Community Profile
 // @Decription			Save community profile in Db.
@@ -197,7 +219,7 @@ func (c *CommunityController) FindMany(ctx *gin.Context) {
 // @Produce				application/json
 // @Tags				Community
 // @Success				201 {object} dto.Response{}
-// @Router				/community_profile [post]
+// @Router				/community/profile [post]
 func (c *CommunityController) CreateCommunityProfile(ctx *gin.Context) {
 	request := dto.CreateCommunityProfileRequest{
 		CommunityID: helpers.MustParseUint(ctx.PostForm("communityId")),

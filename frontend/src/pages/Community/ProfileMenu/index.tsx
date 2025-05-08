@@ -14,7 +14,7 @@ interface IProfileMenuProps {
 }
 export const ProfileMenu: React.FC<IProfileMenuProps> = ({ communityId }) => {
   const [isMemberOf, setIsMemberOf] = useState(false);
-  const { data: memberships, isFetching } = useCommunityMembers();
+  const { data: memberships, isFetching } = useCommunityMembers(communityId);
   const { mutate: joinCommunity } = useJoinCommunity();
   const { mutate: leaveCommunity } = useLeaveCommunity();
 
@@ -25,7 +25,7 @@ export const ProfileMenu: React.FC<IProfileMenuProps> = ({ communityId }) => {
 
   useEffect(() => {
     setIsMemberOf(
-      memberships?.communities.some((x) => x.id === communityId) ?? false,
+      memberships?.members.some((x) => x.id === communityId) ?? false,
     );
   }, [isFetching]);
 

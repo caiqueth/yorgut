@@ -1,5 +1,5 @@
 import { Box, Stack, Typography } from "@mui/material";
-import { useUserFriends } from "api/user/queries";
+import { useMeFriends } from "api/me/queries";
 import { BoxWithTitle } from "components/molecules/BoxWithTitle";
 import { StripedGrid } from "components/molecules/StripedGrid";
 import React from "react";
@@ -7,7 +7,7 @@ import React from "react";
 interface IProps { }
 
 export const Friends: React.FC<IProps> = () => {
-  const { data } = useUserFriends();
+  const { data } = useMeFriends();
 
   const items =
     data?.friends.map((f) => (

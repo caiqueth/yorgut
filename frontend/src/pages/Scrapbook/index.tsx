@@ -9,7 +9,7 @@ import {
 import { Button } from "components/atoms/Button";
 import { BoxWithTitle } from "components/molecules/BoxWithTitle";
 import { StripedGrid } from "components/molecules/StripedGrid";
-import { UserProfilePicture } from "components/organisms/UserProfilePicture";
+import { UserProfilePicture } from "components/molecules/UserProfilePicture";
 import { Menu } from "pages/Home/components/Menu";
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
@@ -45,7 +45,7 @@ export const Scrapbook: React.FC<IProps> = () => {
       <Grid container spacing={2}>
         <Grid size={2}>
           <Stack direction={"column"} gap={2}>
-            <UserProfilePicture />
+            <UserProfilePicture userId={userId} />
             <Menu />
           </Stack>
         </Grid>

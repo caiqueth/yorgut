@@ -1,12 +1,10 @@
 import React from "react";
-import { useRelatedCommunities } from "api/user/queries";
 
 import { BoxWithTitle } from "components/molecules/BoxWithTitle";
 import { PicAndText } from "components/atoms/PicAndText";
 import { StripedGrid } from "components/molecules/StripedGrid";
-import { Box, Stack } from "@mui/material";
-import { Button } from "components/atoms/Button";
-import { useNavigate } from "react-router-dom";
+import { Stack } from "@mui/material";
+import { useCommunityRelated } from "api/community/queries";
 
 interface IRelatedCommunitiesListProps {
   communityId: number;
@@ -14,27 +12,19 @@ interface IRelatedCommunitiesListProps {
 export const RelatedCommunitiesList: React.FC<IRelatedCommunitiesListProps> = ({
   communityId,
 }) => {
-  const navigate = useNavigate();
-  const { data: communities } = useRelatedCommunities(communityId);
-
-  const handleGoToRelated = () => {
-    navigate("related");
-  };
+  const { data: communities } = useCommunityRelated(communityId);
 
   const items =
     communities?.communities.map((c) => (
-      <PicAndText imageSrc={""} url={""} text={""} />
+      <PicAndText imageSrc={`/${c.profilePicture}`} url={`/community/${c.id}`} text={c.name} />
     )) ?? [];
 
   return (
     <BoxWithTitle
-      title={`comunidades relacionadas (${communities?.memberCount})`}
+      title={`comunidades relacionadas`}
     >
       <Stack direction={"column"} alignItems={"center"}>
         <StripedGrid items={items} elementsPerRow={4} />
-        <Box alignSelf={"center"}>
-          <Button onClick={handleGoToRelated}>ver todas</Button>
-        </Box>
       </Stack>
     </BoxWithTitle>
   );

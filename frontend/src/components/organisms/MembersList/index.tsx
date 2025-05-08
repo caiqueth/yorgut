@@ -1,5 +1,5 @@
 import React from "react";
-import { useCommunityMembers } from "api/user/queries";
+import { useCommunityMembers } from "api/community/queries";
 import { Button } from "components/atoms/Button";
 import { useNavigate } from "react-router-dom";
 import { Box, Stack } from "@mui/material";

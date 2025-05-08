@@ -1,13 +1,12 @@
 import React from "react";
-import { useUserMemberships, useUserStatistics } from "api/user/queries";
 import { BoxWithTitle } from "components/molecules/BoxWithTitle";
 import { StripedGrid } from "components/molecules/StripedGrid";
 import { PicAndText } from "components/atoms/PicAndText";
+import { useMeMemberships } from "api/me/queries";
 
 interface ICommunitiesListProps { };
 export const CommunitiesList: React.FC<ICommunitiesListProps> = () => {
-  const userStatistics = useUserStatistics();
-  const { data: memberships } = useUserMemberships();
+  const { data: memberships } = useMeMemberships();
 
   const items =
     memberships?.communities.map((c) => (
@@ -19,7 +18,7 @@ export const CommunitiesList: React.FC<ICommunitiesListProps> = () => {
     )) ?? [];
 
   return (
-    <BoxWithTitle title={`comunidades (${userStatistics.totalCommunities})`}>
+    <BoxWithTitle title={`comunidades (${memberships?.membershipCount})`}>
       <StripedGrid items={items} elementsPerRow={3} />
     </BoxWithTitle>
   );

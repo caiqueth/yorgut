@@ -1,5 +1,5 @@
 import React from "react";
-import { useCommunity } from "api/user/queries";
+import { useCommunity } from "api/community/queries";
 
 import { Box, Paper, Stack, Typography } from "@mui/material";
 

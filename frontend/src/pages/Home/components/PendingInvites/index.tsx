@@ -11,14 +11,13 @@ interface IPendingInvitesProps { };
 export const PendingInvites: React.FC<IPendingInvitesProps> = () => {
   const { data } = useMeFriendsPending();
 
-  if (!data) return null;
-  if (data.friends.length <= 0) return null;
+  if (!data?.friends) return null;
 
   return (
     <BoxWithTitle
       title={`novos pedidos de amizade (${data.friends.length})`}
     >
-      {data?.friends.map((pf, idx) => (
+      {data.friends.map((pf, idx) => (
         <Box
           sx={{
             backgroundColor: isStripedRow(idx, 1)

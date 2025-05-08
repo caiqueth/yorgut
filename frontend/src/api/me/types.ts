@@ -1,10 +1,10 @@
 export interface IMeResponse {
-  birthDate: string;
-  createdAt: string;
+  id: number;
+  birthDate: Date;
+  createdAt: Date;
   email: string;
   firstName: string;
   friendCount: number;
-  id: number;
   lastName: string;
   updatedAt: string;
 }
@@ -15,7 +15,7 @@ export interface IMeUpdateResponse {
 
 export interface IMeFriendsResponse {
   friends: {
-    birthDate: string;
+    birthDate: Date;
     firstName: string;
     friendCount: number;
     id: number;
@@ -25,11 +25,11 @@ export interface IMeFriendsResponse {
 
 export interface IMeFriendsPendingResponse {
   friends: {
-    birthDate: "string";
-    firstName: "string";
-    friendCount: 0;
-    id: 0;
-    profilePicture: "string";
+    birthDate: string;
+    firstName: string;
+    friendCount: number;
+    id: number;
+    profilePicture: string;
   }[];
 }
 
@@ -42,6 +42,7 @@ export interface ILeaveCommunityResponse {
 }
 
 export interface IMeMembershipsResponse {
+  membershipCount: number;
   communities: {
     firstName: number;
     id: number;

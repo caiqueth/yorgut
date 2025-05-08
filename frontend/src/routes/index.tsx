@@ -14,7 +14,6 @@ import { UserPhotoAlbumsList } from "pages/Profile/PhotoAlbums";
 import { UserScrapList } from "pages/Profile/Scraps";
 import { UserVideosList } from "pages/Profile/Videos";
 import { UserTestimonialsList } from "pages/Profile/Testimonials";
-import { RelatedCommunities } from "pages/Community/Related";
 import { Friends } from "pages/Friends";
 import { Communities } from "pages/Communities";
 import { Search } from "pages/Search";
@@ -182,8 +181,8 @@ export const Routes = [
           },
         ],
       },
-      { path: "not-allowed", element: <></> },
-      { path: "disconnected", element: <></> },
+      { path: "not-allowed", element: <BadBadServer /> },
+      { path: "disconnected", element: <BadBadServer /> },
     ],
   },
   {
@@ -207,14 +206,6 @@ export const Routes = [
         element: (
           <ProtectedRoute>
             <CommunityMembers />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: "related",
-        element: (
-          <ProtectedRoute>
-            <RelatedCommunities />
           </ProtectedRoute>
         ),
       },

@@ -201,6 +201,14 @@ func (u *UserService) FindUserMemberships(userId uint) (*dto.FindUserMemberships
 	return resp, nil
 }
 
+func (u *UserService) CountUserMemberships(userId uint) uint {
+	count, err := u.communityMembershipRepository.CountOfUser(userId)
+	if err != nil {
+		return 0
+	}
+	return uint(count)
+}
+
 func (u *UserService) JoinCommunity(userId uint, communityId uint) error {
 	community, err := u.communityRepository.FindById(communityId)
 	if err != nil {
@@ -466,25 +474,16 @@ func (c *CommunityService) FindCommunityProfileById(id uint) (dto.FindCommunityP
 	}, nil
 }
 
-func (c *CommunityService) FindManyCommunities() (*dto.Response, error) {
+func (c *CommunityService) FindManyCommunities() (*dto.FindManyCommunitiesResponse, error) {
 	communities, err := c.communityRepository.FindCommunitiesWithProfiles()
 	if err != nil {
 		return nil, err
 	}
 
-	communityDtos := make([]dto.CommunityDto, len(communities))
+	resp := dto.FindManyCommunitiesResponse{}
+	resp.FromCommunities(communities)
 
-	for i, community := range communities {
-		communityDtos[i] = dto.CommunityDto{
-			Name:           community.Name,
-			CreatedBy:      community.CreatedByID,
-			ProfilePicture: community.Profile.ProfilePicture,
-		}
-	}
-
-	return &dto.Response{
-		Data: map[string][]dto.CommunityDto{"communities": communityDtos},
-	}, nil
+	return &resp, nil
 }
 
 func (c *CommunityService) FindCommunityMembers(communityId uint) (*dto.FindCommunityMembersResponse, error) {

@@ -134,6 +134,8 @@ func (uc *UserController) FindMemberships(ctx *gin.Context) {
 		return
 	}
 
+	memberships.MembershipCount = uc.userService.CountUserMemberships(userId)
+
 	ctx.JSON(http.StatusOK, memberships)
 }
 

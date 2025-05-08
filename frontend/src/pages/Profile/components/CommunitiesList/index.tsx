@@ -1,5 +1,5 @@
 import React from "react";
-import { useUserMemberships, useUserStatistics } from "api/user/queries";
+import { useUserMemberships } from "api/user/queries";
 import { BoxWithTitle } from "components/molecules/BoxWithTitle";
 import { StripedGrid } from "components/molecules/StripedGrid";
 import { PicAndText } from "components/atoms/PicAndText";
@@ -10,7 +10,6 @@ interface ICommunitiesListProps {
 export const CommunitiesList: React.FC<ICommunitiesListProps> = ({
   userId,
 }) => {
-  const userStatistics = useUserStatistics(userId);
   const { data: memberships } = useUserMemberships(userId);
 
   const items =
@@ -23,7 +22,7 @@ export const CommunitiesList: React.FC<ICommunitiesListProps> = ({
     )) ?? [];
 
   return (
-    <BoxWithTitle title={`comunidades (${userStatistics.totalCommunities})`}>
+    <BoxWithTitle title={`comunidades (${memberships?.membershipCount})`}>
       <StripedGrid items={items} elementsPerRow={3} />
     </BoxWithTitle>
   );

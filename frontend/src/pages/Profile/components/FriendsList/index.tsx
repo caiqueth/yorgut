@@ -1,16 +1,21 @@
 import React from "react";
 import { Button } from "components/atoms/Button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Box, Stack } from "@mui/material";
 import { BoxWithTitle } from "components/molecules/BoxWithTitle";
 import { StripedGrid } from "components/molecules/StripedGrid";
 import { PicAndText } from "components/atoms/PicAndText";
 import { useMe, useMeFriends } from "api/me/queries";
+import { useUser, useUserFriends } from "api/user/queries";
 
 interface IFriendsListProps { }
 export const FriendsList: React.FC<IFriendsListProps> = () => {
-  const { data: user } = useMe();
-  const { data: friends } = useMeFriends();
+  const params = useParams();
+  const userId = parseInt(params.userId ?? "");
+
+  const { data: user } = useUser(userId);
+  const { data: friends } = useUserFriends(userId);
+
   const navigate = useNavigate();
 
   const handleGoToFriends = () => {

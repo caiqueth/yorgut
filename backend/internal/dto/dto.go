@@ -69,7 +69,9 @@ type FindCommunityMembersResponse struct {
 	Members     []CommunityMemberEntry `json:"members"`
 }
 
-type FindManyCommunitiesResponse struct{}
+type FindManyCommunitiesResponse struct {
+	Communities []CommunityDto `json:"communities"`
+}
 
 type FriendshipDto struct {
 	UserRequestedID uint      `json:"userRequestedId"`
@@ -210,6 +212,7 @@ type CommunityDto struct {
 	CreatedBy       uint    `json:"firstName"`
 	ProfilePicture  *string `json:"profilePicture"`
 	MembershipCount uint    `json:"membershipCount"`
+	OwnerID         uint    `json:"owner"`
 }
 
 type FindUserResponse struct {
@@ -230,5 +233,6 @@ type FindUserCommunitiesResponse struct {
 }
 
 type FindUserMembershipsResponse struct {
-	Communities []CommunityDto `json:"communities"`
+	Communities     []CommunityDto `json:"communities"`
+	MembershipCount uint           `json:"membershipCount"`
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import { useCommunityProfile } from "api/user/queries";
+import { useCommunityProfile } from "api/community/queries";
 
 import { ProfilePicture } from "components/atoms/ProfilePicture";
 

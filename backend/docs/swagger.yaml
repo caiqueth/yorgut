@@ -10,6 +10,8 @@ definitions:
         type: integer
       name:
         type: string
+      owner:
+        type: integer
       profilePicture:
         type: string
     type: object
@@ -112,6 +114,11 @@ definitions:
         type: array
     type: object
   dto.FindManyCommunitiesResponse:
+    properties:
+      communities:
+        items:
+          $ref: '#/definitions/dto.CommunityDto'
+        type: array
     type: object
   dto.FindManyUsersResponse:
     properties:
@@ -140,6 +147,8 @@ definitions:
         items:
           $ref: '#/definitions/dto.CommunityDto'
         type: array
+      membershipCount:
+        type: integer
     type: object
   dto.FindUserResponse:
     properties:
@@ -339,7 +348,7 @@ paths:
     delete:
       description: Deletes a community
       parameters:
-      - description: delete community by id
+      - description: Community ID
         in: path
         name: communityId
         required: true
@@ -357,7 +366,7 @@ paths:
     get:
       description: Returns the community matching the requested id
       parameters:
-      - description: get community by id
+      - description: Community ID
         in: path
         name: communityId
         required: true
@@ -377,7 +386,7 @@ paths:
       description: Returns a list of the community members matching the requested
         id and a few stats
       parameters:
-      - description: get community members by id
+      - description: Community ID
         in: path
         name: communityId
         required: true
@@ -396,7 +405,7 @@ paths:
     get:
       description: Returns the community profile matching the requested id
       parameters:
-      - description: get community profile by id
+      - description: Community ID
         in: path
         name: communityId
         required: true
@@ -409,6 +418,47 @@ paths:
           schema:
             $ref: '#/definitions/dto.FindCommunityProfileByIdResponse'
       summary: Get Single community profile by its id.
+      tags:
+      - Community
+  /community/{communityId}/related:
+    get:
+      description: Returns an array of communities
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.FindManyCommunitiesResponse'
+      summary: Get Related communities.
+      tags:
+      - Community
+  /community/profile:
+    post:
+      parameters:
+      - description: Community Name
+        in: formData
+        name: communityId
+        required: true
+        type: string
+      - description: Community Description
+        in: formData
+        name: description
+        required: true
+        type: string
+      - description: Community Picture
+        in: formData
+        name: picture
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.Response'
+      summary: Create Community Profile
       tags:
       - Community
   /community_membership:
@@ -453,34 +503,6 @@ paths:
       summary: Delete Community Membership
       tags:
       - CommunityMembership
-  /community_profile:
-    post:
-      parameters:
-      - description: Community Name
-        in: formData
-        name: communityId
-        required: true
-        type: string
-      - description: Community Description
-        in: formData
-        name: description
-        required: true
-        type: string
-      - description: Community Picture
-        in: formData
-        name: picture
-        required: true
-        type: file
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            $ref: '#/definitions/dto.Response'
-      summary: Create Community Profile
-      tags:
-      - Community
   /friendship:
     post:
       description: Creates a Friendship.
@@ -575,7 +597,7 @@ paths:
     post:
       description: Joins a community.
       parameters:
-      - description: community Id
+      - description: Community ID
         in: path
         name: communityId
         required: true
@@ -594,7 +616,7 @@ paths:
     post:
       description: Leaves a community.
       parameters:
-      - description: community Id
+      - description: Community ID
         in: path
         name: communityId
         required: true

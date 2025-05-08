@@ -33,6 +33,7 @@ export interface IUserFriendsResponse {
 }
 
 export interface IUserMembershipsResponse {
+  membershipCount: number;
   communities: {
     firstName: number;
     id: number;
