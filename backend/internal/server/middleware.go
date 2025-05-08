@@ -28,7 +28,7 @@ func JWTMiddleware() gin.HandlerFunc {
 		// Parse the Token
 		parsed, err := helpers.ParseToken(token)
 		if err != nil {
-			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Could not parse the token"})
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Could not parse the token"})
 			return
 		}
 
