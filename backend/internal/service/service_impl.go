@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"sync"
+	"time"
 	"yorgut/internal/dto"
 	"yorgut/internal/helpers"
 	"yorgut/internal/model"
@@ -166,7 +167,7 @@ func (u *UserService) FindUserPhotoAlbums(userId uint) (*dto.FindPhotoAlbumOfUse
 }
 
 func (u *UserService) FindPendingFriendshipsOfUser(userId uint) (*dto.FindPendingFriendshipOfUserResponse, error) {
-	invites, err := u.friendshipRepository.FindPendingFriendshipsOfUser(userId, false)
+	invites, err := u.friendshipRepository.FindPendingFriendshipsOfUser(userId)
 	if err != nil {
 		return nil, err
 	}
@@ -201,6 +202,19 @@ func (u *UserService) FindUserMemberships(userId uint) (*dto.FindUserMemberships
 	return resp, nil
 }
 
+func (u *UserService) IsUserMemberOf(communityId uint, userId uint) bool {
+	membership, err := u.communityMembershipRepository.FindOfUserAndCommunity(communityId, userId)
+	if err != nil {
+		return false
+	}
+
+	if membership == nil {
+		return false
+	}
+
+	return true
+}
+
 func (u *UserService) CountUserMemberships(userId uint) uint {
 	count, err := u.communityMembershipRepository.CountOfUser(userId)
 	if err != nil {
@@ -218,6 +232,11 @@ func (u *UserService) JoinCommunity(userId uint, communityId uint) error {
 	user, err := u.userRepository.FindById(userId)
 	if err != nil {
 		return err
+	}
+
+	membershipExisting, _ := u.communityMembershipRepository.FindOfUserAndCommunity(communityId, userId)
+	if membershipExisting != nil {
+		return errors.New("user is already a member of that community")
 	}
 
 	membership := model.NewCommunityMembership(community, user)
@@ -375,13 +394,13 @@ func (p *PhotoAlbumService) FindPhotoAlbumOfUser(userId uint) (*dto.FindPhotoAlb
 }
 
 // Friendship
-func (f *FriendshipService) CreateFriendship(friendship dto.CreateFriendshipRequest) error {
-	userRequested, err := f.userRepository.FindById(friendship.UserRequested)
+func (f *FriendshipService) CreateFriendship(userRequestedID uint, userRequesteeID uint) error {
+	userRequested, err := f.userRepository.FindById(userRequestedID)
 	if err != nil {
 		return errors.New("could not find user that requested the friendship")
 	}
 
-	userRequestee, err := f.userRepository.FindById(friendship.UserRequestee)
+	userRequestee, err := f.userRepository.FindById(userRequesteeID)
 	if err != nil {
 		return errors.New("could not find user that requestee the friendship")
 	}
@@ -395,7 +414,6 @@ func (f *FriendshipService) CreateFriendship(friendship dto.CreateFriendshipRequ
 	return nil
 }
 
-// Friendship
 func (f *FriendshipService) ReplyFriendship(friendshipId uint, accepted bool) error {
 	friendship, err := f.friendshipRepository.FindPendingFriendshipWithUsersById(friendshipId)
 	if err != nil {
@@ -407,7 +425,10 @@ func (f *FriendshipService) ReplyFriendship(friendshipId uint, accepted bool) er
 		return nil
 	}
 
+	now := time.Now()
 	friendship.Accepted = accepted
+	friendship.AcceptedAt = &now
+
 	if err := f.friendshipRepository.Update(friendship); err != nil {
 		return err
 	}
@@ -420,8 +441,21 @@ func (f *FriendshipService) ReplyFriendship(friendshipId uint, accepted bool) er
 	return nil
 }
 
-func (f *FriendshipService) DeleteFriendship(id uint) error {
-	err := f.friendshipRepository.Delete(id)
+func (f *FriendshipService) ShouldThisUserBeReplying(friendshipId uint, userId uint) bool {
+	friendship, err := f.friendshipRepository.FindById(friendshipId)
+	if err != nil {
+		return false
+	}
+
+	if friendship.UserRequesteeID == userId {
+		return true
+	}
+
+	return false
+}
+
+func (f *FriendshipService) DeleteFriendship(friendshipId uint) error {
+	err := f.friendshipRepository.Delete(friendshipId)
 	if err != nil {
 		return err
 	}

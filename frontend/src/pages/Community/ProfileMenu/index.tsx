@@ -1,33 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { LateralButtonList } from "components/molecules/LateralButtonList";
 
 import { Box } from "@mui/material";
-import {
-  useUserMemberships,
-} from "api/user/queries";
 import { useNavigate } from "react-router-dom";
-import { useJoinCommunity, useLeaveCommunity } from "api/me/queries";
-import { useCommunityMembers } from "api/community/queries";
+import { useJoinCommunity, useLeaveCommunity, useMeAmMember } from "api/me/queries";
 
 interface IProfileMenuProps {
   communityId: number;
 }
 export const ProfileMenu: React.FC<IProfileMenuProps> = ({ communityId }) => {
-  const [isMemberOf, setIsMemberOf] = useState(false);
-  const { data: memberships, isFetching } = useCommunityMembers(communityId);
+  const { data } = useMeAmMember(communityId);
   const { mutate: joinCommunity } = useJoinCommunity();
   const { mutate: leaveCommunity } = useLeaveCommunity();
+
+  const isMemberOf = data?.amIMember;
 
   const navigate = useNavigate();
   const handleGoToCommunity = () => navigate(`/community/${communityId}`);
   const handleJoinCommunity = () => joinCommunity({ communityId });
   const handleLeaveCommunity = () => leaveCommunity({ communityId });
-
-  useEffect(() => {
-    setIsMemberOf(
-      memberships?.members.some((x) => x.id === communityId) ?? false,
-    );
-  }, [isFetching]);
 
   const itemsList = [
     { text: "perfil", avatar: "🏘️", onClick: () => handleGoToCommunity() },

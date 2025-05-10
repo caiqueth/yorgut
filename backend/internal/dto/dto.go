@@ -84,18 +84,25 @@ type CreateFriendshipRequest struct {
 	UserRequestee uint `json:"userRequestee"`
 }
 
+type ReplyFriendshipRequest struct {
+	FriendshipID uint `json:"friendshipId"`
+	Accept       bool
+}
+
 type FindFriendshipOfUserResponse struct {
 	Friendships []FriendshipDto `json:"friendships"`
 }
 
 type PendingFriendship struct {
-	ID             uint   `json:"id"`
-	FirstName      string `json:"firstName"`
-	LastName       string `json:"lastName"`
-	ProfilePicture string `json:"profilePicture"`
+	ID              uint   `json:"id"`
+	UserRequestedID uint   `json:"userRequestedId"`
+	FirstName       string `json:"firstName"`
+	LastName        string `json:"lastName"`
+	ProfilePicture  string `json:"profilePicture"`
 }
 
 type FindPendingFriendshipOfUserResponse struct {
+	Count              uint                `json:"count"`
 	PendingFriendships []PendingFriendship `json:"pendingFriendships"`
 }
 
@@ -236,4 +243,8 @@ type FindUserCommunitiesResponse struct {
 type FindUserMembershipsResponse struct {
 	Communities     []CommunityDto `json:"communities"`
 	MembershipCount uint           `json:"membershipCount"`
+}
+
+type AmIMemberOfResponse struct {
+	AmIMember bool `json:"amIMember"`
 }

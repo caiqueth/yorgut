@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 	"yorgut/internal/dto"
+	"yorgut/internal/helpers"
 	"yorgut/internal/model"
 	"yorgut/internal/service"
 
@@ -128,7 +129,7 @@ func (uc *MeController) FindMyFriends(ctx *gin.Context) {
 // @Description				Returns a list of users
 // @Produce					application/json
 // @Tags					Me
-// @Success					200 {object} dto.FindFriendsOfUserResponse{}
+// @Success					200 {object} dto.FindPendingFriendshipOfUserResponse{}
 // @Router					/me/friends/pending [get]
 func (uc *MeController) FindMyPendingFriendships(ctx *gin.Context) {
 	user := ctx.MustGet("user").(*model.User)
@@ -208,4 +209,22 @@ func (uc *MeController) FindMyMemberships(ctx *gin.Context) {
 	memberships.MembershipCount = uc.userService.CountUserMemberships(user.ID)
 
 	ctx.JSON(http.StatusOK, memberships)
+}
+
+// AmIMemberOf		godoc
+// @Summary			Evaluates if the logged user is member of specified community
+// @Description		Returns true or false
+// @Produce			application/json
+// @Tags			Me
+// @Success			200 {object} dto.AmIMemberOfResponse{}
+// @Router			/me/memberships/{communityId} [get]
+func (uc *MeController) AmIMemberOf(ctx *gin.Context) {
+	user := ctx.MustGet("user").(*model.User)
+	communityId := helpers.MustParseUint(ctx.Param("communityId"))
+
+	isMember := uc.userService.IsUserMemberOf(communityId, user.ID)
+
+	ctx.JSON(http.StatusOK, dto.AmIMemberOfResponse{
+		AmIMember: isMember,
+	})
 }

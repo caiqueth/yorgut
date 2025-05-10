@@ -1,5 +1,10 @@
 basePath: /api/v1
 definitions:
+  dto.AmIMemberOfResponse:
+    properties:
+      amIMember:
+        type: boolean
+    type: object
   dto.CommunityDto:
     properties:
       firstName:
@@ -127,6 +132,15 @@ definitions:
           $ref: '#/definitions/dto.UserDto'
         type: array
     type: object
+  dto.FindPendingFriendshipOfUserResponse:
+    properties:
+      count:
+        type: integer
+      pendingFriendships:
+        items:
+          $ref: '#/definitions/dto.PendingFriendship'
+        type: array
+    type: object
   dto.FindPhotoAlbumOfUserResponse:
     properties:
       photoAlbums:
@@ -237,11 +251,31 @@ definitions:
       profilePicture:
         type: string
     type: object
+  dto.PendingFriendship:
+    properties:
+      firstName:
+        type: string
+      id:
+        type: integer
+      lastName:
+        type: string
+      profilePicture:
+        type: string
+      userRequestedId:
+        type: integer
+    type: object
   dto.PhotoAlbumDto:
     properties:
       name:
         type: string
       userId:
+        type: integer
+    type: object
+  dto.ReplyFriendshipRequest:
+    properties:
+      accept:
+        type: boolean
+      friendshipId:
         type: integer
     type: object
   dto.Response:
@@ -544,6 +578,26 @@ paths:
       summary: Delete Friendship by id.
       tags:
       - Friendship
+  /friendship/accept:
+    post:
+      description: Repliess a Friendship request.
+      parameters:
+      - description: Accept Friendship
+        in: body
+        name: FriendshipRequest
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ReplyFriendshipRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.Response'
+      summary: Reply a Friendship request.
+      tags:
+      - Friendship
   /me:
     get:
       description: Returns the user matching the requested id
@@ -591,7 +645,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.FindFriendsOfUserResponse'
+            $ref: '#/definitions/dto.FindPendingFriendshipOfUserResponse'
       summary: Gets a list of friendship invites of the user.
       tags:
       - Me
@@ -644,6 +698,19 @@ paths:
           schema:
             $ref: '#/definitions/dto.FindUserMembershipsResponse'
       summary: Gets a list of communities that user is member of.
+      tags:
+      - Me
+  /me/memberships/{communityId}:
+    get:
+      description: Returns true or false
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.AmIMemberOfResponse'
+      summary: Evaluates if the logged user is member of specified community
       tags:
       - Me
   /me/photoAlbums:

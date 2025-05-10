@@ -24,11 +24,12 @@ export interface IMeFriendsResponse {
 }
 
 export interface IMeFriendsPendingResponse {
-  friends: {
-    birthDate: string;
-    firstName: string;
-    friendCount: number;
+  count: number;
+  pendingFriendships: {
     id: number;
+    userRequestedId: number;
+    firstName: string;
+    lastName: string;
     profilePicture: string;
   }[];
 }
@@ -86,4 +87,8 @@ export interface IMeProfileResponse {
   sports: string;
   updatedAt: string;
   website: string;
+}
+
+export interface IAmIMemberResponse {
+  amIMember: boolean;
 }

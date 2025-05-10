@@ -62,6 +62,7 @@ func NewRouter(
 			me.PUT("", meController.UpdateMe)
 			me.GET("/profile", meController.FindMyProfile)
 			me.GET("/memberships", meController.FindMyMemberships)
+			me.GET("/memberships/:communityId", meController.AmIMemberOf)
 			me.GET("/friends", meController.FindMyFriends)
 			me.GET("/friends/pending", meController.FindMyPendingFriendships)
 			me.GET("/photoAlbums", meController.FindMyPhotoAlbums)
@@ -102,6 +103,7 @@ func NewRouter(
 		friendships := v1.Group("/friendship")
 		{
 			friendships.POST("", friendshipController.Create)
+			friendships.POST("/reply", friendshipController.ReplyFriendship)
 			friendships.DELETE("", friendshipController.Delete)
 		}
 

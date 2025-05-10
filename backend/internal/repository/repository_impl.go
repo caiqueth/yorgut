@@ -125,23 +125,19 @@ func (r *UserRepository) IncrementFriendCount(user *model.User, increment int) e
 }
 
 // Friendship
-func (f *FriendshipRepository) FindPendingFriendshipsOfUser(userId uint, accepted bool) ([]model.User, error) {
+func (f *FriendshipRepository) FindPendingFriendshipsOfUser(userId uint) ([]model.Friendship, error) {
 	var ents []model.Friendship
-	invites := []model.User{}
 	result := f.db.
 		Preload("UserRequested").
 		Preload("UserRequested.Profile").
-		Where("(user_requestee_id = ?) and accepted = ?", userId, accepted).
+		Where("(user_requestee_id = ?) and accepted = false", userId).
 		Find(&ents)
 
 	if result.Error != nil {
 		return nil, result.Error
 	}
 
-	for _, fsp := range ents {
-		invites = append(invites, *fsp.UserRequested)
-	}
-	return invites, nil
+	return ents, nil
 }
 
 func (f *FriendshipRepository) FindFriendsOfUser(userId uint) ([]model.User, error) {

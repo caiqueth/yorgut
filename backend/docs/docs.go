@@ -372,6 +372,37 @@ const docTemplate = `{
                 }
             }
         },
+        "/friendship/accept": {
+            "post": {
+                "description": "Repliess a Friendship request.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Friendship"
+                ],
+                "summary": "Reply a Friendship request.",
+                "parameters": [
+                    {
+                        "description": "Accept Friendship",
+                        "name": "FriendshipRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.ReplyFriendshipRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/dto.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/friendship/{friendshipId}": {
             "delete": {
                 "description": "Deletes a Friendship.",
@@ -473,7 +504,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.FindFriendsOfUserResponse"
+                            "$ref": "#/definitions/dto.FindPendingFriendshipOfUserResponse"
                         }
                     }
                 }
@@ -552,6 +583,26 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/dto.FindUserMembershipsResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/me/memberships/{communityId}": {
+            "get": {
+                "description": "Returns true or false",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Me"
+                ],
+                "summary": "Evaluates if the logged user is member of specified community",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.AmIMemberOfResponse"
                         }
                     }
                 }
@@ -1097,6 +1148,14 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "dto.AmIMemberOfResponse": {
+            "type": "object",
+            "properties": {
+                "amIMember": {
+                    "type": "boolean"
+                }
+            }
+        },
         "dto.CommunityDto": {
             "type": "object",
             "properties": {
@@ -1295,6 +1354,20 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.FindPendingFriendshipOfUserResponse": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "pendingFriendships": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.PendingFriendship"
+                    }
+                }
+            }
+        },
         "dto.FindPhotoAlbumOfUserResponse": {
             "type": "object",
             "properties": {
@@ -1463,6 +1536,26 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.PendingFriendship": {
+            "type": "object",
+            "properties": {
+                "firstName": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "profilePicture": {
+                    "type": "string"
+                },
+                "userRequestedId": {
+                    "type": "integer"
+                }
+            }
+        },
         "dto.PhotoAlbumDto": {
             "type": "object",
             "properties": {
@@ -1470,6 +1563,17 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "userId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.ReplyFriendshipRequest": {
+            "type": "object",
+            "properties": {
+                "accept": {
+                    "type": "boolean"
+                },
+                "friendshipId": {
                     "type": "integer"
                 }
             }

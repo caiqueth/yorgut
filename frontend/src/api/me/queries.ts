@@ -2,6 +2,7 @@ import { doGet, doPost } from "api/http";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+  IAmIMemberResponse,
   IMeFriendsPendingResponse,
   IMeFriendsResponse,
   IMeMembershipsResponse,
@@ -44,7 +45,7 @@ export const useJoinCommunity = () => {
       doPost({ url: `${basePath}/join/${communityId}`, body: {} }),
     onSettled: (_data, _error, variables) => {
       queryClient.invalidateQueries({
-        queryKey: [`${basePath}/memberships`],
+        queryKey: [`${basePath}/memberships/${variables.communityId}`],
       });
       queryClient.invalidateQueries({
         queryKey: [`/api/community/${variables.communityId}/members`],
@@ -60,7 +61,7 @@ export const useLeaveCommunity = () => {
       doPost({ url: `${basePath}/leave/${communityId}`, body: {} }),
     onSettled: (_data, _error, variables) => {
       queryClient.invalidateQueries({
-        queryKey: [`${basePath}/memberships`],
+        queryKey: [`${basePath}/memberships/${variables.communityId}`],
       });
       queryClient.invalidateQueries({
         queryKey: [`/api/community/${variables.communityId}/members`],
@@ -84,5 +85,11 @@ export const useMePhotoAlbums = () =>
 export const useMeProfile = () =>
   useQuery<IMeProfileResponse>({
     queryKey: [`${basePath}/profile`],
+    queryFn: ({ queryKey }) => doGet({ queryKey }),
+  });
+
+export const useMeAmMember = (communityId: number) =>
+  useQuery<IAmIMemberResponse>({
+    queryKey: [`${basePath}/memberships/${communityId}`],
     queryFn: ({ queryKey }) => doGet({ queryKey }),
   });
