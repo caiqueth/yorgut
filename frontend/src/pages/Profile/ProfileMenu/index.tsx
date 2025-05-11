@@ -13,7 +13,7 @@ export const ProfileMenu: React.FC<IProfileMenuProps> = ({ userId }) => {
   const navigate = useNavigate();
   const { data: friendshipState } = useMeAmFriend(userId);
   const { mutate: replyFriendship } = useReplyFriendship();
-  const { mutate: removeFriend } = useRemoveFriend();
+  const { mutate: removeFriend } = useRemoveFriend(userId);
   const { mutate: addFriend } = useAddFriend();
 
   const handleDoNothing = () => { };
@@ -25,7 +25,8 @@ export const ProfileMenu: React.FC<IProfileMenuProps> = ({ userId }) => {
   };
 
   const handleRemoveFriend = () => {
-    removeFriend(friendshipState?.friendshipId)
+    if (!friendshipState?.friendshipId) return;
+    removeFriend();
   };
 
   const handleAcceptFriendship = () => {
@@ -65,9 +66,9 @@ export const ProfileMenu: React.FC<IProfileMenuProps> = ({ userId }) => {
   if (friendshipState) {
     if (friendshipState.amIFriend) {
       itemsList.unshift({ text: "desfazer amizade", avatar: "➖", onClick: () => handleRemoveFriend() })
-    } else if (friendshipState.isPendingMyRequest) {
+    } else if (friendshipState.isPendingMyReply) {
       itemsList.unshift({ text: "pedido enviado", avatar: "🕛", onClick: () => handleDoNothing() })
-    } else if (friendshipState.isPendingTheirRequest) {
+    } else if (friendshipState.isPendingTheirReply) {
       itemsList.unshift({ text: "aceitar amizade", avatar: "✅", onClick: () => handleAcceptFriendship() })
       itemsList.unshift({ text: "recusar amizade", avatar: "❌", onClick: () => handleRejectFriendship() })
     } else {

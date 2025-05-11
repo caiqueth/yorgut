@@ -105,7 +105,8 @@ func NewRouter(
 		{
 			friendships.POST("", friendshipController.AddFriend)
 			friendships.POST("/reply", friendshipController.ReplyFriendship)
-			friendships.DELETE(":friendshipId", friendshipController.RemoveFriend)
+			friendships.DELETE(":friendshipId", friendshipController.RemoveFriendByFriendshipID)
+			friendships.DELETE("/friend/:userId", friendshipController.RemoveFriendByUserID)
 		}
 
 		photoAlbums := v1.Group("/photoAlbum")

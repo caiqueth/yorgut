@@ -1,11 +1,27 @@
-import { Box } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
+import { useUser, useUserFriends } from "api/user/queries";
+import { BoxWithTitle } from "components/molecules/BoxWithTitle";
+import { StripedGrid } from "components/molecules/StripedGrid";
 import React from "react";
 import { useParams } from "react-router-dom";
 
-interface IProps {}
+interface IProps { }
 export const UserFriendsList: React.FC<IProps> = () => {
   const params = useParams();
   const userId = parseInt(params.userId ?? "");
+  const { data: friends } = useUserFriends(userId);
+  const { data: user } = useUser(userId)
 
-  return <Box>Lista de amigos do usuário {userId}</Box>;
+  const items = friends?.friends.map((f) => (
+    <Stack direction={"row"} alignItems={"center"} gap={1}>
+      <img src={`/${f.profilePicture}`} height={48}></img>
+      <Typography>{f.firstName}</Typography>
+    </Stack>
+  )) ?? [];
+
+  return (<Box>
+    <BoxWithTitle title={`amigos de ${user?.firstName}`}>
+      <StripedGrid items={items} elementsPerRow={1}></StripedGrid>
+    </BoxWithTitle>
+  </Box>);
 };

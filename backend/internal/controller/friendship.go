@@ -71,15 +71,15 @@ func (f *FriendshipController) ReplyFriendship(ctx *gin.Context) {
 	ctx.JSON(http.StatusNoContent, nil)
 }
 
-// RemoveFriend			godoc
-// @Summary				Deletes a Friendship by id.
-// @Param				friendshipId path string true "delete Friendship by id"
-// @Description			Deletes a Friendship.
-// @Produce				application/json
-// @Tags				Friendship
-// @Success				204
-// @Router				/friendship/{friendshipId} [delete]
-func (f *FriendshipController) RemoveFriend(ctx *gin.Context) {
+// RemoveFriendByFriendshipID	godoc
+// @Summary						Deletes a Friendship by id.
+// @Param						friendshipId path string true "delete Friendship by id"
+// @Description					Deletes a Friendship.
+// @Produce						application/json
+// @Tags						Friendship
+// @Success						204
+// @Router						/friendship/{friendshipId} [delete]
+func (f *FriendshipController) RemoveFriendByFriendshipID(ctx *gin.Context) {
 	user := ctx.MustGet("user").(*model.User)
 	friendshipId := helpers.MustParseUint(ctx.Param("friendshipId"))
 
@@ -90,6 +90,33 @@ func (f *FriendshipController) RemoveFriend(ctx *gin.Context) {
 	}
 
 	if err := f.FriendshipService.DeleteFriendship(friendshipId); err != nil {
+		ctx.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	ctx.JSON(http.StatusNoContent, nil)
+
+}
+
+// RemoveFriendByUserID		godoc
+// @Summary					Deletes a Friendship by the target userId Id.
+// @Param					friendId path string true "Target User ID"
+// @Description				Logged user deletes a friendship.
+// @Produce					application/json
+// @Tags					Friendship
+// @Success					204
+// @Router					/friendship/friend/{userId} [delete]
+func (f *FriendshipController) RemoveFriendByUserID(ctx *gin.Context) {
+	user := ctx.MustGet("user").(*model.User)
+	userId := helpers.MustParseUint(ctx.Param("userId"))
+
+	friendship := f.FriendshipService.FindFriendshipByUsersId(user.ID, userId)
+	if friendship == nil {
+		ctx.JSON(http.StatusNotFound, fmt.Sprintf("friendship not found between users %v and %v", user.ID, userId))
+		return
+	}
+
+	if err := f.FriendshipService.DeleteFriendship(friendship.ID); err != nil {
 		ctx.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}

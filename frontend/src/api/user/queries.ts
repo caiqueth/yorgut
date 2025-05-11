@@ -47,6 +47,7 @@ export const useUserProfile = (userId: number) =>
   useQuery<IUserProfileResponse>({
     queryKey: [`${basePath}/${userId}/profile`],
     queryFn: ({ queryKey }) => doGet({ queryKey }),
+    enabled: !!userId,
   });
 
 export const useUserStatistics = () => ({

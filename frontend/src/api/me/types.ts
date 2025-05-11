@@ -96,6 +96,6 @@ export interface IAmIMemberResponse {
 export interface IAmIFriendResponse {
   friendshipId?: number;
   amIFriend: boolean;
-  isPendingMyRequest: boolean;
-  isPendingTheirRequest: boolean;
+  isPendingMyReply: boolean;
+  isPendingTheirReply: boolean;
 }

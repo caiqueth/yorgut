@@ -225,30 +225,34 @@ func (u *UserService) UsersFriendshipStatus(userId uint, targetUserId uint) *dto
 	}
 
 	usersAreFriends := u.friendshipRepository.UsersAreFriends(userId, targetUserId)
-	invites, err := u.friendshipRepository.FindFriendshipsOfUser(userId)
+	friendships, err := u.friendshipRepository.FindFriendshipsOfUser(userId)
 	if err != nil {
 		return nil
 	}
 
 	var friendshipId *uint
-	isPendingMyRequest := false
-	isPendingTheirRequest := false
+	isPendingMyReply := false
+	isPendingTheirReply := false
 
-	for _, inv := range invites {
-		if inv.UserRequestedID == userId {
-			isPendingMyRequest = true
-			friendshipId = &inv.ID
-		} else if inv.UserRequestedID == targetUserId {
-			isPendingTheirRequest = true
-			friendshipId = &inv.ID
+	for _, fsp := range friendships {
+		if fsp.UserRequestedID == userId {
+			friendshipId = &fsp.ID
+			if !fsp.Accepted {
+				isPendingTheirReply = true
+			}
+		} else if fsp.UserRequestedID == targetUserId {
+			friendshipId = &fsp.ID
+			if !fsp.Accepted {
+				isPendingMyReply = true
+			}
 		}
 	}
 
 	return &dto.AmIFriendOfResponse{
-		FriendshipId:          friendshipId,
-		AmIFriend:             usersAreFriends,
-		IsPendingMyRequest:    isPendingMyRequest,
-		IsPendingTheirRequest: isPendingTheirRequest,
+		FriendshipId:        friendshipId,
+		AmIFriend:           usersAreFriends,
+		IsPendingMyReply:    isPendingMyReply,
+		IsPendingTheirReply: isPendingTheirReply,
 	}
 
 }
@@ -506,11 +510,27 @@ func (f *FriendshipService) ShouldThisUserBeDeleting(friendshipId uint, userId u
 }
 
 func (f *FriendshipService) DeleteFriendship(friendshipId uint) error {
-	err := f.friendshipRepository.Delete(friendshipId)
+	friendship, err := f.friendshipRepository.FindByIdWithUsers(friendshipId)
 	if err != nil {
+		return errors.New("friendship not fount")
+	}
+
+	if err := f.friendshipRepository.Delete(friendship.ID); err != nil {
 		return err
 	}
+
+	f.userRepository.IncrementFriendCount(friendship.UserRequested, -1)
+	f.userRepository.IncrementFriendCount(friendship.UserRequestee, -1)
+
 	return nil
+}
+
+func (f *FriendshipService) FindFriendshipByUsersId(userId1 uint, userId2 uint) *model.Friendship {
+	friendship, err := f.friendshipRepository.FindActiveAcceptedFriends(userId1, userId2)
+	if err != nil {
+		return nil
+	}
+	return friendship
 }
 
 // Community

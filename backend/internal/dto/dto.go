@@ -249,8 +249,8 @@ type AmIMemberOfResponse struct {
 }
 
 type AmIFriendOfResponse struct {
-	FriendshipId          *uint `json:"friendshipId"`
-	AmIFriend             bool  `json:"amIFriend"`
-	IsPendingTheirRequest bool  `json:"isPendingTheirRequest"`
-	IsPendingMyRequest    bool  `json:"isPendingMyRequest"`
+	FriendshipId        *uint `json:"friendshipId"`
+	AmIFriend           bool  `json:"amIFriend"`
+	IsPendingTheirReply bool  `json:"isPendingTheirReply"`
+	IsPendingMyReply    bool  `json:"isPendingMyReply"`
 }

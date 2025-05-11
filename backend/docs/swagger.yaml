@@ -6,9 +6,9 @@ definitions:
         type: boolean
       friendshipId:
         type: integer
-      isPendingMyRequest:
+      isPendingMyReply:
         type: boolean
-      isPendingTheirRequest:
+      isPendingTheirReply:
         type: boolean
     type: object
   dto.AmIMemberOfResponse:
@@ -581,6 +581,23 @@ paths:
         "204":
           description: No Content
       summary: Deletes a Friendship by id.
+      tags:
+      - Friendship
+  /friendship/friend/{userId}:
+    delete:
+      description: Logged user deletes a friendship.
+      parameters:
+      - description: Target User ID
+        in: path
+        name: friendId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      summary: Deletes a Friendship by the target userId Id.
       tags:
       - Friendship
   /friendship/reply:

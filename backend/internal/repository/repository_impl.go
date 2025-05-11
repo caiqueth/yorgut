@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"fmt"
 	"yorgut/internal/helpers"
 	"yorgut/internal/model"
@@ -125,6 +126,20 @@ func (r *UserRepository) IncrementFriendCount(user *model.User, increment int) e
 }
 
 // Friendship
+func (f *FriendshipRepository) FindByIdWithUsers(id uint) (*model.Friendship, error) {
+	var ent model.Friendship
+	result := f.db.
+		Preload("UserRequested").
+		Preload("UserRequestee").
+		Find(&ent, id)
+
+	if result != nil {
+		return &ent, nil
+	} else {
+		return nil, errors.New("friendship not found")
+	}
+}
+
 func (f *FriendshipRepository) FindPendingFriendshipsOfUser(userId uint) ([]model.Friendship, error) {
 	var ents []model.Friendship
 	result := f.db.
@@ -143,7 +158,7 @@ func (f *FriendshipRepository) FindPendingFriendshipsOfUser(userId uint) ([]mode
 func (f *FriendshipRepository) FindFriendshipsOfUser(userId uint) ([]model.Friendship, error) {
 	var ents []model.Friendship
 	result := f.db.
-		Where("(user_requestee_id = ? or user_requested_id = ?) and deleted_at is not null", userId, userId).
+		Where("(user_requestee_id = ? or user_requested_id = ?)", userId, userId).
 		Find(&ents)
 
 	if result.Error != nil {
@@ -178,6 +193,19 @@ func (f *FriendshipRepository) FindFriendsOfUser(userId uint) ([]model.User, err
 	}
 
 	return friends, nil
+}
+
+func (f *FriendshipRepository) FindActiveAcceptedFriends(userId1 uint, userId2 uint) (*model.Friendship, error) {
+	var ent model.Friendship
+	result := f.db.
+		Where("((user_requested_id = ? and user_requestee_id = ?) or (user_requested_id = ? and user_requestee_id = ?)) and accepted = true", userId1, userId2, userId2, userId1).
+		First(&ent)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return &ent, nil
 }
 
 func (f *FriendshipRepository) UsersAreFriends(user1 uint, user2 uint) bool {

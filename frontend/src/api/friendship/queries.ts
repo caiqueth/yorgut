@@ -39,16 +39,29 @@ export const useAddFriend = () => {
   });
 };
 
-export const useRemoveFriend = () => {
+export const useRemoveFriend = (userId: number) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (friendshipId?: number) => {
-      if (!friendshipId)
-        return new Promise(() => {
-          console.debug("Friendship ID is missing");
-        });
-      return doDelete({ url: `${basePath}/${friendshipId}` });
+    mutationFn: () => doDelete({ url: `${basePath}/friend/${userId}` }),
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: [`/api/me/friends/pending`],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`/api/me/friends`],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`/api/me/friends/${userId}`],
+      });
     },
+  });
+};
+
+export const useDeleteFriendship = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (friendshipId: number) =>
+      doDelete({ url: `${basePath}/${friendshipId}` }),
     onSettled: () => {
       queryClient.invalidateQueries({
         queryKey: [`/api/me/friends/pending`],

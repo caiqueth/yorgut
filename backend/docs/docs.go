@@ -369,6 +369,32 @@ const docTemplate = `{
                 }
             }
         },
+        "/friendship/friend/{userId}": {
+            "delete": {
+                "description": "Logged user deletes a friendship.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Friendship"
+                ],
+                "summary": "Deletes a Friendship by the target userId Id.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Target User ID",
+                        "name": "friendId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    }
+                }
+            }
+        },
         "/friendship/reply": {
             "post": {
                 "description": "Repliess a Friendship request.",
@@ -1168,10 +1194,10 @@ const docTemplate = `{
                 "friendshipId": {
                     "type": "integer"
                 },
-                "isPendingMyRequest": {
+                "isPendingMyReply": {
                     "type": "boolean"
                 },
-                "isPendingTheirRequest": {
+                "isPendingTheirReply": {
                     "type": "boolean"
                 }
             }
