@@ -2,6 +2,7 @@ import { doGet, doPost } from "api/http";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+  IAmIFriendResponse,
   IAmIMemberResponse,
   IMeFriendsPendingResponse,
   IMeFriendsResponse,
@@ -91,5 +92,11 @@ export const useMeProfile = () =>
 export const useMeAmMember = (communityId: number) =>
   useQuery<IAmIMemberResponse>({
     queryKey: [`${basePath}/memberships/${communityId}`],
+    queryFn: ({ queryKey }) => doGet({ queryKey }),
+  });
+
+export const useMeAmFriend = (userId: number) =>
+  useQuery<IAmIFriendResponse>({
+    queryKey: [`${basePath}/friends/${userId}`],
     queryFn: ({ queryKey }) => doGet({ queryKey }),
   });

@@ -92,3 +92,10 @@ export interface IMeProfileResponse {
 export interface IAmIMemberResponse {
   amIMember: boolean;
 }
+
+export interface IAmIFriendResponse {
+  friendshipId?: number;
+  amIFriend: boolean;
+  isPendingMyRequest: boolean;
+  isPendingTheirRequest: boolean;
+}

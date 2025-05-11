@@ -65,6 +65,7 @@ func NewRouter(
 			me.GET("/memberships/:communityId", meController.AmIMemberOf)
 			me.GET("/friends", meController.FindMyFriends)
 			me.GET("/friends/pending", meController.FindMyPendingFriendships)
+			me.GET("/friends/:userId", meController.AmIFriendOf)
 			me.GET("/photoAlbums", meController.FindMyPhotoAlbums)
 			me.POST("/join/:communityId", meController.JoinCommunity)
 			me.POST("/leave/:communityId", meController.LeaveCommunity)
@@ -102,9 +103,9 @@ func NewRouter(
 
 		friendships := v1.Group("/friendship")
 		{
-			friendships.POST("", friendshipController.Create)
+			friendships.POST("", friendshipController.AddFriend)
 			friendships.POST("/reply", friendshipController.ReplyFriendship)
-			friendships.DELETE("", friendshipController.Delete)
+			friendships.DELETE(":friendshipId", friendshipController.RemoveFriend)
 		}
 
 		photoAlbums := v1.Group("/photoAlbum")

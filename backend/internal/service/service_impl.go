@@ -215,6 +215,44 @@ func (u *UserService) IsUserMemberOf(communityId uint, userId uint) bool {
 	return true
 }
 
+func (u *UserService) UsersAreFriends(userId uint, targetUserId uint) bool {
+	return u.friendshipRepository.UsersAreFriends(userId, targetUserId)
+}
+
+func (u *UserService) UsersFriendshipStatus(userId uint, targetUserId uint) *dto.AmIFriendOfResponse {
+	if userId == targetUserId {
+		return nil
+	}
+
+	usersAreFriends := u.friendshipRepository.UsersAreFriends(userId, targetUserId)
+	invites, err := u.friendshipRepository.FindFriendshipsOfUser(userId)
+	if err != nil {
+		return nil
+	}
+
+	var friendshipId *uint
+	isPendingMyRequest := false
+	isPendingTheirRequest := false
+
+	for _, inv := range invites {
+		if inv.UserRequestedID == userId {
+			isPendingMyRequest = true
+			friendshipId = &inv.ID
+		} else if inv.UserRequestedID == targetUserId {
+			isPendingTheirRequest = true
+			friendshipId = &inv.ID
+		}
+	}
+
+	return &dto.AmIFriendOfResponse{
+		FriendshipId:          friendshipId,
+		AmIFriend:             usersAreFriends,
+		IsPendingMyRequest:    isPendingMyRequest,
+		IsPendingTheirRequest: isPendingTheirRequest,
+	}
+
+}
+
 func (u *UserService) CountUserMemberships(userId uint) uint {
 	count, err := u.communityMembershipRepository.CountOfUser(userId)
 	if err != nil {
@@ -448,6 +486,19 @@ func (f *FriendshipService) ShouldThisUserBeReplying(friendshipId uint, userId u
 	}
 
 	if friendship.UserRequesteeID == userId {
+		return true
+	}
+
+	return false
+}
+
+func (f *FriendshipService) ShouldThisUserBeDeleting(friendshipId uint, userId uint) bool {
+	friendship, err := f.friendshipRepository.FindById(friendshipId)
+	if err != nil {
+		return false
+	}
+
+	if friendship.UserRequesteeID == userId || friendship.UserRequestedID == userId {
 		return true
 	}
 

@@ -228,3 +228,22 @@ func (uc *MeController) AmIMemberOf(ctx *gin.Context) {
 		AmIMember: isMember,
 	})
 }
+
+// AmIFriendOf		godoc
+// @Summary			Evaluates if the logged user is friend of specified user
+// @Description		Returns true or false
+// @Produce			application/json
+// @Tags			Me
+// @Success			200 {object} dto.AmIFriendOfResponse{}
+// @Router			/me/friends/{userId} [get]
+func (uc *MeController) AmIFriendOf(ctx *gin.Context) {
+	user := ctx.MustGet("user").(*model.User)
+	targetUserId := helpers.MustParseUint(ctx.Param("userId"))
+	if user.ID == targetUserId {
+		ctx.JSON(http.StatusNoContent, nil)
+	}
+
+	response := uc.userService.UsersFriendshipStatus(user.ID, targetUserId)
+
+	ctx.JSON(http.StatusOK, response)
+}

@@ -343,14 +343,14 @@ const docTemplate = `{
         },
         "/friendship": {
             "post": {
-                "description": "Creates a Friendship.",
+                "description": "Logged user makes a new friendship request.",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "Friendship"
                 ],
-                "summary": "Create a Friendship.",
+                "summary": "Creates a Friendship request.",
                 "parameters": [
                     {
                         "description": "Create Friendship",
@@ -363,16 +363,13 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "$ref": "#/definitions/dto.Response"
-                        }
+                    "204": {
+                        "description": "No Content"
                     }
                 }
             }
         },
-        "/friendship/accept": {
+        "/friendship/reply": {
             "post": {
                 "description": "Repliess a Friendship request.",
                 "produces": [
@@ -394,11 +391,8 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "$ref": "#/definitions/dto.Response"
-                        }
+                    "204": {
+                        "description": "No Content"
                     }
                 }
             }
@@ -412,7 +406,7 @@ const docTemplate = `{
                 "tags": [
                     "Friendship"
                 ],
-                "summary": "Delete Friendship by id.",
+                "summary": "Deletes a Friendship by id.",
                 "parameters": [
                     {
                         "type": "string",
@@ -424,10 +418,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "204": {
-                        "description": "No Content",
-                        "schema": {
-                            "$ref": "#/definitions/dto.Response"
-                        }
+                        "description": "No Content"
                     }
                 }
             }
@@ -505,6 +496,26 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/dto.FindPendingFriendshipOfUserResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/me/friends/{userId}": {
+            "get": {
+                "description": "Returns true or false",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Me"
+                ],
+                "summary": "Evaluates if the logged user is friend of specified user",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.AmIFriendOfResponse"
                         }
                     }
                 }
@@ -1148,6 +1159,23 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "dto.AmIFriendOfResponse": {
+            "type": "object",
+            "properties": {
+                "amIFriend": {
+                    "type": "boolean"
+                },
+                "friendshipId": {
+                    "type": "integer"
+                },
+                "isPendingMyRequest": {
+                    "type": "boolean"
+                },
+                "isPendingTheirRequest": {
+                    "type": "boolean"
+                }
+            }
+        },
         "dto.AmIMemberOfResponse": {
             "type": "object",
             "properties": {
@@ -1210,10 +1238,7 @@ const docTemplate = `{
         "dto.CreateFriendshipRequest": {
             "type": "object",
             "properties": {
-                "userRequested": {
-                    "type": "integer"
-                },
-                "userRequestee": {
+                "userRequesteeId": {
                     "type": "integer"
                 }
             }

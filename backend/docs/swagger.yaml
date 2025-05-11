@@ -1,5 +1,16 @@
 basePath: /api/v1
 definitions:
+  dto.AmIFriendOfResponse:
+    properties:
+      amIFriend:
+        type: boolean
+      friendshipId:
+        type: integer
+      isPendingMyRequest:
+        type: boolean
+      isPendingTheirRequest:
+        type: boolean
+    type: object
   dto.AmIMemberOfResponse:
     properties:
       amIMember:
@@ -40,9 +51,7 @@ definitions:
     type: object
   dto.CreateFriendshipRequest:
     properties:
-      userRequested:
-        type: integer
-      userRequestee:
+      userRequesteeId:
         type: integer
     type: object
   dto.CreatePhotoAlbumRequest:
@@ -541,7 +550,7 @@ paths:
       - CommunityMembership
   /friendship:
     post:
-      description: Creates a Friendship.
+      description: Logged user makes a new friendship request.
       parameters:
       - description: Create Friendship
         in: body
@@ -552,11 +561,9 @@ paths:
       produces:
       - application/json
       responses:
-        "201":
-          description: Created
-          schema:
-            $ref: '#/definitions/dto.Response'
-      summary: Create a Friendship.
+        "204":
+          description: No Content
+      summary: Creates a Friendship request.
       tags:
       - Friendship
   /friendship/{friendshipId}:
@@ -573,12 +580,10 @@ paths:
       responses:
         "204":
           description: No Content
-          schema:
-            $ref: '#/definitions/dto.Response'
-      summary: Delete Friendship by id.
+      summary: Deletes a Friendship by id.
       tags:
       - Friendship
-  /friendship/accept:
+  /friendship/reply:
     post:
       description: Repliess a Friendship request.
       parameters:
@@ -591,10 +596,8 @@ paths:
       produces:
       - application/json
       responses:
-        "201":
-          description: Created
-          schema:
-            $ref: '#/definitions/dto.Response'
+        "204":
+          description: No Content
       summary: Reply a Friendship request.
       tags:
       - Friendship
@@ -634,6 +637,19 @@ paths:
           schema:
             $ref: '#/definitions/dto.FindFriendsOfUserResponse'
       summary: Gets a list of friends of the user.
+      tags:
+      - Me
+  /me/friends/{userId}:
+    get:
+      description: Returns true or false
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.AmIFriendOfResponse'
+      summary: Evaluates if the logged user is friend of specified user
       tags:
       - Me
   /me/friends/pending:

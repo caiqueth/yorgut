@@ -140,6 +140,19 @@ func (f *FriendshipRepository) FindPendingFriendshipsOfUser(userId uint) ([]mode
 	return ents, nil
 }
 
+func (f *FriendshipRepository) FindFriendshipsOfUser(userId uint) ([]model.Friendship, error) {
+	var ents []model.Friendship
+	result := f.db.
+		Where("(user_requestee_id = ? or user_requested_id = ?) and deleted_at is not null", userId, userId).
+		Find(&ents)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return ents, nil
+}
+
 func (f *FriendshipRepository) FindFriendsOfUser(userId uint) ([]model.User, error) {
 	var ents []model.Friendship
 	friends := []model.User{}
@@ -148,7 +161,7 @@ func (f *FriendshipRepository) FindFriendsOfUser(userId uint) ([]model.User, err
 		Preload("UserRequestee").
 		Preload("UserRequested.Profile").
 		Preload("UserRequestee.Profile").
-		Where("(user_requested_id = ? or user_requestee_id = ?) and accepted = ?", userId, userId, true).
+		Where("(user_requested_id = ? or user_requestee_id = ?) and accepted = true", userId, userId).
 		Find(&ents)
 
 	if result.Error != nil {

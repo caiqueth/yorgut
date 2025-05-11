@@ -80,8 +80,7 @@ type FriendshipDto struct {
 }
 
 type CreateFriendshipRequest struct {
-	UserRequested uint `json:"userRequested"`
-	UserRequestee uint `json:"userRequestee"`
+	UserRequesteeID uint `json:"userRequesteeId"`
 }
 
 type ReplyFriendshipRequest struct {
@@ -247,4 +246,11 @@ type FindUserMembershipsResponse struct {
 
 type AmIMemberOfResponse struct {
 	AmIMember bool `json:"amIMember"`
+}
+
+type AmIFriendOfResponse struct {
+	FriendshipId          *uint `json:"friendshipId"`
+	AmIFriend             bool  `json:"amIFriend"`
+	IsPendingTheirRequest bool  `json:"isPendingTheirRequest"`
+	IsPendingMyRequest    bool  `json:"isPendingMyRequest"`
 }
