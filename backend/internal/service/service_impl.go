@@ -224,25 +224,25 @@ func (u *UserService) UsersFriendshipStatus(userId uint, targetUserId uint) *dto
 		return nil
 	}
 
-	usersAreFriends := u.friendshipRepository.UsersAreFriends(userId, targetUserId)
-	friendships, err := u.friendshipRepository.FindFriendshipsOfUser(userId)
+	friendships, err := u.friendshipRepository.FindFriendshipsBetweenUsers(userId, targetUserId)
 	if err != nil {
 		return nil
 	}
 
 	var friendshipId *uint
+	usersAreFriends := false
 	isPendingMyReply := false
 	isPendingTheirReply := false
 
 	for _, fsp := range friendships {
-		if fsp.UserRequestedID == userId {
-			friendshipId = &fsp.ID
-			if !fsp.Accepted {
+		friendshipId = &fsp.ID
+		if fsp.Accepted {
+			usersAreFriends = true
+		} else {
+			if fsp.UserRequestedID == userId {
 				isPendingTheirReply = true
 			}
-		} else if fsp.UserRequestedID == targetUserId {
-			friendshipId = &fsp.ID
-			if !fsp.Accepted {
+			if fsp.UserRequestedID == targetUserId {
 				isPendingMyReply = true
 			}
 		}

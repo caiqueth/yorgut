@@ -66,9 +66,9 @@ export const ProfileMenu: React.FC<IProfileMenuProps> = ({ userId }) => {
   if (friendshipState) {
     if (friendshipState.amIFriend) {
       itemsList.unshift({ text: "desfazer amizade", avatar: "➖", onClick: () => handleRemoveFriend() })
-    } else if (friendshipState.isPendingMyReply) {
-      itemsList.unshift({ text: "pedido enviado", avatar: "🕛", onClick: () => handleDoNothing() })
     } else if (friendshipState.isPendingTheirReply) {
+      itemsList.unshift({ text: "pedido enviado", avatar: "🕛", onClick: () => handleDoNothing() })
+    } else if (friendshipState.isPendingMyReply) {
       itemsList.unshift({ text: "aceitar amizade", avatar: "✅", onClick: () => handleAcceptFriendship() })
       itemsList.unshift({ text: "recusar amizade", avatar: "❌", onClick: () => handleRejectFriendship() })
     } else {

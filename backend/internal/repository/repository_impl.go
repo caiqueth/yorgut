@@ -168,6 +168,19 @@ func (f *FriendshipRepository) FindFriendshipsOfUser(userId uint) ([]model.Frien
 	return ents, nil
 }
 
+func (f *FriendshipRepository) FindFriendshipsBetweenUsers(userId1 uint, userId2 uint) ([]model.Friendship, error) {
+	var ents []model.Friendship
+	result := f.db.
+		Where("(user_requestee_id = ? and user_requested_id = ?) or (user_requestee_id = ? and user_requested_id = ?)", userId1, userId2, userId2, userId1).
+		Find(&ents)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return ents, nil
+}
+
 func (f *FriendshipRepository) FindFriendsOfUser(userId uint) ([]model.User, error) {
 	var ents []model.Friendship
 	friends := []model.User{}
