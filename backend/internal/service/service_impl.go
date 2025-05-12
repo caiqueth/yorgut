@@ -512,7 +512,7 @@ func (f *FriendshipService) ShouldThisUserBeDeleting(friendshipId uint, userId u
 func (f *FriendshipService) DeleteFriendship(friendshipId uint) error {
 	friendship, err := f.friendshipRepository.FindByIdWithUsers(friendshipId)
 	if err != nil {
-		return errors.New("friendship not fount")
+		return errors.New("friendship not found")
 	}
 
 	if err := f.friendshipRepository.Delete(friendship.ID); err != nil {

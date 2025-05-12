@@ -102,10 +102,11 @@ func UploadPicture(picture []byte) (*string, error) {
 
 func SafeAdd(base uint, delta int) uint {
 	if delta < 0 {
-		if uint(-delta) > base {
+		d := uint(-delta)
+		if d > base {
 			return 0
 		}
-		return base - uint(-delta)
+		return base - d
 	}
 	return base + uint(delta)
 }

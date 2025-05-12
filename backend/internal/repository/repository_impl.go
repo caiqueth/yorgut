@@ -118,7 +118,9 @@ func (r *UserRepository) FindUserWithProfile(userId uint) (*model.User, error) {
 
 func (r *UserRepository) IncrementFriendCount(user *model.User, increment int) error {
 	user.FriendCount = helpers.SafeAdd(user.FriendCount, increment)
-	result := r.db.Model(user).Updates(user)
+
+	// Had to do it this way, otherwise gorm would ignore 0 values
+	result := r.db.Model(user).Select("FriendCount").Updates(user)
 	if result.Error != nil {
 		return result.Error
 	}
