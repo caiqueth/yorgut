@@ -6,11 +6,10 @@ import { Community } from "pages/Community";
 import { NotFound } from "pages/NotFound";
 import { BadBadServer } from "pages/BadBadServer";
 import { CommunityMembers } from "pages/Community/Members";
-import { ProfileDetails as CommunityProfileDetails } from "pages/Community/components/ProfileDetails";
 import { UserFriendsList } from "pages/Profile/Friends";
 import { UserCommunitiesList } from "pages/Profile/Communities";
 import { UserPhotoAlbumsList } from "pages/Profile/PhotoAlbums";
-import { UserScrapList } from "pages/Profile/Scraps";
+import { UserScrapbook } from "pages/Profile/Scrapbook";
 import { UserVideosList } from "pages/Profile/Videos";
 import { UserTestimonialsList } from "pages/Profile/Testimonials";
 import { Friends } from "pages/Friends";
@@ -20,7 +19,7 @@ import { MyAccount } from "pages/MyAccount";
 import { Help } from "pages/Help";
 import { WhatsNew } from "pages/WhatsNew";
 import { Media } from "pages/Media";
-import { Scrapbook } from "pages/Scrapbook";
+import { MyScrapbook } from "pages/MyScrapbook";
 import { Login } from "pages/Login";
 import { MainPage as UserProfileMainPage } from "pages/Profile/MainPage";
 import { MainPage as CommunityMainPage } from "pages/Community/MainPage";
@@ -59,7 +58,7 @@ export const Routes = [
     path: "/scraps",
     element: (
       <ProtectedRoute>
-        <Scrapbook />
+        <MyScrapbook />
       </ProtectedRoute>
     ),
   },
@@ -123,7 +122,7 @@ export const Routes = [
         path: "scraps",
         element: (
           <ProtectedRoute>
-            <UserScrapList />
+            <UserScrapbook />
           </ProtectedRoute>
         ),
       },

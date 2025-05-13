@@ -21,12 +21,16 @@ export const ProfileHeader: React.FC<ICommunityHeaderProps> = ({
         >
           <Typography
             variant={"h5"}
-            sx={{ "&::first-letter": { fontSize: "200%" } }}
+            sx={{
+              "&::first-letter": {
+                fontSize: 72, fontFamily: "Gymnastics"
+              }
+            }}
           >
             {community?.name ?? "Não encontrada"}
           </Typography>
         </Stack>
       </Paper>
-    </Box>
+    </Box >
   );
 };

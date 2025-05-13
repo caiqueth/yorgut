@@ -8,7 +8,7 @@ interface IProfileHeaderProps {
 }
 export const ProfileHeader: React.FC<IProfileHeaderProps> = ({ userId }) => {
   const { data: user } = useUser(userId);
-  const userStatistics = useUserStatistics(userId);
+  const userStatistics = useUserStatistics();
 
   return (
     <Box>
@@ -24,10 +24,10 @@ export const ProfileHeader: React.FC<IProfileHeaderProps> = ({ userId }) => {
           <Typography variant={"body2"}>📹 {userStatistics.totalVideos} vídeo</Typography>
           <Typography variant={"body2"}>⭐ {userStatistics.totalFans} fãs</Typography>
         </Stack>
-        <Stack direction={"row"} gap={1}>
-          <Typography variant={"body2"}>{userStatistics.cool} Legal</Typography>
-          <Typography variant={"body2"}>{userStatistics.trustworthy} Confiável</Typography>
-          <Typography variant={"body2"}>{userStatistics.beautiful} Lindo(a)</Typography>
+        <Stack direction={"row"} spacing={2}>
+          <Typography variant={"body2"} sx={{ letterSpacing: -12 }}>🧊🧊🧊🧊🧊🧊🧊🧊🧊🧊</Typography>
+          <Typography variant={"body2"} sx={{ letterSpacing: -12 }}>😀😀😀😀😀😀😀😀😀😀</Typography>
+          <Typography variant={"body2"} sx={{ letterSpacing: -12 }}>❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️</Typography>
         </Stack>
       </Paper>
     </Box>

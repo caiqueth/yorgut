@@ -5,6 +5,13 @@
     url(./assets/fonts/Verdana.ttf) format("truetype");
 }
 
+@font-face {
+  font-family: "Gymnastics";
+  src:
+    local("Gymnastics"),
+    url(./assets/fonts/Gymnastics.ttf) format("truetype");
+}
+
 * {
   font-family: "Verdana";
 }
