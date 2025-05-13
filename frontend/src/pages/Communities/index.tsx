@@ -1,19 +1,23 @@
 import { Box, Stack, Typography } from "@mui/material";
-import { useUserMemberships } from "api/user/queries";
+import { useMeMemberships } from "api/me/queries";
 import { BoxWithTitle } from "components/molecules/BoxWithTitle";
 import { StripedGrid } from "components/molecules/StripedGrid";
 import React from "react";
+import { Link } from "react-router-dom";
 
-interface IProps {}
+interface IProps { }
 
 export const Communities: React.FC<IProps> = () => {
-  const { data } = useUserMemberships();
+  const { data } = useMeMemberships();
 
   const items =
     data?.communities.map((c) => (
-      <Stack direction={"row"} gap={1}>
-        <img src={c.profilePicture} height={40} />
-        <Typography>{c.name}</Typography>
+      <Stack direction={"row"} gap={2} alignItems={"center"}>
+        <img src={c.profilePicture} width={64} height={64} />
+        <Link to={`/community/${c.id}`}>
+          <Typography>{c.name}</Typography>
+          <Typography>{c.membershipCount} {c.membershipCount > 1 ? "membros" : "membro"}</Typography>
+        </Link>
       </Stack>
     )) ?? [];
 
