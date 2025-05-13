@@ -444,7 +444,11 @@ func (f *FriendshipService) CreateFriendship(userRequestedID uint, userRequestee
 
 	userRequestee, err := f.userRepository.FindById(userRequesteeID)
 	if err != nil {
-		return errors.New("could not find user that requestee the friendship")
+		return errors.New("could not find target user (requestee) of the friendship")
+	}
+
+	if f.friendshipRepository.UsersHavePendingFriendshipInvites(userRequestedID, userRequesteeID) {
+		return errors.New("there is already a friendship or request between these users")
 	}
 
 	friendshipModel := model.NewFriendship(userRequested, userRequestee)

@@ -1,13 +1,13 @@
 import React from "react";
 import { palette } from "theme";
 
-import { Box, Button, Paper, Stack, useTheme } from "@mui/material";
+import { Button, Stack, useTheme } from "@mui/material";
 
 interface ILateralButtonList {
   items: {
     text: string;
     avatar: React.ReactNode;
-    onClick: () => void;
+    onClick?: () => void;
   }[];
 }
 export const LateralButtonList: React.FC<ILateralButtonList> = ({ items }) => {
@@ -22,6 +22,7 @@ export const LateralButtonList: React.FC<ILateralButtonList> = ({ items }) => {
           variant="contained"
           onClick={onClick}
           startIcon={avatar}
+          disabled={!onClick}
           sx={{
             backgroundColor: palette.lightBlue,
             borderRadius: 0,

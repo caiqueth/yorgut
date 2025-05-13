@@ -51,6 +51,9 @@ export const ProfileMenu: React.FC<IProfileMenuProps> = ({ userId }) => {
 
   const itemsList = [
     {
+      text: "perfil", avatar: "🙂", onClick: () => handleGoToRoute(`/profile/${userId}`)
+    },
+    {
       text: "recados", avatar: "📝", onClick: () => handleGoToRoute(`/profile/${userId}/scraps`)
     },
     { text: "álbum", avatar: "📷", onClick: () => handleGoToRoute("albums") },
@@ -60,7 +63,7 @@ export const ProfileMenu: React.FC<IProfileMenuProps> = ({ userId }) => {
       avatar: "🖊️",
       onClick: () => handleGoToRoute("testimonials"),
     },
-    { text: "reportar", avatar: "🚫", onClick: () => null },
+    { text: "reportar", avatar: "🚫" },
   ];
 
   if (friendshipState) {

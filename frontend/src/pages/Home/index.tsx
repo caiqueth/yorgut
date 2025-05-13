@@ -1,6 +1,6 @@
 import { CommunitiesList } from "./components/CommunitiesList";
 import { FriendsList } from "./components/FriendsList";
-import { UserProfilePicture } from "components/molecules/UserProfilePicture";
+import { UserProfilePicture } from "components/molecules/ProfilePicture";
 
 import { Box, Grid2 as Grid, Stack } from "@mui/material";
 
@@ -25,18 +25,22 @@ export const Home = () => {
             <Menu />
           </Stack>
         </Grid>
-        <Grid size={6}>
-          <Stack direction={"column"} gap={2}>
-            <Welcome />
-            <PendingInvites />
-            <Birthdays />
-          </Stack>
-        </Grid>
-        <Grid size={4}>
-          <Stack direction={"column"} gap={2}>
-            <FriendsList />
-            <CommunitiesList />
-          </Stack>
+        <Grid size={10}>
+          <Grid container spacing={2}>
+            <Grid size={7}>
+              <Stack direction={"column"} gap={2}>
+                <Welcome />
+                <PendingInvites />
+                <Birthdays />
+              </Stack>
+            </Grid>
+            <Grid size={5}>
+              <Stack direction={"column"} gap={2}>
+                <FriendsList />
+                <CommunitiesList />
+              </Stack>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
     </Box>

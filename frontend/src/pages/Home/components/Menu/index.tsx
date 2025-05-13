@@ -36,7 +36,7 @@ export const Menu: React.FC<IHomeMenuProps> = () => {
   const listItems = [
     { text: "perfil", avatar: "🙂", onClick: handleGoToProfile },
     { text: "álbum", avatar: "📷", onClick: handleGoToAlbums },
-    { text: "listas", avatar: "📃", onClick: () => null },
+    { text: "listas", avatar: "📃" },
     { text: "recados", avatar: "📝", onClick: handleGoToScraps },
     {
       text: "depoimentos",

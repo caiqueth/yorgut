@@ -17,6 +17,8 @@ export const ProfileMenu: React.FC<IProfileMenuProps> = ({ communityId }) => {
 
   const navigate = useNavigate();
   const handleGoToCommunity = () => navigate(`/community/${communityId}`);
+  const handleGoToForum = () => navigate(`/community/${communityId}/forum`);
+  const handleGoToMembers = () => navigate(`/community/${communityId}/members`);
   const handleJoinCommunity = () => joinCommunity({ communityId });
   const handleLeaveCommunity = () => leaveCommunity({ communityId });
 
@@ -28,11 +30,11 @@ export const ProfileMenu: React.FC<IProfileMenuProps> = ({ communityId }) => {
       onClick: () =>
         isMemberOf ? handleLeaveCommunity() : handleJoinCommunity(),
     },
-    { text: "convidar amigos", avatar: "📧", onClick: () => null },
-    { text: "denunciar abuso", avatar: "⚠️", onClick: () => null },
-    { text: "fórum", avatar: "📫", onClick: () => null },
-    { text: "enquetes", avatar: "📔", onClick: () => null },
-    { text: "membros", avatar: "🧑‍🤝‍🧑", onClick: () => null },
+    { text: "convidar amigos", avatar: "📧" },
+    { text: "denunciar abuso", avatar: "⚠️" },
+    { text: "fórum", avatar: "📫", onClick: () => handleGoToForum() },
+    { text: "enquetes", avatar: "📔" },
+    { text: "membros", avatar: "🧑‍🤝‍🧑", onClick: () => handleGoToMembers() },
   ];
 
   return (

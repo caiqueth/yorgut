@@ -3,7 +3,7 @@ import { useUser, useUserFriends } from "api/user/queries";
 import { BoxWithTitle } from "components/molecules/BoxWithTitle";
 import { StripedGrid } from "components/molecules/StripedGrid";
 import React from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 interface IProps { }
 export const UserFriendsList: React.FC<IProps> = () => {
@@ -13,10 +13,12 @@ export const UserFriendsList: React.FC<IProps> = () => {
   const { data: user } = useUser(userId)
 
   const items = friends?.friends.map((f) => (
-    <Stack direction={"row"} alignItems={"center"} gap={1}>
-      <img src={`/${f.profilePicture}`} height={48}></img>
-      <Typography>{f.firstName}</Typography>
-    </Stack>
+    <Link to={`/profile/${f.id}`}>
+      <Stack direction={"row"} alignItems={"center"} gap={1}>
+        <img src={`/${f.profilePicture}`} height={48}></img>
+        <Typography>{f.firstName}</Typography>
+      </Stack>
+    </Link>
   )) ?? [];
 
   return (<Box>

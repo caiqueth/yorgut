@@ -2,11 +2,8 @@ import React from "react";
 
 import { Box, Grid2 as Grid, Stack } from "@mui/material";
 
-import { CommunitiesList } from "./components/CommunitiesList";
-import { FriendsList } from "./components/FriendsList";
-import { UserProfilePicture } from "components/molecules/UserProfilePicture";
+import { UserProfilePicture } from "components/molecules/ProfilePicture";
 
-import { ProfileHeader } from "./ProfileHeader";
 import { ProfileMenu } from "./ProfileMenu";
 import { Outlet, useParams } from "react-router-dom";
 
@@ -23,17 +20,8 @@ export const Profile: React.FC = () => {
             <ProfileMenu userId={userId} />
           </Stack>
         </Grid>
-        <Grid size={6}>
-          <Stack direction={"column"} gap={2}>
-            <ProfileHeader userId={userId} />
-            <Outlet />
-          </Stack>
-        </Grid>
-        <Grid size={4}>
-          <Stack direction={"column"} gap={2}>
-            <FriendsList userId={userId} />
-            <CommunitiesList userId={userId} />
-          </Stack>
+        <Grid size={10}>
+          <Outlet />
         </Grid>
       </Grid>
     </Box>

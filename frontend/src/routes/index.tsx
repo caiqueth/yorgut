@@ -6,8 +6,7 @@ import { Community } from "pages/Community";
 import { NotFound } from "pages/NotFound";
 import { BadBadServer } from "pages/BadBadServer";
 import { CommunityMembers } from "pages/Community/Members";
-import { ProfileDetails as CommunityProfileDetails } from "pages/Community/ProfileDetails";
-import { ProfileDetails as UserProfileDetails } from "pages/Profile/ProfileDetails";
+import { ProfileDetails as CommunityProfileDetails } from "pages/Community/components/ProfileDetails";
 import { UserFriendsList } from "pages/Profile/Friends";
 import { UserCommunitiesList } from "pages/Profile/Communities";
 import { UserPhotoAlbumsList } from "pages/Profile/PhotoAlbums";
@@ -23,6 +22,9 @@ import { WhatsNew } from "pages/WhatsNew";
 import { Media } from "pages/Media";
 import { Scrapbook } from "pages/Scrapbook";
 import { Login } from "pages/Login";
+import { MainPage as UserProfileMainPage } from "pages/Profile/MainPage";
+import { MainPage as CommunityMainPage } from "pages/Community/MainPage";
+import { Forum } from "pages/Community/Forum";
 
 export const Routes = [
   {
@@ -111,7 +113,11 @@ export const Routes = [
     children: [
       {
         index: true,
-        element: <UserProfileDetails />,
+        element: (
+          <ProtectedRoute>
+            <UserProfileMainPage />
+          </ProtectedRoute>
+        )
       },
       {
         path: "scraps",
@@ -197,7 +203,7 @@ export const Routes = [
         index: true,
         element: (
           <ProtectedRoute>
-            <CommunityProfileDetails />
+            <CommunityMainPage />
           </ProtectedRoute>
         ),
       },
@@ -206,6 +212,14 @@ export const Routes = [
         element: (
           <ProtectedRoute>
             <CommunityMembers />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "forum",
+        element: (
+          <ProtectedRoute>
+            <Forum />
           </ProtectedRoute>
         ),
       },

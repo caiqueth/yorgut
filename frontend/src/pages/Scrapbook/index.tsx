@@ -12,7 +12,7 @@ import { useCreateScrap, useScraps } from "api/scrap/queries";
 import { Button } from "components/atoms/Button";
 import { BoxWithTitle } from "components/molecules/BoxWithTitle";
 import { StripedGrid } from "components/molecules/StripedGrid";
-import { UserProfilePicture } from "components/molecules/UserProfilePicture";
+import { UserProfilePicture } from "components/molecules/ProfilePicture";
 import { dayjsFromDate } from "helpers/formatting/date";
 import { Menu } from "pages/Home/components/Menu";
 import React, { useState } from "react";

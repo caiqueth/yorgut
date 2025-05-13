@@ -131,6 +131,10 @@ func seedFriendships(
 				continue
 			}
 
+			if fr.UsersHavePendingFriendshipInvites(user.ID, friend.ID) {
+				continue
+			}
+
 			// creates frienship request
 			friendship := model.NewFriendship(user, friend)
 			err := fr.Create(friendship)

@@ -233,6 +233,16 @@ func (f *FriendshipRepository) UsersAreFriends(user1 uint, user2 uint) bool {
 	return count > 0
 }
 
+func (f *FriendshipRepository) UsersHavePendingFriendshipInvites(user1 uint, user2 uint) bool {
+	var count int64
+	f.db.Model(&model.Friendship{}).Where(
+		"((user_requested_id = ? and user_requestee_id = ?) or (user_requested_id = ? and user_requestee_id = ?)) and accepted = false",
+		user1, user2, user2, user1,
+	).Count(&count)
+
+	return count > 0
+}
+
 func (f *FriendshipRepository) FindPendingFriendshipWithUsersById(friendshipId uint) (*model.Friendship, error) {
 	var ent model.Friendship
 
