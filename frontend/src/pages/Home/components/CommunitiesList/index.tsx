@@ -18,7 +18,7 @@ export const CommunitiesList: React.FC<ICommunitiesListProps> = () => {
     )) ?? [];
 
   return (
-    <BoxWithTitle title={`comunidades (${memberships?.membershipCount})`}>
+    <BoxWithTitle title={`minhas comunidades (${memberships?.membershipCount})`}>
       <StripedGrid items={items} elementsPerRow={3} />
     </BoxWithTitle>
   );

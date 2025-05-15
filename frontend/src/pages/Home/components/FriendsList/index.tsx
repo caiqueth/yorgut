@@ -28,7 +28,7 @@ export const FriendsList: React.FC<IFriendsListProps> = () => {
     )) ?? [];
 
   return (
-    <BoxWithTitle title={`amigos (${user?.friendCount})`}>
+    <BoxWithTitle title={`meus amigos (${user?.friendCount})`}>
       <Stack direction={"column"} alignItems={"center"}>
         <StripedGrid items={items} elementsPerRow={4} />
         <Box alignSelf={"center"}>
