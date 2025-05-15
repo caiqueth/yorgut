@@ -1,0 +1,18 @@
+<svg width="250" height="250" viewBox="0 0 230 230" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <polygon id="hex" points="50,0 93.3,25 93.3,75 50,100 6.7,75 6.7,25" />
+  </defs>
+  <g transform="translate(60,0) rotate(30)">
+    <use href="#hex" fill="#c183c1" />
+  </g>
+
+  <!-- Top Right -->
+  <g transform="translate(138, 45) rotate(30)">
+    <use href="#hex" fill="#c183c1" />
+  </g>
+
+  <!-- Bottom Center -->
+  <g transform="translate(60,90) rotate(30)">
+    <use href="#hex" fill="#c183c1" />
+  </g>
+</svg>

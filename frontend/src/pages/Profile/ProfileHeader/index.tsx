@@ -1,5 +1,6 @@
 import React from "react";
 import { useUser, useUserStatistics } from "api/user/queries";
+import profileTextDecoration from "assets/images/profile_text_decoration.svg"
 
 import { Box, Paper, Stack, Typography } from "@mui/material";
 
@@ -14,11 +15,32 @@ export const ProfileHeader: React.FC<IProfileHeaderProps> = ({ userId }) => {
     <Box>
       <Paper sx={{ backgroundColor: "white", p: 1 }}>
         <Stack direction={"row"} sx={{ width: "100%", padding: 0 }} alignItems={"end"}>
-          <Typography variant={"h5"} sx={{ "&::first-letter": { fontSize: "200%" } }}>
-            {user?.firstName} {user?.lastName}
-          </Typography>
+          <Box sx={{
+            display: "flex",
+          }}>
+            <Box sx={{
+              width: 45,
+              height: 45,
+              backgroundImage: `url(${profileTextDecoration})`,
+              backgroundSize: "cover",
+              backgroundRepeat: "no-repeat",
+            }}>
+            </Box>
+            <Typography
+              variant={"h5"}
+              sx={{
+                "&::first-letter": {
+                  fontSize: 72,
+                  ml: -3
+                },
+                lineHeight: 1
+              }}>
+              {user?.firstName} {user?.lastName}
+            </Typography>
+          </Box>
+
         </Stack>
-        <Stack direction={"row"} gap={1}>
+        <Stack direction={"row"} spacing={1}>
           <Typography variant={"body2"}>📝 {userStatistics.totalScraps} recados</Typography>
           <Typography variant={"body2"}>📷 {userStatistics.totalPhotos} fotos</Typography>
           <Typography variant={"body2"}>📹 {userStatistics.totalVideos} vídeo</Typography>
