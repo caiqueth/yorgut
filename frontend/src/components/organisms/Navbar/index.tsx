@@ -6,7 +6,7 @@ import { Box, Stack, Typography } from "@mui/material";
 
 export const Navbar: React.FC = () => {
   return (
-    <Box sx={{ width: "100%", backgroundColor: palette.darkBlue, mb: 2 }}>
+    <Box sx={{ width: "100%", backgroundColor: palette.darkBlue }}>
       <Stack direction={"row"} gap={1} sx={{ width: "100%" }}>
         <Typography variant={"body2"}>
           <Link to="/">Home</Link>
@@ -35,6 +35,7 @@ export const Navbar: React.FC = () => {
         <Typography variant={"body2"}>
           <Link to="/whats-new">O que há de novo</Link>
         </Typography>
+        <Box flexGrow={1}></Box>
       </Stack>
     </Box>
   );

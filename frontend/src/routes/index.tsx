@@ -35,10 +35,6 @@ export const Routes = [
     ),
   },
   {
-    path: "/login",
-    element: <Login />,
-  },
-  {
     path: "/friends",
     element: (
       <ProtectedRoute>
@@ -241,6 +237,10 @@ export const Routes = [
         ],
       },
     ],
+  },
+  {
+    path: "/login",
+    element: <Login />,
   },
   {
     path: "/error",

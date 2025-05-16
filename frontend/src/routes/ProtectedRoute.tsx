@@ -1,4 +1,5 @@
 import { useToken } from "hooks/useToken";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 interface IProtectedRouteProps {
@@ -10,20 +11,11 @@ export const ProtectedRoute: React.FC<IProtectedRouteProps> = ({
   const navigate = useNavigate();
   const token = useToken();
 
-  if (!token) {
-    navigate("/login")
-  }
-
-  // if (auth.isLoading)
-  //   return (
-  //     <Backdrop open>
-  //       <CircularProgress />
-  //     </Backdrop>
-  //   );
-
-  // if (!auth.isAuthenticated) {
-  //   return <Disconnected />;
-  // }
+  useEffect(() => {
+    if (!token) {
+      navigate("/login")
+    }
+  }, [token])
 
   return children;
 };
