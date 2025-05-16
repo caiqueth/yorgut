@@ -3,6 +3,7 @@ import { BoxWithTitle } from "components/molecules/BoxWithTitle";
 import { StripedGrid } from "components/molecules/StripedGrid";
 import { dayjsFromDate } from "helpers/formatting/date";
 import React from "react";
+import { Link } from "react-router-dom";
 
 interface IProps {
   communityId: number;
@@ -23,7 +24,7 @@ export const HotTopics: React.FC<IProps> = ({ communityId }) => {
       <Stack direction={"row"} gap={1} alignItems={"center"}>
         <img src={`/${t.ownerProfilePicture}`} height={40} />
         <Stack direction={"column"} sx={{ overflow: "hidden" }}>
-          <Typography>{t.title}</Typography>
+          <Link to={`forum/topic/${t.id}`}><Typography>{t.title}</Typography></Link>
           <Typography variant={"body2"}>{t.replies} respostas</Typography>
           <Stack
             direction={"row"}
