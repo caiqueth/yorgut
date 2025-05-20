@@ -1,6 +1,7 @@
 package seed
 
 import (
+	"fmt"
 	"math/rand"
 	"path"
 	"time"
@@ -23,6 +24,10 @@ func RandomChoice[T any](arr []T) T {
 
 func RandomBoolean() bool {
 	return rng.Intn(2) == 1
+}
+
+func RandomInt(n int) int {
+	return rng.Intn(n)
 }
 
 func uploadFromSeed(seedPath string) *string {
@@ -205,4 +210,40 @@ func GetCommunitiesSeed(owners []*model.User) []*model.Community {
 		community.MemberCount = 0
 	}
 	return communities
+}
+
+func GetTopicsSeed(
+	communities []*model.Community,
+	users []*model.User,
+) []*model.Topic {
+	seedSize := 1000
+	topics := make([]*model.Topic, 0, seedSize)
+
+	for i := range seedSize {
+		community := RandomChoice(communities)
+		author := RandomChoice(users)
+
+		topic := &model.Topic{
+			CommunityID: community.ID,
+			Community:   community,
+			AuthorID:    author.ID,
+			Author:      author,
+			Title:       fmt.Sprintf("Tópico de teste %v", i),
+			Text:        "Esse eu Lorem enim mollit ipsum dolore. Consectetur aute officia incididunt occaecat nulla nostrud amet dolor adipisicing sint amet laboris est. Est non deserunt nisi ex.",
+		}
+		topics = append(topics, topic)
+	}
+
+	for _, t := range topics {
+		if RandomBoolean() {
+			parent := RandomChoice(topics)
+			if parent.Title != t.Title {
+				// not the best way to differ them but...
+				tempId := uint(RandomInt(seedSize))
+				t.ParentTopicID = &tempId
+			}
+		}
+	}
+
+	return topics
 }

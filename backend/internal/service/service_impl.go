@@ -41,14 +41,6 @@ func (t *TestimonialService) DeleteTestimonial(id uint) error {
 	return nil
 }
 
-func (t *TestimonialService) FindTestimonialOfAuthor(userId uint) dto.FindTestimonialOfUserResponse {
-	panic("unimplemented")
-}
-
-func (t *TestimonialService) FindTestimonialOfRecipient(userId uint) dto.FindTestimonialOfUserResponse {
-	panic("unimplemented")
-}
-
 // User
 func (u *UserService) DeleteUser(id uint) error {
 	err := u.userRepository.Delete(id)
@@ -83,8 +75,8 @@ func (u *UserService) FindManyUsers() (*dto.FindManyUsersResponse, error) {
 	}, nil
 }
 
-func (u *UserService) CreateUser(user dto.CreateUserRequest) error {
-	err := u.userRepository.Create(model.NewUser(user.FirstName, user.LastName, user.Email, user.BirthDate))
+func (u *UserService) CreateUser(firstName string, lastName string, email string, birthDate time.Time) error {
+	err := u.userRepository.Create(model.NewUser(firstName, lastName, email, birthDate))
 	if err != nil {
 		return err
 	}
@@ -392,14 +384,6 @@ func (p *PhotoService) DeletePhoto(id uint) error {
 	return nil
 }
 
-func (p *PhotoService) FindPhotoOfAlbum(photoAlbumId uint) dto.FindPhotoOfAlbumResponse {
-	panic("unimplemented")
-}
-
-func (p *PhotoService) FindPhotoOfUser(userId uint) dto.FindPhotoOfUserResponse {
-	panic("unimplemented")
-}
-
 // PhotoAlbum
 func (p *PhotoAlbumService) CreatePhotoAlbum(photoAlbum dto.CreatePhotoAlbumRequest) error {
 	owner, err := p.userRepository.FindById(photoAlbum.UserID)
@@ -686,6 +670,35 @@ func (c *CommunityMembershipService) FindCommunityMembership(communityId uint, u
 	return &membership.ID, nil
 }
 
-func (c *CommunityMembershipService) FindCommunityMembershipsOfUser(userId uint) (dto.FindCommunityMembershipOfUserResponse, error) {
-	panic("unimplemented")
+func (ts *TopicService) FindHotTopics(communityId uint, limit int) (*dto.TopicsResponse, error) {
+	response := dto.TopicsResponse{}
+	response.Topics = []dto.Topic{}
+
+	topics, err := ts.topicRepository.FindMostRecentOfCommunity(communityId, limit)
+
+	for _, t := range topics {
+		count, replies, err := ts.topicRepository.FindRepliesOfTopic(t.ID)
+		if err != nil {
+			return nil, err
+		}
+
+		if count == 0 {
+			continue
+		}
+
+		response.Topics = append(response.Topics, dto.Topic{
+			ID:                   t.ID,
+			AuthorProfilePicture: *t.Author.Profile.ProfilePicture,
+			Title:                t.Title,
+			Replies:              count,
+			LastReplyPreview:     replies[0].Text,
+			LastReplyDate:        replies[0].CreatedAt,
+		})
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &response, nil
 }

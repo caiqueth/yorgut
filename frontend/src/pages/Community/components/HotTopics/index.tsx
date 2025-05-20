@@ -1,4 +1,5 @@
 import { Box, Stack, Typography } from "@mui/material";
+import { useCommunityHotTopics } from "api/community/queries";
 import { BoxWithTitle } from "components/molecules/BoxWithTitle";
 import { StripedGrid } from "components/molecules/StripedGrid";
 import { dayjsFromDate } from "helpers/formatting/date";
@@ -9,20 +10,12 @@ interface IProps {
   communityId: number;
 }
 export const HotTopics: React.FC<IProps> = ({ communityId }) => {
-  const topics = {
-    topics: [
-      { id: 1, ownerProfilePicture: "", title: "Título do Tópico 1", replies: 5, lastReplyPreview: "oadjaspdapsjdp a", lastReplyDate: new Date() },
-      { id: 2, ownerProfilePicture: "", title: "Título do Tópico 2", replies: 4, lastReplyPreview: "oadjasp das dsaikd9[ 1 0edjasdjasijd as] dapsasdkpas odkjsap[djsaidpjasi[ dasjdp a", lastReplyDate: new Date() },
-      { id: 3, ownerProfilePicture: "", title: "Título do Tópico 3", replies: 31, lastReplyPreview: "oadjasp das da asd asdasdas dasdkqw daspsjdp a", lastReplyDate: new Date() },
-      { id: 4, ownerProfilePicture: "", title: "Título do Tópico 4", replies: 993129, lastReplyPreview: "oadaslkdas[ dp das dapsjdp a", lastReplyDate: new Date() },
-      { id: 5, ownerProfilePicture: "", title: "Título do Tópico 5", replies: 21, lastReplyPreview: "oadjasp das dapsjdp a", lastReplyDate: new Date() },
-    ]
-  }
+  const { data: topics } = useCommunityHotTopics(communityId);
 
   const items =
-    topics?.topics.map((t) => (
+    topics?.topics?.map((t) => (
       <Stack direction={"row"} gap={1} alignItems={"center"}>
-        <img src={`/${t.ownerProfilePicture}`} height={40} />
+        <img src={`/${t.authorProfilePicture}`} height={40} />
         <Stack direction={"column"} sx={{ overflow: "hidden" }}>
           <Link to={`forum/topic/${t.id}`}><Typography>{t.title}</Typography></Link>
           <Typography variant={"body2"}>{t.replies} respostas</Typography>

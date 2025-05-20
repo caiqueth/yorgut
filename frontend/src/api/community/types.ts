@@ -39,3 +39,14 @@ export interface ICommunityRelatedResponse {
     profilePicture: string;
   }[];
 }
+
+export interface ICommunityHotTopicsResponse {
+  topics: {
+    authorProfilePicture: string;
+    id: number;
+    lastReplyDate: Date;
+    lastReplyPreview: string;
+    replies: number;
+    title: string;
+  }[];
+}

@@ -198,6 +198,26 @@ const docTemplate = `{
                 }
             }
         },
+        "/community/{communityId}/hot_topics": {
+            "get": {
+                "description": "Returns a list of topics",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Community"
+                ],
+                "summary": "Gets a list of most recently replied topics.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.TopicsResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/community/{communityId}/members": {
             "get": {
                 "description": "Returns a list of the community members matching the requested id and a few stats",
@@ -990,6 +1010,26 @@ const docTemplate = `{
                 }
             }
         },
+        "/topics/hot/{communityId}": {
+            "get": {
+                "description": "Returns a list of topics",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Topics"
+                ],
+                "summary": "Gets a list of most recently replied topics.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.TopicsResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/users": {
             "get": {
                 "description": "Returns a list of users",
@@ -1655,6 +1695,40 @@ const docTemplate = `{
                 },
                 "id": {
                     "type": "integer"
+                }
+            }
+        },
+        "dto.Topic": {
+            "type": "object",
+            "properties": {
+                "authorProfilePicture": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "lastReplyDate": {
+                    "type": "string"
+                },
+                "lastReplyPreview": {
+                    "type": "string"
+                },
+                "replies": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.TopicsResponse": {
+            "type": "object",
+            "properties": {
+                "topics": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.Topic"
+                    }
                 }
             }
         },

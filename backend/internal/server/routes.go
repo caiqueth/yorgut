@@ -32,6 +32,7 @@ func NewRouter(
 	photoController *controller.PhotoController,
 	scrapController *controller.ScrapController,
 	testimonialController *controller.TestimonialController,
+	topicController *controller.TopicController,
 	userService *service.UserService,
 ) *gin.Engine {
 	router := gin.Default()
@@ -92,6 +93,7 @@ func NewRouter(
 			communities.GET("/:communityId/members", communityController.FindMembers)
 			communities.GET("/:communityId/profile", communityController.FindProfileById)
 			communities.GET("/:communityId/related", communityController.FindRelated)
+			communities.GET("/:communityId/hot_topics", communityController.FindHotTopics)
 			communities.POST("/profile", communityController.CreateCommunityProfile)
 		}
 
@@ -132,6 +134,11 @@ func NewRouter(
 		{
 			testimonials.POST("", testimonialController.Create)
 			testimonials.DELETE("", testimonialController.Delete)
+		}
+
+		topics := v1.Group("/topic")
+		{
+			topics.GET("/hot/:communityId", topicController.FindHotTopics)
 		}
 
 	}

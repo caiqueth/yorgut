@@ -73,6 +73,11 @@ type CommunityMembershipService struct {
 	Validate                      *validator.Validate
 }
 
+type TopicService struct {
+	topicRepository repository.TopicRepository
+	Validate        *validator.Validate
+}
+
 func NewCommunityMembershipService(
 	communityMembershipRepository repository.CommunityMembershipRepository,
 	validate *validator.Validate,
@@ -182,5 +187,14 @@ func NewCommunityProfileService(
 	return &CommunityProfileService{
 		communityProfileRepository: communityProfileRepository,
 		communityRepository:        communityRepository,
+	}
+}
+
+func NewTopicService(
+	topicRepository repository.TopicRepository,
+	validate *validator.Validate,
+) *TopicService {
+	return &TopicService{
+		topicRepository: topicRepository,
 	}
 }

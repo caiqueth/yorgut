@@ -15,15 +15,18 @@ import (
 type CommunityController struct {
 	communityService        service.CommunityService
 	communityProfileService service.CommunityProfileService
+	topicService            service.TopicService
 }
 
 func NewCommunityController(
 	communityService service.CommunityService,
 	communityProfileService service.CommunityProfileService,
+	topicService service.TopicService,
 ) *CommunityController {
 	return &CommunityController{
 		communityService:        communityService,
 		communityProfileService: communityProfileService,
+		topicService:            topicService,
 	}
 }
 
@@ -245,4 +248,23 @@ func (c *CommunityController) CreateCommunityProfile(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusCreated, webResponse)
+}
+
+// FindHotTopics		godoc
+// @Summary				Gets a list of most recently replied topics.
+// @Description			Returns a list of topics
+// @Produce				application/json
+// @Tags				Community
+// @Success				200 {object} dto.TopicsResponse{}
+// @Router				/community/{communityId}/hot_topics [get]
+func (c *CommunityController) FindHotTopics(ctx *gin.Context) {
+	communityId := helpers.MustParseUint(ctx.Param("communityId"))
+	topics, err := c.topicService.FindHotTopics(communityId, 5)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, topics)
+
 }

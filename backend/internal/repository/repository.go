@@ -20,6 +20,14 @@ func (r *repository[T]) Create(entity T) error {
 	return nil
 }
 
+func (r *repository[T]) CreateMany(entities []T) error {
+	result := r.db.CreateInBatches(&entities, 100)
+	if result.Error != nil {
+		return fmt.Errorf("error creating entity: %v", result.Error)
+	}
+	return nil
+}
+
 func (r *repository[T]) Delete(id uint) error {
 	var ent T
 	result := r.db.Where("id = ?", id).Delete(&ent)
@@ -97,6 +105,10 @@ type TestimonialRepository struct {
 	repository[*model.Testimonial]
 }
 
+type TopicRepository struct {
+	repository[*model.Topic]
+}
+
 func NewTestimonialRepository(Db *gorm.DB) *TestimonialRepository {
 	return &TestimonialRepository{
 		repository: repository[*model.Testimonial]{db: Db},
@@ -153,5 +165,11 @@ func NewUserRepository(Db *gorm.DB) *UserRepository {
 func NewCommunityMembershipRepository(Db *gorm.DB) *CommunityMembershipRepository {
 	return &CommunityMembershipRepository{
 		repository: repository[*model.CommunityMembership]{db: Db},
+	}
+}
+
+func NewTopicRepository(Db *gorm.DB) *TopicRepository {
+	return &TopicRepository{
+		repository: repository[*model.Topic]{db: Db},
 	}
 }

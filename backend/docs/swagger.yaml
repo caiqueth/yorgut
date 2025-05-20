@@ -306,6 +306,28 @@ definitions:
       id:
         type: integer
     type: object
+  dto.Topic:
+    properties:
+      authorProfilePicture:
+        type: string
+      id:
+        type: integer
+      lastReplyDate:
+        type: string
+      lastReplyPreview:
+        type: string
+      replies:
+        type: integer
+      title:
+        type: string
+    type: object
+  dto.TopicsResponse:
+    properties:
+      topics:
+        items:
+          $ref: '#/definitions/dto.Topic'
+        type: array
+    type: object
   dto.UserDto:
     properties:
       birthDate:
@@ -424,6 +446,19 @@ paths:
           schema:
             $ref: '#/definitions/dto.FindCommunityByIdResponse'
       summary: Get Single community by id.
+      tags:
+      - Community
+  /community/{communityId}/hot_topics:
+    get:
+      description: Returns a list of topics
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.TopicsResponse'
+      summary: Gets a list of most recently replied topics.
       tags:
       - Community
   /community/{communityId}/members:
@@ -971,6 +1006,19 @@ paths:
       summary: Delete Testimonial by id.
       tags:
       - Testimonial
+  /topics/hot/{communityId}:
+    get:
+      description: Returns a list of topics
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.TopicsResponse'
+      summary: Gets a list of most recently replied topics.
+      tags:
+      - Topics
   /users:
     get:
       description: Returns a list of users

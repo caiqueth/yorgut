@@ -29,15 +29,15 @@ func NewUserController(service service.UserService) *UserController {
 // @Success			201 {object} dto.Response{}
 // @Router			/users [post]
 func (uc *UserController) Create(ctx *gin.Context) {
-	createUserRequest := dto.CreateUserRequest{}
+	req := dto.CreateUserRequest{}
 
-	err := ctx.ShouldBindJSON(&createUserRequest)
+	err := ctx.ShouldBindJSON(&req)
 
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}
 
-	err = uc.userService.CreateUser(createUserRequest)
+	err = uc.userService.CreateUser(req.FirstName, req.LastName, req.Email, req.BirthDate)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

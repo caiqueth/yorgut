@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { doGet } from "api/http";
 import {
   ICommunitiesResponse,
+  ICommunityHotTopicsResponse,
   ICommunityMembersResponse,
   ICommunityProfileResponse,
   ICommunityRelatedResponse,
@@ -55,3 +56,9 @@ export const useCreateCommunity = () => {
 export const useDeleteCommunity = () => {
   throw new Error("Not implemented");
 };
+
+export const useCommunityHotTopics = (communityId: number) =>
+  useQuery<ICommunityHotTopicsResponse>({
+    queryKey: [`${basePath}/${communityId}/hot_topics`],
+    queryFn: ({ queryKey }) => doGet({ queryKey }),
+  });

@@ -254,3 +254,16 @@ type AmIFriendOfResponse struct {
 	IsPendingTheirReply bool  `json:"isPendingTheirReply"`
 	IsPendingMyReply    bool  `json:"isPendingMyReply"`
 }
+
+type Topic struct {
+	ID                   uint      `json:"id"`
+	AuthorProfilePicture string    `json:"authorProfilePicture"`
+	Title                string    `json:"title"`
+	Replies              int64     `json:"replies"`
+	LastReplyPreview     string    `json:"lastReplyPreview"`
+	LastReplyDate        time.Time `json:"lastReplyDate"`
+}
+
+type TopicsResponse struct {
+	Topics []Topic `json:"topics"`
+}

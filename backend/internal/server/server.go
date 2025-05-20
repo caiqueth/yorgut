@@ -38,6 +38,7 @@ func NewServer() *http.Server {
 	photoRepository := repository.NewPhotoRepository(db)
 	scrapRepository := repository.NewScrapRepository(db)
 	testimonialRepository := repository.NewTestimonialRepository(db)
+	topicRepository := repository.NewTopicRepository(db)
 
 	// Service
 	userService := service.NewUserService(
@@ -57,17 +58,19 @@ func NewServer() *http.Server {
 	photoService := service.NewPhotoService(*photoRepository, validate)
 	scrapService := service.NewScrapService(*scrapRepository, *userRepository, validate)
 	testimonialService := service.NewTestimonialService(*testimonialRepository, validate)
+	topicService := service.NewTopicService(*topicRepository, validate)
 
 	// Controllers
 	meController := controller.NewMeController(*userService)
 	userController := controller.NewUserController(*userService)
 	communityMembershipController := controller.NewCommunityMembershipController(*communityMembershipService)
-	communityController := controller.NewCommunityController(*communityService, *communityProfileService)
+	communityController := controller.NewCommunityController(*communityService, *communityProfileService, *topicService)
 	friendshipController := controller.NewFriendshipController(*friendshipService)
 	photoAlbumController := controller.NewPhotoAlbumController(*photoAlbumService)
 	photoController := controller.NewPhotoController(*photoService)
 	scrapController := controller.NewScrapController(*scrapService)
 	testimonialController := controller.NewTestimonialController(*testimonialService)
+	topicController := controller.NewTopicController(*topicService)
 
 	// Router
 	routes := NewRouter(
@@ -80,6 +83,7 @@ func NewServer() *http.Server {
 		photoController,
 		scrapController,
 		testimonialController,
+		topicController,
 		userService,
 	)
 

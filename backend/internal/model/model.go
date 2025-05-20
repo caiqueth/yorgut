@@ -113,20 +113,14 @@ type UserProfile struct {
 	Cuisine            *string
 }
 
-type Forum struct {
-	gorm.Model
-	CommunityID uint       `gorm:"uniqueIndex"`
-	Community   *Community `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
-}
-
 type Topic struct {
 	gorm.Model
-	ForumID       uint   `gorm:"uniqueIndex"`
-	Forum         *Forum `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
-	AuthorID      uint   `gorm:"uniqueIndex"`
-	Author        *User  `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
-	ParentTopicID *uint  `gorm:"uniqueIndex"`
-	ParentTopic   *Topic `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	CommunityID   uint
+	Community     *Community
+	AuthorID      uint
+	Author        *User
+	ParentTopicID *uint
+	ParentTopic   *Topic
 	Title         string
 	Text          string
 }
@@ -244,21 +238,14 @@ func NewUser(firstName string, lastName string, email string, birthDate time.Tim
 	}
 }
 
-func NewForum(community *Community) *Forum {
-	return &Forum{
+func NewTopic(author *User, community *Community, parentTopic *Topic, title string, text string) *Topic {
+	topic := Topic{
 		CommunityID: community.ID,
 		Community:   community,
-	}
-}
-
-func NewTopic(author *User, forum *Forum, parentTopic *Topic, title string, text string) *Topic {
-	topic := Topic{
-		ForumID:  forum.ID,
-		Forum:    forum,
-		AuthorID: author.ID,
-		Author:   author,
-		Title:    title,
-		Text:     text,
+		AuthorID:    author.ID,
+		Author:      author,
+		Title:       title,
+		Text:        text,
 	}
 
 	if parentTopic != nil {
