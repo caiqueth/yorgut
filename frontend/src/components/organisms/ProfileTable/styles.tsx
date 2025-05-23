@@ -15,6 +15,8 @@ export const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 export const StyledTableCell = styled(TableCell)(({ theme }) => ({
   border: "none",
+  whiteSpace: "pre-line",
+  lineHeight: 1.6,
   padding: "0px 6px 0px 6px",
   "&:nth-of-type(odd)": {
     textAlign: "right",

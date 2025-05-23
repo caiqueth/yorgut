@@ -6,6 +6,7 @@ import (
 	"yorgut/internal/model"
 
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type repository[T any] struct {
@@ -40,6 +41,16 @@ func (r *repository[T]) Delete(id uint) error {
 func (r *repository[T]) FindById(id uint) (T, error) {
 	var ent T
 	result := r.db.Find(&ent, id)
+	if result != nil {
+		return ent, nil
+	} else {
+		return ent, errors.New("entity not found")
+	}
+}
+
+func (r *repository[T]) FindByIdEager(id uint) (T, error) {
+	var ent T
+	result := r.db.Preload(clause.Associations).Find(&ent, id)
 	if result != nil {
 		return ent, nil
 	} else {

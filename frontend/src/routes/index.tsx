@@ -24,6 +24,7 @@ import { Login } from "pages/Login";
 import { MainPage as UserProfileMainPage } from "pages/Profile/MainPage";
 import { MainPage as CommunityMainPage } from "pages/Community/MainPage";
 import { Forum } from "pages/Community/Forum";
+import { Topic } from "pages/Community/Topic";
 
 export const Routes = [
   {
@@ -219,22 +220,12 @@ export const Routes = [
         ),
       },
       {
-        path: "topics",
+        path: "forum/topic/:topicId",
         element: (
           <ProtectedRoute>
-            <></>
+            <Topic />
           </ProtectedRoute>
         ),
-        children: [
-          {
-            path: ":topicId",
-            element: (
-              <ProtectedRoute>
-                <></>
-              </ProtectedRoute>
-            ),
-          },
-        ],
       },
     ],
   },

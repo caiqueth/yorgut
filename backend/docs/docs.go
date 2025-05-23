@@ -1010,6 +1010,26 @@ const docTemplate = `{
                 }
             }
         },
+        "/topic/{topicId}/replies": {
+            "get": {
+                "description": "Returns a list of topics",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Topics"
+                ],
+                "summary": "Lists all the replies of a given topic",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.TopicRepliesResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/topics/hot/{communityId}": {
             "get": {
                 "description": "Returns a list of topics",
@@ -1379,11 +1399,20 @@ const docTemplate = `{
         "dto.FindCommunityByIdResponse": {
             "type": "object",
             "properties": {
-                "createdBy": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdById": {
                     "type": "integer"
                 },
                 "name": {
                     "type": "string"
+                },
+                "ownerFirstName": {
+                    "type": "string"
+                },
+                "ownerId": {
+                    "type": "integer"
                 }
             }
         },
@@ -1701,6 +1730,75 @@ const docTemplate = `{
         "dto.Topic": {
             "type": "object",
             "properties": {
+                "authorFirstName": {
+                    "type": "string"
+                },
+                "authorId": {
+                    "type": "integer"
+                },
+                "authorProfilePicture": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "replies": {
+                    "type": "integer"
+                },
+                "text": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.TopicRepliesResponse": {
+            "type": "object",
+            "properties": {
+                "replies": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.TopicReply"
+                    }
+                },
+                "topic": {
+                    "$ref": "#/definitions/dto.Topic"
+                }
+            }
+        },
+        "dto.TopicReply": {
+            "type": "object",
+            "properties": {
+                "authorFirstName": {
+                    "type": "string"
+                },
+                "authorId": {
+                    "type": "integer"
+                },
+                "authorProfilePicture": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "text": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.TopicSummary": {
+            "type": "object",
+            "properties": {
                 "authorProfilePicture": {
                     "type": "string"
                 },
@@ -1727,7 +1825,7 @@ const docTemplate = `{
                 "topics": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/dto.Topic"
+                        "$ref": "#/definitions/dto.TopicSummary"
                     }
                 }
             }

@@ -544,16 +544,20 @@ func (c *CommunityService) DeleteCommunity(id uint) error {
 	return nil
 }
 
-func (c *CommunityService) FindCommunityById(id uint) (dto.FindCommunityByIdResponse, error) {
-	community, err := c.communityRepository.FindById(id)
+func (c *CommunityService) FindCommunityById(id uint) (*dto.FindCommunityByIdResponse, error) {
+	response := dto.FindCommunityByIdResponse{}
+	community, err := c.communityRepository.FindByIdEager(id)
 	if err != nil {
-		return dto.FindCommunityByIdResponse{}, errors.New("could not find specified community id")
+		return &response, errors.New("could not find specified community id")
 	}
 
-	return dto.FindCommunityByIdResponse{
-		Name:      community.Name,
-		CreatedBy: community.CreatedByID,
-	}, nil
+	response.Name = community.Name
+	response.CreatedByID = community.CreatedByID
+	response.OwnerFirstName = community.Owner.FirstName
+	response.OwnerID = community.Owner.ID
+	response.CreatedAt = community.CreatedAt
+
+	return &response, nil
 }
 
 func (c *CommunityService) FindCommunityProfileById(id uint) (dto.FindCommunityProfileByIdResponse, error) {
@@ -672,7 +676,7 @@ func (c *CommunityMembershipService) FindCommunityMembership(communityId uint, u
 
 func (ts *TopicService) FindHotTopics(communityId uint, limit int) (*dto.TopicsResponse, error) {
 	response := dto.TopicsResponse{}
-	response.Topics = []dto.Topic{}
+	response.Topics = []dto.TopicSummary{}
 
 	topics, err := ts.topicRepository.FindMostRecentOfCommunity(communityId, limit)
 
@@ -686,18 +690,58 @@ func (ts *TopicService) FindHotTopics(communityId uint, limit int) (*dto.TopicsR
 			continue
 		}
 
-		response.Topics = append(response.Topics, dto.Topic{
+		response.Topics = append(response.Topics, dto.TopicSummary{
 			ID:                   t.ID,
 			AuthorProfilePicture: *t.Author.Profile.ProfilePicture,
 			Title:                t.Title,
+			LastReplyPreview:     replies[len(replies)-1].Text,
+			LastReplyDate:        replies[len(replies)-1].CreatedAt,
 			Replies:              count,
-			LastReplyPreview:     replies[0].Text,
-			LastReplyDate:        replies[0].CreatedAt,
 		})
 	}
 
 	if err != nil {
 		return nil, err
+	}
+
+	return &response, nil
+}
+
+func (ts *TopicService) FindTopicReplies(topicId uint) (*dto.TopicRepliesResponse, error) {
+	response := dto.TopicRepliesResponse{}
+	response.Replies = []dto.TopicReply{}
+
+	topic, err := ts.topicRepository.FindByIdWithAuthorProfile(topicId)
+	if err != nil {
+		return nil, err
+	}
+
+	count, replies, err := ts.topicRepository.FindRepliesOfTopic(topicId)
+	if err != nil {
+		return nil, err
+	}
+
+	response.Topic = &dto.Topic{
+		ID:                   topic.ID,
+		AuthorID:             topic.AuthorID,
+		AuthorFirstName:      topic.Author.FirstName,
+		AuthorProfilePicture: *topic.Author.Profile.ProfilePicture,
+		Title:                topic.Title,
+		Text:                 topic.Text,
+		CreatedAt:            topic.CreatedAt,
+		Replies:              count,
+	}
+
+	for _, r := range replies {
+		response.Replies = append(response.Replies, dto.TopicReply{
+			ID:                   r.ID,
+			AuthorID:             r.AuthorID,
+			AuthorFirstName:      r.Author.FirstName,
+			AuthorProfilePicture: *r.Author.Profile.ProfilePicture,
+			Title:                r.Title,
+			Text:                 r.Text,
+			CreatedAt:            r.CreatedAt,
+		})
 	}
 
 	return &response, nil

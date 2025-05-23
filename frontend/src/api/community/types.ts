@@ -1,6 +1,9 @@
 export interface ICommunityResponse {
-  createdBy: number;
   name: string;
+  createdById: number;
+  ownerId: number;
+  ownerFirstName: string;
+  createdAt: Date;
 }
 
 export interface ICommunitiesResponse {

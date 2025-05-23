@@ -303,10 +303,31 @@ func (t *TopicRepository) FindRepliesOfTopic(topicId uint) (int64, []model.Topic
 		return 0, nil, resultCount.Error
 	}
 
-	resultReplies := t.db.Where("parent_topic_id = ?", topicId).Order("created_at desc").Find(&replies)
+	resultReplies := t.db.
+		Where("parent_topic_id = ?", topicId).
+		Preload("Author").
+		Preload("Author.Profile").
+		Order("created_at asc").
+		Find(&replies)
+
 	if resultReplies.Error != nil {
 		return 0, nil, resultReplies.Error
 	}
 
 	return count, replies, nil
+}
+
+func (t *TopicRepository) FindByIdWithAuthorProfile(topicId uint) (*model.Topic, error) {
+	var topic model.Topic
+	result := t.db.
+		Preload("Author").
+		Preload("Author.Profile").
+		Find(&topic, topicId)
+
+	if result != nil {
+		return &topic, nil
+	} else {
+		return &topic, errors.New("topic not found")
+	}
+
 }

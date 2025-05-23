@@ -48,8 +48,11 @@ type UpdateCommunityRequest struct {
 }
 
 type FindCommunityByIdResponse struct {
-	Name      string `json:"name"`
-	CreatedBy uint   `json:"createdBy"`
+	Name           string    `json:"name"`
+	CreatedByID    uint      `json:"createdById"`
+	OwnerID        uint      `json:"ownerId"`
+	OwnerFirstName string    `json:"ownerFirstName"`
+	CreatedAt      time.Time `json:"createdAt"`
 }
 
 type FindCommunityProfileByIdResponse struct {
@@ -255,7 +258,7 @@ type AmIFriendOfResponse struct {
 	IsPendingMyReply    bool  `json:"isPendingMyReply"`
 }
 
-type Topic struct {
+type TopicSummary struct {
 	ID                   uint      `json:"id"`
 	AuthorProfilePicture string    `json:"authorProfilePicture"`
 	Title                string    `json:"title"`
@@ -265,5 +268,31 @@ type Topic struct {
 }
 
 type TopicsResponse struct {
-	Topics []Topic `json:"topics"`
+	Topics []TopicSummary `json:"topics"`
+}
+
+type Topic struct {
+	ID                   uint      `json:"id"`
+	AuthorID             uint      `json:"authorId"`
+	AuthorFirstName      string    `json:"authorFirstName"`
+	AuthorProfilePicture string    `json:"authorProfilePicture"`
+	Title                string    `json:"title"`
+	Text                 string    `json:"text"`
+	CreatedAt            time.Time `json:"createdAt"`
+	Replies              int64     `json:"replies"`
+}
+
+type TopicReply struct {
+	ID                   uint      `json:"id"`
+	AuthorID             uint      `json:"authorId"`
+	AuthorFirstName      string    `json:"authorFirstName"`
+	AuthorProfilePicture string    `json:"authorProfilePicture"`
+	Title                string    `json:"title"`
+	Text                 string    `json:"text"`
+	CreatedAt            time.Time `json:"createdAt"`
+}
+
+type TopicRepliesResponse struct {
+	Topic   *Topic       `json:"topic"`
+	Replies []TopicReply `json:"replies"`
 }

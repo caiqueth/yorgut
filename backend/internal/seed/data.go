@@ -140,7 +140,10 @@ func GetCommunitiesSeed(owners []*model.User) []*model.Community {
 			Category: "Pessoas",
 			Profile: &model.CommunityProfile{
 				ProfilePicture: uploadFromSeed("community_pictures/borracha.png"),
-				Description:    ptr("Descrição da comunidade para testes."),
+				Description: ptr(`Você desde que é gente fica intigado com o desaparecimento das suas borrachas?
+									Não entende por que de uma hora para outra sua borracha resolve passear?
+									Seja porque você a perde logo no começo, ou porque ela some do nada, ou também às vezes porque seu amigo pega "emprestado"
+									Agora você sabe que você não é o único no mundo que nunca terminou uma borracha!`),
 			},
 		},
 		{
@@ -164,7 +167,8 @@ func GetCommunitiesSeed(owners []*model.User) []*model.Community {
 			Category: "Animais e bichos de estimacão",
 			Profile: &model.CommunityProfile{
 				ProfilePicture: uploadFromSeed("community_pictures/duplas.png"),
-				Description:    ptr("Descrição da comunidade para testes."),
+				Description: ptr(`Imagino como se os integrantes da dupla estivessem sempre juntos, o tempo todo, como se eles fossem uma única pessoa.
+									A propósito, você não acha que tanto o Chitãozinho e Xororó como o Chitãozinho e Xororó saíram bem na foto?`),
 			},
 		},
 		{
@@ -188,7 +192,9 @@ func GetCommunitiesSeed(owners []*model.User) []*model.Community {
 			Category: "Romances e Relacionamentos",
 			Profile: &model.CommunityProfile{
 				ProfilePicture: uploadFromSeed("community_pictures/sorvete.png"),
-				Description:    ptr("Descrição da comunidade para testes."),
+				Description: ptr(`sua mãe, tia ou avó, eh daquelas que bota o resto daquele "delicioso" feijão do mês passado nos potes de sorvete?
+    								pois eh, se você já foi enganado naquela tarde quente de verão, foi louco achando q era sorvete, e abriu e viu aquela coisa nojenta e marrom com cheiro forte de feijão!
+    								com certeza você já passou por essa situação, pode até ter sido outra gororoba, mas fatalmente você já caiu na pegadinha do pote de sorvete... algumas vezes, já te tinha separado o potinho, colher e cobertura pro sorvete!`),
 			},
 		},
 		{
@@ -196,7 +202,7 @@ func GetCommunitiesSeed(owners []*model.User) []*model.Community {
 			Category: "Saúde, Bem-estar e Fitness",
 			Profile: &model.CommunityProfile{
 				ProfilePicture: uploadFromSeed("community_pictures/tony.png"),
-				Description:    ptr("Descrição da comunidade para testes."),
+				Description:    ptr("EU COLHO FLORES E O TONY RAMOS KKKK!!!!!."),
 			},
 		},
 	}

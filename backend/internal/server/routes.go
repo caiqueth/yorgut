@@ -138,7 +138,7 @@ func NewRouter(
 
 		topics := v1.Group("/topic")
 		{
-			topics.GET("/hot/:communityId", topicController.FindHotTopics)
+			topics.GET("/:topicId/replies", topicController.FindTopicAndReplies)
 		}
 
 	}

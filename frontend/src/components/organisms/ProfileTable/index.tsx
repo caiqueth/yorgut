@@ -4,7 +4,7 @@ import { StyledTableCell, StyledTableRow } from "./styles";
 
 interface IProfileTableData {
   label: string;
-  value?: string;
+  value?: string | React.ReactNode | null;
 }
 
 interface IProfileTableProps {
