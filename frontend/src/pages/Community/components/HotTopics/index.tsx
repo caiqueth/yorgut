@@ -1,16 +1,27 @@
 import { Box, Stack, Typography } from "@mui/material";
 import { useCommunityHotTopics } from "api/community/queries";
+import { Button } from "components/atoms/Button";
 import { BoxWithTitle } from "components/molecules/BoxWithTitle";
 import { StripedGrid } from "components/molecules/StripedGrid";
 import { dayjsFromDate } from "helpers/formatting/date";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface IProps {
   communityId: number;
 }
 export const HotTopics: React.FC<IProps> = ({ communityId }) => {
   const { data: topics } = useCommunityHotTopics(communityId);
+
+  const navigate = useNavigate();
+
+  const handleClickSeeAll = () => {
+    navigate(`forum`)
+  }
+
+  const handleCreateTopic = () => {
+    navigate(`forum/new-topic`)
+  }
 
   const items =
     topics?.topics?.map((t) => (
@@ -27,7 +38,7 @@ export const HotTopics: React.FC<IProps> = ({ communityId }) => {
               maxWidth: "100%",
               whiteSpace: "nowrap",
             }}>
-            <Typography variant={"body2"}>{dayjsFromDate(t.lastReplyDate, "DD [de] MM [de] YYYY")}:</Typography>
+            <Typography variant={"body2"}>{dayjsFromDate(t.lastReplyDate, "DD [de] MMM [de] YYYY")}:</Typography>
             <Box sx={{ textOverflow: "ellipsis" }}>
               <Typography variant={"body2"}>{t.lastReplyPreview}</Typography>
             </Box>
@@ -39,6 +50,10 @@ export const HotTopics: React.FC<IProps> = ({ communityId }) => {
   return (
     <BoxWithTitle title={"fórum"}>
       <StripedGrid items={items} elementsPerRow={1} />
+      <Stack direction={"row"} justifyContent={"end"}>
+        <Button onClick={handleClickSeeAll}>ver todos</Button>
+        <Button onClick={handleCreateTopic}>+ novo tópico</Button>
+      </Stack>
     </BoxWithTitle>
   )
 }

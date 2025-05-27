@@ -1,6 +1,7 @@
 import { Box, Stack, Typography } from "@mui/material";
 import { useCommunityMembers } from "api/community/queries";
 import { PicAndText } from "components/atoms/PicAndText";
+import { PicAndTextHorizontal } from "components/atoms/PicAndTextHorizontal";
 import { BoxWithTitle } from "components/molecules/BoxWithTitle";
 import { StripedGrid } from "components/molecules/StripedGrid";
 import React from "react";
@@ -14,12 +15,13 @@ export const CommunityMembers: React.FC<IProps> = () => {
   const { data } = useCommunityMembers(communityId);
 
   const items = data?.members.map((m) => (
-    <Link to={`/profile/${m.id}`}>
-      <Stack direction={"row"} alignItems={"center"} gap={1}>
-        <img src={`/${m.profilePicture}`} height={48}></img>
-        <Typography>{m.firstName}</Typography>
-      </Stack >
-    </Link>
+    <PicAndTextHorizontal
+      title={`${m.firstName}`}
+      text={`${m.friendCount} ${m.friendCount > 1 ? "amigos" : "amigo"}`}
+      url={`/profile/${m.id}`}
+      imageSrc={`/${m.profilePicture}`}
+      imageSize={64}
+    />
   )) ?? [];
 
   return <BoxWithTitle title={`membros da comunidade (${data?.memberCount})`}>

@@ -1,14 +1,19 @@
 import { Box, Stack, TextField, Typography } from "@mui/material";
 import { Button } from "components/atoms/Button";
+import { PicAndTextHorizontal } from "components/atoms/PicAndTextHorizontal";
 import { BoxWithTitle } from "components/molecules/BoxWithTitle";
 import { StripedGrid } from "components/molecules/StripedGrid";
-import React from "react";
+import { TextCompositor } from "components/molecules/TextCompositor";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 
-interface IProps {}
+interface IProps { }
 export const UserTestimonialsList: React.FC<IProps> = () => {
   const params = useParams();
   const userId = parseInt(params.userId ?? "");
+
+  const [testimonialContent, setTestimonialContent] = useState("");
+  const handleSubmit = () => { };
 
   const { data: testimonials } = {
     data: {
@@ -26,25 +31,24 @@ export const UserTestimonialsList: React.FC<IProps> = () => {
   };
 
   const items = testimonials.testimonials.map((t) => (
-    <Stack
-      alignItems={"center"}
-      flexDirection={"row"}
-      sx={{ textAlign: "left" }}
-      gap={1}
-    >
-      <Typography>{t.author}</Typography>
-      <Typography>{t.text}</Typography>
-    </Stack>
+    <PicAndTextHorizontal
+      title={t.author}
+      text={t.text}
+      imageSrc={t.author}
+      url={t.author}
+    />
   ));
 
   return (
     <Box>
       <Box>
-        <Stack direction={"column"}>
-          Escrever depoimento:
-          <TextField multiline rows={8} fullWidth />
-          <Button disabled>Enviar</Button>
-        </Stack>
+        <TextCompositor
+          content={testimonialContent}
+          onChangeContent={setTestimonialContent}
+          header={"Escrever um depoimento"}
+          onSubmit={handleSubmit}
+          maxLength={2048}
+        />
       </Box>
       <BoxWithTitle title={"depoimentos recebidos"}>
         <StripedGrid items={items} elementsPerRow={1} />

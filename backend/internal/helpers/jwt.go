@@ -55,8 +55,8 @@ func ParseToken(token string) (*Token, error) {
 	return claims, nil
 }
 
-func ValidateToken(token Token) Token {
-	return token
+func ValidateToken(token *Token) error {
+	return nil
 }
 
 func SetJWTToken(c *gin.Context, token *Token) {

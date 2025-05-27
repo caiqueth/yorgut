@@ -7,6 +7,7 @@ import {
   ICommunityProfileResponse,
   ICommunityRelatedResponse,
   ICommunityResponse,
+  ICommunityTopicsResponse,
 } from "./types";
 
 const basePath = "/api/community";
@@ -60,5 +61,11 @@ export const useDeleteCommunity = () => {
 export const useCommunityHotTopics = (communityId: number) =>
   useQuery<ICommunityHotTopicsResponse>({
     queryKey: [`${basePath}/${communityId}/hot_topics`],
+    queryFn: ({ queryKey }) => doGet({ queryKey }),
+  });
+
+export const useCommunityTopics = (communityId: number) =>
+  useQuery<ICommunityTopicsResponse>({
+    queryKey: [`${basePath}/${communityId}/topics`],
     queryFn: ({ queryKey }) => doGet({ queryKey }),
   });

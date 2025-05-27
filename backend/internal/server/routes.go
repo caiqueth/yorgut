@@ -93,6 +93,7 @@ func NewRouter(
 			communities.GET("/:communityId/members", communityController.FindMembers)
 			communities.GET("/:communityId/profile", communityController.FindProfileById)
 			communities.GET("/:communityId/related", communityController.FindRelated)
+			communities.GET("/:communityId/topics", communityController.FindAllTopics)
 			communities.GET("/:communityId/hot_topics", communityController.FindHotTopics)
 			communities.POST("/profile", communityController.CreateCommunityProfile)
 		}

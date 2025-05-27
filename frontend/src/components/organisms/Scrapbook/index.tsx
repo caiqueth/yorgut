@@ -1,15 +1,13 @@
 import {
-  Box,
-  FormHelperText,
   Stack,
-  TextField,
   Typography,
 } from "@mui/material";
 import { useCreateScrap, useScraps } from "api/scrap/queries";
+import { PicAndTextHorizontal } from "components/atoms/PicAndTextHorizontal";
 
-import { Button } from "components/atoms/Button";
 import { BoxWithTitle } from "components/molecules/BoxWithTitle";
 import { StripedGrid } from "components/molecules/StripedGrid";
+import { TextCompositor } from "components/molecules/TextCompositor";
 import { dayjsFromDate } from "helpers/formatting/date";
 import React, { useState } from "react";
 
@@ -17,53 +15,38 @@ interface IProps {
   userId: number;
 }
 export const Scrapbook: React.FC<IProps> = ({ userId }) => {
-
   const { data: scraps } = useScraps(userId);
   const { mutate: sendScrap } = useCreateScrap();
 
   const [scrapContent, setScrapContent] = useState<string>("");
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     sendScrap({
       content: scrapContent,
-      userRecipientId: userId ?? 0,
+      userRecipientId: userId,
     });
   };
 
-  const handleChangeText = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { value } = e.target;
-    if (value.length > 2048) return;
-    setScrapContent(value);
-  }
-
   const items =
     scraps?.scraps.map((s) => (
-      <Stack direction={"row"} gap={1} alignItems={"center"}>
-        <img src={`/${s.authorProfilePicture}`} height={40} />
-        <Stack direction={"column"}>
-          <Typography>{s.authorName} em {dayjsFromDate(s.createdAt, "D [de] MMMM [de] YYYY")}:</Typography>
-          <Typography>{s.content}</Typography>
-        </Stack>
-      </Stack>
+      <PicAndTextHorizontal
+        imageSrc={s.authorProfilePicture}
+        title={`${s.authorName} em ${dayjsFromDate(s.createdAt, "D [de] MMMM [de] YYYY")}: `}
+        text={s.content}
+        url={`/profile/${s.authorId}`}
+      />
     )) ?? [];
 
   return (
     <Stack direction={"column"} gap={1}>
-      <form onSubmit={handleSubmit}>
-        <Box sx={{ width: "100%" }}>
-          <Typography>Deixar um recado</Typography>
-          <TextField
-            value={scrapContent}
-            onChange={handleChangeText}
-            multiline
-            rows={6}
-            fullWidth
-          ></TextField>
-          <FormHelperText>{2048 - scrapContent.length} caracteres restantes.</FormHelperText>
-        </Box>
-        <Button type="submit">Enviar</Button>
-      </form>
+      <TextCompositor
+        content={scrapContent}
+        header={"Deixar um recado"}
+        onChangeContent={setScrapContent}
+        onSubmit={handleSubmit}
+        maxLength={2048}
+      />
       <BoxWithTitle title="meus recados">
         <StripedGrid items={items} elementsPerRow={1} />
       </BoxWithTitle>

@@ -296,6 +296,26 @@ const docTemplate = `{
                 }
             }
         },
+        "/community/{communityId}/topics": {
+            "get": {
+                "description": "Returns a list of topics",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Community"
+                ],
+                "summary": "Gets a list of most recently replied topics.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.TopicsResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/community_membership": {
             "post": {
                 "produces": [
@@ -1025,26 +1045,6 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/dto.TopicRepliesResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/topics/hot/{communityId}": {
-            "get": {
-                "description": "Returns a list of topics",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Topics"
-                ],
-                "summary": "Gets a list of most recently replied topics.",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/dto.TopicsResponse"
                         }
                     }
                 }

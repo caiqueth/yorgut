@@ -674,7 +674,7 @@ func (c *CommunityMembershipService) FindCommunityMembership(communityId uint, u
 	return &membership.ID, nil
 }
 
-func (ts *TopicService) FindHotTopics(communityId uint, limit int) (*dto.TopicsResponse, error) {
+func (ts *TopicService) FindTopics(communityId uint, limit int) (*dto.TopicsResponse, error) {
 	response := dto.TopicsResponse{}
 	response.Topics = []dto.TopicSummary{}
 

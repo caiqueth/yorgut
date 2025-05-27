@@ -32,6 +32,10 @@ func JWTMiddleware() gin.HandlerFunc {
 			return
 		}
 
+		if err := helpers.ValidateToken(parsed); err != nil {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+		}
+
 		// Store the token in the context
 		helpers.SetJWTToken(c, parsed)
 

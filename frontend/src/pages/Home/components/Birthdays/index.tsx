@@ -6,6 +6,7 @@ import { BoxWithTitle } from "components/molecules/BoxWithTitle";
 import { dayjsFromDate } from "helpers/formatting/date";
 import { StripedGrid } from "components/molecules/StripedGrid";
 import { useMeFriends } from "api/me/queries";
+import { PicAndTextHorizontal } from "components/atoms/PicAndTextHorizontal";
 
 interface ItemProps {
   id: number;
@@ -13,27 +14,6 @@ interface ItemProps {
   profilePicture: string;
   birthDate: Date;
 }
-const Item: React.FC<ItemProps> = ({
-  id,
-  firstName,
-  profilePicture,
-  birthDate,
-}) => {
-  return (
-    <Stack
-      alignItems={"center"}
-      flexDirection={"row"}
-      sx={{ textAlign: "left" }}
-      gap={1}
-    >
-      <img height={64} src={profilePicture} alt="image not found" />
-      <Typography variant={"body2"}>
-        <Link to={`/profile/${id}`}>{firstName}</Link>{" "}
-        {`${dayjsFromDate(birthDate, "D [de] MMMM")}`}
-      </Typography>
-    </Stack>
-  );
-};
 
 interface IBirthdaysProps { };
 export const Birthdays: React.FC<IBirthdaysProps> = () => {
@@ -41,11 +21,12 @@ export const Birthdays: React.FC<IBirthdaysProps> = () => {
 
   const items =
     friends?.friends.map((f) => (
-      <Item
-        id={f.id}
-        firstName={f.firstName}
-        profilePicture={f.profilePicture}
-        birthDate={f.birthDate}
+      <PicAndTextHorizontal
+        title={f.firstName}
+        text={dayjsFromDate(f.birthDate, "D [de] MMMM")}
+        imageSrc={`/${f.profilePicture}`}
+        url={`/profile/${f.id}`}
+        imageSize={56}
       />
     )) ?? [];
 

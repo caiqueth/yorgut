@@ -1,5 +1,6 @@
 import { Box, Stack, Typography } from "@mui/material";
 import { useUser, useUserFriends } from "api/user/queries";
+import { PicAndTextHorizontal } from "components/atoms/PicAndTextHorizontal";
 import { BoxWithTitle } from "components/molecules/BoxWithTitle";
 import { StripedGrid } from "components/molecules/StripedGrid";
 import React from "react";
@@ -13,12 +14,13 @@ export const UserFriendsList: React.FC<IProps> = () => {
   const { data: user } = useUser(userId)
 
   const items = friends?.friends.map((f) => (
-    <Link to={`/profile/${f.id}`}>
-      <Stack direction={"row"} alignItems={"center"} gap={1}>
-        <img src={`/${f.profilePicture}`} height={48}></img>
-        <Typography>{f.firstName}</Typography>
-      </Stack>
-    </Link>
+    <PicAndTextHorizontal
+      title={f.firstName}
+      text={`${f.friendCount} amigos`}
+      imageSrc={`/${f.profilePicture}`}
+      imageSize={56}
+      url={`/profile/${f.id}`}
+    />
   )) ?? [];
 
   return (<Box>

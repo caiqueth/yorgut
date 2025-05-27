@@ -3,6 +3,7 @@ import { useUserProfile } from "api/user/queries";
 
 import { ProfilePicture } from "components/atoms/ProfilePicture";
 import { useCommunityProfile } from "api/community/queries";
+import { Link } from "react-router-dom";
 
 interface IUserProfilePictureProps { userId: number; };
 export const UserProfilePicture: React.FC<IUserProfilePictureProps> = ({ userId }) => {
@@ -23,5 +24,5 @@ export const CommunityProfilePicture: React.FC<
 
   if (!community?.profilePicture) return null;
 
-  return <ProfilePicture imageSrc={`/${community.profilePicture}`} />;
+  return <Link to={`/community/${communityId}`}><ProfilePicture imageSrc={`/${community.profilePicture}`} /></Link>;
 };

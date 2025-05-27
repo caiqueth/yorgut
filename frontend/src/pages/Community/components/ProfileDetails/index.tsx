@@ -20,11 +20,11 @@ export const ProfileDetails: React.FC<IProfileDetailsProps> = ({ communityId }) 
       value: communityProfile?.description,
     },
     {
-      label: "Dono(a)",
+      label: "dono(a):",
       value: <Link to={`/profile/${community.ownerId}`}>{community?.ownerFirstName}</Link>,
     },
     {
-      label: "Criada em:",
+      label: "criada em:",
       value: dayjsFromDate(community.createdAt, "DD [de] MMMM [de] YYYY"),
     },
   ];

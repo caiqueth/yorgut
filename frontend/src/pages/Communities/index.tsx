@@ -1,5 +1,6 @@
 import { Box, Stack, Typography } from "@mui/material";
 import { useMeMemberships } from "api/me/queries";
+import { PicAndTextHorizontal } from "components/atoms/PicAndTextHorizontal";
 import { BoxWithTitle } from "components/molecules/BoxWithTitle";
 import { StripedGrid } from "components/molecules/StripedGrid";
 import React from "react";
@@ -12,13 +13,13 @@ export const Communities: React.FC<IProps> = () => {
 
   const items =
     data?.communities.map((c) => (
-      <Stack direction={"row"} gap={2} alignItems={"center"}>
-        <img src={c.profilePicture} width={64} height={64} />
-        <Link to={`/community/${c.id}`}>
-          <Typography>{c.name}</Typography>
-          <Typography>{c.membershipCount} {c.membershipCount > 1 ? "membros" : "membro"}</Typography>
-        </Link>
-      </Stack>
+      <PicAndTextHorizontal
+        title={c.name}
+        text={`${c.membershipCount} membros`}
+        url={`/community/${c.id}`}
+        imageSrc={c.profilePicture}
+        imageSize={64}
+      />
     )) ?? [];
 
   return (

@@ -53,3 +53,14 @@ export interface ICommunityHotTopicsResponse {
     title: string;
   }[];
 }
+
+export interface ICommunityTopicsResponse {
+  topics: {
+    authorProfilePicture: string;
+    id: number;
+    lastReplyDate: Date;
+    lastReplyPreview: string;
+    replies: number;
+    title: string;
+  }[];
+}

@@ -18,6 +18,6 @@ export const ProfilePicture: React.FC<IProfilePictureProps> = ({
         width: "100%",
         height: "15em",
       }}
-    ></Box>
+    />
   );
 };
