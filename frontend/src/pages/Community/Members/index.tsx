@@ -24,7 +24,9 @@ export const CommunityMembers: React.FC<IProps> = () => {
     />
   )) ?? [];
 
-  return <BoxWithTitle title={`membros da comunidade (${data?.memberCount})`}>
-    <StripedGrid elementsPerRow={1} items={items} />
-  </BoxWithTitle>;
+  return (
+    <BoxWithTitle title={`membros da comunidade (${data?.memberCount})`}>
+      <StripedGrid elementsPerRow={1} items={items} />
+    </BoxWithTitle>
+  );
 };

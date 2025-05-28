@@ -686,18 +686,19 @@ func (ts *TopicService) FindTopics(communityId uint, limit int) (*dto.TopicsResp
 			return nil, err
 		}
 
-		if count == 0 {
-			continue
-		}
-
-		response.Topics = append(response.Topics, dto.TopicSummary{
+		topicSummary := dto.TopicSummary{
 			ID:                   t.ID,
 			AuthorProfilePicture: *t.Author.Profile.ProfilePicture,
 			Title:                t.Title,
-			LastReplyPreview:     replies[len(replies)-1].Text,
-			LastReplyDate:        replies[len(replies)-1].CreatedAt,
 			Replies:              count,
-		})
+		}
+
+		if count != 0 {
+			topicSummary.LastReplyPreview = replies[len(replies)-1].Text
+			topicSummary.LastReplyDate = replies[len(replies)-1].CreatedAt
+		}
+
+		response.Topics = append(response.Topics, topicSummary)
 	}
 
 	if err != nil {
@@ -745,4 +746,24 @@ func (ts *TopicService) FindTopicReplies(topicId uint) (*dto.TopicRepliesRespons
 	}
 
 	return &response, nil
+}
+
+func (ts *TopicService) CreateTopic(authorId uint, communityId uint, title string, text string) error {
+	if err := ts.topicRepository.Create(model.NewTopic(authorId, communityId, nil, title, text)); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (ts *TopicService) ReplyTopic(authorId uint, communityId uint, parentTopicId uint, title string, text string) error {
+	parentTopic, err := ts.topicRepository.FindById(parentTopicId)
+	if err != nil {
+		return fmt.Errorf("could not find topic with id %v", parentTopicId)
+	}
+
+	if err := ts.topicRepository.Create(model.NewTopic(authorId, communityId, &parentTopic.ID, title, text)); err != nil {
+		return err
+	}
+
+	return nil
 }

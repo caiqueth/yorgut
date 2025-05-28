@@ -1,11 +1,12 @@
-import { Box, Stack, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { useTopicReplies } from "api/topic/queries";
 import { PicAndTextHorizontal } from "components/atoms/PicAndTextHorizontal";
 import { BoxWithTitle } from "components/molecules/BoxWithTitle";
 import { StripedGrid } from "components/molecules/StripedGrid";
 import { dayjsFromDate } from "helpers/formatting/date";
 import React from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { Reply } from "./Reply";
 
 interface IProps { }
 export const Topic: React.FC<IProps> = () => {
@@ -29,6 +30,7 @@ export const Topic: React.FC<IProps> = () => {
     <Box>
       <BoxWithTitle title="respostas">
         <StripedGrid items={items} elementsPerRow={1} />
+        <Reply topicId={topicId} />
       </BoxWithTitle>
     </Box>
   )

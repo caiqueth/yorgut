@@ -238,19 +238,13 @@ func NewUser(firstName string, lastName string, email string, birthDate time.Tim
 	}
 }
 
-func NewTopic(author *User, community *Community, parentTopic *Topic, title string, text string) *Topic {
+func NewTopic(authorId uint, communityId uint, parentTopicId *uint, title string, text string) *Topic {
 	topic := Topic{
-		CommunityID: community.ID,
-		Community:   community,
-		AuthorID:    author.ID,
-		Author:      author,
-		Title:       title,
-		Text:        text,
-	}
-
-	if parentTopic != nil {
-		topic.ParentTopicID = &parentTopic.ID
-		topic.ParentTopic = parentTopic
+		CommunityID:   communityId,
+		AuthorID:      authorId,
+		ParentTopicID: parentTopicId,
+		Title:         title,
+		Text:          text,
 	}
 
 	return &topic

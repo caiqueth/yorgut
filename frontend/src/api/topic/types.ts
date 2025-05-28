@@ -19,3 +19,15 @@ export interface ITopicRepliesResponse {
     createdAt: Date;
   }[];
 }
+
+export interface ITopicCreateRequest {
+  communityId: number;
+  title: string;
+  text: string;
+}
+
+export interface ITopicReplyRequest {
+  communityId: number;
+  title: string;
+  text: string;
+}

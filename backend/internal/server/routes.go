@@ -140,6 +140,8 @@ func NewRouter(
 		topics := v1.Group("/topic")
 		{
 			topics.GET("/:topicId/replies", topicController.FindTopicAndReplies)
+			topics.POST("", topicController.CreateTopic)
+			topics.POST("/:topicId", topicController.ReplyTopic)
 		}
 
 	}

@@ -296,3 +296,15 @@ type TopicRepliesResponse struct {
 	Topic   *Topic       `json:"topic"`
 	Replies []TopicReply `json:"replies"`
 }
+
+type CreateTopicRequest struct {
+	CommunityID uint   `json:"communityId"`
+	Title       string `json:"title"`
+	Text        string `json:"text"`
+}
+
+type ReplyTopicRequest struct {
+	CommunityID uint   `json:"communityId"`
+	Title       string `json:"title"`
+	Text        string `json:"text"`
+}

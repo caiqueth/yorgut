@@ -1027,6 +1027,40 @@
                 }
             }
         },
+        "/topic": {
+            "post": {
+                "description": "Creates a new Topic inside a community's forum",
+                "tags": [
+                    "Topics"
+                ],
+                "summary": "Creates a new Topic",
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/dto.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/topic/{topicId}": {
+            "post": {
+                "description": "Replies to an existing Topic inside a community's forum",
+                "tags": [
+                    "Topics"
+                ],
+                "summary": "Creates a new Topic Reply",
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/dto.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/topic/{topicId}/replies": {
             "get": {
                 "description": "Returns a list of topics",
