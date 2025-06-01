@@ -27,6 +27,7 @@ export const PicAndTextHorizontal: React.FC<IProps> = ({
         backgroundImage: `url("${imageSrc}")`,
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
+        alignSelf: "start",
       }} />
       <Stack direction={"column"}>
         <Typography><Link to={url}>{title}</Link></Typography>
