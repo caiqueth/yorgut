@@ -229,6 +229,28 @@ type FindUserResponse struct {
 	UserDto
 }
 
+type ProfileViews struct {
+	AllTime  uint `json:"allTime"`
+	LastWeek uint `json:"lastWeek"`
+}
+
+type RecentVisitor struct {
+	FirstName string `json:"firstName"`
+	UserID    uint   `json:"userId"`
+}
+
+type WelcomeResponse struct {
+	UserFirstName       string          `json:"userFirstName"`
+	UserCreatedAt       time.Time       `json:"userCreatedAt"`
+	IndirectConnections uint            `json:"indirectConnections"`
+	DirectConnections   uint            `json:"directConnections"`
+	NumberOfFans        uint            `json:"numberOfFans"`
+	NumberOfScraps      uint            `json:"numberOfScraps"`
+	ProfileViews        ProfileViews    `json:"profileViews"`
+	RecentVisitors      []RecentVisitor `json:"recentVisitors"`
+	TodaysLuck          string          `json:"todaysLuck"`
+}
+
 type FindUserWithProfileByIdResponse struct {
 	UserDto
 	UserProfileDto

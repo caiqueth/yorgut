@@ -61,6 +61,7 @@ func NewRouter(
 		{
 			me.GET("", meController.FindMe)
 			me.PUT("", meController.UpdateMe)
+			me.GET("/welcome", meController.Welcome)
 			me.GET("/profile", meController.FindMyProfile)
 			me.GET("/memberships", meController.FindMyMemberships)
 			me.GET("/memberships/:communityId", meController.AmIMemberOf)

@@ -99,3 +99,21 @@ export interface IAmIFriendResponse {
   isPendingMyReply: boolean;
   isPendingTheirReply: boolean;
 }
+
+export interface WelcomeResponse {
+  userFirstName: string;
+  userCreatedAt: Date;
+  indirectConnections: number;
+  directConnections: number;
+  numberOfFans: number;
+  numberOfScraps: number;
+  profileViews: {
+    allTime: number;
+    lastWeek: number;
+  };
+  recentVisitors: {
+    firstName: string;
+    userId: number;
+  }[];
+  todaysLuck: number;
+}

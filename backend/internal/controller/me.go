@@ -37,6 +37,34 @@ func (uc *MeController) FindMe(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, resp)
 }
 
+// Welcome	 			godoc
+// @Summary				Get user stats for the Home Welcome
+// @Description			Returns the user stats
+// @Produce				application/json
+// @Tags				Me
+// @Success				200 {object} dto.WelcomeResponse{}
+// @Router				/me/welcome [get]
+func (uc *MeController) Welcome(ctx *gin.Context) {
+	user := ctx.MustGet("user").(*model.User)
+
+	resp := dto.WelcomeResponse{
+		UserFirstName:       user.FirstName,
+		UserCreatedAt:       user.CreatedAt,
+		IndirectConnections: 0,
+		DirectConnections:   0,
+		NumberOfFans:        0,
+		NumberOfScraps:      0,
+		ProfileViews: dto.ProfileViews{
+			AllTime:  0,
+			LastWeek: 0,
+		},
+		RecentVisitors: make([]dto.RecentVisitor, 0),
+		TodaysLuck:     "Boas notícias chegarão por e-mail.",
+	}
+
+	ctx.JSON(http.StatusOK, resp)
+}
+
 // Update 			godoc
 // @Summary			Update user
 // @Description		Returns null

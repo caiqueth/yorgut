@@ -11,6 +11,7 @@ import {
   IMeProfileResponse,
   IMeResponse,
   IMeUpdateResponse,
+  WelcomeResponse,
 } from "./types";
 
 const basePath = "/api/me";
@@ -98,5 +99,11 @@ export const useMeAmMember = (communityId: number) =>
 export const useMeAmFriend = (userId: number) =>
   useQuery<IAmIFriendResponse>({
     queryKey: [`${basePath}/friends/${userId}`],
+    queryFn: ({ queryKey }) => doGet({ queryKey }),
+  });
+
+export const useMeWelcome = () =>
+  useQuery<WelcomeResponse>({
+    queryKey: [`${basePath}/welcome`],
     queryFn: ({ queryKey }) => doGet({ queryKey }),
   });

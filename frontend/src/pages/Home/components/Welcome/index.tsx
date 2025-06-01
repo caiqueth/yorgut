@@ -1,20 +1,17 @@
 import React from "react";
-import { useTodaysLuck, useUserStatistics } from "api/user/queries";
 
 import { Box, Paper, Stack, Typography } from "@mui/material";
 import { dayjsFromDate } from "helpers/formatting/date";
-import { useMe } from "api/me/queries";
+import { useMeWelcome } from "api/me/queries";
+import { Link } from "react-router-dom";
 
 interface IProps {
 
 }
 export const Welcome: React.FC<IProps> = () => {
-  const { data: user } = useMe();
+  const { data } = useMeWelcome();
 
-  if (!user) return null;
-
-  const userStatistics = useUserStatistics();
-  const todaysLuck = useTodaysLuck();
+  if (!data) return null;
 
   return (
     <Box>
@@ -22,41 +19,44 @@ export const Welcome: React.FC<IProps> = () => {
         <Stack direction={"column"} gap={1}>
           <Typography
             variant={"subtitle1"}
-            sx={{ "&::first-letter": { fontSize: "200%" } }}
+            sx={{ "&::first-letter": { fontSize: 36, lineHeight: 1 } }}
           >
-            Bem-vindo(a), {user.firstName}
+            Bem-vindo(a), {data.userFirstName}
           </Typography>
           <Box>
             <Typography variant={"body1"}>
-              Você está conectado(a) a {userStatistics.undirectConnections}{" "}
-              pessoas através de {userStatistics.totalFriends} amigos
+              Você está conectado(a) a {data.indirectConnections}{" "}
+              pessoas através de {data.directConnections} amigos
             </Typography>
             <Typography variant={"body1"}>
               Aumente sua rede agora mesmo!
             </Typography>
           </Box>
           <Typography variant={"body1"}>
-            ⭐ Você tem {userStatistics.totalFans} fãs.
+            ⭐ Você tem {data.numberOfFans} fãs.
           </Typography>
           <Typography variant={"body1"}>
-            📝 {userStatistics.totalScraps} recados.
+            📝 {data.numberOfScraps} recados.
           </Typography>
           <Typography variant={"body1"}>
             <strong>Visualizações do seu perfil:</strong>
           </Typography>
           <Typography variant={"body1"}>
-            Desde {dayjsFromDate(user.createdAt, "D [de] MMMM [de] YYYY")}:{" "}
-            {userStatistics.totalProfileViews}. Semana passada:{" "}
-            {userStatistics.lastWeekProfileViews}.
+            Desde {dayjsFromDate(data.userCreatedAt, "D [de] MMMM [de] YYYY")}:{" "}
+            {data.profileViews.allTime}. Semana passada:{" "}
+            {data.profileViews.lastWeek}.
           </Typography>
           <Box>
             <Typography variant={"body1"}>
               <strong>Visitantes recentes:</strong>
             </Typography>
             <Typography variant={"body1"}>
-              {userStatistics.profileLastVisitors
-                .map(({ name }) => name)
-                .join(", ")}
+              {data.recentVisitors.length > 0 ? data.recentVisitors
+                .map(({ userId, firstName }) => (
+                  <Link to={`/profile/${userId}`}>
+                    <Typography>{firstName}</Typography>
+                  </Link>
+                )) : "Por enquanto, ninguém."}
             </Typography>
           </Box>
           <Box>
@@ -69,7 +69,7 @@ export const Welcome: React.FC<IProps> = () => {
             <Typography variant={"body1"}>
               <strong>Sorte de hoje</strong>
             </Typography>
-            <Typography variant={"body1"}>{todaysLuck}</Typography>
+            <Typography variant={"body1"}>{data.todaysLuck}</Typography>
           </Box>
         </Stack>
       </Paper>

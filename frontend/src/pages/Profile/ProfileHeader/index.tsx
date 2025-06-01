@@ -1,5 +1,5 @@
 import React from "react";
-import { useUser, useUserStatistics } from "api/user/queries";
+import { useUser } from "api/user/queries";
 import profileTextDecoration from "assets/images/profile_text_decoration.svg"
 
 import { Box, Paper, Stack, Typography } from "@mui/material";
@@ -9,7 +9,13 @@ interface IProfileHeaderProps {
 }
 export const ProfileHeader: React.FC<IProfileHeaderProps> = ({ userId }) => {
   const { data: user } = useUser(userId);
-  const userStatistics = useUserStatistics();
+
+  const userStatistics = {
+    totalScraps: 0,
+    totalPhotos: 0,
+    totalVideos: 0,
+    totalFans: 0,
+  }
 
   return (
     <Box>

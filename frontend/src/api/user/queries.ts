@@ -49,30 +49,3 @@ export const useUserProfile = (userId: number) =>
     queryFn: ({ queryKey }) => doGet({ queryKey }),
     enabled: !!userId,
   });
-
-export const useUserStatistics = () => ({
-  totalProfileViews: 3558,
-  lastWeekProfileViews: 45,
-  totalFriends: 111,
-  totalCommunities: 123,
-  undirectConnections: 34537335,
-  totalScraps: 123,
-  totalPhotos: 12,
-  totalVideos: 1,
-  totalFans: 8,
-  trustworthy: 1,
-  cool: 1,
-  beautiful: 1,
-  profileLastVisitors: [
-    { name: "Aline" },
-    { name: "Caique" },
-    { name: "Carol" },
-    { name: "Diego" },
-    { name: "Lígia" },
-    { name: "Luciana" },
-    { name: "Renato" },
-    { name: "Weslley" },
-  ],
-});
-
-export const useTodaysLuck = () => `Boas notícias chegarão por e-mail.`;
