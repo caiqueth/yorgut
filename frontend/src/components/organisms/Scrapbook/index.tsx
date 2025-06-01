@@ -47,7 +47,7 @@ export const Scrapbook: React.FC<IProps> = ({ userId }) => {
         onSubmit={handleSubmit}
         maxLength={2048}
       />
-      <BoxWithTitle title="meus recados">
+      <BoxWithTitle title="recados">
         <StripedGrid items={items} elementsPerRow={1} />
       </BoxWithTitle>
     </Stack>
