@@ -30,7 +30,9 @@ export const PicAndTextHorizontal: React.FC<IProps> = ({
       }} />
       <Stack direction={"column"}>
         <Typography><Link to={url}>{title}</Link></Typography>
-        {text && <Typography>{text}</Typography>}
+        {text && <Typography sx={{
+          whiteSpace: "pre-line"
+        }}>{text}</Typography>}
       </Stack>
     </Stack>
   );
