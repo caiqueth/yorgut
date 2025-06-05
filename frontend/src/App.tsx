@@ -22,15 +22,15 @@ const App: React.FC = () => {
     () =>
       new QueryCache({
         onError: (error) => {
-          if (error.message.startsWith("Unauthorized")) {
-            navigate("/disconnected");
+          if (error.message.toLowerCase().startsWith("unauthorized")) {
+            navigate("/login");
             return;
           }
-          if (error.message.startsWith("Not allowed")) {
+          if (error.message.toLowerCase().startsWith("not allowed")) {
             navigate("/not-allowed");
             return;
           }
-          if (error.message.startsWith("Not Found")) {
+          if (error.message.toLowerCase().startsWith("not found")) {
             navigate("/not-found");
             return;
           }

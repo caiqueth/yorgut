@@ -2,12 +2,16 @@ package server
 
 import (
 	"net/http"
+	"os"
 	"strings"
 	"yorgut/internal/helpers"
 	"yorgut/internal/service"
 
 	"github.com/gin-gonic/gin"
+	"google.golang.org/api/idtoken"
 )
+
+var audience string = os.Getenv("GOOGLE_CLIENT_ID")
 
 func JWTMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -23,21 +27,15 @@ func JWTMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		token := parts[1]
-
-		// Parse the Token
-		parsed, err := helpers.ParseToken(token)
+		tokenString := parts[1]
+		payload, err := idtoken.Validate(c, tokenString, audience)
 		if err != nil {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Could not parse the token"})
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
 			return
 		}
 
-		if err := helpers.ValidateToken(parsed); err != nil {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
-		}
-
 		// Store the token in the context
-		helpers.SetJWTToken(c, parsed)
+		helpers.SetJWTToken(c, payload.Claims)
 
 		c.Next()
 	}

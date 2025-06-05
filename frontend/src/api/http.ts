@@ -95,6 +95,6 @@ async function doRequest<T>(
 
     return (await response.json()) as T;
   } catch (error: any) {
-    throw new Error(`Fetch error: ${error.message}`);
+    throw new Error(`${error.message}`);
   }
 }

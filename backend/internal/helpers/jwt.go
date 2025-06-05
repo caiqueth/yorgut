@@ -55,22 +55,27 @@ func ParseToken(token string) (*Token, error) {
 	return claims, nil
 }
 
-func ValidateToken(token *Token) error {
-	return nil
-}
-
-func SetJWTToken(c *gin.Context, token *Token) {
+func SetJWTToken(c *gin.Context, token map[string]interface{}) {
 	c.Set(USER_TOKEN_KEY, token)
 }
 
 func GetTokenFromContext(c *gin.Context) (*Token, bool) {
-	value, exists := c.Get(USER_TOKEN_KEY)
+	data, exists := c.Get(USER_TOKEN_KEY)
 	if !exists {
 		return nil, false
 	}
 
-	token, ok := value.(*Token)
-	return token, ok
+	jsonBytes, err := json.Marshal(data)
+	if err != nil {
+		return nil, false
+	}
+
+	var token Token
+	if err := json.Unmarshal(jsonBytes, &token); err != nil {
+		return nil, false
+	}
+
+	return &token, true
 }
 
 func GetUserEmail(c *gin.Context) string {

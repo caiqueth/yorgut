@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useTopicReplies } from "api/topic/queries";
 import { PicAndTextHorizontal } from "components/atoms/PicAndTextHorizontal";
 import { BoxWithTitle } from "components/molecules/BoxWithTitle";
@@ -29,6 +29,9 @@ export const Topic: React.FC<IProps> = () => {
   return (
     <Box>
       <BoxWithTitle title="respostas">
+        <Box sx={{ px: 1 }}>
+          <Typography variant={"h6"}>{replies?.topic.title}</Typography>
+        </Box>
         <StripedGrid items={items} elementsPerRow={1} />
         <Reply topicId={topicId} />
       </BoxWithTitle>
