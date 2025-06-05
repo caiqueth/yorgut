@@ -51,7 +51,7 @@ func (uc *MeController) Welcome(ctx *gin.Context) {
 		UserFirstName:       user.FirstName,
 		UserCreatedAt:       user.CreatedAt,
 		IndirectConnections: 0,
-		DirectConnections:   0,
+		DirectConnections:   user.FriendCount,
 		NumberOfFans:        0,
 		NumberOfScraps:      0,
 		ProfileViews: dto.ProfileViews{
