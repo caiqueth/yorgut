@@ -3,6 +3,7 @@ import { useUser } from "api/user/queries";
 import profileTextDecoration from "assets/images/profile_text_decoration.svg"
 
 import { Box, Paper, Stack, Typography } from "@mui/material";
+import { Repeater } from "components/atoms/Repeater";
 
 interface IProfileHeaderProps {
   userId: number;
@@ -15,6 +16,9 @@ export const ProfileHeader: React.FC<IProfileHeaderProps> = ({ userId }) => {
     totalPhotos: 0,
     totalVideos: 0,
     totalFans: 0,
+    trustworthy: Math.floor(10 * Math.random()),
+    cool: Math.floor(10 * Math.random()),
+    sexy: Math.floor(10 * Math.random()),
   }
 
   return (
@@ -52,10 +56,10 @@ export const ProfileHeader: React.FC<IProfileHeaderProps> = ({ userId }) => {
           <Typography variant={"body2"}>📹 {userStatistics.totalVideos} vídeo</Typography>
           <Typography variant={"body2"}>⭐ {userStatistics.totalFans} fãs</Typography>
         </Stack>
-        <Stack direction={"row"} spacing={2}>
-          <Typography variant={"body2"} sx={{ letterSpacing: -12 }}>🧊🧊🧊🧊🧊🧊🧊🧊🧊🧊</Typography>
-          <Typography variant={"body2"} sx={{ letterSpacing: -12 }}>😀😀😀😀😀😀😀😀😀😀</Typography>
-          <Typography variant={"body2"} sx={{ letterSpacing: -12 }}>❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️</Typography>
+        <Stack direction={"row"} spacing={0}>
+          <Repeater element={"🧊"} times={userStatistics.cool} />
+          <Repeater element={"😀"} times={userStatistics.trustworthy} />
+          <Repeater element={"❤️"} times={userStatistics.sexy} />
         </Stack>
       </Paper>
     </Box>
