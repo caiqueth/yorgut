@@ -44,7 +44,8 @@ func NewCommunityController(
 func (c *CommunityController) Create(ctx *gin.Context) {
 	createCommunityRequest := dto.CreateCommunityRequest{
 		Name:        ctx.PostForm("name"),
-		CreatedByID: uint(helpers.MustParseUint(ctx.PostForm("createdById"))),
+		Category:    ctx.PostForm("category"),
+		CreatedByID: helpers.MustParseUint(ctx.PostForm("createdById")),
 	}
 
 	err := c.communityService.CreateCommunity(createCommunityRequest)
@@ -80,15 +81,8 @@ func (c *CommunityController) Update(ctx *gin.Context) {
 // @Success				204 {object} dto.Response{}
 // @Router				/community/{communityId} [delete]
 func (c *CommunityController) Delete(ctx *gin.Context) {
-	communityId := ctx.Param("communityId")
-	id, err := strconv.ParseUint(communityId, 0, 0)
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	err = c.communityService.DeleteCommunity(uint(id))
-	if err != nil {
+	communityId := helpers.MustParseUint(ctx.Param("communityId"))
+	if err := c.communityService.DeleteCommunity(uint(communityId)); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}

@@ -9,7 +9,6 @@ export const Button: React.FC<IButtonProps> = ({ children, ...props }) => {
     <MuiButton
       {...props}
       sx={{
-        ...props.sx,
         m: 1,
         // backgroundColor: "rgba(195,208,238,1)",
         backgroundColor: palette.mediumBlue,
@@ -22,6 +21,7 @@ export const Button: React.FC<IButtonProps> = ({ children, ...props }) => {
         typographyProps: {
           variant: "h1",
         },
+        ...props.sx,
       }}
     >
       {children}

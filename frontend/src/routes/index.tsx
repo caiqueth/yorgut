@@ -26,6 +26,9 @@ import { MainPage as CommunityMainPage } from "pages/Community/MainPage";
 import { Forum } from "pages/Community/Forum";
 import { Topic } from "pages/Community/Topic";
 import { NewTopic } from "pages/Community/NewTopic";
+import { NewCommunity } from "pages/Communities/NewCommunity";
+import { MyMemberships } from "pages/Communities/MyMemberships";
+import { MyCommunities } from "pages/Communities/MyCommunities";
 
 export const Routes = [
   {
@@ -51,6 +54,32 @@ export const Routes = [
         <Communities />
       </ProtectedRoute>
     ),
+    children: [
+      {
+        index: true,
+        element: (
+          <ProtectedRoute>
+            <MyMemberships />
+          </ProtectedRoute>
+        )
+      },
+      {
+        path: "new",
+        element: (
+          <ProtectedRoute>
+            <NewCommunity />
+          </ProtectedRoute>
+        )
+      },
+      {
+        path: "owned",
+        element: (
+          <ProtectedRoute>
+            <MyCommunities />
+          </ProtectedRoute>
+        )
+      }
+    ]
   },
   {
     path: "/scraps",
