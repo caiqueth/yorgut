@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { doGet } from "api/http";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { doGet, doPost } from "api/http";
 import {
   ICommunitiesResponse,
   ICommunityHotTopicsResponse,
@@ -8,6 +8,7 @@ import {
   ICommunityRelatedResponse,
   ICommunityResponse,
   ICommunityTopicsResponse,
+  ICreateCommunityRequest,
 } from "./types";
 
 const basePath = "/api/community";
@@ -51,7 +52,16 @@ export const useUpdateCommunity = () => {
 };
 
 export const useCreateCommunity = () => {
-  throw new Error("Not implemented");
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: ICreateCommunityRequest) =>
+      doPost({ url: `${basePath}`, body: payload }),
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: [`/api/me/my-communities`],
+      });
+    },
+  });
 };
 
 export const useDeleteCommunity = () => {

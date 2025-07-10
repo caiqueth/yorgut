@@ -64,3 +64,8 @@ export interface ICommunityTopicsResponse {
     title: string;
   }[];
 }
+
+export interface ICreateCommunityRequest {
+  name: string;
+  category: string;
+}

@@ -685,6 +685,26 @@ const docTemplate = `{
                 }
             }
         },
+        "/me/my-communities": {
+            "get": {
+                "description": "Returns a list of communities",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Me"
+                ],
+                "summary": "Gets a list of communities that user owns.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.FindMyOwnedCommunitiesResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/me/photoAlbums": {
             "get": {
                 "description": "Returns a list of photo albums",
@@ -720,6 +740,26 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/dto.FindUserWithProfileByIdResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/me/welcome": {
+            "get": {
+                "description": "Returns the user stats",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Me"
+                ],
+                "summary": "Get user stats for the Home Welcome",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.WelcomeResponse"
                         }
                     }
                 }
@@ -1508,6 +1548,17 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.FindMyOwnedCommunitiesResponse": {
+            "type": "object",
+            "properties": {
+                "communities": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.MyOwnedCommunityDto"
+                    }
+                }
+            }
+        },
         "dto.FindPendingFriendshipOfUserResponse": {
             "type": "object",
             "properties": {
@@ -1690,6 +1741,23 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.MyOwnedCommunityDto": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "membershipCount": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "profilePicture": {
+                    "type": "string"
+                }
+            }
+        },
         "dto.PendingFriendship": {
             "type": "object",
             "properties": {
@@ -1714,6 +1782,28 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "name": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.ProfileViews": {
+            "type": "object",
+            "properties": {
+                "allTime": {
+                    "type": "integer"
+                },
+                "lastWeek": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.RecentVisitor": {
+            "type": "object",
+            "properties": {
+                "firstName": {
                     "type": "string"
                 },
                 "userId": {
@@ -1889,6 +1979,41 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.WelcomeResponse": {
+            "type": "object",
+            "properties": {
+                "directConnections": {
+                    "type": "integer"
+                },
+                "indirectConnections": {
+                    "type": "integer"
+                },
+                "numberOfFans": {
+                    "type": "integer"
+                },
+                "numberOfScraps": {
+                    "type": "integer"
+                },
+                "profileViews": {
+                    "$ref": "#/definitions/dto.ProfileViews"
+                },
+                "recentVisitors": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.RecentVisitor"
+                    }
+                },
+                "todaysLuck": {
+                    "type": "string"
+                },
+                "userCreatedAt": {
+                    "type": "string"
+                },
+                "userFirstName": {
                     "type": "string"
                 }
             }

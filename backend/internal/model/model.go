@@ -133,10 +133,9 @@ func NewCommunity(
 ) *Community {
 	return &Community{
 		Name:        name,
-		CreatedByID: createdBy.ID,
-		CreatedBy:   createdBy,
 		Category:    category,
-		Owner:       createdBy,
+		CreatedByID: createdBy.ID,
+		OwnerID:     createdBy.ID,
 		MemberCount: 0,
 	}
 }

@@ -42,12 +42,16 @@ func (r *FindUserWithProfileByIdResponse) FromUser(user *model.User) {
 	r.Cuisine = user.Profile.Cuisine
 }
 
-func (r *FindUserCommunitiesResponse) FromCommunities(communities []model.Community) {
-	r.Communities = make([]CommunityDto, len(communities))
+func (r *FindMyOwnedCommunitiesResponse) FromCommunities(communities []model.Community) {
+	r.Communities = make([]MyOwnedCommunityDto, len(communities))
 	for i, c := range communities {
-		r.Communities[i] = CommunityDto{
-			Name:      c.Name,
-			CreatedBy: c.CreatedByID,
+		r.Communities[i] = MyOwnedCommunityDto{
+			ID:              c.ID,
+			Name:            c.Name,
+			MembershipCount: c.MemberCount,
+		}
+		if c.Profile != nil {
+			r.Communities[i].ProfilePicture = c.Profile.ProfilePicture
 		}
 	}
 }

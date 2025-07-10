@@ -78,6 +78,12 @@ export const useMeMemberships = () =>
     queryFn: ({ queryKey }) => doGet({ queryKey }),
   });
 
+export const useMeMyCommunities = () =>
+  useQuery<IMeMembershipsResponse>({
+    queryKey: [`${basePath}/my-communities`],
+    queryFn: ({ queryKey }) => doGet({ queryKey }),
+  });
+
 export const useMePhotoAlbums = () =>
   useQuery<IMePhotoAlbumsResponse>({
     queryKey: [`${basePath}/photoAlbums`],

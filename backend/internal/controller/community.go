@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"yorgut/internal/dto"
 	"yorgut/internal/helpers"
+	"yorgut/internal/model"
 
 	"yorgut/internal/service"
 
@@ -42,13 +43,14 @@ func NewCommunityController(
 // @Success				201 {object} dto.Response{}
 // @Router				/community [post]
 func (c *CommunityController) Create(ctx *gin.Context) {
-	createCommunityRequest := dto.CreateCommunityRequest{
-		Name:        ctx.PostForm("name"),
-		Category:    ctx.PostForm("category"),
-		CreatedByID: helpers.MustParseUint(ctx.PostForm("createdById")),
-	}
+	user := ctx.MustGet("user").(*model.User)
 
-	err := c.communityService.CreateCommunity(createCommunityRequest)
+	request := dto.CreateCommunityRequest{}
+	ctx.ShouldBindJSON(&request)
+
+	request.CreatedByID = user.ID
+
+	err := c.communityService.CreateCommunity(request)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

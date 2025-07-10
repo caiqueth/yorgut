@@ -45,7 +45,15 @@ export interface ILeaveCommunityResponse {
 export interface IMeMembershipsResponse {
   membershipCount: number;
   communities: {
-    firstName: number;
+    id: number;
+    name: string;
+    membershipCount: number;
+    profilePicture: string;
+  }[];
+}
+
+export interface IMeMyCommunitiesResponse {
+  communities: {
     id: number;
     membershipCount: number;
     name: string;

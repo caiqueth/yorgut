@@ -239,6 +239,25 @@ func (uc *MeController) FindMyMemberships(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, memberships)
 }
 
+// FindMyCommunities		godoc
+// @Summary					Gets a list of communities that user owns.
+// @Description				Returns a list of communities
+// @Produce					application/json
+// @Tags					Me
+// @Success					200 {object} dto.FindMyOwnedCommunitiesResponse{}
+// @Router					/me/my-communities [get]
+func (uc *MeController) FindMyCommunities(ctx *gin.Context) {
+	user := ctx.MustGet("user").(*model.User)
+
+	communities, err := uc.userService.FindUserOwnedCommunities(user.ID)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, communities)
+}
+
 // AmIMemberOf		godoc
 // @Summary			Evaluates if the logged user is member of specified community
 // @Description		Returns true or false

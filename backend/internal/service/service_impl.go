@@ -133,13 +133,13 @@ func (u *UserService) FindUserWithProfileById(id uint) (*dto.FindUserWithProfile
 
 }
 
-func (u *UserService) FindUserOwnedCommunities(userId uint) (*dto.FindUserCommunitiesResponse, error) {
+func (u *UserService) FindUserOwnedCommunities(userId uint) (*dto.FindMyOwnedCommunitiesResponse, error) {
 	communities, err := u.userRepository.FindUserOwnedCommunities(userId)
 	if err != nil {
 		return nil, err
 	}
 
-	resp := &dto.FindUserCommunitiesResponse{}
+	resp := &dto.FindMyOwnedCommunitiesResponse{}
 	resp.FromCommunities(communities)
 
 	return resp, nil

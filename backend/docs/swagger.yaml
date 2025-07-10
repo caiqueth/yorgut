@@ -147,6 +147,13 @@ definitions:
           $ref: '#/definitions/dto.UserDto'
         type: array
     type: object
+  dto.FindMyOwnedCommunitiesResponse:
+    properties:
+      communities:
+        items:
+          $ref: '#/definitions/dto.MyOwnedCommunityDto'
+        type: array
+    type: object
   dto.FindPendingFriendshipOfUserResponse:
     properties:
       count:
@@ -266,6 +273,17 @@ definitions:
       profilePicture:
         type: string
     type: object
+  dto.MyOwnedCommunityDto:
+    properties:
+      id:
+        type: integer
+      membershipCount:
+        type: integer
+      name:
+        type: string
+      profilePicture:
+        type: string
+    type: object
   dto.PendingFriendship:
     properties:
       firstName:
@@ -282,6 +300,20 @@ definitions:
   dto.PhotoAlbumDto:
     properties:
       name:
+        type: string
+      userId:
+        type: integer
+    type: object
+  dto.ProfileViews:
+    properties:
+      allTime:
+        type: integer
+      lastWeek:
+        type: integer
+    type: object
+  dto.RecentVisitor:
+    properties:
+      firstName:
         type: string
       userId:
         type: integer
@@ -396,6 +428,29 @@ definitions:
       lastName:
         type: string
       updatedAt:
+        type: string
+    type: object
+  dto.WelcomeResponse:
+    properties:
+      directConnections:
+        type: integer
+      indirectConnections:
+        type: integer
+      numberOfFans:
+        type: integer
+      numberOfScraps:
+        type: integer
+      profileViews:
+        $ref: '#/definitions/dto.ProfileViews'
+      recentVisitors:
+        items:
+          $ref: '#/definitions/dto.RecentVisitor'
+        type: array
+      todaysLuck:
+        type: string
+      userCreatedAt:
+        type: string
+      userFirstName:
         type: string
     type: object
 host: localhost:8080
@@ -845,6 +900,19 @@ paths:
       summary: Evaluates if the logged user is member of specified community
       tags:
       - Me
+  /me/my-communities:
+    get:
+      description: Returns a list of communities
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.FindMyOwnedCommunitiesResponse'
+      summary: Gets a list of communities that user owns.
+      tags:
+      - Me
   /me/photoAlbums:
     get:
       description: Returns a list of photo albums
@@ -869,6 +937,19 @@ paths:
           schema:
             $ref: '#/definitions/dto.FindUserWithProfileByIdResponse'
       summary: Get logged user with it's profile by their Token.
+      tags:
+      - Me
+  /me/welcome:
+    get:
+      description: Returns the user stats
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.WelcomeResponse'
+      summary: Get user stats for the Home Welcome
       tags:
       - Me
   /photo:
