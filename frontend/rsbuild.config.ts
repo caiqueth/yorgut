@@ -17,4 +17,9 @@ export default defineConfig({
     template: "./public/index.html",
   },
   plugins: [pluginReact()],
+  source: {
+    define: {
+      "__GOOGLE_CLIENT_ID__": JSON.stringify(process.env.GOOGLE_CLIENT_ID),
+    },
+  },
 });
