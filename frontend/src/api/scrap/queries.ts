@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ICreateScrapPayload, IScrapsResponse } from "./types";
 import { doGet, doPost } from "api/http";
 
-const basePath = "/api/scrap";
+const basePath = `${__API_BASE_URL__}/scrap`
 
 export const useScraps = (userId: number | undefined) =>
   useQuery<IScrapsResponse>({

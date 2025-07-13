@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { doDelete, doPost } from "api/http";
 import { IAddFriendRequest, IFriendshipReplyRequest } from "./types";
 
-export const basePath = "/api/friendship";
+const basePath = `${__API_BASE_URL__}/friendship`;
 
 export const useReplyFriendship = () => {
   const queryClient = useQueryClient();

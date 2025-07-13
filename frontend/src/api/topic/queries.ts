@@ -6,7 +6,7 @@ import {
   ITopicReplyRequest,
 } from "./types";
 
-const basePath = "/api/topic";
+const basePath = `${__API_BASE_URL__}/topic`;
 
 export const useTopicReplies = (topicId: number) =>
   useQuery<ITopicRepliesResponse>({

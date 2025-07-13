@@ -11,7 +11,7 @@ import {
   IUsersResponse,
 } from "./types";
 
-const basePath = "/api/users";
+const basePath = `${__API_BASE_URL__}/users`;
 
 export const useUsers = () =>
   useQuery<IUsersResponse>({

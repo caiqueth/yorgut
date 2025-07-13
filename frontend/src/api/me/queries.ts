@@ -14,7 +14,7 @@ import {
   WelcomeResponse,
 } from "./types";
 
-const basePath = "/api/me";
+const basePath = `${__API_BASE_URL__}/me`;
 
 export const useMe = () =>
   useQuery<IMeResponse>({

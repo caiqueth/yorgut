@@ -11,7 +11,7 @@ import {
   ICreateCommunityRequest,
 } from "./types";
 
-const basePath = "/api/community";
+const basePath = `${__API_BASE_URL__}/community`;
 
 export const useCommunities = () =>
   useQuery<ICommunitiesResponse>({

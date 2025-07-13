@@ -20,6 +20,7 @@ export default defineConfig({
   source: {
     define: {
       "__GOOGLE_CLIENT_ID__": JSON.stringify(process.env.GOOGLE_CLIENT_ID),
+      "__API_BASE_URL__": JSON.stringify(process.env.API_BASE_URL),
     },
   },
 });
