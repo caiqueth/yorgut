@@ -20,7 +20,7 @@ import (
 func NewServer() *http.Server {
 	log.Info().Msg("Starting the server")
 	port, _ := strconv.Atoi(os.Getenv("PORT"))
-	srvAddr := fmt.Sprintf("127.0.0.1:%d", port)
+	srvAddr := fmt.Sprintf("0.0.0.0:%d", port)
 
 	db := database.DatabaseConnection()
 	validate := validator.New()
