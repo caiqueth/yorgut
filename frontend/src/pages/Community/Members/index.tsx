@@ -19,7 +19,7 @@ export const CommunityMembers: React.FC<IProps> = () => {
       title={`${m.firstName}`}
       text={`${m.friendCount} ${m.friendCount > 1 ? "amigos" : "amigo"}`}
       url={`/profile/${m.id}`}
-      imageSrc={`/${m.profilePicture}`}
+      imageSrc={m.profilePicture}
       imageSize={64}
     />
   )) ?? [];

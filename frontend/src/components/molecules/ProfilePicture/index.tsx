@@ -11,7 +11,7 @@ export const UserProfilePicture: React.FC<IUserProfilePictureProps> = ({ userId 
 
   if (!user) return null;
 
-  return <ProfilePicture imageSrc={`/${user.profilePicture}`} />;
+  return <ProfilePicture imageSrc={user.profilePicture} />;
 };
 
 interface ICommunityProfilePictureProps {
@@ -24,5 +24,5 @@ export const CommunityProfilePicture: React.FC<
 
   if (!community?.profilePicture) return null;
 
-  return <Link to={`/community/${communityId}`}><ProfilePicture imageSrc={`/${community.profilePicture}`} /></Link>;
+  return <Link to={`/community/${communityId}`}><ProfilePicture imageSrc={community.profilePicture} /></Link>;
 };

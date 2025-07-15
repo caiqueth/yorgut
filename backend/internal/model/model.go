@@ -7,6 +7,23 @@ import (
 )
 
 // Structs
+type Token struct {
+	Iss            string
+	Azp            string
+	Aud            string
+	Sub            string
+	Email          string
+	Email_verified bool
+	Nbf            int
+	Name           string
+	Picture        string
+	Given_name     string
+	Family_name    string
+	Iat            int
+	Exp            int
+	Jti            string
+}
+
 type Community struct {
 	gorm.Model
 	Name        string
@@ -227,13 +244,16 @@ func AddCommunityProfilePicture(profile *CommunityProfile, profilePicturePath st
 	profile.ProfilePicture = &profilePicturePath
 }
 
-func NewUser(firstName string, lastName string, email string, birthDate time.Time) *User {
+func NewUser(firstName string, lastName string, email string, birthDate time.Time, profilePicture *string) *User {
 	return &User{
 		Email:       email,
 		FirstName:   firstName,
 		LastName:    lastName,
 		BirthDate:   birthDate,
 		FriendCount: 0,
+		Profile: &UserProfile{
+			ProfilePicture: profilePicture,
+		},
 	}
 }
 

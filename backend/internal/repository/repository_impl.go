@@ -2,7 +2,6 @@ package repository
 
 import (
 	"errors"
-	"fmt"
 	"yorgut/internal/helpers"
 	"yorgut/internal/model"
 )
@@ -88,10 +87,10 @@ func (r *CommunityRepository) IncrementCommunityMembers(community *model.Communi
 func (u *UserRepository) FindByEmail(email string) (*model.User, error) {
 	var ent model.User
 	result := u.db.Where("email = ?", email).First(&ent)
-	if result != nil {
-		return &ent, nil
+	if result.Error != nil {
+		return nil, result.Error
 	} else {
-		return &ent, fmt.Errorf("user with e-mail %v not found", email)
+		return &ent, nil
 	}
 }
 

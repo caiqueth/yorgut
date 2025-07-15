@@ -16,7 +16,7 @@ export const RelatedCommunitiesList: React.FC<IRelatedCommunitiesListProps> = ({
 
   const items =
     communities?.communities.map((c) => (
-      <PicAndText imageSrc={`/${c.profilePicture}`} url={`/community/${c.id}`} text={c.name} />
+      <PicAndText imageSrc={c.profilePicture} url={`/community/${c.id}`} text={c.name} />
     )) ?? [];
 
   return (

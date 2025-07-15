@@ -21,7 +21,7 @@ export const Topic: React.FC<IProps> = () => {
         title={`${r.authorFirstName} em ${dayjsFromDate(r.createdAt, "D [de] MMMM [de] YYYY")}:`}
         text={r.text}
         url={`/profile/${r.authorId}`}
-        imageSrc={`/${r.authorProfilePicture}`}
+        imageSrc={r.authorProfilePicture}
         imageSize={56}
       />
     )) : [];

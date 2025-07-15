@@ -15,7 +15,7 @@ export const CommunitiesList: React.FC<ICommunitiesListProps> = ({
   const items =
     memberships?.communities.map((c) => (
       <PicAndText
-        imageSrc={`/${c.profilePicture}`}
+        imageSrc={c.profilePicture}
         url={`/community/${c.id}`}
         text={`${c.name} (${c.membershipCount ?? 0})`}
       />

@@ -31,7 +31,7 @@ export const Scrapbook: React.FC<IProps> = ({ userId }) => {
   const items =
     scraps?.scraps.map((s) => (
       <PicAndTextHorizontal
-        imageSrc={`/${s.authorProfilePicture}`}
+        imageSrc={s.authorProfilePicture}
         title={`${s.authorName} em ${dayjsFromDate(s.createdAt, "D [de] MMMM [de] YYYY")}: `}
         text={s.content}
         url={`/profile/${s.authorId}`}

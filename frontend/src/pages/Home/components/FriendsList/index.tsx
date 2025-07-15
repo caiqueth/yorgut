@@ -21,7 +21,7 @@ export const FriendsList: React.FC<IFriendsListProps> = () => {
   const items =
     friends?.friends.map((f) => (
       <PicAndText
-        imageSrc={`/${f.profilePicture}`}
+        imageSrc={f.profilePicture}
         url={`/profile/${f.id}`}
         text={`${f.firstName} (${f.friendCount})`}
       />

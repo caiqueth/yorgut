@@ -37,7 +37,7 @@ func (uc *UserController) Create(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}
 
-	err = uc.userService.CreateUser(req.FirstName, req.LastName, req.Email, req.BirthDate)
+	err = uc.userService.CreateUser(req.FirstName, req.LastName, req.Email, req.BirthDate, nil)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

@@ -17,7 +17,7 @@ export const UserFriendsList: React.FC<IProps> = () => {
     <PicAndTextHorizontal
       title={f.firstName}
       text={`${f.friendCount} amigos`}
-      imageSrc={`/${f.profilePicture}`}
+      imageSrc={f.profilePicture}
       imageSize={56}
       url={`/profile/${f.id}`}
     />

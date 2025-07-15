@@ -23,7 +23,7 @@ export const Forum: React.FC<IProps> = () => {
       title={t.title}
       text={t.lastReplyPreview}
       url={`topic/${t.id}`}
-      imageSrc={`/${t.authorProfilePicture}`}
+      imageSrc={t.authorProfilePicture}
     />
   )) ?? [];
 

@@ -24,7 +24,7 @@ export const Birthdays: React.FC<IBirthdaysProps> = () => {
       <PicAndTextHorizontal
         title={f.firstName}
         text={dayjsFromDate(f.birthDate, "D [de] MMMM")}
-        imageSrc={`/${f.profilePicture}`}
+        imageSrc={f.profilePicture}
         url={`/profile/${f.id}`}
         imageSize={56}
       />

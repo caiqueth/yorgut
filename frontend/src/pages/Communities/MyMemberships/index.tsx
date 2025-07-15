@@ -14,7 +14,7 @@ export const MyMemberships: React.FC<IProps> = () => {
         title={c.name}
         text={`${c.membershipCount} membros`}
         url={`/community/${c.id}`}
-        imageSrc={`/${c.profilePicture}`}
+        imageSrc={c.profilePicture}
         imageSize={64}
       />
     )) ?? [];

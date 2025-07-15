@@ -8,6 +8,8 @@ import (
 	"yorgut/internal/dto"
 	"yorgut/internal/helpers"
 	"yorgut/internal/model"
+
+	"gorm.io/gorm"
 )
 
 var userIDCache = sync.Map{}
@@ -75,8 +77,8 @@ func (u *UserService) FindManyUsers() (*dto.FindManyUsersResponse, error) {
 	}, nil
 }
 
-func (u *UserService) CreateUser(firstName string, lastName string, email string, birthDate time.Time) error {
-	err := u.userRepository.Create(model.NewUser(firstName, lastName, email, birthDate))
+func (u *UserService) CreateUser(firstName string, lastName string, email string, birthDate time.Time, profilePicture *string) error {
+	err := u.userRepository.Create(model.NewUser(firstName, lastName, email, birthDate, profilePicture))
 	if err != nil {
 		return err
 	}
@@ -84,11 +86,12 @@ func (u *UserService) CreateUser(firstName string, lastName string, email string
 }
 
 func (u *UserService) UpdateUser(user dto.UpdateUserRequest) error {
-	err := u.userRepository.Update(model.NewUser(user.FirstName, user.LastName, user.Email, user.BirthDate))
-	if err != nil {
-		return err
-	}
-	return nil
+	return errors.New("not implemented")
+	// err := u.userRepository.Update(model.NewUser(user.FirstName, user.LastName, user.Email, user.BirthDate))
+	// if err != nil {
+	// 	return err
+	// }
+	// return nil
 }
 
 func (u *UserService) FindUserById(id uint) (*dto.FindUserResponse, error) {
@@ -105,12 +108,33 @@ func (u *UserService) FindUserById(id uint) (*dto.FindUserResponse, error) {
 }
 
 func (u *UserService) FindUserByEmail(email string) (*model.User, error) {
-	user, err := u.userRepository.FindByEmail(email)
-	if err != nil {
-		return nil, err
-	}
-	return user, nil
+	return u.userRepository.FindByEmail(email)
+}
 
+func (u *UserService) FindUserByToken(token *model.Token) (*model.User, error) {
+	return u.userRepository.FindByEmail(token.Email)
+}
+
+func (u *UserService) GetOrCreateByToken(token *model.Token) (*model.User, error) {
+	user, err := u.FindUserByToken(token)
+	if err == nil {
+		return user, nil
+	}
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		createErr := u.CreateUser(token.Given_name, token.Family_name, token.Email, time.Time{}, &token.Picture)
+		if createErr != nil {
+			return nil, fmt.Errorf("failed to create user: %w", createErr)
+		}
+
+		user, err = u.FindUserByToken(token)
+		if err != nil {
+			return nil, fmt.Errorf("user created but not found: %w", err)
+		}
+		return user, nil
+	}
+
+	return nil, fmt.Errorf("could not find user: %w", err)
 }
 
 func (u *UserService) FindUserIdFromEmail(email string) (uint, error) {
