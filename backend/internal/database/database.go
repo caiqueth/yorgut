@@ -6,14 +6,14 @@ import (
 
 	_ "github.com/joho/godotenv/autoload"
 	_ "github.com/mattn/go-sqlite3"
-	"gorm.io/driver/sqlite"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-var dburl string = os.Getenv("BLUEPRINT_DB_URL")
+var dsn string = os.Getenv("DATABASE_DSN")
 
 func DatabaseConnection() *gorm.DB {
-	db, err := gorm.Open(sqlite.Open(dburl), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		// This will not be a connection error, but a DSN parse error or
 		// another initialization error.
