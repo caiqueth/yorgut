@@ -22,6 +22,7 @@ export const Wrapper: React.FC<IWrapperProps> = ({ children }) => {
         alignContent: "center",
         m: "0 auto",
         pt: 3,
+        px: 2,
       }}
     >
       <Stack direction={"row"} width={"100%"} alignItems={"center"}>
