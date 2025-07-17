@@ -78,6 +78,7 @@ func NewRouter(
 		{
 			users.POST("", userController.Create)
 			users.GET("", userController.FindMany)
+			users.GET("search-users", userController.SearchUsers)
 			users.GET("/:userId", userController.FindById)
 			users.GET("/:userId/profile", userController.FindUserProfile)
 			users.GET("/:userId/memberships", userController.FindMemberships)

@@ -126,6 +126,25 @@ func (r *UserRepository) IncrementFriendCount(user *model.User, increment int) e
 	return nil
 }
 
+func (r *UserRepository) SearchUsers(name string, page int, pageSize int) ([]*model.User, int64) {
+	var ents []*model.User
+	result := r.db.
+		Scopes(newPaginate(page, pageSize).paginatedResult).
+		Where("lower(first_name) like lower(?)", "%"+name+"%").
+		Preload("Profile").
+		Order("first_name").
+		Find(&ents)
+
+	if result.Error != nil {
+		return []*model.User{}, 0
+	}
+
+	var count int64
+	r.db.Where("lower(first_name) like lower(?)", "%"+name+"%").Count(&count)
+
+	return ents, count
+}
+
 // Friendship
 func (f *FriendshipRepository) FindByIdWithUsers(id uint) (*model.Friendship, error) {
 	var ent model.Friendship

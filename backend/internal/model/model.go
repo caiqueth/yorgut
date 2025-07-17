@@ -7,23 +7,6 @@ import (
 )
 
 // Structs
-type Token struct {
-	Iss            string
-	Azp            string
-	Aud            string
-	Sub            string
-	Email          string
-	Email_verified bool
-	Nbf            int
-	Name           string
-	Picture        string
-	Given_name     string
-	Family_name    string
-	Iat            int
-	Exp            int
-	Jti            string
-}
-
 type Community struct {
 	gorm.Model
 	Name        string

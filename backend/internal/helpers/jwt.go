@@ -6,14 +6,14 @@ import (
 	"errors"
 	"net/http"
 	"strings"
-	"yorgut/internal/model"
+	"yorgut/internal/dto"
 
 	"github.com/gin-gonic/gin"
 )
 
 var USER_TOKEN_KEY string = "user_token"
 
-func ParseToken(token string) (*model.Token, error) {
+func ParseToken(token string) (*dto.Token, error) {
 	parts := strings.Split(token, ".")
 	if len(parts) != 3 {
 		return nil, errors.New("invalid token format")
@@ -30,7 +30,7 @@ func ParseToken(token string) (*model.Token, error) {
 		return nil, errors.New("invalid base64 encoding")
 	}
 
-	var claims *model.Token
+	var claims *dto.Token
 	err = json.Unmarshal(decoded, &claims)
 	if err != nil {
 		return nil, errors.New("invalid JSON format")
@@ -43,7 +43,7 @@ func SetJWTToken(c *gin.Context, token map[string]interface{}) {
 	c.Set(USER_TOKEN_KEY, token)
 }
 
-func GetTokenFromContext(c *gin.Context) (*model.Token, bool) {
+func GetTokenFromContext(c *gin.Context) (*dto.Token, bool) {
 	data, exists := c.Get(USER_TOKEN_KEY)
 	if !exists {
 		return nil, false
@@ -54,7 +54,7 @@ func GetTokenFromContext(c *gin.Context) (*model.Token, bool) {
 		return nil, false
 	}
 
-	var token model.Token
+	var token dto.Token
 	if err := json.Unmarshal(jsonBytes, &token); err != nil {
 		return nil, false
 	}

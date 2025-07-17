@@ -5,8 +5,31 @@ import (
 	"time"
 )
 
+type Token struct {
+	Iss            string
+	Azp            string
+	Aud            string
+	Sub            string
+	Email          string
+	Email_verified bool
+	Nbf            int
+	Name           string
+	Picture        string
+	Given_name     string
+	Family_name    string
+	Iat            int
+	Exp            int
+	Jti            string
+}
+
+type PagedResponse struct {
+	Page     int   `json:"page"`
+	PageSize int   `json:"pageSize"`
+	Count    int64 `json:"count"`
+}
+
 type Response struct {
-	Data interface{} `json:"data,omitempty"`
+	Data any `json:"data,omitempty"`
 }
 
 type FindUserByIdResponse struct {
@@ -208,6 +231,14 @@ type UserProfileDto struct {
 	Cuisine            *string `json:"cuisine"`
 }
 
+type UserSearchDto struct {
+	ID             uint      `json:"id"`
+	FirstName      string    `json:"firstName"`
+	BirthDate      time.Time `json:"birthDate"`
+	ProfilePicture *string   `json:"profilePicture"`
+	FriendCount    uint      `json:"friendCount"`
+}
+
 type FriendDto struct {
 	ID             uint      `json:"id"`
 	FirstName      string    `json:"firstName"`
@@ -265,6 +296,11 @@ type FindUserWithProfileByIdResponse struct {
 
 type FindManyUsersResponse struct {
 	Users []UserDto `json:"users"`
+}
+
+type SearchUsersResponse struct {
+	PagedResponse
+	Users []*UserSearchDto `json:"users"`
 }
 
 type FindMyOwnedCommunitiesResponse struct {

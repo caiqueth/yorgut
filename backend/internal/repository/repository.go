@@ -13,6 +13,21 @@ type repository[T any] struct {
 	db *gorm.DB
 }
 
+type paginate struct {
+	page     int
+	pageSize int
+}
+
+func newPaginate(page int, pageSize int) *paginate {
+	return &paginate{page: page, pageSize: pageSize}
+}
+
+func (p *paginate) paginatedResult(db *gorm.DB) *gorm.DB {
+	offset := (p.page - 1) * p.pageSize
+
+	return db.Offset(offset).Limit(p.pageSize)
+}
+
 func (r *repository[T]) Create(entity T) error {
 	result := r.db.Create(&entity)
 	if result.Error != nil {

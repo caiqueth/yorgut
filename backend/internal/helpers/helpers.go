@@ -37,6 +37,11 @@ func MustParseUint(s string) uint {
 	return uint(val)
 }
 
+func MustParseInt(s string) int {
+	val, _ := strconv.ParseInt(s, 10, 64)
+	return int(val)
+}
+
 func FileToBytes(fileHeader *multipart.FileHeader) ([]byte, error) {
 	file, err := fileHeader.Open()
 	if err != nil {

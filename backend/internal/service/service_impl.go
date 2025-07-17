@@ -111,11 +111,15 @@ func (u *UserService) FindUserByEmail(email string) (*model.User, error) {
 	return u.userRepository.FindByEmail(email)
 }
 
-func (u *UserService) FindUserByToken(token *model.Token) (*model.User, error) {
+func (u *UserService) SearchUsers(name string, page int, pageSize int) ([]*model.User, int64) {
+	return u.userRepository.SearchUsers(name, page, pageSize)
+}
+
+func (u *UserService) FindUserByToken(token *dto.Token) (*model.User, error) {
 	return u.userRepository.FindByEmail(token.Email)
 }
 
-func (u *UserService) GetOrCreateByToken(token *model.Token) (*model.User, error) {
+func (u *UserService) GetOrCreateByToken(token *dto.Token) (*model.User, error) {
 	user, err := u.FindUserByToken(token)
 	if err == nil {
 		return user, nil

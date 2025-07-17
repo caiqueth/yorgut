@@ -7,13 +7,23 @@ import (
 	_ "github.com/joho/godotenv/autoload"
 	_ "github.com/mattn/go-sqlite3"
 	"gorm.io/driver/postgres"
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
 var dsn string = os.Getenv("DATABASE_DSN")
+var development bool = os.Getenv("DEV_MODE") == "true"
 
 func DatabaseConnection() *gorm.DB {
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	var db *gorm.DB
+	var err error
+
+	if development {
+		db, err = gorm.Open(sqlite.Open(dsn), &gorm.Config{})
+	} else {
+		db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	}
+
 	if err != nil {
 		// This will not be a connection error, but a DSN parse error or
 		// another initialization error.

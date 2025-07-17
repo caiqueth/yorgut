@@ -69,6 +69,44 @@ func (uc *UserController) FindMany(ctx *gin.Context) {
 
 }
 
+// SearchUser			godoc
+// @Summary				Searches for a user by their name.
+// @Description			Returns a list of users
+// @Produce				application/json
+// @Tags				Users
+// @Success				200 {object} dto.SearchUsersResponse{}
+// @Router				/users/search-users [get]
+func (uc *UserController) SearchUsers(ctx *gin.Context) {
+	name := ctx.Query("name")
+	page := helpers.MustParseInt(ctx.Query("page"))
+	pageSize := helpers.MustParseInt(ctx.Query("pageSize"))
+
+	users, count := uc.userService.SearchUsers(name, page, pageSize)
+
+	userDtos := make([]*dto.UserSearchDto, len(users))
+	for i, u := range users {
+		userDtos[i] = &dto.UserSearchDto{
+			ID:             u.ID,
+			FirstName:      u.FirstName,
+			BirthDate:      u.BirthDate,
+			ProfilePicture: u.Profile.ProfilePicture,
+			FriendCount:    u.FriendCount,
+		}
+	}
+
+	response := dto.SearchUsersResponse{
+		PagedResponse: dto.PagedResponse{
+			Page:     page,
+			PageSize: pageSize,
+			Count:    count,
+		},
+		Users: userDtos,
+	}
+
+	ctx.JSON(http.StatusOK, response)
+
+}
+
 // FindById 			godoc
 // @Summary				Get Single user by id.
 // @Param				userId path string true "User ID"

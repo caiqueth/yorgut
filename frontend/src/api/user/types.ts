@@ -78,3 +78,16 @@ export interface IUserProfileResponse {
   updatedAt: string;
   website: string;
 }
+
+export interface ISearchUsersResponse {
+  page: number;
+  pageSize: number;
+  count: number;
+  users: {
+    id: number;
+    firstName: string;
+    birthDate: string;
+    profilePicture: string;
+    friendCount: number;
+  }[];
+}

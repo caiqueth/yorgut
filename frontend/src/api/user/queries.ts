@@ -3,6 +3,7 @@ import { doGet } from "api/http";
 import { useQuery } from "@tanstack/react-query";
 
 import {
+  ISearchUsersResponse,
   IUserFriendsResponse,
   IUserMembershipsResponse,
   IUserPhotoAlbumsResponse,
@@ -49,3 +50,11 @@ export const useUserProfile = (userId: number) =>
     queryFn: ({ queryKey }) => doGet({ queryKey }),
     enabled: !!userId,
   });
+
+export const useUserSearchUsers = (name: string, page: number, pageSize: number) =>
+  useQuery<ISearchUsersResponse>({
+    queryKey: [`${basePath}/search-users?name=${name}&page=${page}&pageSize=${pageSize}`],
+    queryFn: ({ queryKey }) => doGet({ queryKey }),
+    enabled: false,
+  });
+
