@@ -1172,6 +1172,26 @@ const docTemplate = `{
                 }
             }
         },
+        "/users/search-users": {
+            "get": {
+                "description": "Returns a list of users",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Searches for a user by their name.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SearchUsersResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/users/{userId}": {
             "get": {
                 "description": "Returns the user matching the requested id",
@@ -1851,6 +1871,26 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.SearchUsersResponse": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "type": "integer"
+                },
+                "users": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.UserSearchDto"
+                    }
+                }
+            }
+        },
         "dto.Topic": {
             "type": "object",
             "properties": {
@@ -1979,6 +2019,26 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.UserSearchDto": {
+            "type": "object",
+            "properties": {
+                "birthDate": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "friendCount": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "profilePicture": {
                     "type": "string"
                 }
             }

@@ -7,6 +7,7 @@ interface IProps {
   header?: string;
   onChangeContent: (value: string) => void;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  isPending: boolean;
   maxLength: number;
 }
 export const TextCompositor: React.FC<IProps> = ({
@@ -14,12 +15,14 @@ export const TextCompositor: React.FC<IProps> = ({
   header,
   onChangeContent,
   onSubmit,
+  isPending,
   maxLength = 256,
 }) => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
     onSubmit(e);
+    onChangeContent("");
   };
 
   const handleChangeContent = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -42,7 +45,7 @@ export const TextCompositor: React.FC<IProps> = ({
         ></TextField>
         <FormHelperText>{maxLength - content.length} caracteres restantes.</FormHelperText>
       </Box>
-      <Button type="submit">Enviar</Button>
+      <Button type="submit" loading={isPending}>Enviar</Button>
     </form>
 
   )

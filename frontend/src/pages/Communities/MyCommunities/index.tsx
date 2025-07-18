@@ -5,7 +5,7 @@ import { StripedGrid } from "components/molecules/StripedGrid";
 import React from "react";
 
 export const MyCommunities: React.FC = () => {
-  const { data } = useMeMyCommunities();
+  const { data, isLoading } = useMeMyCommunities();
 
   const items =
     data?.communities.map((c) => (
@@ -19,7 +19,7 @@ export const MyCommunities: React.FC = () => {
     )) ?? [];
 
   return (
-    <BoxWithTitle title="minhas comunidades">
+    <BoxWithTitle title="minhas comunidades" isLoading={isLoading}>
       <StripedGrid items={items} elementsPerRow={1} />
     </BoxWithTitle>
   )

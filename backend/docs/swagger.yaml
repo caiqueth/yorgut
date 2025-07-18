@@ -344,6 +344,19 @@ definitions:
       id:
         type: integer
     type: object
+  dto.SearchUsersResponse:
+    properties:
+      count:
+        type: integer
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      users:
+        items:
+          $ref: '#/definitions/dto.UserSearchDto'
+        type: array
+    type: object
   dto.Topic:
     properties:
       authorFirstName:
@@ -428,6 +441,19 @@ definitions:
       lastName:
         type: string
       updatedAt:
+        type: string
+    type: object
+  dto.UserSearchDto:
+    properties:
+      birthDate:
+        type: string
+      firstName:
+        type: string
+      friendCount:
+        type: integer
+      id:
+        type: integer
+      profilePicture:
         type: string
     type: object
   dto.WelcomeResponse:
@@ -1310,6 +1336,19 @@ paths:
           schema:
             $ref: '#/definitions/dto.FindUserWithProfileByIdResponse'
       summary: Get Single user with it's profile by id.
+      tags:
+      - Users
+  /users/search-users:
+    get:
+      description: Returns a list of users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.SearchUsersResponse'
+      summary: Searches for a user by their name.
       tags:
       - Users
 schemes:

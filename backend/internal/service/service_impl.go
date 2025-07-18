@@ -141,6 +141,16 @@ func (u *UserService) GetOrCreateByToken(token *dto.Token) (*model.User, error) 
 	return nil, fmt.Errorf("could not find user: %w", err)
 }
 
+func (u *UserService) UpdateFriendCount(userId uint) error {
+	friendCount := u.friendshipRepository.CountFriends(userId)
+	user, err := u.userRepository.FindById(userId)
+	if err != nil {
+		return err
+	}
+	user.FriendCount = uint(friendCount)
+	return u.userRepository.Update(user)
+}
+
 func (u *UserService) FindUserIdFromEmail(email string) (uint, error) {
 	if val, ok := userIDCache.Load(email); ok {
 		return val.(uint), nil
@@ -479,21 +489,21 @@ func (f *FriendshipService) ReplyFriendship(friendshipId uint, accepted bool) er
 	}
 
 	if !accepted {
-		f.friendshipRepository.Delete(friendshipId)
+		if err := f.friendshipRepository.Delete(friendshipId); err != nil {
+			return err
+		}
 		return nil
 	}
 
-	now := time.Now()
-	friendship.Accepted = accepted
-	friendship.AcceptedAt = &now
-
-	if err := f.friendshipRepository.Update(friendship); err != nil {
+	if err := f.friendshipRepository.AcceptFriendship(friendshipId); err != nil {
 		return err
 	}
 
-	if accepted {
-		f.userRepository.IncrementFriendCount(friendship.UserRequested, 1)
-		f.userRepository.IncrementFriendCount(friendship.UserRequestee, 1)
+	for _, userId := range []uint{friendship.UserRequestedID, friendship.UserRequesteeID} {
+		count := f.friendshipRepository.CountFriends(userId)
+		if err := f.userRepository.UpdateFriendCount(userId, uint(count)); err != nil {
+			return err
+		}
 	}
 
 	return nil

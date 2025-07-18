@@ -7,7 +7,7 @@ import React from "react";
 
 interface IProps { }
 export const Friends: React.FC<IProps> = () => {
-  const { data } = useMeFriends();
+  const { data, isLoading } = useMeFriends();
 
   const items =
     data?.friends.map((f) => (
@@ -21,7 +21,7 @@ export const Friends: React.FC<IProps> = () => {
 
   return (
     <Box width={"100%"}>
-      <BoxWithTitle title={"meus amigos"}>
+      <BoxWithTitle title={"meus amigos"} isLoading={isLoading}>
         <StripedGrid items={items} elementsPerRow={1} />
       </BoxWithTitle>
     </Box>

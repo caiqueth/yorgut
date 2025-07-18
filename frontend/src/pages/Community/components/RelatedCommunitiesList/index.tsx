@@ -12,7 +12,7 @@ interface IRelatedCommunitiesListProps {
 export const RelatedCommunitiesList: React.FC<IRelatedCommunitiesListProps> = ({
   communityId,
 }) => {
-  const { data: communities } = useCommunityRelated(communityId);
+  const { data: communities, isLoading } = useCommunityRelated(communityId);
 
   const items =
     communities?.communities.map((c) => (
@@ -22,6 +22,7 @@ export const RelatedCommunitiesList: React.FC<IRelatedCommunitiesListProps> = ({
   return (
     <BoxWithTitle
       title={`comunidades relacionadas`}
+      isLoading={isLoading}
     >
       <Stack direction={"column"} alignItems={"center"}>
         <StripedGrid items={items} elementsPerRow={4} />

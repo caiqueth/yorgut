@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import { BoxWithTitle } from "components/molecules/BoxWithTitle";
 import { dayjsFromDate } from "helpers/formatting/date";
 import { StripedGrid } from "components/molecules/StripedGrid";
@@ -17,7 +17,7 @@ interface ItemProps {
 
 interface IBirthdaysProps { };
 export const Birthdays: React.FC<IBirthdaysProps> = () => {
-  const { data: friends } = useMeFriends();
+  const { data: friends, isLoading } = useMeFriends();
 
   const items =
     friends?.friends.map((f) => (
@@ -31,8 +31,14 @@ export const Birthdays: React.FC<IBirthdaysProps> = () => {
     )) ?? [];
 
   return (
-    <BoxWithTitle title={`próximos aniversários`}>
-      <StripedGrid items={items} elementsPerRow={1} />
+    <BoxWithTitle title={`próximos aniversários`} isLoading={isLoading}>
+      {items.length > 0
+        ? <StripedGrid items={items} elementsPerRow={1} />
+        : (
+          <Box sx={{ p: 1 }}>
+            <Typography>Não há nenhum aniversário próximo.</Typography>
+          </Box>
+        )}
     </BoxWithTitle>
   );
 };

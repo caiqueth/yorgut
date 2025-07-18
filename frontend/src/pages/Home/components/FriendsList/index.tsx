@@ -11,7 +11,7 @@ interface IFriendsListProps { };
 
 export const FriendsList: React.FC<IFriendsListProps> = () => {
   const { data: user } = useMe();
-  const { data: friends } = useMeFriends();
+  const { data: friends, isLoading } = useMeFriends();
   const navigate = useNavigate();
 
   const handleGoToFriends = () => {
@@ -28,7 +28,7 @@ export const FriendsList: React.FC<IFriendsListProps> = () => {
     )) ?? [];
 
   return (
-    <BoxWithTitle title={`meus amigos (${user?.friendCount})`}>
+    <BoxWithTitle title={`meus amigos (${user?.friendCount})`} isLoading={isLoading}>
       <Stack direction={"column"} alignItems={"center"}>
         <StripedGrid items={items} elementsPerRow={4} />
         <Box alignSelf={"center"}>

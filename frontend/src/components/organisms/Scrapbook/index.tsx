@@ -1,4 +1,5 @@
 import {
+  Box,
   Stack,
   Typography,
 } from "@mui/material";
@@ -15,8 +16,8 @@ interface IProps {
   userId: number;
 }
 export const Scrapbook: React.FC<IProps> = ({ userId }) => {
-  const { data: scraps } = useScraps(userId);
-  const { mutate: sendScrap } = useCreateScrap();
+  const { data: scraps, isLoading } = useScraps(userId);
+  const { mutate: sendScrap, isPending } = useCreateScrap();
 
   const [scrapContent, setScrapContent] = useState<string>("");
 
@@ -32,7 +33,7 @@ export const Scrapbook: React.FC<IProps> = ({ userId }) => {
     scraps?.scraps.map((s) => (
       <PicAndTextHorizontal
         imageSrc={s.authorProfilePicture}
-        title={`${s.authorName} em ${dayjsFromDate(s.createdAt, "D [de] MMMM [de] YYYY")}: `}
+        title={`${s.authorName} em ${dayjsFromDate(s.createdAt, "D [de] MMMM [de] YYYY [às] HH[h]MM")}: `}
         text={s.content}
         url={`/profile/${s.authorId}`}
       />
@@ -45,10 +46,17 @@ export const Scrapbook: React.FC<IProps> = ({ userId }) => {
         header={"Deixar um recado"}
         onChangeContent={setScrapContent}
         onSubmit={handleSubmit}
+        isPending={isPending}
         maxLength={2048}
       />
-      <BoxWithTitle title="recados">
-        <StripedGrid items={items} elementsPerRow={1} />
+      <BoxWithTitle title="recados" isLoading={isLoading}>
+        {items.length > 0
+          ? <StripedGrid items={items} elementsPerRow={1} />
+          : (
+            <Box sx={{ p: 1 }}>
+              <Typography>Não há nenhum recado.</Typography>
+            </Box>
+          )}
       </BoxWithTitle>
     </Stack>
   );

@@ -29,20 +29,24 @@ export const Search: React.FC<IProps> = () => {
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Typography>Pesquisar por usuários</Typography>
-      <Stack
-        direction={"row"}
-        alignItems={"center"}
-        gap={1}
-        sx={{ width: "100%" }}
-      >
-        <TextField size={"small"} value={searchName} onChange={handleChangeSearchName} />
-        <Button onClick={() => refetch()}>Pesquisar</Button>
+      <Stack spacing={1}>
+        <Box>
+          <Typography>Pesquisar por usuários</Typography>
+          <Stack
+            direction={"row"}
+            alignItems={"center"}
+            gap={1}
+            sx={{ width: "100%" }}
+          >
+            <TextField size={"small"} value={searchName} onChange={handleChangeSearchName} />
+            <Button onClick={() => refetch()}>Pesquisar</Button>
+          </Stack>
+        </Box>
+        <BoxWithTitle title={"resultados"}>
+          <LinearProgress sx={{ visibility: isFetching ? "visible" : "hidden" }} />
+          <StripedGrid items={items} elementsPerRow={1} />
+        </BoxWithTitle>
       </Stack>
-      <BoxWithTitle title={"resultados"}>
-        <LinearProgress sx={{ visibility: isFetching ? "visible" : "hidden" }} />
-        <StripedGrid items={items} elementsPerRow={1} />
-      </BoxWithTitle>
     </Box>
   );
 };

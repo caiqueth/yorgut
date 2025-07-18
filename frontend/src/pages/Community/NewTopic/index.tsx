@@ -13,7 +13,7 @@ export const NewTopic: React.FC<IProps> = () => {
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
 
-  const { mutate: createTopic } = useCreateTopic();
+  const { mutate: createTopic, isPending } = useCreateTopic();
 
   const navigate = useNavigate();
 
@@ -35,6 +35,7 @@ export const NewTopic: React.FC<IProps> = () => {
         header={"Criar um novo tópico"}
         onChangeContent={setContent}
         onSubmit={handleSubmit}
+        isPending={isPending}
         maxLength={2048}
       />
     </Box>

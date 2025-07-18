@@ -12,7 +12,7 @@ export const CommunityMembers: React.FC<IProps> = () => {
   const params = useParams();
   const communityId = parseInt(params.communityId ?? "");
 
-  const { data } = useCommunityMembers(communityId);
+  const { data, isLoading } = useCommunityMembers(communityId);
 
   const items = data?.members.map((m) => (
     <PicAndTextHorizontal
@@ -25,7 +25,7 @@ export const CommunityMembers: React.FC<IProps> = () => {
   )) ?? [];
 
   return (
-    <BoxWithTitle title={`membros da comunidade (${data?.memberCount})`}>
+    <BoxWithTitle title={`membros da comunidade (${data?.memberCount})`} isLoading={isLoading}>
       <StripedGrid elementsPerRow={1} items={items} />
     </BoxWithTitle>
   );

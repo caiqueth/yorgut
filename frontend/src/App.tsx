@@ -13,6 +13,7 @@ import {
 import { theme } from "./theme";
 
 import "./App.css";
+import { GlobalLoading } from "components/templates/GlobalLoading";
 
 const App: React.FC = () => {
   const navigate = useNavigate();
@@ -58,7 +59,9 @@ const App: React.FC = () => {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={createTheme(theme)}>
         <CssBaseline />
-        <Wrapper>{routes}</Wrapper>
+        <GlobalLoading>
+          <Wrapper>{routes}</Wrapper>
+        </GlobalLoading>
       </ThemeProvider>
     </QueryClientProvider>
   );

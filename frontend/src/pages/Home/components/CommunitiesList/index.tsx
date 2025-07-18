@@ -6,7 +6,7 @@ import { useMeMemberships } from "api/me/queries";
 
 interface ICommunitiesListProps { };
 export const CommunitiesList: React.FC<ICommunitiesListProps> = () => {
-  const { data: memberships } = useMeMemberships();
+  const { data: memberships, isLoading } = useMeMemberships();
 
   const items =
     memberships?.communities.map((c) => (
@@ -18,7 +18,7 @@ export const CommunitiesList: React.FC<ICommunitiesListProps> = () => {
     )) ?? [];
 
   return (
-    <BoxWithTitle title={`minhas comunidades (${memberships?.membershipCount})`}>
+    <BoxWithTitle title={`minhas comunidades (${memberships?.membershipCount})`} isLoading={isLoading}>
       <StripedGrid items={items} elementsPerRow={3} />
     </BoxWithTitle>
   );

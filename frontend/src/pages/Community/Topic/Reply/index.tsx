@@ -12,7 +12,7 @@ export const Reply: React.FC<IProps> = ({ topicId }) => {
   const communityId = parseInt(params.communityId ?? "");
 
   const [content, setContent] = useState("");
-  const { mutate: reply } = useReplyTopic(topicId);
+  const { mutate: reply, isPending } = useReplyTopic(topicId);
 
   const handleSubmit = () => {
     reply({
@@ -29,6 +29,7 @@ export const Reply: React.FC<IProps> = ({ topicId }) => {
         header={"Responder:"}
         onChangeContent={setContent}
         onSubmit={handleSubmit}
+        isPending={isPending}
         maxLength={2048}
       />
     </Box>

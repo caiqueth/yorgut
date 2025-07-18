@@ -6,7 +6,7 @@ import React from "react";
 
 interface IProps { }
 export const MyMemberships: React.FC<IProps> = () => {
-  const { data } = useMeMemberships();
+  const { data, isLoading } = useMeMemberships();
 
   const items =
     data?.communities.map((c) => (
@@ -20,7 +20,7 @@ export const MyMemberships: React.FC<IProps> = () => {
     )) ?? [];
 
   return (
-    <BoxWithTitle title={"comunidades que participo"}>
+    <BoxWithTitle title={"comunidades que participo"} isLoading={isLoading}>
       <StripedGrid items={items} elementsPerRow={1} />
     </BoxWithTitle>
   );

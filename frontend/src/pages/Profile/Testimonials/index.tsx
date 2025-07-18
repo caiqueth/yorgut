@@ -19,12 +19,8 @@ export const UserTestimonialsList: React.FC<IProps> = () => {
     data: {
       testimonials: [
         {
-          author: "Test Author 1",
-          text: "Alo alo 1",
-        },
-        {
-          author: "Test Author 2",
-          text: "Alo alo 2",
+          author: "👷",
+          text: " Em construção...",
         },
       ],
     },
@@ -47,10 +43,11 @@ export const UserTestimonialsList: React.FC<IProps> = () => {
           onChangeContent={setTestimonialContent}
           header={"Escrever um depoimento"}
           onSubmit={handleSubmit}
+          isPending={true}
           maxLength={2048}
         />
       </Box>
-      <BoxWithTitle title={"depoimentos recebidos"}>
+      <BoxWithTitle title={"depoimentos recebidos"} isLoading={true}>
         <StripedGrid items={items} elementsPerRow={1} />
       </BoxWithTitle>
     </Box>

@@ -2,6 +2,7 @@ package repository
 
 import (
 	"errors"
+	"time"
 	"yorgut/internal/helpers"
 	"yorgut/internal/model"
 )
@@ -126,11 +127,19 @@ func (r *UserRepository) IncrementFriendCount(user *model.User, increment int) e
 	return nil
 }
 
+func (r *UserRepository) UpdateFriendCount(userId uint, friendCount uint) error {
+	updateResult := r.db.Model(&model.User{}).
+		Where("id = ?", userId).
+		Update("friend_count", friendCount)
+
+	return updateResult.Error
+}
+
 func (r *UserRepository) SearchUsers(name string, page int, pageSize int) ([]*model.User, int64) {
 	var ents []*model.User
 	result := r.db.
 		Scopes(newPaginate(page, pageSize).paginatedResult).
-		Where("lower(first_name) like lower(?)", "%"+name+"%").
+		Where("lower(concat(first_name, ' ', last_name)) like lower(?)", "%"+name+"%").
 		Preload("Profile").
 		Order("first_name").
 		Find(&ents)
@@ -140,7 +149,7 @@ func (r *UserRepository) SearchUsers(name string, page int, pageSize int) ([]*mo
 	}
 
 	var count int64
-	r.db.Where("lower(first_name) like lower(?)", "%"+name+"%").Count(&count)
+	r.db.Where("lower(concat(first_name, ' ', last_name)) like lower(?)", "%"+name+"%").Count(&count)
 
 	return ents, count
 }
@@ -239,6 +248,30 @@ func (f *FriendshipRepository) FindActiveAcceptedFriends(userId1 uint, userId2 u
 	}
 
 	return &ent, nil
+}
+
+func (f *FriendshipRepository) CountFriends(userId uint) int64 {
+	var count int64
+	result := f.db.
+		Model(&model.Friendship{}).
+		Where("(user_requested_id = ? or user_requestee_id = ?) and accepted = true", userId, userId).
+		Count(&count)
+
+	if result.Error != nil {
+		return 0
+	}
+
+	return count
+}
+
+func (f *FriendshipRepository) AcceptFriendship(friendshipId uint) error {
+	now := time.Now()
+	result := f.db.
+		Model(&model.Friendship{}).
+		Where("id = ?", friendshipId).
+		Updates(&model.Friendship{Accepted: true, AcceptedAt: &now})
+
+	return result.Error
 }
 
 func (f *FriendshipRepository) UsersAreFriends(user1 uint, user2 uint) bool {
