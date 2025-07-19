@@ -12,8 +12,8 @@ interface IProfileMenuProps {
 export const ProfileMenu: React.FC<IProfileMenuProps> = ({ userId }) => {
   const navigate = useNavigate();
   const { data: friendshipState } = useMeAmFriend(userId);
-  const { mutate: replyFriendship } = useReplyFriendship();
-  const { mutate: removeFriend } = useRemoveFriend(userId);
+  const { mutate: replyFriendship, isPending: isPendingReply } = useReplyFriendship();
+  const { mutate: removeFriend, isPending: isPendingRemoval } = useRemoveFriend(userId);
   const { mutate: addFriend } = useAddFriend();
 
   const handleDoNothing = () => { };

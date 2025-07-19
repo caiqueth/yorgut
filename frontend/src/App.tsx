@@ -13,6 +13,8 @@ import {
 import { theme } from "./theme";
 
 import "./App.css";
+import { GlobalContextStateProvider } from "contexts/GlobalStateContext";
+import { AuthContextProvider } from "contexts/AuthContext";
 
 const App: React.FC = () => {
   const navigate = useNavigate();
@@ -58,7 +60,13 @@ const App: React.FC = () => {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={createTheme(theme)}>
         <CssBaseline />
-        <Wrapper>{routes}</Wrapper>
+        <AuthContextProvider>
+          <GlobalContextStateProvider>
+            <Wrapper>
+              {routes}
+            </Wrapper>
+          </GlobalContextStateProvider>
+        </AuthContextProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );

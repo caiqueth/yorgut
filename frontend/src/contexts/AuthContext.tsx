@@ -1,47 +1,22 @@
-import React, { ActionDispatch } from "react";
-import { createContext, useReducer, useEffect } from "react";
+import { Backdrop, CircularProgress } from "@mui/material";
+import { useMe } from "api/me/queries";
+import React from "react";
+import { createContext } from "react";
 
 export const AuthContext = createContext({} as IAuthContextState);
 
-export const authReducer = (state: IAuthContextState, action: IAction) => {
-  switch (action.type) {
-    case "LOGIN":
-      return { token: action.payload }
-    case "LOGOUT":
-      return { token: null }
-    default:
-      return state
-  }
-}
-
 export const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
-  const [state, dispatch] = useReducer(authReducer, {
-    token: null
-  });
-
-  useEffect(() => {
-    const token = JSON.parse(localStorage.getItem("token"));
-
-    if (token) {
-      dispatch({ type: "LOGIN", payload: token })
-    }
-  }, [])
-
-  console.log("AuthContext state: ", state);
+  const { isFetching } = useMe();
 
   return (
-    <AuthContext.Provider value={{ ...state, dispatch }}>
+    <AuthContext.Provider value={{}}>
+      <Backdrop open={isFetching}>
+        <CircularProgress />
+      </Backdrop>
       {children}
     </AuthContext.Provider>
   )
 }
 
-interface IAction {
-  type: string;
-  payload: any;
-}
 
-interface IAuthContextState {
-  token: string;
-  dispatch: ActionDispatch<[action: IAction]>;
-}
+interface IAuthContextState { }

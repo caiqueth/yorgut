@@ -83,27 +83,10 @@ func (uc *UserController) SearchUsers(ctx *gin.Context) {
 
 	users, count := uc.userService.SearchUsers(name, page, pageSize)
 
-	userDtos := make([]*dto.UserSearchDto, len(users))
-	for i, u := range users {
-		userDtos[i] = &dto.UserSearchDto{
-			ID:             u.ID,
-			FirstName:      u.FirstName,
-			BirthDate:      u.BirthDate,
-			ProfilePicture: u.Profile.ProfilePicture,
-			FriendCount:    u.FriendCount,
-		}
-	}
+	resp := dto.SearchUsersResponse{}
+	resp.FromUsers(users, page, pageSize, count)
 
-	response := dto.SearchUsersResponse{
-		PagedResponse: dto.PagedResponse{
-			Page:     page,
-			PageSize: pageSize,
-			Count:    count,
-		},
-		Users: userDtos,
-	}
-
-	ctx.JSON(http.StatusOK, response)
+	ctx.JSON(http.StatusOK, resp)
 
 }
 

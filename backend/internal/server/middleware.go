@@ -1,9 +1,11 @@
 package server
 
 import (
+	"math/rand"
 	"net/http"
 	"os"
 	"strings"
+	"time"
 	"yorgut/internal/helpers"
 	"yorgut/internal/service"
 
@@ -64,4 +66,12 @@ func InjectUserMiddleware(userService *service.UserService) gin.HandlerFunc {
 		c.Next()
 	}
 
+}
+
+func DelayMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		delay := time.Duration(rand.Intn(10)+1) * time.Second
+		time.Sleep(delay)
+		c.Next()
+	}
 }

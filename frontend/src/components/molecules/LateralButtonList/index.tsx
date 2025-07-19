@@ -8,13 +8,14 @@ interface ILateralButtonList {
     text: string;
     avatar: React.ReactNode;
     onClick?: () => void;
+    disabled?: boolean;
   }[];
 }
 export const LateralButtonList: React.FC<ILateralButtonList> = ({ items }) => {
   const theme = useTheme();
   return (
     <Stack spacing={"2px"}>
-      {items.map(({ text, avatar, onClick }, idx) => (
+      {items.map(({ text, avatar, onClick, disabled }, idx) => (
         <Button
           disableElevation
           key={idx}
@@ -22,7 +23,7 @@ export const LateralButtonList: React.FC<ILateralButtonList> = ({ items }) => {
           variant="contained"
           onClick={onClick}
           startIcon={avatar}
-          disabled={!onClick}
+          disabled={!onClick || disabled}
           sx={{
             backgroundColor: palette.lightBlue,
             borderRadius: 0,

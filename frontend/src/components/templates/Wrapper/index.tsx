@@ -4,6 +4,7 @@ import { UserBar } from "components/organisms/UserBar";
 
 import { Box, Stack } from "@mui/material";
 import { YorgutTitle } from "components/atoms/YorgutTitle";
+import { useMe } from "api/me/queries";
 
 const lineColor = "#bac6dd";
 

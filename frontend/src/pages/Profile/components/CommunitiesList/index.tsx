@@ -10,7 +10,7 @@ interface ICommunitiesListProps {
 export const CommunitiesList: React.FC<ICommunitiesListProps> = ({
   userId,
 }) => {
-  const { data: memberships } = useUserMemberships(userId);
+  const { data: memberships, isLoading } = useUserMemberships(userId);
 
   const items =
     memberships?.communities.map((c) => (
@@ -22,7 +22,7 @@ export const CommunitiesList: React.FC<ICommunitiesListProps> = ({
     )) ?? [];
 
   return (
-    <BoxWithTitle title={`comunidades (${memberships?.membershipCount})`}>
+    <BoxWithTitle title={`comunidades (${memberships?.membershipCount})`} isLoading={isLoading}>
       <StripedGrid items={items} elementsPerRow={3} />
     </BoxWithTitle>
   );

@@ -49,5 +49,11 @@ export const theme: ThemeOptions = {
         },
       },
     },
+    MuiSkeleton: {
+      defaultProps: {
+        variant: "rectangular",
+        animation: "wave",
+      }
+    }
   },
 };

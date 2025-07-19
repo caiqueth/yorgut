@@ -135,3 +135,22 @@ func (r *FindManyCommunitiesResponse) FromCommunities(communities []model.Commun
 		}
 	}
 }
+
+func (r *SearchUsersResponse) FromUsers(users []*model.User, page int, pageSize int, count int64) {
+	r.PagedResponse = PagedResponse{
+		Page:     page,
+		PageSize: pageSize,
+		Count:    count,
+	}
+
+	r.Users = make([]*UserSearchDto, len(users))
+	for i, u := range users {
+		r.Users[i] = &UserSearchDto{
+			ID:             u.ID,
+			FirstName:      u.FirstName,
+			BirthDate:      u.BirthDate,
+			ProfilePicture: u.Profile.ProfilePicture,
+			FriendCount:    u.FriendCount,
+		}
+	}
+}

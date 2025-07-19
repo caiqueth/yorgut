@@ -20,7 +20,9 @@ export const useMe = () =>
   useQuery<IMeResponse>({
     queryKey: [`${basePath}`],
     queryFn: ({ queryKey }) => doGet({ queryKey }),
-  });
+    staleTime: Infinity,
+  })
+
 
 export const useUpdateMe = () =>
   useQuery<IMeUpdateResponse>({

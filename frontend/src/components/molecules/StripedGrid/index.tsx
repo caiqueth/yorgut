@@ -2,15 +2,17 @@ import React from "react";
 import { isStripedRow } from "helpers/isStripedRow";
 import { palette } from "theme";
 
-import { Grid2 as Grid } from "@mui/material";
+import { Grid2 as Grid, Skeleton } from "@mui/material";
 
 interface IStripedGridProps {
   items: React.ReactNode[];
   elementsPerRow?: number;
+  isLoading?: boolean;
 }
 export const StripedGrid: React.FC<IStripedGridProps> = ({
-  items,
+  items = Array.from({ length: 8 }),
   elementsPerRow = 3,
+  isLoading,
 }) => {
   return (
     <Grid container direction={"row"} width={"100%"}>
@@ -25,9 +27,10 @@ export const StripedGrid: React.FC<IStripedGridProps> = ({
               : palette.mediumBlue,
           }}
         >
-          {item}
+          {isLoading ? <Skeleton height={64} /> : item}
         </Grid>
-      ))}
+      ))
+      }
     </Grid>
   );
 };
