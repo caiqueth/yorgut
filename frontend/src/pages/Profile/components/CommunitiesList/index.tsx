@@ -22,8 +22,8 @@ export const CommunitiesList: React.FC<ICommunitiesListProps> = ({
     )) ?? [];
 
   return (
-    <BoxWithTitle title={`comunidades (${memberships?.membershipCount})`} isLoading={isLoading}>
-      <StripedGrid items={items} elementsPerRow={3} />
+    <BoxWithTitle title={`comunidades (${memberships?.membershipCount})`}>
+      <StripedGrid items={items} elementsPerRow={3} isLoading={isLoading} />
     </BoxWithTitle>
   );
 };

@@ -10,13 +10,13 @@ interface IStripedGridProps {
   isLoading?: boolean;
 }
 export const StripedGrid: React.FC<IStripedGridProps> = ({
-  items = Array.from({ length: 8 }),
+  items,
   elementsPerRow = 3,
   isLoading,
 }) => {
   return (
     <Grid container direction={"row"} width={"100%"}>
-      {items.map((item, idx) => (
+      {(isLoading ? Array.from({ length: 8 }, () => <></>) : items).map((item, idx) => (
         <Grid
           size={Math.ceil(12 / elementsPerRow)}
           key={idx}
@@ -27,7 +27,7 @@ export const StripedGrid: React.FC<IStripedGridProps> = ({
               : palette.mediumBlue,
           }}
         >
-          {isLoading ? <Skeleton height={64} /> : item}
+          {isLoading ? <Skeleton height={82} /> : item}
         </Grid>
       ))
       }

@@ -49,9 +49,9 @@ export const Scrapbook: React.FC<IProps> = ({ userId }) => {
         isPending={isPending}
         maxLength={2048}
       />
-      <BoxWithTitle title="recados" isLoading={isLoading}>
+      <BoxWithTitle title="recados">
         {items.length > 0
-          ? <StripedGrid items={items} elementsPerRow={1} />
+          ? <StripedGrid items={items} elementsPerRow={1} isLoading={isLoading} />
           : (
             <Box sx={{ p: 1 }}>
               <Typography>Não há nenhum recado.</Typography>

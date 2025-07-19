@@ -19,8 +19,8 @@ export const MyCommunities: React.FC = () => {
     )) ?? [];
 
   return (
-    <BoxWithTitle title="minhas comunidades" isLoading={isLoading}>
-      <StripedGrid items={items} elementsPerRow={1} />
+    <BoxWithTitle title="minhas comunidades">
+      <StripedGrid items={items} elementsPerRow={1} isLoading={isLoading} />
     </BoxWithTitle>
   )
 }

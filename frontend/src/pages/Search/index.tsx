@@ -44,7 +44,7 @@ export const Search: React.FC<IProps> = () => {
         </Box>
         <BoxWithTitle title={"resultados"}>
           <LinearProgress sx={{ visibility: isFetching ? "visible" : "hidden" }} />
-          <StripedGrid items={items} elementsPerRow={1} />
+          <StripedGrid items={items} elementsPerRow={1} isLoading={isFetching} />
         </BoxWithTitle>
       </Stack>
     </Box>

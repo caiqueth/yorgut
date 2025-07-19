@@ -21,8 +21,8 @@ export const Friends: React.FC<IProps> = () => {
 
   return (
     <Box width={"100%"}>
-      <BoxWithTitle title={"meus amigos"} isLoading={isLoading}>
-        <StripedGrid items={items} elementsPerRow={1} />
+      <BoxWithTitle title={"meus amigos"}>
+        <StripedGrid items={items} elementsPerRow={1} isLoading={isLoading} />
       </BoxWithTitle>
     </Box>
   );

@@ -11,7 +11,7 @@ interface IProps {
   communityId: number;
 }
 export const HotTopics: React.FC<IProps> = ({ communityId }) => {
-  const { data: topics } = useCommunityHotTopics(communityId);
+  const { data: topics, isLoading } = useCommunityHotTopics(communityId);
 
   const navigate = useNavigate();
 
@@ -49,7 +49,7 @@ export const HotTopics: React.FC<IProps> = ({ communityId }) => {
 
   return (
     <BoxWithTitle title={"fórum"}>
-      <StripedGrid items={items} elementsPerRow={1} />
+      <StripedGrid items={items} elementsPerRow={1} isLoading={isLoading} />
       <Stack direction={"row"} justifyContent={"end"}>
         <Button onClick={handleClickSeeAll}>ver todos</Button>
         <Button onClick={handleCreateTopic}>+ novo tópico</Button>

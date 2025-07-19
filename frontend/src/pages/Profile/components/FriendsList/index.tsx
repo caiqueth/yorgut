@@ -30,9 +30,9 @@ export const FriendsList: React.FC<IFriendsListProps> = ({ userId }) => {
     )) ?? [];
 
   return (
-    <BoxWithTitle title={`amigos (${user?.friendCount})`} isLoading={isLoading}>
+    <BoxWithTitle title={`amigos (${user?.friendCount})`}>
       <Stack direction={"column"} alignItems={"center"}>
-        <StripedGrid items={items} elementsPerRow={4} />
+        <StripedGrid items={items} elementsPerRow={4} isLoading={isLoading} />
         <Box alignSelf={"center"}>
           <Button onClick={handleGoToFriends}>ver amigos</Button>
         </Box>

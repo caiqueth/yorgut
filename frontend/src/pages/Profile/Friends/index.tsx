@@ -10,7 +10,7 @@ interface IProps { }
 export const UserFriendsList: React.FC<IProps> = () => {
   const params = useParams();
   const userId = parseInt(params.userId ?? "");
-  const { data: friends } = useUserFriends(userId);
+  const { data: friends, isLoading } = useUserFriends(userId);
   const { data: user } = useUser(userId)
 
   const items = friends?.friends.map((f) => (
@@ -25,7 +25,7 @@ export const UserFriendsList: React.FC<IProps> = () => {
 
   return (<Box>
     <BoxWithTitle title={`amigos de ${user?.firstName}`}>
-      <StripedGrid items={items} elementsPerRow={1}></StripedGrid>
+      <StripedGrid items={items} elementsPerRow={1} isLoading={isLoading}></StripedGrid>
     </BoxWithTitle>
   </Box>);
 };

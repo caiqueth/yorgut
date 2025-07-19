@@ -47,8 +47,8 @@ export const UserTestimonialsList: React.FC<IProps> = () => {
           maxLength={2048}
         />
       </Box>
-      <BoxWithTitle title={"depoimentos recebidos"} isLoading={true}>
-        <StripedGrid items={items} elementsPerRow={1} />
+      <BoxWithTitle title={"depoimentos recebidos"}>
+        <StripedGrid items={items} elementsPerRow={1} isLoading={true} />
       </BoxWithTitle>
     </Box>
   );

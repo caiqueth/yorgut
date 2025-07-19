@@ -11,7 +11,7 @@ interface IMembersListProps {
   communityId: number;
 }
 export const MembersList: React.FC<IMembersListProps> = ({ communityId }) => {
-  const { data: members } = useCommunityMembers(communityId);
+  const { data: members, isLoading } = useCommunityMembers(communityId);
   const navigate = useNavigate();
 
   const handleGoToMembers = () => {
@@ -30,7 +30,7 @@ export const MembersList: React.FC<IMembersListProps> = ({ communityId }) => {
   return (
     <BoxWithTitle title={`membros (${members?.memberCount})`}>
       <Stack direction={"column"} alignItems={"center"}>
-        <StripedGrid items={items} elementsPerRow={4} />
+        <StripedGrid items={items} elementsPerRow={4} isLoading={isLoading} />
         <Box alignSelf={"center"}>
           <Button onClick={handleGoToMembers}>ver membros</Button>
         </Box>

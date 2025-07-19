@@ -11,7 +11,7 @@ export const Forum: React.FC<IProps> = () => {
   const params = useParams();
   const communityId = parseInt(params.communityId ?? "");
 
-  const { data: topics } = useCommunityTopics(communityId);
+  const { data: topics, isLoading } = useCommunityTopics(communityId);
   const navigate = useNavigate();
 
   const handleGoToNewTopic = () => {
@@ -27,12 +27,11 @@ export const Forum: React.FC<IProps> = () => {
     />
   )) ?? [];
 
+  items.push(<Button onClick={handleGoToNewTopic}>+ novo tópico</Button>);
+
   return (
     <BoxWithTitle title={"fórum"}>
-      <StripedGrid items={[
-        ...items,
-        <Button onClick={handleGoToNewTopic}>+ novo tópico</Button>,
-      ]} elementsPerRow={1} />
+      <StripedGrid items={items} elementsPerRow={1} isLoading={isLoading} />
     </BoxWithTitle>
   )
 }

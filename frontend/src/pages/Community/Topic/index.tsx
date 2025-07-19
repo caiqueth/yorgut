@@ -13,7 +13,7 @@ export const Topic: React.FC<IProps> = () => {
   const params = useParams();
   const topicId = parseInt(params.topicId ?? "");
 
-  const { data: replies } = useTopicReplies(topicId);
+  const { data: replies, isLoading } = useTopicReplies(topicId);
 
   const items = replies ?
     [replies.topic, ...(replies.replies ?? [])].map((r) => (
@@ -32,7 +32,7 @@ export const Topic: React.FC<IProps> = () => {
         <Box sx={{ px: 1 }}>
           <Typography variant={"h6"}>{replies?.topic.title}</Typography>
         </Box>
-        <StripedGrid items={items} elementsPerRow={1} />
+        <StripedGrid items={items} elementsPerRow={1} isLoading={isLoading} />
         <Reply topicId={topicId} />
       </BoxWithTitle>
     </Box>

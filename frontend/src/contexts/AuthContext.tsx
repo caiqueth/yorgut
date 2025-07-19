@@ -10,7 +10,7 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
 
   return (
     <AuthContext.Provider value={{}}>
-      <Backdrop open={isFetching}>
+      <Backdrop open={isFetching} sx={{ zIndex: 9999 }}>
         <CircularProgress />
       </Backdrop>
       {children}

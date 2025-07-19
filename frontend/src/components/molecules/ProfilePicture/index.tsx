@@ -7,11 +7,13 @@ import { Link } from "react-router-dom";
 
 interface IUserProfilePictureProps { userId: number; };
 export const UserProfilePicture: React.FC<IUserProfilePictureProps> = ({ userId }) => {
-  const { data: user } = useUserProfile(userId);
+  const { data: user, isLoading } = useUserProfile(userId);
 
-  if (!user) return null;
-
-  return <ProfilePicture imageSrc={user.profilePicture} />;
+  return (
+    <Link to={`/profile/${userId}`}>
+      <ProfilePicture isLoading={isLoading} imageSrc={user?.profilePicture} />
+    </Link>
+  );
 };
 
 interface ICommunityProfilePictureProps {
@@ -20,9 +22,11 @@ interface ICommunityProfilePictureProps {
 export const CommunityProfilePicture: React.FC<
   ICommunityProfilePictureProps
 > = ({ communityId }) => {
-  const { data: community } = useCommunityProfile(communityId);
+  const { data: community, isLoading } = useCommunityProfile(communityId);
 
-  if (!community?.profilePicture) return null;
-
-  return <Link to={`/community/${communityId}`}><ProfilePicture imageSrc={community.profilePicture} /></Link>;
+  return (
+    <Link to={`/community/${communityId}`}>
+      <ProfilePicture isLoading={isLoading} imageSrc={community?.profilePicture} />
+    </Link>
+  );
 };

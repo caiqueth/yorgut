@@ -31,13 +31,14 @@ export const Birthdays: React.FC<IBirthdaysProps> = () => {
     )) ?? [];
 
   return (
-    <BoxWithTitle title={`próximos aniversários`} isLoading={isLoading}>
-      {items.length > 0
-        ? <StripedGrid items={items} elementsPerRow={1} />
-        : (
+    <BoxWithTitle title={`próximos aniversários`}>
+      {items.length === 0 && !isLoading
+        ? (
           <Box sx={{ p: 1 }}>
             <Typography>Não há nenhum aniversário próximo.</Typography>
           </Box>
+        ) : (
+          <StripedGrid items={items} elementsPerRow={1} isLoading={isLoading} />
         )}
     </BoxWithTitle>
   );

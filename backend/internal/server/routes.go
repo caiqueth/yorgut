@@ -42,7 +42,7 @@ func NewRouter(
 	userInjector := InjectUserMiddleware(userService)
 	jwtInjector := JWTMiddleware()
 
-	router.Use(DelayMiddleware())
+	// router.Use(DelayMiddleware()) // Used for testing
 
 	router.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:3000", "https://yorgut.onrender.com"},

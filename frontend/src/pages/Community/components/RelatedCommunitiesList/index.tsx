@@ -20,12 +20,9 @@ export const RelatedCommunitiesList: React.FC<IRelatedCommunitiesListProps> = ({
     )) ?? [];
 
   return (
-    <BoxWithTitle
-      title={`comunidades relacionadas`}
-      isLoading={isLoading}
-    >
+    <BoxWithTitle title={`comunidades relacionadas`}>
       <Stack direction={"column"} alignItems={"center"}>
-        <StripedGrid items={items} elementsPerRow={4} />
+        <StripedGrid items={items} elementsPerRow={4} isLoading={isLoading} />
       </Stack>
     </BoxWithTitle>
   );
