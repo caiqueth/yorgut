@@ -115,23 +115,19 @@ func (u *UserService) SearchUsers(name string, page int, pageSize int) ([]*model
 	return u.userRepository.SearchUsers(name, page, pageSize)
 }
 
-func (u *UserService) FindUserByToken(token *dto.Token) (*model.User, error) {
-	return u.userRepository.FindByEmail(token.Email)
-}
-
-func (u *UserService) GetOrCreateByToken(token *dto.Token) (*model.User, error) {
-	user, err := u.FindUserByToken(token)
+func (u *UserService) GetOrCreateUser(email string, firstName string, lastName string, picture *string) (*model.User, error) {
+	user, err := u.userRepository.FindByEmail(email)
 	if err == nil {
 		return user, nil
 	}
 
 	if errors.Is(err, gorm.ErrRecordNotFound) {
-		createErr := u.CreateUser(token.Given_name, token.Family_name, token.Email, time.Time{}, &token.Picture)
+		createErr := u.CreateUser(firstName, lastName, email, time.Time{}, picture)
 		if createErr != nil {
 			return nil, fmt.Errorf("failed to create user: %w", createErr)
 		}
 
-		user, err = u.FindUserByToken(token)
+		user, err = u.userRepository.FindByEmail(email)
 		if err != nil {
 			return nil, fmt.Errorf("user created but not found: %w", err)
 		}

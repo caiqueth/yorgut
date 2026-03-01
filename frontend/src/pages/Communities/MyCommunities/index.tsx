@@ -1,3 +1,4 @@
+import { Box, Typography } from "@mui/material";
 import { useMeMyCommunities } from "api/me/queries";
 import { PicAndTextHorizontal } from "components/atoms/PicAndTextHorizontal";
 import { BoxWithTitle } from "components/molecules/BoxWithTitle";
@@ -20,7 +21,11 @@ export const MyCommunities: React.FC = () => {
 
   return (
     <BoxWithTitle title="minhas comunidades">
-      <StripedGrid items={items} elementsPerRow={1} isLoading={isLoading} />
+      {!items.length ? (
+        <Box sx={{ p: 1 }}>
+          <Typography>Parece que você ainda não possui nenhuma comunidade.</Typography>
+        </Box>
+      ) : <StripedGrid items={items} elementsPerRow={1} isLoading={isLoading} />}
     </BoxWithTitle>
   )
 }

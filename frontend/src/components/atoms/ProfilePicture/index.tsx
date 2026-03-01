@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Paper, Skeleton } from "@mui/material";
+import { Box, Paper, Skeleton } from "@mui/material";
 
 interface IProfilePictureProps {
   imageSrc?: string;
@@ -13,7 +13,7 @@ export const ProfilePicture: React.FC<IProfilePictureProps> = ({
   return (
     isLoading
       ? (
-        <Paper
+        <Box
           sx={{
             boxShadow: "inset 1px 1px 20px 12px rgba(255,255,255,1)",
             backgroundSize: "cover",
@@ -24,12 +24,12 @@ export const ProfilePicture: React.FC<IProfilePictureProps> = ({
           }}
         >
           <Skeleton height={"100%"} />
-        </Paper>
+        </Box>
       ) : (
-        <Paper
+        <Box
           sx={{
             boxShadow: "inset 1px 1px 20px 12px rgba(255,255,255,1)",
-            background: imageSrc ? `url(${imageSrc}) no - repeat center top` : "",
+            background: imageSrc ? `url(${imageSrc}) no-repeat center top` : "",
             backgroundSize: "cover",
             display: "block",
             width: "100%",

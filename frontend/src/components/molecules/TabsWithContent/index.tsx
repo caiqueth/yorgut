@@ -13,8 +13,8 @@ interface IProps {
 export const TabsWithContent: React.FC<IProps> = ({ tabs, extraHeader, children }) => {
   return (
     <Box sx={{ width: "100%" }}>
-      <Stack direction={"row"} spacing={"2px"}>
-        {tabs.map(({ title, onClick }) => (
+      <Stack direction={"row"} spacing={"1px"} alignItems={"end"}>
+        {tabs.map(({ title, onClick }, idx) => (
           <Button sx={{
             borderRadius: "4px 4px 0 0",
             boxShadow: "none",
@@ -22,6 +22,7 @@ export const TabsWithContent: React.FC<IProps> = ({ tabs, extraHeader, children 
             borderLeft: `2px solid ${palette.darkerBlue}`,
             borderRight: `2px solid ${palette.darkerBlue}`,
           }}
+            key={idx}
             onClick={onClick}>
             {title}
           </Button>

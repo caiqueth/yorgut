@@ -12,7 +12,6 @@ export const useTopicReplies = (topicId: number) =>
   useQuery<ITopicRepliesResponse>({
     queryKey: [`${basePath}/${topicId}/replies`],
     queryFn: ({ queryKey }) => doGet({ queryKey }),
-    enabled: !!topicId,
   });
 
 export const useCreateTopic = () => {
@@ -22,10 +21,10 @@ export const useCreateTopic = () => {
       doPost({ url: `${basePath}`, body: payload }),
     onSettled: (_data, _error, variables) => {
       queryClient.invalidateQueries({
-        queryKey: [`/api/community/${variables.communityId}/hot_topics`],
+        queryKey: [`/community/${variables.communityId}/hot_topics`],
       });
       queryClient.invalidateQueries({
-        queryKey: [`/api/community/${variables.communityId}/topics`],
+        queryKey: [`/community/${variables.communityId}/topics`],
       });
     },
   });
@@ -38,7 +37,7 @@ export const useReplyTopic = (topicId: number) => {
       doPost({ url: `${basePath}/${topicId}`, body: payload }),
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: [`/api/topic/${topicId}/replies`],
+        queryKey: [`${basePath}/${topicId}/replies`],
       });
     },
   });

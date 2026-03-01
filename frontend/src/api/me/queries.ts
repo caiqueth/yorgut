@@ -49,10 +49,10 @@ export const useJoinCommunity = () => {
       doPost({ url: `${basePath}/join/${communityId}`, body: {} }),
     onSettled: (_data, _error, variables) => {
       queryClient.invalidateQueries({
-        queryKey: [`${basePath}/memberships/${variables.communityId}`],
+        queryKey: [`/memberships/${variables.communityId}`],
       });
       queryClient.invalidateQueries({
-        queryKey: [`/api/community/${variables.communityId}/members`],
+        queryKey: [`/community/${variables.communityId}/members`],
       });
     },
   });
@@ -65,7 +65,7 @@ export const useLeaveCommunity = () => {
       doPost({ url: `${basePath}/leave/${communityId}`, body: {} }),
     onSettled: (_data, _error, variables) => {
       queryClient.invalidateQueries({
-        queryKey: [`${basePath}/memberships/${variables.communityId}`],
+        queryKey: [`/memberships/${variables.communityId}`],
       });
       queryClient.invalidateQueries({
         queryKey: [`/api/community/${variables.communityId}/members`],

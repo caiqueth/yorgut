@@ -29,7 +29,10 @@ export const Communities: React.FC<IProps> = () => {
     <Box width={"100%"}>
       <Stack direction={"row"} width={"100%"} justifyContent={"end"}>
         <TabsWithContent tabs={tabs} extraHeader={
-          <Button onClick={handleGoToNew}>+ criar comunidade</Button>
+          <Box sx={{ p1: 1 }}>
+            <Button onClick={handleGoToNew}>+ criar comunidade
+            </Button>
+          </Box>
         }>
           <Outlet />
         </TabsWithContent>

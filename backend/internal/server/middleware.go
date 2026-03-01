@@ -53,7 +53,7 @@ func InjectUserMiddleware(userService *service.UserService) gin.HandlerFunc {
 			return
 		}
 
-		user, err := userService.GetOrCreateByToken(token)
+		user, err := userService.GetOrCreateUser(token.Email, token.Given_name, token.Family_name, &token.Picture)
 		if err != nil {
 			log.Error().Err(err).Msg("user resolution failed")
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{

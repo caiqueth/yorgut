@@ -1,4 +1,4 @@
-import { Box, Stack, TextField } from "@mui/material";
+import { Box, Stack, TextField, Typography } from "@mui/material";
 import { useCreateCommunity } from "api/community/queries";
 import { Button } from "components/atoms/Button";
 import { BoxWithTitle } from "components/molecules/BoxWithTitle";
@@ -30,9 +30,15 @@ export const NewCommunity: React.FC<IProps> = () => {
     <BoxWithTitle title={"nova comunidade"}>
       <Box sx={{ p: 1 }}>
         <form onSubmit={handleSubmit}>
-          <Stack direction={"column"} width={500} spacing={2}>
-            <TextField label={"Nome"} value={name} onChange={handleChangeName} />
-            <TextField label={"Categoria"} value={category} onChange={handleChangeCategory} />
+          <Stack direction={"column"} width={"100%"} spacing={1}>
+            <Box>
+              <Typography>Dê um nome à sua comunidade</Typography>
+              <TextField size="small" label={"Nome"} value={name} onChange={handleChangeName} />
+            </Box>
+            <Box>
+              <Typography>Qual a categoria da comunidade?</Typography>
+              <TextField size="small" label={"Categoria"} value={category} onChange={handleChangeCategory} />
+            </Box>
             <Button type={"submit"}>Criar</Button>
           </Stack>
         </form>

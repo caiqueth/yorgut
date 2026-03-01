@@ -55,6 +55,5 @@ export const useUserSearchUsers = (name: string, page: number, pageSize: number)
   useQuery<ISearchUsersResponse>({
     queryKey: [`${basePath}/search-users?name=${name}&page=${page}&pageSize=${pageSize}`],
     queryFn: ({ queryKey }) => doGet({ queryKey }),
-    enabled: false,
   });
 

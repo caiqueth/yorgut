@@ -26,7 +26,7 @@ export const HotTopics: React.FC<IProps> = ({ communityId }) => {
   const items =
     topics?.topics?.map((t) => (
       <Stack direction={"row"} gap={1} alignItems={"center"}>
-        <img src={`/${t.authorProfilePicture}`} height={40} />
+        <img src={`${t.authorProfilePicture}`} height={40} />
         <Stack direction={"column"} sx={{ overflow: "hidden" }}>
           <Link to={`forum/topic/${t.id}`}><Typography>{t.title}</Typography></Link>
           <Typography variant={"body2"}>{t.replies} respostas</Typography>

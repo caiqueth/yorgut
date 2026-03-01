@@ -1,3 +1,4 @@
+import { Box, Typography } from "@mui/material";
 import { useMeMemberships } from "api/me/queries";
 import { PicAndTextHorizontal } from "components/atoms/PicAndTextHorizontal";
 import { BoxWithTitle } from "components/molecules/BoxWithTitle";
@@ -21,7 +22,13 @@ export const MyMemberships: React.FC<IProps> = () => {
 
   return (
     <BoxWithTitle title={"comunidades que participo"} isLoading={isLoading}>
-      <StripedGrid items={items} elementsPerRow={1} />
+      {!items.length ? (
+        <Box sx={{ p: 1 }}>
+          <Typography>Parece que você ainda participa nenhuma comunidade.</Typography>
+        </Box>
+      ) :
+        <StripedGrid items={items} elementsPerRow={1} />
+      }
     </BoxWithTitle>
   );
 }

@@ -15,6 +15,7 @@ import { theme } from "./theme";
 import "./App.css";
 import { GlobalContextStateProvider } from "contexts/GlobalStateContext";
 import { AuthContextProvider } from "contexts/AuthContext";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const App: React.FC = () => {
   const navigate = useNavigate();
@@ -68,6 +69,7 @@ const App: React.FC = () => {
           </GlobalContextStateProvider>
         </AuthContextProvider>
       </ThemeProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 };

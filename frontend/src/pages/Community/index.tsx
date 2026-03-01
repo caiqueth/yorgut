@@ -4,7 +4,7 @@ import { Box, Grid2 as Grid, Stack } from "@mui/material";
 
 import { ProfileMenu } from "./ProfileMenu";
 import { Outlet, useParams } from "react-router-dom";
-import { CommunityProfilePicture } from "components/molecules/ProfilePicture";
+import { CommunityProfilePicture } from "components/molecules/CommunityProfilePicture";
 
 export const Community: React.FC = () => {
   const params = useParams();
