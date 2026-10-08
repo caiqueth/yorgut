@@ -1,6 +1,7 @@
 import React from "react";
 import { Stack, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
+import { uploadUrl } from "helpers/uploadUrl";
 
 interface IProps {
   imageSrc: string;
@@ -15,7 +16,7 @@ export const PicAndText: React.FC<IProps> = ({ imageSrc, url, text }) => {
       sx={{ textAlign: "center" }}
     >
       <Link to={url}>
-        <img height={64} src={imageSrc} alt="image not found" />
+        <img height={64} src={uploadUrl(imageSrc)} alt="image not found" />
         <Typography variant={"body2"}>{text}</Typography>
       </Link>
     </Stack>

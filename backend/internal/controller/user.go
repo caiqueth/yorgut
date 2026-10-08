@@ -3,38 +3,47 @@ package controller
 import (
 	"net/http"
 	"strconv"
-	"yorgut/internal/dto"
 	"yorgut/internal/helpers"
 	"yorgut/internal/service"
+	"yorgut/internal/transport"
 
 	"github.com/gin-gonic/gin"
 )
 
 type UserController struct {
-	userService service.UserService
+	userService                service.UserService
+	friendshipService          service.FriendshipService
+	communityMembershipService service.CommunityMembershipService
 }
 
-func NewUserController(service service.UserService) *UserController {
+func NewUserController(
+	userService service.UserService,
+	friendshipService service.FriendshipService,
+	communityMembershipService service.CommunityMembershipService,
+) *UserController {
 	return &UserController{
-		userService: service,
+		userService:                userService,
+		friendshipService:          friendshipService,
+		communityMembershipService: communityMembershipService,
 	}
 }
 
 // Create			godoc
 // @Summary			Create user
 // @Decription		Save user in Db.
-// @Param			user body dto.CreateUserRequest true "Create User"
+// @Param			user body transport.CreateUserRequest true "Create User"
 // @Produce			application/json
 // @Tags			Users
-// @Success			201 {object} dto.Response{}
+// @Success			201 {object} transport.Response{}
 // @Router			/users [post]
 func (uc *UserController) Create(ctx *gin.Context) {
-	req := dto.CreateUserRequest{}
+	req := transport.CreateUserRequest{}
 
 	err := ctx.ShouldBindJSON(&req)
 
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
 
 	err = uc.userService.CreateUser(req.FirstName, req.LastName, req.Email, req.BirthDate, nil)
@@ -43,7 +52,7 @@ func (uc *UserController) Create(ctx *gin.Context) {
 		return
 	}
 
-	webResponse := dto.Response{
+	webResponse := transport.Response{
 		Data: nil,
 	}
 
@@ -56,7 +65,7 @@ func (uc *UserController) Create(ctx *gin.Context) {
 // @Description			Returns a list of users
 // @Produce				application/json
 // @Tags				Users
-// @Success				200 {object} dto.FindManyUsersResponse{}
+// @Success				200 {object} transport.FindManyUsersResponse{}
 // @Router				/users [get]
 func (uc *UserController) FindMany(ctx *gin.Context) {
 	users, err := uc.userService.FindManyUsers()
@@ -74,19 +83,16 @@ func (uc *UserController) FindMany(ctx *gin.Context) {
 // @Description			Returns a list of users
 // @Produce				application/json
 // @Tags				Users
-// @Success				200 {object} dto.SearchUsersResponse{}
+// @Success				200 {object} transport.SearchUsersResponse{}
 // @Router				/users/search-users [get]
 func (uc *UserController) SearchUsers(ctx *gin.Context) {
 	name := ctx.Query("name")
 	page := helpers.MustParseInt(ctx.Query("page"))
 	pageSize := helpers.MustParseInt(ctx.Query("pageSize"))
 
-	users, count := uc.userService.SearchUsers(name, page, pageSize)
+	users := uc.userService.SearchUsers(name, page, pageSize)
 
-	resp := dto.SearchUsersResponse{}
-	resp.FromUsers(users, page, pageSize, count)
-
-	ctx.JSON(http.StatusOK, resp)
+	ctx.JSON(http.StatusOK, users)
 
 }
 
@@ -96,7 +102,7 @@ func (uc *UserController) SearchUsers(ctx *gin.Context) {
 // @Description			Returns the user matching the requested id
 // @Produce				application/json
 // @Tags				Users
-// @Success				200 {object} dto.FindUserResponse{}
+// @Success				200 {object} transport.FindUserResponse{}
 // @Router				/users/{userId} [get]
 func (uc *UserController) FindById(ctx *gin.Context) {
 	userId := ctx.Param("userId")
@@ -123,7 +129,7 @@ func (uc *UserController) FindById(ctx *gin.Context) {
 // @Description			Returns the user matching the requested id
 // @Produce				application/json
 // @Tags				Users
-// @Success				200 {object} dto.FindUserWithProfileByIdResponse{}
+// @Success				200 {object} transport.FindUserWithProfileByIdResponse{}
 // @Router				/users/{userId}/profile [get]
 func (uc *UserController) FindUserProfile(ctx *gin.Context) {
 	userId := helpers.MustParseUint(ctx.Param("userId"))
@@ -144,18 +150,16 @@ func (uc *UserController) FindUserProfile(ctx *gin.Context) {
 // @Description				Returns a list of communities
 // @Produce					application/json
 // @Tags					Users
-// @Success					200 {object} dto.FindUserMembershipsResponse{}
+// @Success					200 {object} transport.FindUserMembershipsResponse{}
 // @Router					/users/{userId}/memberships [get]
 func (uc *UserController) FindMemberships(ctx *gin.Context) {
 	userId := helpers.MustParseUint(ctx.Param("userId"))
 
-	memberships, err := uc.userService.FindUserMemberships(userId)
+	memberships, err := uc.communityMembershipService.FindUserMemberships(userId)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-
-	memberships.MembershipCount = uc.userService.CountUserMemberships(userId)
 
 	ctx.JSON(http.StatusOK, memberships)
 }
@@ -166,34 +170,15 @@ func (uc *UserController) FindMemberships(ctx *gin.Context) {
 // @Description				Returns a list of friends
 // @Produce					application/json
 // @Tags					Users
-// @Success					200 {object} dto.FindFriendsOfUserResponse{}
+// @Success					200 {object} transport.FindFriendsOfUserResponse{}
 // @Router					/users/{userId}/friends [get]
 func (uc *UserController) FindFriends(ctx *gin.Context) {
 	userId := helpers.MustParseUint(ctx.Param("userId"))
-	friendships, err := uc.userService.FindFriendsOfUser(userId)
+	friendships, err := uc.friendshipService.FindFriendsOfUser(userId)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
 	ctx.JSON(http.StatusOK, friendships)
-}
-
-// FindPhotoAlbums	godoc
-// @Summary					Gets a list of photo albums of the user.
-// @Param					userId path string true "User ID"
-// @Description				Returns a list of photo albums
-// @Produce					application/json
-// @Tags					Users
-// @Success					200 {object} dto.FindPhotoAlbumOfUserResponse{}
-// @Router					/users/{userId}/photoAlbums [get]
-func (uc *UserController) FindPhotoAlbums(ctx *gin.Context) {
-	userId := helpers.MustParseUint(ctx.Param("userId"))
-	photoAlbums, err := uc.userService.FindUserPhotoAlbums(userId)
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	ctx.JSON(http.StatusOK, photoAlbums)
 }

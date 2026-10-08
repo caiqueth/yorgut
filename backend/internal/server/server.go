@@ -27,50 +27,33 @@ func NewServer() *http.Server {
 
 	database.Migrate(db)
 
-	// Repository
-	userRepository := repository.NewUserRepository(db)
-	userProfileRepository := repository.NewUserProfileRepository(db)
-	communityMembershipRepository := repository.NewCommunityMembershipRepository(db)
-	communityRepository := repository.NewCommunityRepository(db)
-	communityProfileRepository := repository.NewCommunityProfileRepository(db)
-	friendshipRepository := repository.NewFriendshipRepository(db)
-	photoAlbumRepository := repository.NewPhotoAlbumRepository(db)
-	photoRepository := repository.NewPhotoRepository(db)
-	scrapRepository := repository.NewScrapRepository(db)
-	testimonialRepository := repository.NewTestimonialRepository(db)
-	topicRepository := repository.NewTopicRepository(db)
-
-	// Service
-	userService := service.NewUserService(
-		*userRepository,
-		*userProfileRepository,
-		*communityRepository,
-		*communityMembershipRepository,
-		*photoAlbumRepository,
-		*friendshipRepository,
-		validate,
-	)
-	communityMembershipService := service.NewCommunityMembershipService(*communityMembershipRepository, validate)
-	communityService := service.NewCommunityService(*communityRepository, *communityProfileRepository, *communityMembershipRepository, *userRepository, validate)
-	communityProfileService := service.NewCommunityProfileService(*communityProfileRepository, *communityRepository, validate)
-	friendshipService := service.NewFriendshipService(*friendshipRepository, *userRepository, validate)
-	photoAlbumService := service.NewPhotoAlbumService(*photoAlbumRepository, validate)
-	photoService := service.NewPhotoService(*photoRepository, validate)
-	scrapService := service.NewScrapService(*scrapRepository, *userRepository, validate)
-	testimonialService := service.NewTestimonialService(*testimonialRepository, validate)
-	topicService := service.NewTopicService(*topicRepository, validate)
+	repositories := repository.NewRepositories(db)
+	services := service.NewServices(repositories, validate)
 
 	// Controllers
-	meController := controller.NewMeController(*userService)
-	userController := controller.NewUserController(*userService)
-	communityMembershipController := controller.NewCommunityMembershipController(*communityMembershipService)
-	communityController := controller.NewCommunityController(*communityService, *communityProfileService, *topicService)
-	friendshipController := controller.NewFriendshipController(*friendshipService)
-	photoAlbumController := controller.NewPhotoAlbumController(*photoAlbumService)
-	photoController := controller.NewPhotoController(*photoService)
-	scrapController := controller.NewScrapController(*scrapService)
-	testimonialController := controller.NewTestimonialController(*testimonialService)
-	topicController := controller.NewTopicController(*topicService)
+	meController := controller.NewMeController(
+		*services.User,
+		*services.Friendship,
+		*services.Community,
+		*services.CommunityMembership,
+		*services.UserFan,
+		*services.Scrap,
+		*services.UserProfile,
+	)
+	userController := controller.NewUserController(
+		*services.User,
+		*services.Friendship,
+		*services.CommunityMembership,
+	)
+	communityMembershipController := controller.NewCommunityMembershipController(*services.CommunityMembership)
+	communityController := controller.NewCommunityController(*services.Community, *services.Topic)
+	friendshipController := controller.NewFriendshipController(*services.Friendship)
+	photoController := controller.NewPhotoController(*services.Photo)
+	scrapController := controller.NewScrapController(*services.Scrap)
+	testimonialController := controller.NewTestimonialController(*services.Testimonial)
+	topicController := controller.NewTopicController(*services.Topic)
+	userReviewController := controller.NewUserReviewController(*services.UserReview)
+	userFanController := controller.NewUserFanController(*services.UserFan)
 
 	// Router
 	routes := NewRouter(
@@ -79,12 +62,13 @@ func NewServer() *http.Server {
 		communityController,
 		communityMembershipController,
 		friendshipController,
-		photoAlbumController,
 		photoController,
 		scrapController,
 		testimonialController,
 		topicController,
-		userService,
+		userReviewController,
+		userFanController,
+		services.User,
 	)
 
 	// Declare Server config

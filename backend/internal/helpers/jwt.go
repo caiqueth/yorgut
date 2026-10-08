@@ -6,14 +6,31 @@ import (
 	"errors"
 	"net/http"
 	"strings"
-	"yorgut/internal/dto"
 
 	"github.com/gin-gonic/gin"
 )
 
 var USER_TOKEN_KEY string = "user_token"
 
-func ParseToken(token string) (*dto.Token, error) {
+// Token holds the claims of a Google ID token.
+type Token struct {
+	Iss            string
+	Azp            string
+	Aud            string
+	Sub            string
+	Email          string
+	Email_verified bool
+	Nbf            int
+	Name           string
+	Picture        string
+	Given_name     string
+	Family_name    string
+	Iat            int
+	Exp            int
+	Jti            string
+}
+
+func ParseToken(token string) (*Token, error) {
 	parts := strings.Split(token, ".")
 	if len(parts) != 3 {
 		return nil, errors.New("invalid token format")
@@ -30,7 +47,7 @@ func ParseToken(token string) (*dto.Token, error) {
 		return nil, errors.New("invalid base64 encoding")
 	}
 
-	var claims *dto.Token
+	var claims *Token
 	err = json.Unmarshal(decoded, &claims)
 	if err != nil {
 		return nil, errors.New("invalid JSON format")
@@ -43,7 +60,7 @@ func SetJWTToken(c *gin.Context, token map[string]interface{}) {
 	c.Set(USER_TOKEN_KEY, token)
 }
 
-func GetTokenFromContext(c *gin.Context) (*dto.Token, bool) {
+func GetTokenFromContext(c *gin.Context) (*Token, bool) {
 	data, exists := c.Get(USER_TOKEN_KEY)
 	if !exists {
 		return nil, false
@@ -54,7 +71,7 @@ func GetTokenFromContext(c *gin.Context) (*dto.Token, bool) {
 		return nil, false
 	}
 
-	var token dto.Token
+	var token Token
 	if err := json.Unmarshal(jsonBytes, &token); err != nil {
 		return nil, false
 	}

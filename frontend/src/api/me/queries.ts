@@ -1,4 +1,4 @@
-import { doGet, doPost } from "api/http";
+import { doGet, doPost, doPut } from "api/http";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -7,10 +7,9 @@ import {
   IMeFriendsPendingResponse,
   IMeFriendsResponse,
   IMeMembershipsResponse,
-  IMePhotoAlbumsResponse,
   IMeProfileResponse,
   IMeResponse,
-  IMeUpdateResponse,
+  IUpdateMePayload,
   WelcomeResponse,
 } from "./types";
 
@@ -24,11 +23,45 @@ export const useMe = () =>
   })
 
 
-export const useUpdateMe = () =>
-  useQuery<IMeUpdateResponse>({
-    queryKey: [`${basePath}`],
-    queryFn: ({ queryKey }) => doGet({ queryKey }),
+// userId is the logged user's id, used to refresh their public profile queries.
+export const useUpdateMe = (userId: number) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: IUpdateMePayload) =>
+      doPut({ url: `${basePath}`, body: payload }),
+    onSettled: () => {
+      for (const key of [
+        `${basePath}`,
+        `${basePath}/profile`,
+        `${basePath}/welcome`,
+        `${__API_BASE_URL__}/users/${userId}`,
+        `${__API_BASE_URL__}/users/${userId}/profile`,
+      ]) {
+        queryClient.invalidateQueries({ queryKey: [key] });
+      }
+    },
   });
+};
+
+// userId is the logged user's id, used to refresh their public profile queries.
+export const useUpdateProfilePicture = (userId: number) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (picture: File) => {
+      const form = new FormData();
+      form.append("picture", picture);
+      return doPut({ url: `${basePath}/profile-picture`, body: form });
+    },
+    onSettled: () => {
+      for (const key of [
+        `${basePath}/profile`,
+        `${__API_BASE_URL__}/users/${userId}/profile`,
+      ]) {
+        queryClient.invalidateQueries({ queryKey: [key] });
+      }
+    },
+  });
+};
 
 export const useMeFriends = () =>
   useQuery<IMeFriendsResponse>({
@@ -49,10 +82,16 @@ export const useJoinCommunity = () => {
       doPost({ url: `${basePath}/join/${communityId}`, body: {} }),
     onSettled: (_data, _error, variables) => {
       queryClient.invalidateQueries({
-        queryKey: [`/memberships/${variables.communityId}`],
+        queryKey: [`${basePath}/memberships/${variables.communityId}`],
       });
       queryClient.invalidateQueries({
-        queryKey: [`/community/${variables.communityId}/members`],
+        queryKey: [`${__API_BASE_URL__}/communities/${variables.communityId}/members`],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`${basePath}/memberships`],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`${__API_BASE_URL__}/communities/search`],
       });
     },
   });
@@ -65,10 +104,16 @@ export const useLeaveCommunity = () => {
       doPost({ url: `${basePath}/leave/${communityId}`, body: {} }),
     onSettled: (_data, _error, variables) => {
       queryClient.invalidateQueries({
-        queryKey: [`/memberships/${variables.communityId}`],
+        queryKey: [`${basePath}/memberships/${variables.communityId}`],
       });
       queryClient.invalidateQueries({
-        queryKey: [`/api/community/${variables.communityId}/members`],
+        queryKey: [`${__API_BASE_URL__}/communities/${variables.communityId}/members`],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`${basePath}/memberships`],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`${__API_BASE_URL__}/communities/search`],
       });
     },
   });
@@ -83,12 +128,6 @@ export const useMeMemberships = () =>
 export const useMeMyCommunities = () =>
   useQuery<IMeMembershipsResponse>({
     queryKey: [`${basePath}/my-communities`],
-    queryFn: ({ queryKey }) => doGet({ queryKey }),
-  });
-
-export const useMePhotoAlbums = () =>
-  useQuery<IMePhotoAlbumsResponse>({
-    queryKey: [`${basePath}/photoAlbums`],
     queryFn: ({ queryKey }) => doGet({ queryKey }),
   });
 

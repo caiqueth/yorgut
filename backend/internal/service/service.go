@@ -6,195 +6,34 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-type TestimonialService struct {
-	TestimonialRepository repository.TestimonialRepository
-	UserRepository        repository.UserRepository
-	Validate              *validator.Validate
+// Services holds one instance of every service, so the API server and the
+// seed command are wired the same way.
+type Services struct {
+	User                *UserService
+	UserProfile         *UserProfileService
+	UserReview          *UserReviewService
+	UserFan             *UserFanService
+	Community           *CommunityService
+	CommunityMembership *CommunityMembershipService
+	Friendship          *FriendshipService
+	Photo               *PhotoService
+	Scrap               *ScrapService
+	Testimonial         *TestimonialService
+	Topic               *TopicService
 }
 
-type UserService struct {
-	userRepository                repository.UserRepository
-	userProfileRepository         repository.UserProfileRepository
-	communityRepository           repository.CommunityRepository
-	communityMembershipRepository repository.CommunityMembershipRepository
-	photoAlbumRepository          repository.PhotoAlbumRepository
-	friendshipRepository          repository.FriendshipRepository
-	Validate                      *validator.Validate
-}
-
-type UserProfileService struct {
-	userProfileRepository repository.UserProfileRepository
-	userRepository        repository.UserRepository
-	Validate              *validator.Validate
-}
-
-type ScrapService struct {
-	scrapRepository repository.ScrapRepository
-	userRepository  repository.UserRepository
-	Validate        *validator.Validate
-}
-
-type PhotoService struct {
-	photoRepository      repository.PhotoRepository
-	photoAlbumRepository repository.PhotoAlbumRepository
-	Validate             *validator.Validate
-}
-
-type PhotoAlbumService struct {
-	photoAlbumRepository repository.PhotoAlbumRepository
-	userRepository       repository.UserRepository
-	Validate             *validator.Validate
-}
-
-type FriendshipService struct {
-	friendshipRepository repository.FriendshipRepository
-	userRepository       repository.UserRepository
-	Validate             *validator.Validate
-}
-
-type CommunityService struct {
-	communityRepository        repository.CommunityRepository
-	communityProfileRepository repository.CommunityProfileRepository
-	membershipRepository       repository.CommunityMembershipRepository
-	userRepository             repository.UserRepository
-	Validate                   *validator.Validate
-}
-
-type CommunityProfileService struct {
-	communityProfileRepository repository.CommunityProfileRepository
-	communityRepository        repository.CommunityRepository
-	Validate                   *validator.Validate
-}
-
-type CommunityMembershipService struct {
-	communityMembershipRepository repository.CommunityMembershipRepository
-	communityRepository           repository.CommunityRepository
-	userRepository                repository.UserRepository
-	Validate                      *validator.Validate
-}
-
-type TopicService struct {
-	topicRepository repository.TopicRepository
-	Validate        *validator.Validate
-}
-
-func NewCommunityMembershipService(
-	communityMembershipRepository repository.CommunityMembershipRepository,
-	validate *validator.Validate,
-) *CommunityMembershipService {
-	return &CommunityMembershipService{
-		communityMembershipRepository: communityMembershipRepository,
-		Validate:                      validate,
-	}
-}
-
-func NewCommunityService(
-	communityRepository repository.CommunityRepository,
-	communityProfileRepository repository.CommunityProfileRepository,
-	membershipRepository repository.CommunityMembershipRepository,
-	userRepository repository.UserRepository,
-	validate *validator.Validate,
-) *CommunityService {
-	return &CommunityService{
-		communityRepository:        communityRepository,
-		communityProfileRepository: communityProfileRepository,
-		membershipRepository:       membershipRepository,
-		userRepository:             userRepository,
-		Validate:                   validate,
-	}
-}
-
-func NewFriendshipService(
-	friendshipRepository repository.FriendshipRepository,
-	userRepository repository.UserRepository,
-	validate *validator.Validate,
-) *FriendshipService {
-	return &FriendshipService{
-		friendshipRepository: friendshipRepository,
-		userRepository:       userRepository,
-		Validate:             validate,
-	}
-}
-
-func NewPhotoAlbumService(
-	photoAlbumRepository repository.PhotoAlbumRepository,
-	validate *validator.Validate,
-) *PhotoAlbumService {
-	return &PhotoAlbumService{
-		photoAlbumRepository: photoAlbumRepository,
-		Validate:             validate,
-	}
-}
-
-func NewPhotoService(photoRepository repository.PhotoRepository, validate *validator.Validate) *PhotoService {
-	return &PhotoService{
-		photoRepository: photoRepository,
-		Validate:        validate,
-	}
-}
-
-func NewScrapService(scrapRepository repository.ScrapRepository, userRepository repository.UserRepository, validate *validator.Validate) *ScrapService {
-	return &ScrapService{
-		scrapRepository: scrapRepository,
-		userRepository:  userRepository,
-		Validate:        validate,
-	}
-}
-
-func NewTestimonialService(testimonialRepository repository.TestimonialRepository, validate *validator.Validate) *TestimonialService {
-	return &TestimonialService{
-		TestimonialRepository: testimonialRepository,
-		Validate:              validate,
-	}
-}
-
-func NewUserService(
-	userRepository repository.UserRepository,
-	userProfileRepository repository.UserProfileRepository,
-	communityRepository repository.CommunityRepository,
-	communityMembershipRepository repository.CommunityMembershipRepository,
-	photoAlbumRepository repository.PhotoAlbumRepository,
-	friendshipRepository repository.FriendshipRepository,
-	validate *validator.Validate,
-) *UserService {
-	return &UserService{
-		userRepository:                userRepository,
-		userProfileRepository:         userProfileRepository,
-		communityRepository:           communityRepository,
-		communityMembershipRepository: communityMembershipRepository,
-		photoAlbumRepository:          photoAlbumRepository,
-		friendshipRepository:          friendshipRepository,
-		Validate:                      validate,
-	}
-}
-
-func NewUserProfileService(
-	userProfileRepository repository.UserProfileRepository,
-	userRepository repository.UserRepository,
-	validate *validator.Validate,
-) *UserProfileService {
-	return &UserProfileService{
-		userProfileRepository: userProfileRepository,
-		userRepository:        userRepository,
-	}
-}
-
-func NewCommunityProfileService(
-	communityProfileRepository repository.CommunityProfileRepository,
-	communityRepository repository.CommunityRepository,
-	validate *validator.Validate,
-) *CommunityProfileService {
-	return &CommunityProfileService{
-		communityProfileRepository: communityProfileRepository,
-		communityRepository:        communityRepository,
-	}
-}
-
-func NewTopicService(
-	topicRepository repository.TopicRepository,
-	validate *validator.Validate,
-) *TopicService {
-	return &TopicService{
-		topicRepository: topicRepository,
+func NewServices(r *repository.Repositories, validate *validator.Validate) *Services {
+	return &Services{
+		User:                NewUserService(*r.User, validate),
+		UserProfile:         NewUserProfileService(*r.UserProfile, *r.User, validate),
+		UserReview:          NewUserReviewService(*r.UserReview, *r.Friendship, validate),
+		UserFan:             NewUserFanService(*r.UserFan, *r.Friendship, validate),
+		Community:           NewCommunityService(*r.Community, *r.CommunityProfile, *r.CommunityMembership, *r.User, validate),
+		CommunityMembership: NewCommunityMembershipService(*r.CommunityMembership, *r.Community, *r.User, validate),
+		Friendship:          NewFriendshipService(*r.Friendship, *r.User, validate),
+		Photo:               NewPhotoService(*r.Photo, *r.PhotoAlbum, validate),
+		Scrap:               NewScrapService(*r.Scrap, *r.User, validate),
+		Testimonial:         NewTestimonialService(*r.Testimonial, *r.User, *r.Friendship, validate),
+		Topic:               NewTopicService(*r.Topic, *r.CommunityMembership, validate),
 	}
 }

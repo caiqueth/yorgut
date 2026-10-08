@@ -1,6 +1,8 @@
 import { Box, Stack, Typography } from "@mui/material";
 import { useCommunityHotTopics } from "api/community/queries";
+import { useMeAmMember } from "api/me/queries";
 import { Button } from "components/atoms/Button";
+import { uploadUrl } from "helpers/uploadUrl";
 import { BoxWithTitle } from "components/molecules/BoxWithTitle";
 import { StripedGrid } from "components/molecules/StripedGrid";
 import { dayjsFromDate } from "helpers/formatting/date";
@@ -12,6 +14,7 @@ interface IProps {
 }
 export const HotTopics: React.FC<IProps> = ({ communityId }) => {
   const { data: topics, isLoading } = useCommunityHotTopics(communityId);
+  const { data: membership } = useMeAmMember(communityId);
 
   const navigate = useNavigate();
 
@@ -26,23 +29,26 @@ export const HotTopics: React.FC<IProps> = ({ communityId }) => {
   const items =
     topics?.topics?.map((t) => (
       <Stack direction={"row"} gap={1} alignItems={"center"}>
-        <img src={`${t.authorProfilePicture}`} height={40} />
+        <img src={uploadUrl(t.authorProfilePicture)} height={40} />
         <Stack direction={"column"} sx={{ overflow: "hidden" }}>
           <Link to={`forum/topic/${t.id}`}><Typography>{t.title}</Typography></Link>
           <Typography variant={"body2"}>{t.replies} respostas</Typography>
-          <Stack
-            direction={"row"}
-            alignItems={"center"}
-            spacing={1}
-            sx={{
-              maxWidth: "100%",
-              whiteSpace: "nowrap",
-            }}>
-            <Typography variant={"body2"}>{dayjsFromDate(t.lastReplyDate, "DD [de] MMM [de] YYYY")}:</Typography>
-            <Box sx={{ textOverflow: "ellipsis" }}>
-              <Typography variant={"body2"}>{t.lastReplyPreview}</Typography>
-            </Box>
-          </Stack>
+          {/* Topics without replies have no last reply (the API sends a zero date). */}
+          {t.replies > 0 && (
+            <Stack
+              direction={"row"}
+              alignItems={"center"}
+              spacing={1}
+              sx={{
+                maxWidth: "100%",
+                whiteSpace: "nowrap",
+              }}>
+              <Typography variant={"body2"}>{dayjsFromDate(t.lastReplyDate, "DD [de] MMM [de] YYYY")}:</Typography>
+              <Box sx={{ textOverflow: "ellipsis" }}>
+                <Typography variant={"body2"}>{t.lastReplyPreview}</Typography>
+              </Box>
+            </Stack>
+          )}
         </Stack>
       </Stack>
     )) ?? [];
@@ -52,7 +58,7 @@ export const HotTopics: React.FC<IProps> = ({ communityId }) => {
       <StripedGrid items={items} elementsPerRow={1} isLoading={isLoading} />
       <Stack direction={"row"} justifyContent={"end"}>
         <Button onClick={handleClickSeeAll}>ver todos</Button>
-        <Button onClick={handleCreateTopic}>+ novo tópico</Button>
+        {membership?.amIMember && <Button onClick={handleCreateTopic}>+ novo tópico</Button>}
       </Stack>
     </BoxWithTitle>
   )

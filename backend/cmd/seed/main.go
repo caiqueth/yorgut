@@ -24,53 +24,40 @@ func main() {
 
 	validate := validator.New()
 
-	userRepository := repository.NewUserRepository(db)
-	userProfileRepository := repository.NewUserProfileRepository(db)
-	communityMembershipRepository := repository.NewCommunityMembershipRepository(db)
-	communityRepository := repository.NewCommunityRepository(db)
-	friendshipRepository := repository.NewFriendshipRepository(db)
-	photoAlbumRepository := repository.NewPhotoAlbumRepository(db)
-	topicRepository := repository.NewTopicRepository(db)
-	// photoRepository := repository.NewPhotoRepository(db)
-	// scrapRepository := repository.NewScrapRepository(db)
-	// testimonialRepository := repository.NewTestimonialRepository(db)
+	repositories := repository.NewRepositories(db)
+	services := service.NewServices(repositories, validate)
 
-	userService := service.NewUserService(
-		*userRepository,
-		*userProfileRepository,
-		*communityRepository,
-		*communityMembershipRepository,
-		*photoAlbumRepository,
-		*friendshipRepository,
-		validate,
-	)
-
-	frienshipService := service.NewFriendshipService(
-		*friendshipRepository,
-		*userRepository,
-		validate,
-	)
-
-	seedUsers(userRepository)
-	seedCommunities(communityRepository, userRepository)
-	seedFriendships(friendshipRepository, userRepository, frienshipService)
-	seedMemberships(userRepository, communityRepository, userService)
-	seedTopics(topicRepository, communityRepository, userRepository)
+	seedUsers(repositories.User)
+	seedCommunities(repositories.Community, repositories.User)
+	seedFriendships(repositories.Friendship, repositories.User, services.Friendship)
+	seedOwnerMemberships(repositories.Community, services.CommunityMembership)
+	seedMemberships(repositories.User, repositories.Community, services.CommunityMembership)
+	seedTopics(repositories.Topic, repositories.Community, repositories.User)
 
 	log.Printf("✅ Seeding complete!")
 }
 
 func clearStorageFolder() {
-	os.RemoveAll(path.Join("storage", "uploads"))
+	if err := os.RemoveAll(path.Join("storage", "uploads")); err != nil {
+		log.Fatalf("❌ could not clear storage/uploads: %v", err)
+	}
 }
 
+// deleteDb removes the SQLite file. On Windows this fails while another
+// process (usually the running API) has it open; seeding on top of the old
+// database would duplicate every row, so stop instead.
 func deleteDb() {
-	os.Remove(os.Getenv("DATABASE_DSN"))
+	dsn := os.Getenv("DATABASE_DSN")
+	if err := os.Remove(dsn); err != nil && !os.IsNotExist(err) {
+		log.Fatalf("❌ could not delete the database %q: %v. Stop the API (it keeps the file open) and run the seed again.", dsn, err)
+	}
 }
 
+// localReset deletes the database first: if it's locked, nothing (not even
+// the uploaded images the old rows point to) has been touched yet.
 func localReset() {
-	clearStorageFolder()
 	deleteDb()
+	clearStorageFolder()
 }
 
 func seedUsers(ur *repository.UserRepository) {
@@ -150,10 +137,30 @@ func seedFriendships(
 
 }
 
+// seedOwnerMemberships makes every owner a member of their community, as
+// creating a community through the API does.
+func seedOwnerMemberships(
+	cr *repository.CommunityRepository,
+	ms *service.CommunityMembershipService,
+) {
+	communities, err := cr.FindMany()
+	if err != nil {
+		panic(err)
+	}
+
+	for _, community := range communities {
+		if err := ms.JoinCommunity(community.OwnerID, community.ID); err != nil {
+			log.Printf("❌ Failed to add owner to %s: %v\n", community.Name, err)
+		} else {
+			log.Printf("✅ Owner joined %s\n", community.Name)
+		}
+	}
+}
+
 func seedMemberships(
 	ur *repository.UserRepository,
 	cr *repository.CommunityRepository,
-	us *service.UserService,
+	ms *service.CommunityMembershipService,
 ) {
 	users, err := ur.FindMany()
 	if err != nil {
@@ -167,10 +174,11 @@ func seedMemberships(
 
 	for _, user := range users {
 		for _, community := range communities {
-			if !seed.RandomBoolean() {
+			// owners already joined in seedOwnerMemberships
+			if community.OwnerID == user.ID || !seed.RandomBoolean() {
 				continue
 			}
-			err := us.JoinCommunity(user.ID, community.ID)
+			err := ms.JoinCommunity(user.ID, community.ID)
 			if err != nil {
 				log.Printf("❌ Failed to create %s membership for user %s: %v\n", community.Name, user.FirstName, err)
 			} else {

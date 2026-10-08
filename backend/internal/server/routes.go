@@ -28,11 +28,12 @@ func NewRouter(
 	communityController *controller.CommunityController,
 	communityMembershipController *controller.CommunityMembershipController,
 	friendshipController *controller.FriendshipController,
-	photoAlbumController *controller.PhotoAlbumController,
 	photoController *controller.PhotoController,
 	scrapController *controller.ScrapController,
 	testimonialController *controller.TestimonialController,
 	topicController *controller.TopicController,
+	userReviewController *controller.UserReviewController,
+	userFanController *controller.UserFanController,
 	userService *service.UserService,
 ) *gin.Engine {
 	router := gin.Default()
@@ -63,6 +64,7 @@ func NewRouter(
 		{
 			me.GET("", meController.FindMe)
 			me.PUT("", meController.UpdateMe)
+			me.PUT("/profile-picture", meController.UpdateMyProfilePicture)
 			me.GET("/welcome", meController.Welcome)
 			me.GET("/profile", meController.FindMyProfile)
 			me.GET("/my-communities", meController.FindMyCommunities)
@@ -71,7 +73,6 @@ func NewRouter(
 			me.GET("/friends", meController.FindMyFriends)
 			me.GET("/friends/pending", meController.FindMyPendingFriendships)
 			me.GET("/friends/:userId", meController.AmIFriendOf)
-			me.GET("/photoAlbums", meController.FindMyPhotoAlbums)
 			me.POST("/join/:communityId", meController.JoinCommunity)
 			me.POST("/leave/:communityId", meController.LeaveCommunity)
 		}
@@ -80,69 +81,71 @@ func NewRouter(
 		{
 			users.POST("", userController.Create)
 			users.GET("", userController.FindMany)
-			users.GET("search-users", userController.SearchUsers)
+			users.GET("/search-users", userController.SearchUsers)
 			users.GET("/:userId", userController.FindById)
 			users.GET("/:userId/profile", userController.FindUserProfile)
 			users.GET("/:userId/memberships", userController.FindMemberships)
 			users.GET("/:userId/friends", userController.FindFriends)
-			users.GET("/:userId/photoAlbums", userController.FindPhotoAlbums)
+			users.GET("/:userId/reviews", userReviewController.FindSummary)
+			users.PUT("/:userId/review", userReviewController.Upsert)
+			users.GET("/:userId/fans", userFanController.FindSummary)
+			users.PUT("/:userId/fan", userFanController.BecomeFan)
+			users.DELETE("/:userId/fan", userFanController.StopBeingFan)
 		}
 
-		communities := v1.Group("/community")
+		communities := v1.Group("/communities")
 		{
 			communities.POST("", communityController.Create)
-			communities.PUT("", communityController.Update)
+			communities.PUT("/:communityId", communityController.Update)
+			communities.PUT("/:communityId/picture", communityController.UpdatePicture)
 			communities.GET("", communityController.FindMany)
+			communities.GET("/search", communityController.Search)
 			communities.DELETE("/:communityId", communityController.Delete)
 			communities.GET("/:communityId", communityController.FindById)
 			communities.GET("/:communityId/members", communityController.FindMembers)
 			communities.GET("/:communityId/profile", communityController.FindProfileById)
 			communities.GET("/:communityId/related", communityController.FindRelated)
 			communities.GET("/:communityId/topics", communityController.FindAllTopics)
-			communities.GET("/:communityId/hot_topics", communityController.FindHotTopics)
-			communities.POST("/profile", communityController.CreateCommunityProfile)
+			communities.GET("/:communityId/hot-topics", communityController.FindHotTopics)
 		}
 
-		community_memberships := v1.Group("/community_membership")
+		communityMemberships := v1.Group("/community-memberships")
 		{
-			community_memberships.POST("", communityMembershipController.Create)
-			community_memberships.DELETE("/:userId/:communityId", communityMembershipController.Delete)
+			communityMemberships.POST("", communityMembershipController.Create)
+			communityMemberships.DELETE("/:userId/:communityId", communityMembershipController.Delete)
 		}
 
-		friendships := v1.Group("/friendship")
+		friendships := v1.Group("/friendships")
 		{
 			friendships.POST("", friendshipController.AddFriend)
 			friendships.POST("/reply", friendshipController.ReplyFriendship)
-			friendships.DELETE(":friendshipId", friendshipController.RemoveFriendByFriendshipID)
+			friendships.DELETE("/:friendshipId", friendshipController.RemoveFriendByFriendshipID)
 			friendships.DELETE("/friend/:userId", friendshipController.RemoveFriendByUserID)
 		}
 
-		photoAlbums := v1.Group("/photoAlbum")
+		photos := v1.Group("/photos")
 		{
-			photoAlbums.POST("", photoAlbumController.Create)
-			photoAlbums.DELETE("", photoAlbumController.Delete)
-		}
-
-		photos := v1.Group("/photo")
-		{
+			photos.GET("/user/:userId", photoController.FindOfUser)
 			photos.POST("", photoController.Create)
-			photos.DELETE("", photoController.Delete)
+			photos.DELETE("/:photoId", photoController.Delete)
 		}
 
-		scraps := v1.Group("/scrap")
+		scraps := v1.Group("/scraps")
 		{
 			scraps.GET("/user/:userId", scrapController.FindOfUser)
 			scraps.POST("", scrapController.Create)
 			scraps.DELETE("", scrapController.Delete)
 		}
 
-		testimonials := v1.Group("/testimonial")
+		testimonials := v1.Group("/testimonials")
 		{
+			testimonials.GET("/user/:userId", testimonialController.FindOfUser)
 			testimonials.POST("", testimonialController.Create)
-			testimonials.DELETE("", testimonialController.Delete)
+			testimonials.POST("/:testimonialId/approve", testimonialController.Approve)
+			testimonials.DELETE("/:testimonialId", testimonialController.Delete)
 		}
 
-		topics := v1.Group("/topic")
+		topics := v1.Group("/topics")
 		{
 			topics.GET("/:topicId/replies", topicController.FindTopicAndReplies)
 			topics.POST("", topicController.CreateTopic)

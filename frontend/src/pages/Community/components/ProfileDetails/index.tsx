@@ -20,6 +20,10 @@ export const ProfileDetails: React.FC<IProfileDetailsProps> = ({ communityId }) 
       value: communityProfile?.description,
     },
     {
+      label: "categoria:",
+      value: community.category,
+    },
+    {
       label: "dono(a):",
       value: <Link to={`/profile/${community.ownerId}`}>{community?.ownerFirstName}</Link>,
     },

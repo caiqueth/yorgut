@@ -5,6 +5,7 @@ import { BoxWithTitle } from "components/molecules/BoxWithTitle";
 import { StripedGrid } from "components/molecules/StripedGrid";
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { MembersOnly } from "../components/MembersOnly";
 
 interface IProps { }
 export const Forum: React.FC<IProps> = () => {
@@ -27,11 +28,12 @@ export const Forum: React.FC<IProps> = () => {
     />
   )) ?? [];
 
-  items.push(<Button onClick={handleGoToNewTopic}>+ novo tópico</Button>);
-
   return (
     <BoxWithTitle title={"fórum"}>
       <StripedGrid items={items} elementsPerRow={1} isLoading={isLoading} />
+      <MembersOnly communityId={communityId} action={"criar tópicos"}>
+        <Button onClick={handleGoToNewTopic}>+ novo tópico</Button>
+      </MembersOnly>
     </BoxWithTitle>
   )
 }

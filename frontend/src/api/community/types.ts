@@ -1,5 +1,6 @@
 export interface ICommunityResponse {
   name: string;
+  category: string;
   createdById: number;
   ownerId: number;
   ownerFirstName: string;
@@ -68,4 +69,30 @@ export interface ICommunityTopicsResponse {
 export interface ICreateCommunityRequest {
   name: string;
   category: string;
+  // Optional community picture (PNG or JPEG, up to 1 MB and 1024x1024).
+  picture: File | null;
+}
+
+export interface IUpdateCommunityPayload {
+  name: string;
+  category: string;
+  // An empty description clears it.
+  description: string;
+}
+
+export interface ICreateCommunityResponse {
+  data: { id: number };
+}
+
+export interface ISearchCommunitiesResponse {
+  page: number;
+  pageSize: number;
+  count: number;
+  communities: {
+    id: number;
+    name: string;
+    category: string;
+    profilePicture: string | null;
+    memberCount: number;
+  }[];
 }

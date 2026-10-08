@@ -6,7 +6,7 @@ import {
   ITopicReplyRequest,
 } from "./types";
 
-const basePath = `${__API_BASE_URL__}/topic`;
+const basePath = `${__API_BASE_URL__}/topics`;
 
 export const useTopicReplies = (topicId: number) =>
   useQuery<ITopicRepliesResponse>({
@@ -21,10 +21,10 @@ export const useCreateTopic = () => {
       doPost({ url: `${basePath}`, body: payload }),
     onSettled: (_data, _error, variables) => {
       queryClient.invalidateQueries({
-        queryKey: [`/community/${variables.communityId}/hot_topics`],
+        queryKey: [`${__API_BASE_URL__}/communities/${variables.communityId}/hot-topics`],
       });
       queryClient.invalidateQueries({
-        queryKey: [`/community/${variables.communityId}/topics`],
+        queryKey: [`${__API_BASE_URL__}/communities/${variables.communityId}/topics`],
       });
     },
   });

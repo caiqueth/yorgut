@@ -1,5 +1,6 @@
 import { Box, Stack, Typography } from "@mui/material";
 import { Button } from "components/atoms/Button";
+import { uploadUrl } from "helpers/uploadUrl";
 import { BoxWithTitle } from "components/molecules/BoxWithTitle";
 import React from "react";
 import { palette } from "theme";
@@ -46,7 +47,7 @@ export const PendingInvites: React.FC<IPendingInvitesProps> = () => {
           <Stack direction={"row"} alignItems={"center"} gap={1}>
             <Link to={`/profile/${pf.userRequestedId}`}>
               <Box>
-                <img src={`${pf.profilePicture}`} height={64}></img>
+                <img src={uploadUrl(pf.profilePicture)} height={64}></img>
               </Box>
             </Link>
             <Box>

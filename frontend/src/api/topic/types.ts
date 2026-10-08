@@ -26,8 +26,8 @@ export interface ITopicCreateRequest {
   text: string;
 }
 
+// No communityId: the backend posts the reply in the parent topic's community.
 export interface ITopicReplyRequest {
-  communityId: number;
   title: string;
   text: string;
 }

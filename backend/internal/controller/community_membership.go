@@ -1,48 +1,52 @@
 package controller
 
 import (
+	"errors"
 	"net/http"
 	"strconv"
-	"yorgut/internal/dto"
+	"yorgut/internal/model"
 	"yorgut/internal/service"
+	"yorgut/internal/transport"
 
 	"github.com/gin-gonic/gin"
 )
 
 type CommunityMembershipController struct {
-	CommunityMembershipService service.CommunityMembershipService
+	communityMembershipService service.CommunityMembershipService
 }
 
 func NewCommunityMembershipController(service service.CommunityMembershipService) *CommunityMembershipController {
 	return &CommunityMembershipController{
-		CommunityMembershipService: service,
+		communityMembershipService: service,
 	}
 }
 
 // Create				godoc
 // @Summary				Create Community Membership
 // @Decription			Save membership in Db.
-// @Param				community body dto.CreateCommunityMembershipRequest true "Create Community Membership"
+// @Param				community body transport.CreateCommunityMembershipRequest true "Create Community Membership"
 // @Produce				application/json
 // @Tags				CommunityMembership
-// @Success				201 {object} dto.Response{}
-// @Router				/community_membership [post]
+// @Success				201 {object} transport.Response{}
+// @Router				/community-memberships [post]
 func (cm *CommunityMembershipController) Create(ctx *gin.Context) {
-	createMembershipRequest := dto.CreateCommunityMembershipRequest{}
+	user := ctx.MustGet("user").(*model.User)
+	createMembershipRequest := transport.CreateCommunityMembershipRequest{}
 
 	err := ctx.ShouldBindJSON(&createMembershipRequest)
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
 
-	err = cm.CommunityMembershipService.CreateCommunityMembership(createMembershipRequest)
+	err = cm.communityMembershipService.JoinCommunity(user.ID, createMembershipRequest.CommunityID)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	webResponse := dto.Response{
+	webResponse := transport.Response{
 		Data: nil,
 	}
 
@@ -50,16 +54,18 @@ func (cm *CommunityMembershipController) Create(ctx *gin.Context) {
 
 }
 
-// Create				godoc
+// Delete				godoc
 // @Summary				Delete Community Membership
-// @Decription			Deletes the uint so that an user is not a member of the community anymore
+// @Description			The logged user leaves a community (same as /me/leave). userId must be the logged user (403 otherwise), and the owner can't leave (403).
 // @Param				userId path uint true "id of the user"
 // @Param				communityId path string true "id of the community"
 // @Produce				application/json
 // @Tags				CommunityMembership
-// @Success				204 {object} dto.Response{}
-// @Router				/community_membership/{userId}/{communityId} [delete]
+// @Success				204
+// @Router				/community-memberships/{userId}/{communityId} [delete]
 func (cm *CommunityMembershipController) Delete(ctx *gin.Context) {
+	user := ctx.MustGet("user").(*model.User)
+
 	communityId, err := strconv.Atoi(ctx.Param("communityId"))
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -72,22 +78,20 @@ func (cm *CommunityMembershipController) Delete(ctx *gin.Context) {
 		return
 	}
 
-	communityMembershipId, err := cm.CommunityMembershipService.FindCommunityMembership(uint(communityId), uint(userId))
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	if uint(userId) != user.ID {
+		ctx.JSON(http.StatusForbidden, gin.H{"error": "users can only remove their own memberships"})
 		return
 	}
 
-	err = cm.CommunityMembershipService.DeleteCommunityMembership(*communityMembershipId)
+	err = cm.communityMembershipService.LeaveCommunity(user.ID, uint(communityId))
+	if errors.Is(err, service.ErrOwnerCannotLeave) {
+		ctx.JSON(http.StatusForbidden, gin.H{"error": err.Error()})
+		return
+	}
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	webResponse := dto.Response{
-		Data: nil,
-	}
-
-	ctx.JSON(http.StatusCreated, webResponse)
-
+	ctx.JSON(http.StatusNoContent, nil)
 }

@@ -4,21 +4,30 @@ import profileTextDecoration from "assets/images/profile_text_decoration.svg"
 
 import { Box, Paper, Skeleton, Stack, Typography } from "@mui/material";
 import { Repeater } from "components/atoms/Repeater";
+import { useUserReviews } from "api/userReview/queries";
+import { useUserFans } from "api/userFan/queries";
+import { usePhotos } from "api/photo/queries";
+import { useScraps } from "api/scrap/queries";
 
 interface IProfileHeaderProps {
   userId: number;
 }
 export const ProfileHeader: React.FC<IProfileHeaderProps> = ({ userId }) => {
   const { data: user, isLoading } = useUser(userId);
+  const { data: reviews } = useUserReviews(userId);
+  const { data: fans } = useUserFans(userId);
+  const { data: photos } = usePhotos(userId);
+  // Same query as the scrapbook page, so both share one request.
+  const { data: scraps } = useScraps(userId);
 
   const userStatistics = {
-    totalScraps: 0,
-    totalPhotos: 0,
+    totalScraps: scraps?.scraps.length ?? 0,
+    totalPhotos: photos?.count ?? 0,
     totalVideos: 0,
-    totalFans: 0,
-    trustworthy: Math.floor(10 * Math.random()),
-    cool: Math.floor(10 * Math.random()),
-    sexy: Math.floor(10 * Math.random()),
+    totalFans: fans?.fanCount ?? 0,
+    trustworthy: Math.round(reviews?.trustworthy ?? 0),
+    cool: Math.round(reviews?.cool ?? 0),
+    sexy: Math.round(reviews?.sexy ?? 0),
   }
 
   return (
@@ -52,7 +61,6 @@ export const ProfileHeader: React.FC<IProfileHeaderProps> = ({ userId }) => {
                     {`${user?.firstName} ${user?.lastName}`}
                   </Typography>
                 </Box>
-
               </Stack>
               <Stack direction={"row"} spacing={1}>
                 <Typography variant={"body2"}>📝 {userStatistics.totalScraps} recados</Typography>

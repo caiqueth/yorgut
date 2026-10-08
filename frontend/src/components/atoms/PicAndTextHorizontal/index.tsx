@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Stack, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
+import { uploadUrl } from "helpers/uploadUrl";
 
 interface IProps {
   imageSrc: string;
@@ -24,7 +25,7 @@ export const PicAndTextHorizontal: React.FC<IProps> = ({
         width: imageSize,
         height: imageSize,
         minHeight: imageSize,
-        backgroundImage: `url("${imageSrc}")`,
+        backgroundImage: `url("${uploadUrl(imageSrc)}")`,
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
         alignSelf: "start",

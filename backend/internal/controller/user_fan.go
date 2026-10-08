@@ -1,0 +1,86 @@
+package controller
+
+import (
+	"net/http"
+	"yorgut/internal/helpers"
+	"yorgut/internal/model"
+	"yorgut/internal/service"
+
+	"github.com/gin-gonic/gin"
+)
+
+type UserFanController struct {
+	userFanService service.UserFanService
+}
+
+func NewUserFanController(service service.UserFanService) *UserFanController {
+	return &UserFanController{
+		userFanService: service,
+	}
+}
+
+// FindSummary			godoc
+// @Summary				Gets the fan summary of a user.
+// @Param				userId path string true "User ID"
+// @Description			Returns how many fans a user has, and whether the logged user is (or can become) one of them.
+// @Produce				application/json
+// @Tags				UserFan
+// @Success				200 {object} transport.UserFanSummaryResponse{}
+// @Router				/users/{userId}/fans [get]
+func (u *UserFanController) FindSummary(ctx *gin.Context) {
+	viewer := ctx.MustGet("user").(*model.User)
+	userId := helpers.MustParseUint(ctx.Param("userId"))
+
+	summary, err := u.userFanService.FindSummaryOfUser(viewer.ID, userId)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, summary)
+}
+
+// BecomeFan			godoc
+// @Summary				Becomes a fan of a user.
+// @Param				userId path string true "User ID"
+// @Description			Logged user becomes a fan of a friend. Idempotent.
+// @Produce				application/json
+// @Tags				UserFan
+// @Success				204
+// @Router				/users/{userId}/fan [put]
+func (u *UserFanController) BecomeFan(ctx *gin.Context) {
+	fan := ctx.MustGet("user").(*model.User)
+	userId := helpers.MustParseUint(ctx.Param("userId"))
+
+	if !u.userFanService.CanBecomeFan(fan.ID, userId) {
+		ctx.JSON(http.StatusForbidden, gin.H{"error": "only friends can become fans of this user"})
+		return
+	}
+
+	if err := u.userFanService.BecomeFan(fan.ID, userId); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusNoContent, nil)
+}
+
+// StopBeingFan			godoc
+// @Summary				Stops being a fan of a user.
+// @Param				userId path string true "User ID"
+// @Description			Logged user removes their star from a user. Idempotent.
+// @Produce				application/json
+// @Tags				UserFan
+// @Success				204
+// @Router				/users/{userId}/fan [delete]
+func (u *UserFanController) StopBeingFan(ctx *gin.Context) {
+	fan := ctx.MustGet("user").(*model.User)
+	userId := helpers.MustParseUint(ctx.Param("userId"))
+
+	if err := u.userFanService.StopBeingFan(fan.ID, userId); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusNoContent, nil)
+}

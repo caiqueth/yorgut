@@ -46,5 +46,7 @@ func Migrate(db *gorm.DB) {
 		&model.Scrap{},
 		&model.Testimonial{},
 		&model.Topic{},
+		&model.UserReview{},
+		&model.UserFan{},
 	)
 }

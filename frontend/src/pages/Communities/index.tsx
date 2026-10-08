@@ -20,9 +20,14 @@ export const Communities: React.FC<IProps> = () => {
     navigate("/communities/owned")
   }
 
+  const handleGoToDiscover = () => {
+    navigate("/communities/discover")
+  }
+
   const tabs = [
     { title: "participando", onClick: handleGoToMemberships },
-    { title: "minhas comunidades", onClick: handleGoToOwned, }
+    { title: "minhas comunidades", onClick: handleGoToOwned, },
+    { title: "descobrir", onClick: handleGoToDiscover },
   ];
 
   return (

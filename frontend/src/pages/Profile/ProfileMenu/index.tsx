@@ -3,7 +3,7 @@ import { LateralButtonList } from "components/molecules/LateralButtonList";
 
 import { Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useMeAmFriend } from "api/me/queries";
+import { useMe, useMeAmFriend } from "api/me/queries";
 import { useAddFriend, useRemoveFriend, useReplyFriendship } from "api/friendship/queries";
 
 interface IProfileMenuProps {
@@ -11,6 +11,7 @@ interface IProfileMenuProps {
 }
 export const ProfileMenu: React.FC<IProfileMenuProps> = ({ userId }) => {
   const navigate = useNavigate();
+  const { data: me } = useMe();
   const { data: friendshipState } = useMeAmFriend(userId);
   const { mutate: replyFriendship, isPending: isPendingReply } = useReplyFriendship();
   const { mutate: removeFriend, isPending: isPendingRemoval } = useRemoveFriend(userId);
@@ -77,6 +78,11 @@ export const ProfileMenu: React.FC<IProfileMenuProps> = ({ userId }) => {
     } else {
       itemsList.unshift({ text: "adicionar", avatar: "➕", onClick: () => handleAddFriend() })
     }
+  }
+
+  // Last unshift, so it's always the first option on your own profile.
+  if (me?.id === userId) {
+    itemsList.unshift({ text: "editar perfil", avatar: "✏️", onClick: () => handleGoToRoute(`/profile/${userId}/edit`) })
   }
 
   return (

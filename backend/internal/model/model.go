@@ -89,6 +89,26 @@ type User struct {
 	Profile     *UserProfile `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
 
+type UserReview struct {
+	gorm.Model
+	ReviewerID  uint  `gorm:"uniqueIndex:idx_user_review_pair"`
+	Reviewer    *User `gorm:"foreignKey:ReviewerID;references:ID"`
+	ReviewedID  uint  `gorm:"uniqueIndex:idx_user_review_pair"`
+	Reviewed    *User `gorm:"foreignKey:ReviewedID;references:ID"`
+	Cool        uint8
+	Sexy        uint8
+	Trustworthy uint8
+}
+
+// UserFan marks FanID as a fan of IdolID (the star on Orkut's friend list).
+type UserFan struct {
+	gorm.Model
+	FanID  uint  `gorm:"uniqueIndex:idx_user_fan_pair"`
+	Fan    *User `gorm:"foreignKey:FanID;references:ID"`
+	IdolID uint  `gorm:"uniqueIndex:idx_user_fan_pair"`
+	Idol   *User `gorm:"foreignKey:IdolID;references:ID"`
+}
+
 type UserProfile struct {
 	gorm.Model
 	UserID             uint  `gorm:"uniqueIndex"`
@@ -160,14 +180,6 @@ func NewFriendship(userRequested *User, userRequestee *User) *Friendship {
 	}
 }
 
-func NewPhotoAlbum(user *User, name string) *PhotoAlbum {
-	return &PhotoAlbum{
-		UserID: user.ID,
-		User:   user,
-		Name:   name,
-	}
-}
-
 func NewPhoto(photoAlbum *PhotoAlbum, url string, caption string) *Photo {
 	return &Photo{
 		PhotoAlbumID: photoAlbum.ID,
@@ -198,6 +210,23 @@ func NewTestimonial(author *User, recipient *User, content string) *Testimonial 
 	}
 }
 
+func NewUserReview(reviewerID uint, reviewedID uint, cool uint8, sexy uint8, trustworthy uint8) *UserReview {
+	return &UserReview{
+		ReviewerID:  reviewerID,
+		ReviewedID:  reviewedID,
+		Cool:        cool,
+		Sexy:        sexy,
+		Trustworthy: trustworthy,
+	}
+}
+
+func NewUserFan(fanID uint, idolID uint) *UserFan {
+	return &UserFan{
+		FanID:  fanID,
+		IdolID: idolID,
+	}
+}
+
 func NewUserProfile(user *User) *UserProfile {
 	profile := &UserProfile{
 		User:   user,
@@ -206,24 +235,7 @@ func NewUserProfile(user *User) *UserProfile {
 	return profile
 }
 
-func NewCommunityProfile(community *Community, opts ...func(*CommunityProfile)) *CommunityProfile {
-	profile := &CommunityProfile{
-		Community:   community,
-		CommunityID: community.ID,
-	}
-
-	for _, opt := range opts {
-		opt(profile)
-	}
-
-	return profile
-}
-
 func AddUserProfilePicture(profile *UserProfile, profilePicturePath string) {
-	profile.ProfilePicture = &profilePicturePath
-}
-
-func AddCommunityProfilePicture(profile *CommunityProfile, profilePicturePath string) {
 	profile.ProfilePicture = &profilePicturePath
 }
 

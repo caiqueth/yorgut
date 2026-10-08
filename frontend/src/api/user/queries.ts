@@ -6,7 +6,6 @@ import {
   ISearchUsersResponse,
   IUserFriendsResponse,
   IUserMembershipsResponse,
-  IUserPhotoAlbumsResponse,
   IUserProfileResponse,
   IUserResponse,
   IUsersResponse,
@@ -35,12 +34,6 @@ export const useUserFriends = (userId: number) =>
 export const useUserMemberships = (userId: number) =>
   useQuery<IUserMembershipsResponse>({
     queryKey: [`${basePath}/${userId}/memberships`],
-    queryFn: ({ queryKey }) => doGet({ queryKey }),
-  });
-
-export const useUserPhotoAlbums = (userId: number) =>
-  useQuery<IUserPhotoAlbumsResponse>({
-    queryKey: [`${basePath}/${userId}/photoAlbums`],
     queryFn: ({ queryKey }) => doGet({ queryKey }),
   });
 

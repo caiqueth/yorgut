@@ -1,23 +1,45 @@
 package controller
 
 import (
+	"errors"
 	"net/http"
 	"strconv"
-	"yorgut/internal/dto"
+	"time"
 	"yorgut/internal/helpers"
 	"yorgut/internal/model"
 	"yorgut/internal/service"
+	"yorgut/internal/transport"
 
 	"github.com/gin-gonic/gin"
 )
 
 type MeController struct {
-	userService service.UserService
+	userService                service.UserService
+	friendshipService          service.FriendshipService
+	communityService           service.CommunityService
+	communityMembershipService service.CommunityMembershipService
+	userFanService             service.UserFanService
+	scrapService               service.ScrapService
+	userProfileService         service.UserProfileService
 }
 
-func NewMeController(service service.UserService) *MeController {
+func NewMeController(
+	userService service.UserService,
+	friendshipService service.FriendshipService,
+	communityService service.CommunityService,
+	communityMembershipService service.CommunityMembershipService,
+	userFanService service.UserFanService,
+	scrapService service.ScrapService,
+	userProfileService service.UserProfileService,
+) *MeController {
 	return &MeController{
-		userService: service,
+		userService:                userService,
+		friendshipService:          friendshipService,
+		communityService:           communityService,
+		communityMembershipService: communityMembershipService,
+		userFanService:             userFanService,
+		scrapService:               scrapService,
+		userProfileService:         userProfileService,
 	}
 }
 
@@ -26,12 +48,12 @@ func NewMeController(service service.UserService) *MeController {
 // @Description			Returns the user matching the requested id
 // @Produce				application/json
 // @Tags				Me
-// @Success				200 {object} dto.FindUserResponse{}
+// @Success				200 {object} transport.FindUserResponse{}
 // @Router				/me [get]
 func (uc *MeController) FindMe(ctx *gin.Context) {
 	user := ctx.MustGet("user").(*model.User)
 
-	resp := dto.FindUserResponse{}
+	resp := transport.FindUserResponse{}
 	resp.FromUser(user)
 
 	ctx.JSON(http.StatusOK, resp)
@@ -42,58 +64,151 @@ func (uc *MeController) FindMe(ctx *gin.Context) {
 // @Description			Returns the user stats
 // @Produce				application/json
 // @Tags				Me
-// @Success				200 {object} dto.WelcomeResponse{}
+// @Success				200 {object} transport.WelcomeResponse{}
 // @Router				/me/welcome [get]
 func (uc *MeController) Welcome(ctx *gin.Context) {
 	user := ctx.MustGet("user").(*model.User)
 
-	resp := dto.WelcomeResponse{
+	numberOfFans, err := uc.userFanService.CountFansOfUser(user.ID)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	numberOfScraps, err := uc.scrapService.CountScrapsOfUser(user.ID)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	resp := transport.WelcomeResponse{
 		UserFirstName:       user.FirstName,
 		UserCreatedAt:       user.CreatedAt,
 		IndirectConnections: 0,
 		DirectConnections:   user.FriendCount,
-		NumberOfFans:        0,
-		NumberOfScraps:      0,
-		ProfileViews: dto.ProfileViews{
+		NumberOfFans:        numberOfFans,
+		NumberOfScraps:      numberOfScraps,
+		ProfileViews: transport.ProfileViews{
 			AllTime:  0,
 			LastWeek: 0,
 		},
-		RecentVisitors: make([]dto.RecentVisitor, 0),
+		RecentVisitors: make([]transport.RecentVisitor, 0),
 		TodaysLuck:     "Boas notícias chegarão por e-mail.",
 	}
 
 	ctx.JSON(http.StatusOK, resp)
 }
 
-// Update 			godoc
-// @Summary			Update user
-// @Description		Returns null
+// UpdateMe		godoc
+// @Summary			Update the logged user
+// @Description		Replaces the logged user's basic data and profile fields. Email can't be changed.
+// @Param			Me body transport.UpdateMeRequest true "User data"
 // @Produce			application/json
 // @Tags			Me
-// @Success			200 {object} dto.Response{}
+// @Success			204
 // @Router			/me [put]
 func (uc *MeController) UpdateMe(ctx *gin.Context) {
-	// THIS ENDPOINT IS BROKEN
-	request := dto.UpdateUserRequest{}
+	user := ctx.MustGet("user").(*model.User)
+	request := transport.UpdateMeRequest{}
 
-	err := ctx.ShouldBindJSON(&request)
-	if err != nil {
+	if err := ctx.ShouldBindJSON(&request); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	err = uc.userService.UpdateUser(request)
+	var birthDate *time.Time
+	if request.BirthDate != "" {
+		parsed, err := time.ParseInLocation("2006-01-02", request.BirthDate, time.Local)
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		birthDate = &parsed
+	}
+
+	err := uc.userService.UpdateUser(user.ID, service.UpdateUserInput{
+		FirstName: request.FirstName,
+		LastName:  request.LastName,
+		BirthDate: birthDate,
+	})
+	if errors.Is(err, service.ErrFirstNameRequired) {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	webResponse := dto.Response{
-		Data: nil,
+	err = uc.userProfileService.UpdateProfile(user.ID, service.UpdateUserProfileInput{
+		Description:        request.Description,
+		RelationshipStatus: request.RelationshipStatus,
+		Interests:          request.Interests,
+		About:              request.About,
+		Religion:           request.Religion,
+		Humor:              request.Humor,
+		Fashion:            request.Fashion,
+		LivesWith:          request.LivesWith,
+		BirthCity:          request.BirthCity,
+		Website:            request.Website,
+		Passions:           request.Passions,
+		Sports:             request.Sports,
+		Hobbies:            request.Hobbies,
+		Books:              request.Books,
+		Music:              request.Music,
+		Movies:             request.Movies,
+		Cuisine:            request.Cuisine,
+	})
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
-	ctx.JSON(http.StatusOK, webResponse)
+	ctx.JSON(http.StatusNoContent, nil)
+}
 
+// UpdateMyProfilePicture	godoc
+// @Summary			Update the logged user's profile picture
+// @Description		Uploads a PNG or JPEG (max 1 MB and 1024x1024) as the logged user's profile picture.
+// @Param			picture formData file true "Profile picture"
+// @Accept			multipart/form-data
+// @Produce			application/json
+// @Tags			Me
+// @Success			204
+// @Router			/me/profile-picture [put]
+func (uc *MeController) UpdateMyProfilePicture(ctx *gin.Context) {
+	user := ctx.MustGet("user").(*model.User)
+
+	file, err := ctx.FormFile("picture")
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Failed to get picture file"})
+		return
+	}
+	// Refuse oversized files before reading them; the service checks again.
+	if file.Size > service.MaxPictureBytes {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": service.ErrPictureTooLarge.Error()})
+		return
+	}
+
+	picture, err := helpers.FileToBytes(file)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Failed to read picture file"})
+		return
+	}
+
+	err = uc.userProfileService.UpdateProfilePicture(user.ID, picture)
+	if errors.Is(err, service.ErrInvalidPicture) ||
+		errors.Is(err, service.ErrPictureTooLarge) ||
+		errors.Is(err, service.ErrPictureTooBig) {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusNoContent, nil)
 }
 
 // FindLoggedUserProfile 	godoc
@@ -101,7 +216,7 @@ func (uc *MeController) UpdateMe(ctx *gin.Context) {
 // @Description				Returns the user matching the token
 // @Produce					application/json
 // @Tags					Me
-// @Success					200 {object} dto.FindUserWithProfileByIdResponse{}
+// @Success					200 {object} transport.FindUserWithProfileByIdResponse{}
 // @Router					/me/profile [get]
 func (uc *MeController) FindMyProfile(ctx *gin.Context) {
 	user := ctx.MustGet("user").(*model.User)
@@ -116,34 +231,16 @@ func (uc *MeController) FindMyProfile(ctx *gin.Context) {
 
 }
 
-// FindMyPhotoAlbums		godoc
-// @Summary					Gets a list of photo albums of the user.
-// @Description				Returns a list of photo albums
-// @Produce					application/json
-// @Tags					Me
-// @Success					200 {object} dto.FindPhotoAlbumOfUserResponse{}
-// @Router					/me/photoAlbums [get]
-func (uc *MeController) FindMyPhotoAlbums(ctx *gin.Context) {
-	user := ctx.MustGet("user").(*model.User)
-	photoAlbums, err := uc.userService.FindUserPhotoAlbums(user.ID)
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	ctx.JSON(http.StatusOK, photoAlbums)
-}
-
 // FindMyFriends	godoc
 // @Summary			Gets a list of friends of the user.
 // @Description		Returns a list of friends
 // @Produce			application/json
 // @Tags			Me
-// @Success			200 {object} dto.FindFriendsOfUserResponse{}
+// @Success			200 {object} transport.FindFriendsOfUserResponse{}
 // @Router			/me/friends [get]
 func (uc *MeController) FindMyFriends(ctx *gin.Context) {
 	user := ctx.MustGet("user").(*model.User)
-	friendships, err := uc.userService.FindFriendsOfUser(user.ID)
+	friendships, err := uc.friendshipService.FindFriendsOfUser(user.ID)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -157,11 +254,11 @@ func (uc *MeController) FindMyFriends(ctx *gin.Context) {
 // @Description				Returns a list of users
 // @Produce					application/json
 // @Tags					Me
-// @Success					200 {object} dto.FindPendingFriendshipOfUserResponse{}
+// @Success					200 {object} transport.FindPendingFriendshipOfUserResponse{}
 // @Router					/me/friends/pending [get]
 func (uc *MeController) FindMyPendingFriendships(ctx *gin.Context) {
 	user := ctx.MustGet("user").(*model.User)
-	friendships, err := uc.userService.FindPendingFriendshipsOfUser(user.ID)
+	friendships, err := uc.friendshipService.FindPendingFriendshipsOfUser(user.ID)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -176,7 +273,7 @@ func (uc *MeController) FindMyPendingFriendships(ctx *gin.Context) {
 // @Description		Joins a community.
 // @Produce			application/json
 // @Tags			Me
-// @Success			201 {object} dto.Response{}
+// @Success			201 {object} transport.Response{}
 // @Router			/me/join/{communityId} [post]
 func (uc *MeController) JoinCommunity(ctx *gin.Context) {
 	user := ctx.MustGet("user").(*model.User)
@@ -186,12 +283,12 @@ func (uc *MeController) JoinCommunity(ctx *gin.Context) {
 		return
 	}
 
-	err = uc.userService.JoinCommunity(user.ID, uint(communityId))
+	err = uc.communityMembershipService.JoinCommunity(user.ID, uint(communityId))
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	ctx.JSON(http.StatusCreated, dto.Response{})
+	ctx.JSON(http.StatusCreated, transport.Response{})
 }
 
 // LeaveCommunity	godoc
@@ -200,7 +297,7 @@ func (uc *MeController) JoinCommunity(ctx *gin.Context) {
 // @Description		Leaves a community.
 // @Produce			application/json
 // @Tags			Me
-// @Success			201 {object} dto.Response{}
+// @Success			201 {object} transport.Response{}
 // @Router			/me/leave/{communityId} [post]
 func (uc *MeController) LeaveCommunity(ctx *gin.Context) {
 	user := ctx.MustGet("user").(*model.User)
@@ -210,12 +307,16 @@ func (uc *MeController) LeaveCommunity(ctx *gin.Context) {
 		return
 	}
 
-	err = uc.userService.LeaveCommunity(user.ID, uint(communityId))
+	err = uc.communityMembershipService.LeaveCommunity(user.ID, uint(communityId))
+	if errors.Is(err, service.ErrOwnerCannotLeave) {
+		ctx.JSON(http.StatusForbidden, gin.H{"error": err.Error()})
+		return
+	}
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	ctx.JSON(http.StatusCreated, dto.Response{})
+	ctx.JSON(http.StatusCreated, transport.Response{})
 }
 
 // FindMyMemberships		godoc
@@ -223,18 +324,16 @@ func (uc *MeController) LeaveCommunity(ctx *gin.Context) {
 // @Description				Returns a list of communities
 // @Produce					application/json
 // @Tags					Me
-// @Success					200 {object} dto.FindUserMembershipsResponse{}
+// @Success					200 {object} transport.FindUserMembershipsResponse{}
 // @Router					/me/memberships [get]
 func (uc *MeController) FindMyMemberships(ctx *gin.Context) {
 	user := ctx.MustGet("user").(*model.User)
 
-	memberships, err := uc.userService.FindUserMemberships(user.ID)
+	memberships, err := uc.communityMembershipService.FindUserMemberships(user.ID)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-
-	memberships.MembershipCount = uc.userService.CountUserMemberships(user.ID)
 
 	ctx.JSON(http.StatusOK, memberships)
 }
@@ -244,12 +343,12 @@ func (uc *MeController) FindMyMemberships(ctx *gin.Context) {
 // @Description				Returns a list of communities
 // @Produce					application/json
 // @Tags					Me
-// @Success					200 {object} dto.FindMyOwnedCommunitiesResponse{}
+// @Success					200 {object} transport.FindMyOwnedCommunitiesResponse{}
 // @Router					/me/my-communities [get]
 func (uc *MeController) FindMyCommunities(ctx *gin.Context) {
 	user := ctx.MustGet("user").(*model.User)
 
-	communities, err := uc.userService.FindUserOwnedCommunities(user.ID)
+	communities, err := uc.communityService.FindCommunitiesCreatedByUser(user.ID)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -263,15 +362,15 @@ func (uc *MeController) FindMyCommunities(ctx *gin.Context) {
 // @Description		Returns true or false
 // @Produce			application/json
 // @Tags			Me
-// @Success			200 {object} dto.AmIMemberOfResponse{}
+// @Success			200 {object} transport.AmIMemberOfResponse{}
 // @Router			/me/memberships/{communityId} [get]
 func (uc *MeController) AmIMemberOf(ctx *gin.Context) {
 	user := ctx.MustGet("user").(*model.User)
 	communityId := helpers.MustParseUint(ctx.Param("communityId"))
 
-	isMember := uc.userService.IsUserMemberOf(communityId, user.ID)
+	isMember := uc.communityMembershipService.IsUserMemberOf(communityId, user.ID)
 
-	ctx.JSON(http.StatusOK, dto.AmIMemberOfResponse{
+	ctx.JSON(http.StatusOK, transport.AmIMemberOfResponse{
 		AmIMember: isMember,
 	})
 }
@@ -281,16 +380,17 @@ func (uc *MeController) AmIMemberOf(ctx *gin.Context) {
 // @Description		Returns true or false
 // @Produce			application/json
 // @Tags			Me
-// @Success			200 {object} dto.AmIFriendOfResponse{}
+// @Success			200 {object} transport.AmIFriendOfResponse{}
 // @Router			/me/friends/{userId} [get]
 func (uc *MeController) AmIFriendOf(ctx *gin.Context) {
 	user := ctx.MustGet("user").(*model.User)
 	targetUserId := helpers.MustParseUint(ctx.Param("userId"))
 	if user.ID == targetUserId {
 		ctx.JSON(http.StatusNoContent, nil)
+		return
 	}
 
-	response := uc.userService.UsersFriendshipStatus(user.ID, targetUserId)
+	response := uc.friendshipService.UsersFriendshipStatus(user.ID, targetUserId)
 
 	ctx.JSON(http.StatusOK, response)
 }

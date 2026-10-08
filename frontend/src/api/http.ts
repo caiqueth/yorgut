@@ -63,10 +63,11 @@ async function doRequest<T>(
       method,
       headers: {
         ...getAuthorizationHeaders(),
-        "Content-Type": "application/json",
+        // FormData sets its own multipart Content-Type (with the boundary).
+        ...(body instanceof FormData ? {} : { "Content-Type": "application/json" }),
         ...headers,
       },
-      body: body ? JSON.stringify(body) : undefined,
+      body: body instanceof FormData ? body : body ? JSON.stringify(body) : undefined,
     });
 
     if (!response.ok) {
@@ -91,6 +92,10 @@ async function doRequest<T>(
           errorMessage = `HTTP Error ${response.status}: ${response.statusText}`;
       }
       throw new Error(errorMessage);
+    }
+
+    if (response.status === 204) {
+      return undefined as T;
     }
 
     return (await response.json()) as T;

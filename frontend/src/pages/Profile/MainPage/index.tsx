@@ -5,6 +5,7 @@ import { FriendsList } from "../components/FriendsList";
 import { CommunitiesList } from "../components/CommunitiesList";
 import { useParams } from "react-router-dom";
 import { ProfileDetails } from "../ProfileDetails";
+import { TestimonialsPanel } from "../components/TestimonialsPanel";
 
 interface IProps { };
 export const MainPage: React.FC<IProps> = () => {
@@ -16,6 +17,7 @@ export const MainPage: React.FC<IProps> = () => {
       <Stack direction={"column"} gap={2}>
         <ProfileHeader userId={userId} />
         <ProfileDetails userId={userId} />
+        <TestimonialsPanel userId={userId} />
       </Stack>
     </Grid>
     <Grid size={5}>

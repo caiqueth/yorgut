@@ -63,7 +63,9 @@ export const Welcome: React.FC<IProps> = () => {
                 <Typography variant={"body1"}>
                   <strong>Próximas etapas:</strong>
                 </Typography>
-                <Typography variant={"body1"}>Classifique seus amigos!</Typography>
+                <Typography variant={"body1"}>
+                  <Link to="/friends">Classifique seus amigos!</Link>
+                </Typography>
               </Box>
               <Box>
                 <Typography variant={"body1"}>

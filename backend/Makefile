@@ -33,13 +33,4 @@ swagger:
 run_local_db:
 	@docker run --name yorgut-dev -e POSTGRES_USER=localdev -e POSTGRES_PASSWORD=localdev -e POSTGRES_DB=yorgut-dev -p 5432:5432 -d postgres
 
-migration_up:
-	@migrate -path database/migration/ -database "postgresql://username:secretkey@localhost:5432/database_name?sslmode=disable" -verbose up
-
-migration_down:
-	@migrate -path database/migration/ -database "postgresql://username:secretkey@localhost:5432/database_name?sslmode=disable" -verbose down
-
-migration_fix:
-	@migrate -path database/migration/ -database "postgresql://username:secretkey@localhost:5432/database_name?sslmode=disable" force VERSION
-
-.PHONY: all build run test clean migration_up migration_down migration_fix watch
+.PHONY: all build run seed test clean swagger run_local_db

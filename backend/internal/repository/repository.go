@@ -1,9 +1,7 @@
 package repository
 
 import (
-	"errors"
 	"fmt"
-	"yorgut/internal/model"
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -55,22 +53,20 @@ func (r *repository[T]) Delete(id uint) error {
 
 func (r *repository[T]) FindById(id uint) (T, error) {
 	var ent T
-	result := r.db.Find(&ent, id)
-	if result != nil {
-		return ent, nil
-	} else {
-		return ent, errors.New("entity not found")
+	result := r.db.First(&ent, id)
+	if result.Error != nil {
+		return ent, result.Error
 	}
+	return ent, nil
 }
 
 func (r *repository[T]) FindByIdEager(id uint) (T, error) {
 	var ent T
-	result := r.db.Preload(clause.Associations).Find(&ent, id)
-	if result != nil {
-		return ent, nil
-	} else {
-		return ent, errors.New("entity not found")
+	result := r.db.Preload(clause.Associations).First(&ent, id)
+	if result.Error != nil {
+		return ent, result.Error
 	}
+	return ent, nil
 }
 
 func (r *repository[T]) FindMany() ([]T, error) {
@@ -91,111 +87,38 @@ func (r *repository[T]) Update(ent T) error {
 	return nil
 }
 
-type UserProfileRepository struct {
-	repository[*model.UserProfile]
+// Repositories holds one instance of every repository, so the API server and
+// the seed command are wired the same way.
+type Repositories struct {
+	User                *UserRepository
+	UserProfile         *UserProfileRepository
+	UserReview          *UserReviewRepository
+	UserFan             *UserFanRepository
+	Community           *CommunityRepository
+	CommunityProfile    *CommunityProfileRepository
+	CommunityMembership *CommunityMembershipRepository
+	Friendship          *FriendshipRepository
+	PhotoAlbum          *PhotoAlbumRepository
+	Photo               *PhotoRepository
+	Scrap               *ScrapRepository
+	Testimonial         *TestimonialRepository
+	Topic               *TopicRepository
 }
 
-type UserRepository struct {
-	repository[*model.User]
-}
-
-type CommunityMembershipRepository struct {
-	repository[*model.CommunityMembership]
-}
-
-type FriendshipRepository struct {
-	repository[*model.Friendship]
-}
-
-type PhotoRepository struct {
-	repository[*model.Photo]
-}
-
-type CommunityRepository struct {
-	repository[*model.Community]
-}
-
-type CommunityProfileRepository struct {
-	repository[*model.CommunityProfile]
-}
-
-type PhotoAlbumRepository struct {
-	repository[*model.PhotoAlbum]
-}
-
-type ScrapRepository struct {
-	repository[*model.Scrap]
-}
-
-type TestimonialRepository struct {
-	repository[*model.Testimonial]
-}
-
-type TopicRepository struct {
-	repository[*model.Topic]
-}
-
-func NewTestimonialRepository(Db *gorm.DB) *TestimonialRepository {
-	return &TestimonialRepository{
-		repository: repository[*model.Testimonial]{db: Db},
-	}
-}
-func NewScrapRepository(Db *gorm.DB) *ScrapRepository {
-	return &ScrapRepository{
-		repository: repository[*model.Scrap]{db: Db},
-	}
-}
-
-func NewPhotoAlbumRepository(Db *gorm.DB) *PhotoAlbumRepository {
-	return &PhotoAlbumRepository{
-		repository: repository[*model.PhotoAlbum]{db: Db},
-	}
-}
-
-func NewCommunityRepository(Db *gorm.DB) *CommunityRepository {
-	return &CommunityRepository{
-		repository: repository[*model.Community]{db: Db},
-	}
-}
-
-func NewCommunityProfileRepository(Db *gorm.DB) *CommunityProfileRepository {
-	return &CommunityProfileRepository{
-		repository: repository[*model.CommunityProfile]{db: Db},
-	}
-}
-
-func NewPhotoRepository(Db *gorm.DB) *PhotoRepository {
-	return &PhotoRepository{
-		repository: repository[*model.Photo]{db: Db},
-	}
-}
-
-func NewFriendshipRepository(Db *gorm.DB) *FriendshipRepository {
-	return &FriendshipRepository{
-		repository: repository[*model.Friendship]{db: Db},
-	}
-}
-
-func NewUserProfileRepository(Db *gorm.DB) *UserProfileRepository {
-	return &UserProfileRepository{
-		repository: repository[*model.UserProfile]{db: Db},
-	}
-}
-
-func NewUserRepository(Db *gorm.DB) *UserRepository {
-	return &UserRepository{
-		repository: repository[*model.User]{db: Db},
-	}
-}
-
-func NewCommunityMembershipRepository(Db *gorm.DB) *CommunityMembershipRepository {
-	return &CommunityMembershipRepository{
-		repository: repository[*model.CommunityMembership]{db: Db},
-	}
-}
-
-func NewTopicRepository(Db *gorm.DB) *TopicRepository {
-	return &TopicRepository{
-		repository: repository[*model.Topic]{db: Db},
+func NewRepositories(db *gorm.DB) *Repositories {
+	return &Repositories{
+		User:                NewUserRepository(db),
+		UserProfile:         NewUserProfileRepository(db),
+		UserReview:          NewUserReviewRepository(db),
+		UserFan:             NewUserFanRepository(db),
+		Community:           NewCommunityRepository(db),
+		CommunityProfile:    NewCommunityProfileRepository(db),
+		CommunityMembership: NewCommunityMembershipRepository(db),
+		Friendship:          NewFriendshipRepository(db),
+		PhotoAlbum:          NewPhotoAlbumRepository(db),
+		Photo:               NewPhotoRepository(db),
+		Scrap:               NewScrapRepository(db),
+		Testimonial:         NewTestimonialRepository(db),
+		Topic:               NewTopicRepository(db),
 	}
 }

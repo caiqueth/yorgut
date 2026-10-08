@@ -9,8 +9,28 @@ export interface IMeResponse {
   updatedAt: string;
 }
 
-export interface IMeUpdateResponse {
-  data: string;
+export interface IUpdateMePayload {
+  firstName: string;
+  lastName: string;
+  // "YYYY-MM-DD"; empty keeps the current birth date.
+  birthDate: string;
+  description: string;
+  relationshipStatus: string;
+  interests: string;
+  about: string;
+  religion: string;
+  humor: string;
+  fashion: string;
+  livesWith: string;
+  birthCity: string;
+  website: string;
+  passions: string;
+  sports: string;
+  hobbies: string;
+  books: string;
+  music: string;
+  movies: string;
+  cuisine: string;
 }
 
 export interface IMeFriendsResponse {
@@ -58,13 +78,6 @@ export interface IMeMyCommunitiesResponse {
     membershipCount: number;
     name: string;
     profilePicture: string;
-  }[];
-}
-
-export interface IMePhotoAlbumsResponse {
-  photoAlbums: {
-    name: string;
-    userId: number;
   }[];
 }
 

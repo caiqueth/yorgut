@@ -6,12 +6,14 @@ import { Community } from "pages/Community";
 import { NotFound } from "pages/NotFound";
 import { BadBadServer } from "pages/BadBadServer";
 import { CommunityMembers } from "pages/Community/Members";
+import { EditCommunity } from "pages/Community/Edit";
 import { UserFriendsList } from "pages/Profile/Friends";
 import { UserCommunitiesList } from "pages/Profile/Communities";
 import { UserPhotoAlbumsList } from "pages/Profile/PhotoAlbums";
 import { UserScrapbook } from "pages/Profile/Scrapbook";
 import { UserVideosList } from "pages/Profile/Videos";
 import { UserTestimonialsList } from "pages/Profile/Testimonials";
+import { EditProfile } from "pages/Profile/Edit";
 import { Friends } from "pages/Friends";
 import { Communities } from "pages/Communities";
 import { Search } from "pages/Search";
@@ -29,6 +31,7 @@ import { NewTopic } from "pages/Community/NewTopic";
 import { NewCommunity } from "pages/Communities/NewCommunity";
 import { MyMemberships } from "pages/Communities/MyMemberships";
 import { MyCommunities } from "pages/Communities/MyCommunities";
+import { DiscoverCommunities } from "pages/Communities/Discover";
 
 export const Routes = [
   {
@@ -76,6 +79,14 @@ export const Routes = [
         element: (
           <ProtectedRoute>
             <MyCommunities />
+          </ProtectedRoute>
+        )
+      },
+      {
+        path: "discover",
+        element: (
+          <ProtectedRoute>
+            <DiscoverCommunities />
           </ProtectedRoute>
         )
       }
@@ -186,6 +197,14 @@ export const Routes = [
         ),
       },
       {
+        path: "edit",
+        element: (
+          <ProtectedRoute>
+            <EditProfile />
+          </ProtectedRoute>
+        ),
+      },
+      {
         path: "albums",
         element: (
           <ProtectedRoute>
@@ -238,6 +257,14 @@ export const Routes = [
         element: (
           <ProtectedRoute>
             <CommunityMembers />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "edit",
+        element: (
+          <ProtectedRoute>
+            <EditCommunity />
           </ProtectedRoute>
         ),
       },

@@ -43,13 +43,6 @@ export interface IUserMembershipsResponse {
   }[];
 }
 
-export interface IUserPhotoAlbumsResponse {
-  photoAlbums: {
-    name: string;
-    userId: number;
-  }[];
-}
-
 export interface IUserProfileResponse {
   about: string;
   birthCity: string;
