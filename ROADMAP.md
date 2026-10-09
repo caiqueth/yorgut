@@ -45,14 +45,10 @@ decrementing both users' counts when cancelling a *pending* request. Pattern doc
 
 Left to do:
 
-- [ ] Counts already wrong in production heal on the next friendship/membership change of that user or
-  community. To fix them all at once, run after deploying:
-  `UPDATE users u SET friend_count = (SELECT COUNT(*) FROM friendships f WHERE f.deleted_at IS NULL AND f.accepted AND (f.user_requested_id = u.id OR f.user_requestee_id = u.id));`
-  `UPDATE communities c SET member_count = (SELECT COUNT(*) FROM community_memberships m WHERE m.deleted_at IS NULL AND m.community_id = c.id);`
-- [ ] Duplicate rows are still possible under concurrency: `JoinCommunity` and `CreateFriendship` check
-  "already exists" and then insert. A transaction doesn't prevent that; a unique index would, but soft deletes
-  (`deleted_at`) make it tricky (leaving and rejoining keeps the old row). Options: partial unique index
-  `WHERE deleted_at IS NULL` (Postgres and SQLite support it; needs item 5's migrations) or hard deletes for these tables.
+- [x] Counts already wrong in production: migration `00003` recomputes every friend and member count on deploy.
+- [x] Duplicate memberships/friendships under concurrency: migration `00003` soft-deletes existing duplicates and adds
+  partial unique indexes (`WHERE deleted_at IS NULL`, friendships on the unordered pair). A concurrent duplicate now
+  fails at the database, but the API answers 500 for it; mapping it to 409 belongs to item 4.
 - [ ] An uploaded picture stays on disk if `CreateCommunity` then fails. Minor; clean up when there's an upload cleanup job.
 
 ---
@@ -74,10 +70,25 @@ Left to do:
 - [ ] One controller helper (e.g. `respondError(ctx, err)`) that maps those errors to 404/403/409/400, else 500 (and logs it).
 - [ ] Fixes the "record not found → 500" entry in known-deviations.
 
-### 5. Versioned migrations and Postgres in dev
+### 5. Versioned migrations and Postgres in dev ✅ (done 2026-10-09)
 
-- [ ] Replace `AutoMigrate` with **goose** or **atlas** before there is production data to protect. Generate the baseline migration from the current schema.
-- [ ] `docker-compose.yml` with Postgres for local dev, so dev and prod run the same database; keep SQLite only for fast unit tests, if at all.
+- [x] **goose** with embedded SQL migrations (`backend/internal/database/migrations/`), run at API startup under an
+  advisory lock. `00001` is the baseline, taken from the DDL GORM issued for the `main` (`41a3a88`) models on a real
+  Postgres and made idempotent, so the existing production DB just records it. `00002` adds `google_sub` and the
+  unique email index; `00003` adds the duplicate protection (see item 2).
+- [x] `backend/docker-compose.yml` (Postgres 17), `make db_up` / `db_down` / `migration_new name=...` /
+  `migration_status`. The seed can reset a local Postgres (refuses non-localhost DSNs).
+- SQLite stays for dev without Docker and for the tests, through `AutoMigrate`. A schema change needs a migration
+  **and** the model change; `make test_pg` (embedded Postgres, `pgtest` build tag) checks both give the same schema.
+
+Left to do:
+
+- [ ] Before deploying: check there are no duplicate emails in production (`00002` would fail and stop startup):
+  `SELECT email, COUNT(*) FROM users GROUP BY email HAVING COUNT(*) > 1;`
+- [ ] After deploying: compare production's schema with a freshly migrated DB using the queries in `backend/README.md`
+  ("Production"). `main` ignored AutoMigrate errors, so production may differ in ways `IF NOT EXISTS` leaves alone.
+- [ ] `docker-compose.yml` is untested (no Docker on the machine it was written on).
+- [ ] Run the service tests against Postgres too (item 3); the `pgtest` setup can be reused.
 
 ---
 
