@@ -17,5 +17,5 @@ export const ProtectedRoute: React.FC<IProtectedRouteProps> = ({
     }
   }, [token])
 
-  return children;
+  return <>{children}</>;
 };

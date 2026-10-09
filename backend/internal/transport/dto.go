@@ -14,6 +14,16 @@ type Response struct {
 	Data any `json:"data,omitempty"`
 }
 
+type LoginWithGoogleRequest struct {
+	// Credential is the Google ID token returned by Sign in with Google.
+	Credential string `json:"credential" binding:"required"`
+}
+
+type LoginResponse struct {
+	// Token is the Yorgut session token, sent back as "Authorization: Bearer <token>".
+	Token string `json:"token"`
+}
+
 type FindUserByIdResponse struct {
 	ID          uint
 	Email       string

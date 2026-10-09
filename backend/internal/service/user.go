@@ -2,7 +2,6 @@ package service
 
 import (
 	"errors"
-	"fmt"
 	"strings"
 	"time"
 	"yorgut/internal/model"
@@ -10,7 +9,6 @@ import (
 	"yorgut/internal/transport"
 
 	"github.com/go-playground/validator/v10"
-	"gorm.io/gorm"
 )
 
 var ErrFirstNameRequired = errors.New("first name is required")
@@ -94,30 +92,6 @@ func (u *UserService) SearchUsers(name string, page int, pageSize int) *transpor
 	resp.FromUsers(users, page, pageSize, count)
 
 	return resp
-}
-
-// GetOrCreateUser returns a model on purpose: the auth middleware stores it in
-// the request context as the logged user.
-func (u *UserService) GetOrCreateUser(email string, firstName string, lastName string, picture *string) (*model.User, error) {
-	user, err := u.userRepository.FindByEmail(email)
-	if err == nil {
-		return user, nil
-	}
-
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		createErr := u.CreateUser(firstName, lastName, email, time.Time{}, picture)
-		if createErr != nil {
-			return nil, fmt.Errorf("failed to create user: %w", createErr)
-		}
-
-		user, err = u.userRepository.FindByEmail(email)
-		if err != nil {
-			return nil, fmt.Errorf("user created but not found: %w", err)
-		}
-		return user, nil
-	}
-
-	return nil, fmt.Errorf("could not find user: %w", err)
 }
 
 func (u *UserService) FindUserWithProfileById(id uint) (*transport.FindUserWithProfileByIdResponse, error) {

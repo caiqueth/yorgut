@@ -13,6 +13,7 @@ import (
 
 	"yorgut/internal/controller"
 	"yorgut/internal/database"
+	"yorgut/internal/helpers"
 	"yorgut/internal/repository"
 	"yorgut/internal/service"
 )
@@ -21,6 +22,14 @@ func NewServer() *http.Server {
 	log.Info().Msg("Starting the server")
 	port, _ := strconv.Atoi(os.Getenv("PORT"))
 	srvAddr := fmt.Sprintf("0.0.0.0:%d", port)
+
+	if !helpers.SessionSecretConfigured() {
+		log.Fatal().Msg("SESSION_SECRET is not set; it signs the login session tokens")
+	}
+	// Without it, Google ID tokens issued to any app would be accepted.
+	if os.Getenv("GOOGLE_CLIENT_ID") == "" {
+		log.Fatal().Msg("GOOGLE_CLIENT_ID is not set; it is needed to validate Google logins")
+	}
 
 	db := database.DatabaseConnection()
 	validate := validator.New()
@@ -31,6 +40,7 @@ func NewServer() *http.Server {
 	services := service.NewServices(repositories, validate)
 
 	// Controllers
+	authController := controller.NewAuthController(*services.Auth)
 	meController := controller.NewMeController(
 		*services.User,
 		*services.Friendship,
@@ -57,6 +67,7 @@ func NewServer() *http.Server {
 
 	// Router
 	routes := NewRouter(
+		authController,
 		meController,
 		userController,
 		communityController,
@@ -68,7 +79,7 @@ func NewServer() *http.Server {
 		topicController,
 		userReviewController,
 		userFanController,
-		services.User,
+		services.Auth,
 	)
 
 	// Declare Server config

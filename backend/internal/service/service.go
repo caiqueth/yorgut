@@ -9,6 +9,7 @@ import (
 // Services holds one instance of every service, so the API server and the
 // seed command are wired the same way.
 type Services struct {
+	Auth                *AuthService
 	User                *UserService
 	UserProfile         *UserProfileService
 	UserReview          *UserReviewService
@@ -24,6 +25,7 @@ type Services struct {
 
 func NewServices(r *repository.Repositories, validate *validator.Validate) *Services {
 	return &Services{
+		Auth:                NewAuthService(*r.User, validate),
 		User:                NewUserService(*r.User, validate),
 		UserProfile:         NewUserProfileService(*r.UserProfile, *r.User, validate),
 		UserReview:          NewUserReviewService(*r.UserReview, *r.Friendship, validate),

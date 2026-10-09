@@ -1,11 +1,9 @@
-const getAuthorizationHeaders = () => {
+const getAuthorizationHeaders = (): Record<string, string> => {
   try {
     const token = localStorage.getItem("token");
-    return {
-      Authorization: "Bearer " + token,
-    };
+    return token ? { Authorization: "Bearer " + token } : {};
   } catch (e) {
-    return null;
+    return {};
   }
 };
 
@@ -74,6 +72,9 @@ async function doRequest<T>(
       let errorMessage = `Error ${response.status}: ${response.statusText}`;
       switch (response.status) {
         case 401:
+          // The session expired or is invalid: drop it so the next screen
+          // goes to login (see the QueryCache error handler in App.tsx).
+          localStorage.removeItem("token");
           errorMessage = "Unauthorized: Invalid or missing credentials.";
           break;
         case 403:

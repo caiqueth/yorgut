@@ -1,6 +1,7 @@
 package database
 
 import (
+	"fmt"
 	"os"
 	"yorgut/internal/model"
 
@@ -34,7 +35,7 @@ func DatabaseConnection() *gorm.DB {
 }
 
 func Migrate(db *gorm.DB) {
-	db.AutoMigrate(
+	err := db.AutoMigrate(
 		&model.User{},
 		&model.UserProfile{},
 		&model.Community{},
@@ -49,4 +50,8 @@ func Migrate(db *gorm.DB) {
 		&model.UserReview{},
 		&model.UserFan{},
 	)
+	if err != nil {
+		// Fail fast: running on a half-migrated schema breaks in less obvious ways.
+		panic(fmt.Errorf("database migration failed: %w", err))
+	}
 }

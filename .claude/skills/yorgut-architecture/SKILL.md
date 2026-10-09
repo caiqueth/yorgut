@@ -21,7 +21,7 @@ does otherwise. When fixing a deviation, update `known-deviations.md`.
 ### Request flow
 
 ```
-HTTP → JWTMiddleware → InjectUserMiddleware → routes.go → Controller → Service → Repository → GORM/DB
+HTTP → AuthMiddleware → routes.go → Controller → Service → Repository → GORM/DB
 ```
 
 What crosses each boundary:
@@ -48,15 +48,23 @@ HTTP ←────────────────────── Contr
 | Entry points | `cmd/api/main.go`, `cmd/seed/main.go` | Process start, timezone, graceful shutdown, seeding | Contain business logic |
 | Wiring | `repository.NewRepositories(db)` and `service.NewServices(repos, validate)` build everything; `internal/server/server.go` builds the controllers from them | Manual DI. `cmd/seed` uses the same two aggregates, so the wiring can't drift | Contain logic |
 | Routing | `internal/server/routes.go` | URL → controller method mapping, CORS, swagger | Contain handlers inline (except `/api` health) |
-| Middleware | `internal/server/middleware.go` | Google ID-token validation, resolving the logged user into `ctx.Set("user", *model.User)` | Do anything that is not request-wide |
+| Middleware | `internal/server/middleware.go` | `AuthMiddleware`: reads the `Authorization: Bearer` Yorgut session token, resolves the logged user via `AuthService.UserFromSession` into `ctx.Set("user", *model.User)` | Do anything that is not request-wide; call Google |
 | Controller | `internal/controller/<entity>.go` (one file per entity, snake_case); shared handler helpers (`notImplemented`) in `controller/controller.go` | Bind and validate the request, read path params, get logged user via `ctx.MustGet("user").(*model.User)`, turn request fields into service arguments (including reading uploaded files into `[]byte`), call the services it needs, choose HTTP status, swagger `godoc` comments | Touch repositories or GORM; contain business rules; pass a `Request` struct to a service |
 | Service | `internal/service/<entity>.go`: struct, `New<Entity>Service`, and methods in one file. `service.go` only has the `Services` aggregate | Business rules, permission checks (e.g. "only friends"), orchestration across repositories, input structs for methods with many parameters (e.g. `service.UpdateUserInput`, no `json`/`binding` tags), returning response structs (via `transport` mappers), sentinel errors (`var ErrXNotFound = errors.New(...)`) | Import `gin`, `net/http` or `mime/multipart`; take `transport.*Request` parameters; write SQL; return models to controllers |
 | Repository | `internal/repository/<entity>.go`: struct, `New<Entity>Repository`, custom queries and query-projection structs (e.g. `UserReviewAverages`). `repository.go` has the generic `repository[T]` (`Create`, `FindById`, …) and the `Repositories` aggregate | All GORM queries, preloads, upserts, aggregates. Lookups by id use `First` so a missing row returns `gorm.ErrRecordNotFound` | Contain business rules or return DTOs |
 | Model | `internal/model/model.go` | GORM entities (`gorm.Model` embedded) + `New<Entity>(...)` constructors | Have JSON tags or HTTP concerns |
 | HTTP contract (`transport`) | `internal/transport/dto.go` (types), `internal/transport/mapper.go` (all model → response mapping, as `From<X>` methods) | The API's request and response shapes, with camelCase `json` tags and `binding` validation. Types ending in `Item` (`ScrapItem`, `UserItem`) are nested pieces of responses | Import services/repositories; be used as service inputs |
-| Helpers | `internal/helpers/` | Stateless utilities: parsing (`MustParseUint`), file upload, JWT helpers and the Google `Token` claims type | Hold domain logic |
+| Helpers | `internal/helpers/` | Stateless utilities: parsing (`MustParseUint`), file upload, session-token signing/parsing (`NewSessionToken`, `ParseSessionToken`) | Hold domain logic |
 | DB | `internal/database/database.go` | Connection (sqlite when `DEV_MODE=true`, else postgres) and `AutoMigrate` list | — |
 | Seed | `internal/seed/` + `cmd/seed/main.go` | Fake data and images for local dev | Be imported by the API |
+
+### Authentication
+
+- Google is the only identity provider (no passwords, no email flows, on purpose).
+- `POST /api/v1/auth/google` (public) takes the Google ID token, `AuthService.LoginWithGoogle` validates it once against `GOOGLE_CLIENT_ID`, finds the user by `GoogleSub` (or links an existing one by email, or creates one) and returns a Yorgut JWT (HS256, `SESSION_SECRET`, 7 days).
+- Every other route is in the `/api/v1` group behind `AuthMiddleware`, which only verifies that JWT and loads the user by id.
+- The server refuses to start without `SESSION_SECRET` or `GOOGLE_CLIENT_ID`.
+- Frontend: `api/auth` stores the token in `localStorage.token`; `api/http.ts` sends it and removes it on `401`.
 
 ### Conventions
 
@@ -74,7 +82,7 @@ HTTP ←────────────────────── Contr
 - **Success statuses**: `200` with a body for reads, `201` for creations returning `transport.Response`, `204` with no body for actions, `501` via `notImplemented(ctx)` for routed-but-unwritten handlers (never `panic`).
 - **Validation**: `transport.*Request` types use Gin `binding:"..."` tags, checked by `ctx.ShouldBindJSON`; use pointer fields (`*uint8`) when `0` is a valid value with `required`.
 - **Routes**: groups are plural kebab-case (`/communities`, `/community-memberships`, `/photo-albums`), and every path starts with `/`. Resources nested under the owning user use `/users/:userId/<thing>`; "my" views of the logged user go under `/me/...`. Renaming a route means updating `frontend/src/api` in the same change.
-- **Logged user exception**: `UserService.GetOrCreateUser` returns a `*model.User` because the middleware stores the model in the context; no other service method returns models.
+- **Logged user exception**: `AuthService.UserFromSession` returns a `*model.User` because the middleware stores the model in the context; no other service method returns models.
 - **Swagger**: every controller method has a `godoc` block; regenerate with `make swagger` (needs `swag`).
 - **Schema changes**: add the model to `database.Migrate`; there are no SQL migrations in use.
 
@@ -89,7 +97,7 @@ Reference implementation: user reviews (`UserReview`).
 5. `service/<entity>.go`: struct with its repositories + `Validate`, `New<Entity>Service`, methods taking primitives (or a `<Action>Input` struct when there are many). Permission checks go here. Add it to `Services` / `NewServices` in `service/service.go`.
 6. `controller/<entity>.go`: controller struct, `New<Entity>Controller`, handlers with godoc.
 7. `server/server.go`: build the controller from `services`. `server/routes.go`: add the parameter to `NewRouter` and register routes.
-8. `go build ./... && go vet ./...`, then `make swagger`.
+8. `go build ./... && go vet ./... && go test ./...`, then `make swagger`.
 
 ---
 
@@ -143,6 +151,7 @@ Reference implementation: user reviews.
 
 When asked to audit or fix layering:
 
-1. Read [known-deviations.md](known-deviations.md) for the current backlog.
+1. Read [known-deviations.md](known-deviations.md) for the current backlog, and the
+   repo-root `ROADMAP.md` for larger planned changes (auth, transactions, tests, migrations).
 2. Check a file against the "Must not" column of its layer.
 3. Prefer small moves that keep behavior identical, one deviation per change, and update the backlog file.

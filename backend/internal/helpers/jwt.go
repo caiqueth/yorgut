@@ -1,90 +1,70 @@
 package helpers
 
 import (
-	"encoding/base64"
-	"encoding/json"
 	"errors"
-	"net/http"
-	"strings"
+	"fmt"
+	"os"
+	"strconv"
+	"time"
 
-	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
 )
 
-var USER_TOKEN_KEY string = "user_token"
+// Yorgut session tokens: a JWT signed with SESSION_SECRET whose subject is
+// the user id. They are issued once at login (after Google validates the user)
+// and sent back by the frontend as "Authorization: Bearer <token>".
 
-// Token holds the claims of a Google ID token.
-type Token struct {
-	Iss            string
-	Azp            string
-	Aud            string
-	Sub            string
-	Email          string
-	Email_verified bool
-	Nbf            int
-	Name           string
-	Picture        string
-	Given_name     string
-	Family_name    string
-	Iat            int
-	Exp            int
-	Jti            string
+const (
+	sessionIssuer   = "yorgut"
+	sessionDuration = 7 * 24 * time.Hour
+)
+
+var ErrInvalidSessionToken = errors.New("invalid session token")
+
+// The secret is read on each call instead of at package init, so it is
+// always read after the .env file has been loaded.
+func sessionSecret() []byte {
+	return []byte(os.Getenv("SESSION_SECRET"))
 }
 
-func ParseToken(token string) (*Token, error) {
-	parts := strings.Split(token, ".")
-	if len(parts) != 3 {
-		return nil, errors.New("invalid token format")
+// SessionSecretConfigured reports whether SESSION_SECRET is set. The server
+// refuses to start without it.
+func SessionSecretConfigured() bool {
+	return len(sessionSecret()) > 0
+}
+
+func NewSessionToken(userId uint) (string, error) {
+	now := time.Now()
+	claims := jwt.RegisteredClaims{
+		Issuer:    sessionIssuer,
+		Subject:   strconv.FormatUint(uint64(userId), 10),
+		IssuedAt:  jwt.NewNumericDate(now),
+		ExpiresAt: jwt.NewNumericDate(now.Add(sessionDuration)),
 	}
 
-	payload := parts[1]
+	return jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString(sessionSecret())
+}
 
-	if mod := len(payload) % 4; mod != 0 {
-		payload += strings.Repeat("=", 4-mod)
-	}
-
-	decoded, err := base64.StdEncoding.DecodeString(payload)
+// ParseSessionToken checks the token's signature, issuer and expiry, and
+// returns the user id it was issued for.
+func ParseSessionToken(tokenString string) (uint, error) {
+	claims := &jwt.RegisteredClaims{}
+	_, err := jwt.ParseWithClaims(
+		tokenString,
+		claims,
+		func(*jwt.Token) (any, error) { return sessionSecret(), nil },
+		jwt.WithValidMethods([]string{jwt.SigningMethodHS256.Alg()}),
+		jwt.WithIssuer(sessionIssuer),
+		jwt.WithExpirationRequired(),
+	)
 	if err != nil {
-		return nil, errors.New("invalid base64 encoding")
+		return 0, fmt.Errorf("%w: %v", ErrInvalidSessionToken, err)
 	}
 
-	var claims *Token
-	err = json.Unmarshal(decoded, &claims)
-	if err != nil {
-		return nil, errors.New("invalid JSON format")
+	userId, err := strconv.ParseUint(claims.Subject, 10, 0)
+	if err != nil || userId == 0 {
+		return 0, ErrInvalidSessionToken
 	}
 
-	return claims, nil
-}
-
-func SetJWTToken(c *gin.Context, token map[string]interface{}) {
-	c.Set(USER_TOKEN_KEY, token)
-}
-
-func GetTokenFromContext(c *gin.Context) (*Token, bool) {
-	data, exists := c.Get(USER_TOKEN_KEY)
-	if !exists {
-		return nil, false
-	}
-
-	jsonBytes, err := json.Marshal(data)
-	if err != nil {
-		return nil, false
-	}
-
-	var token Token
-	if err := json.Unmarshal(jsonBytes, &token); err != nil {
-		return nil, false
-	}
-
-	return &token, true
-}
-
-func GetUserEmail(c *gin.Context) string {
-	tkn, ok := GetTokenFromContext(c)
-	if !ok {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "could not find auth token"})
-		return ""
-	}
-
-	return tkn.Email
+	return uint(userId), nil
 }

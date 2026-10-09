@@ -28,6 +28,23 @@ func (u *UserRepository) FindByEmail(email string) (*model.User, error) {
 	}
 }
 
+func (u *UserRepository) FindByGoogleSub(googleSub string) (*model.User, error) {
+	var ent model.User
+	result := u.db.Where("google_sub = ?", googleSub).First(&ent)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &ent, nil
+}
+
+func (u *UserRepository) SetGoogleSub(userId uint, googleSub string) error {
+	result := u.db.Model(&model.User{}).
+		Where("id = ?", userId).
+		Update("google_sub", googleSub)
+
+	return result.Error
+}
+
 func (r *UserRepository) FindUserWithProfile(userId uint) (*model.User, error) {
 	var ent model.User
 	results := r.db.Preload("Profile").Where("id = ?", userId).First(&ent)

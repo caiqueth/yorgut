@@ -27,8 +27,6 @@ Severity:
 ### Bugs caused by structure
 
 - [ ] **bug**: `hooks/useGlobalStateContext.ts` imports from `contexts/GlobalState`, but the file is `contexts/GlobalStateContext.tsx`, so this is a TS error.
-- [ ] **bug**: `routes/ProtectedRoute.tsx` returns `ReactNode` from a `React.FC`, so this is a TS error.
-  - Fix: wrap it in a fragment.
 
 ### Components in the wrong place
 

@@ -23,6 +23,7 @@ import (
 // @BasePath /api/v1
 // @schemes http
 func NewRouter(
+	authController *controller.AuthController,
 	meController *controller.MeController,
 	userController *controller.UserController,
 	communityController *controller.CommunityController,
@@ -34,14 +35,11 @@ func NewRouter(
 	topicController *controller.TopicController,
 	userReviewController *controller.UserReviewController,
 	userFanController *controller.UserFanController,
-	userService *service.UserService,
+	authService *service.AuthService,
 ) *gin.Engine {
 	router := gin.Default()
 
 	router.Static("/storage/uploads", helpers.GetUploadsPath(true))
-
-	userInjector := InjectUserMiddleware(userService)
-	jwtInjector := JWTMiddleware()
 
 	// router.Use(DelayMiddleware()) // Used for testing
 
@@ -58,7 +56,13 @@ func NewRouter(
 		ctx.JSON(http.StatusOK, "Yorgut")
 	})
 
-	v1 := router.Group("/api/v1", jwtInjector, userInjector)
+	// Public: the only way in, so it can't require a session.
+	auth := router.Group("/api/v1/auth")
+	{
+		auth.POST("/google", authController.LoginWithGoogle)
+	}
+
+	v1 := router.Group("/api/v1", AuthMiddleware(authService))
 	{
 		me := v1.Group("/me")
 		{

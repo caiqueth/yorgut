@@ -1,17 +1,22 @@
 import { Box, Grid2 as Grid, Paper, Stack, Typography } from "@mui/material";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
+import { useLoginWithGoogle } from "api/auth/queries";
 import whoDoYouKnow from "../../assets/images/who_do_you_know.jpg";
 
 export const Login = () => {
   const navigate = useNavigate();
+  const loginWithGoogle = useLoginWithGoogle();
 
   const onSuccess = (credentialResponse: CredentialResponse) => {
-    localStorage.setItem(
-      "token",
-      credentialResponse.credential ?? "",
+    if (!credentialResponse.credential) {
+      onError();
+      return;
+    }
+    loginWithGoogle.mutate(
+      { credential: credentialResponse.credential },
+      { onSuccess: () => navigate("/") },
     );
-    navigate("/");
   };
 
   const onError = () => {
@@ -51,6 +56,11 @@ export const Login = () => {
                 Faça login no Yorgut com a sua conta Google.
               </Typography>
               <GoogleLogin onSuccess={onSuccess} onError={onError} />
+              {loginWithGoogle.isError && (
+                <Typography variant={"body2"} color={"error"}>
+                  Não foi possível entrar. Tente novamente.
+                </Typography>
+              )}
               <Typography variant={"body2"}>
                 É necessário ter uma conta Google para acessar o Yorgut.
               </Typography>

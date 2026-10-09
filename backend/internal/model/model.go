@@ -81,7 +81,10 @@ type Testimonial struct {
 
 type User struct {
 	gorm.Model
-	Email       string
+	// GoogleSub is Google's stable id for the account (the ID token's "sub").
+	// Nil for seeded users until they first log in.
+	GoogleSub   *string `gorm:"uniqueIndex"`
+	Email       string  `gorm:"uniqueIndex"`
 	FirstName   string
 	LastName    string
 	BirthDate   time.Time
