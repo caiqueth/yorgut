@@ -1,8 +1,8 @@
 import { Box, Grid2 as Grid, Stack } from "@mui/material";
 import React from "react";
 import { ProfileHeader } from "features/profile/components/ProfileHeader";
-import { FriendsList } from "features/profile/components/FriendsList";
-import { CommunitiesList } from "features/profile/components/CommunitiesList";
+import { FriendsList } from "components/FriendsList";
+import { CommunitiesList } from "components/CommunitiesList";
 import { useParams } from "react-router-dom";
 import { ProfileDetails } from "features/profile/components/ProfileDetails";
 import { TestimonialsPanel } from "features/profile/components/TestimonialsPanel";
