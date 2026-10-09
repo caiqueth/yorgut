@@ -222,7 +222,7 @@ func GetTopicsSeed(
 	communities []*model.Community,
 	users []*model.User,
 ) []*model.Topic {
-	seedSize := 1000
+	seedSize := 500
 	topics := make([]*model.Topic, 0, seedSize)
 
 	for i := range seedSize {
@@ -240,16 +240,32 @@ func GetTopicsSeed(
 		topics = append(topics, topic)
 	}
 
-	for _, t := range topics {
-		if RandomBoolean() {
-			parent := RandomChoice(topics)
-			if parent.Title != t.Title {
-				// not the best way to differ them but...
-				tempId := uint(RandomInt(seedSize))
-				t.ParentTopicID = &tempId
-			}
+	return topics
+}
+
+// GetTopicRepliesSeed returns replies to random topics, in the same
+// community. The topics must already be saved: replies point to their ids,
+// and Postgres enforces that foreign key.
+func GetTopicRepliesSeed(
+	topics []*model.Topic,
+	users []*model.User,
+) []*model.Topic {
+	seedSize := len(topics)
+	replies := make([]*model.Topic, 0, seedSize)
+
+	for i := range seedSize {
+		parent := RandomChoice(topics)
+		author := RandomChoice(users)
+
+		reply := &model.Topic{
+			CommunityID:   parent.CommunityID,
+			AuthorID:      author.ID,
+			ParentTopicID: &parent.ID,
+			Title:         fmt.Sprintf("Re: %s (%v)", parent.Title, i),
+			Text:          "Concordo plenamente. Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
 		}
+		replies = append(replies, reply)
 	}
 
-	return topics
+	return replies
 }

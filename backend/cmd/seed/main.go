@@ -12,14 +12,13 @@ import (
 	"yorgut/internal/service"
 
 	"github.com/go-playground/validator/v10"
+	"gorm.io/gorm"
 )
 
 func main() {
 	time.Local, _ = time.LoadLocation("America/Sao_Paulo")
 
-	localReset()
-
-	db := database.DatabaseConnection()
+	db := localReset()
 	database.Migrate(db)
 
 	validate := validator.New()
@@ -43,21 +42,35 @@ func clearStorageFolder() {
 	}
 }
 
-// deleteDb removes the SQLite file. On Windows this fails while another
+// deleteSQLiteDb removes the SQLite file. On Windows this fails while another
 // process (usually the running API) has it open; seeding on top of the old
 // database would duplicate every row, so stop instead.
-func deleteDb() {
+func deleteSQLiteDb() {
 	dsn := os.Getenv("DATABASE_DSN")
 	if err := os.Remove(dsn); err != nil && !os.IsNotExist(err) {
 		log.Fatalf("❌ could not delete the database %q: %v. Stop the API (it keeps the file open) and run the seed again.", dsn, err)
 	}
 }
 
-// localReset deletes the database first: if it's locked, nothing (not even
-// the uploaded images the old rows point to) has been touched yet.
-func localReset() {
-	deleteDb()
+// localReset empties the database and returns a connection to it: SQLite
+// (DEV_MODE=true) by deleting the file, Postgres by dropping the schema, which
+// database.ResetLocalPostgres only allows on localhost. The database goes
+// first: if it can't be reset, nothing (not even the uploaded images the old
+// rows point to) has been touched yet.
+func localReset() *gorm.DB {
+	if os.Getenv("DEV_MODE") == "true" {
+		deleteSQLiteDb()
+	}
+
+	db := database.DatabaseConnection()
+	if db.Dialector.Name() == "postgres" {
+		if err := database.ResetLocalPostgres(db); err != nil {
+			log.Fatalf("❌ could not reset the database: %v", err)
+		}
+	}
+
 	clearStorageFolder()
+	return db
 }
 
 func seedUsers(ur *repository.UserRepository) {
@@ -200,6 +213,13 @@ func seedTopics(
 
 	if err := tr.CreateMany(topics); err != nil {
 		log.Printf("❌ Failed to create topics => %v", err.Error())
+		return
+	}
+
+	// Replies after their parents exist, since they point to their ids.
+	replies := seed.GetTopicRepliesSeed(topics, users)
+	if err := tr.CreateMany(replies); err != nil {
+		log.Printf("❌ Failed to create topic replies => %v", err.Error())
 	} else {
 		log.Println("✅ Topics created successfully")
 	}

@@ -5,7 +5,7 @@ description: Architecture layers and file-placement conventions for the Yorgut p
 
 # Yorgut architecture
 
-Yorgut is an Orkut clone: `backend/` (Go, Gin, GORM, Postgres in prod, SQLite in dev)
+Yorgut is an Orkut clone: `backend/` (Go, Gin, GORM, Postgres in prod and optionally in dev, SQLite for dev without Docker and tests)
 and `frontend/` (React, MUI, TanStack Query, rsbuild). This skill describes the
 **intended** layering. The code does not always follow it: see
 [known-deviations.md](known-deviations.md) before treating an existing file as a
@@ -55,7 +55,7 @@ HTTP ←────────────────────── Contr
 | Model | `internal/model/model.go` | GORM entities (`gorm.Model` embedded) + `New<Entity>(...)` constructors | Have JSON tags or HTTP concerns |
 | HTTP contract (`transport`) | `internal/transport/dto.go` (types), `internal/transport/mapper.go` (all model → response mapping, as `From<X>` methods) | The API's request and response shapes, with camelCase `json` tags and `binding` validation. Types ending in `Item` (`ScrapItem`, `UserItem`) are nested pieces of responses | Import services/repositories; be used as service inputs |
 | Helpers | `internal/helpers/` | Stateless utilities: parsing (`MustParseUint`), file upload, session-token signing/parsing (`NewSessionToken`, `ParseSessionToken`) | Hold domain logic |
-| DB | `internal/database/database.go` | Connection (sqlite when `DEV_MODE=true`, else postgres) and `AutoMigrate` list | — |
+| DB | `internal/database/`: `database.go` (connection: sqlite when `DEV_MODE=true`, else postgres), `migrate.go` (`Migrate` picks the schema path: `MigratePostgres` runs the goose SQL files in `migrations/`, `AutoMigrateSQLite` runs GORM AutoMigrate over `Models()`), `reset.go` (localhost-only reset for the seed) | Run AutoMigrate on Postgres; edit a migration that already ran in production |
 | Seed | `internal/seed/` + `cmd/seed/main.go` | Fake data and images for local dev | Be imported by the API |
 
 ### Authentication
@@ -86,14 +86,14 @@ HTTP ←────────────────────── Contr
 - **Routes**: groups are plural kebab-case (`/communities`, `/community-memberships`, `/photo-albums`), and every path starts with `/`. Resources nested under the owning user use `/users/:userId/<thing>`; "my" views of the logged user go under `/me/...`. Renaming a route means updating `frontend/src/api` in the same change.
 - **Logged user exception**: `AuthService.UserFromSession` returns a `*model.User` because the middleware stores the model in the context; no other service method returns models.
 - **Swagger**: every controller method has a `godoc` block; regenerate with `make swagger` (needs `swag`).
-- **Schema changes**: add the model to `database.Migrate`; there are no SQL migrations in use.
+- **Schema changes** need two things that must agree: the model change (SQLite and the tests use `AutoMigrate`) and a new goose migration in `internal/database/migrations/` (`make migration_new name=...`), written in Postgres SQL that matches what GORM would create (types, `idx_<table>_<column>` index names). Migrations are the source of truth for production and run at API startup. A new model also goes in `database.Models()`. Check with `make test_pg`, which compares the migrated schema with AutoMigrate on a real (embedded) Postgres. Never edit a migration that already ran in production. Details in `backend/README.md` ("Database").
 
 ### Recipe: adding a backend feature
 
 Reference implementation: user reviews (`UserReview`).
 
 1. `model/model.go`: struct + `New<Entity>` constructor.
-2. `database/database.go`: append to `AutoMigrate`.
+2. Schema: a new model goes in `Models()` in `database/migrate.go`; then `make migration_new name=<change>` and write the Postgres SQL for it in the new `database/migrations/000NN_<change>.sql`. Run `make test_pg`.
 3. `transport/dto.go`: request/response types. `transport/mapper.go`: `From<Model>` methods that build the responses.
 4. `repository/<entity>.go`: `type <Entity>Repository struct { repository[*model.<Entity>] }`, `New<Entity>Repository`, custom queries. Add it to `Repositories` / `NewRepositories` in `repository/repository.go`.
 5. `service/<entity>.go`: struct with its repositories + `Validate` (+ `transactor` if a method writes more than one row), `New<Entity>Service`, methods taking primitives (or a `<Action>Input` struct when there are many). Permission checks go here. Add it to `Services` / `NewServices` in `service/service.go`. Tests go in `service/<entity>_test.go`, using `newTestRepositories(t)` (in-memory SQLite).

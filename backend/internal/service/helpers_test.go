@@ -21,6 +21,8 @@ func newTestRepositories(t *testing.T) *repository.Repositories {
 	// Each connection to ":memory:" is a separate database: keep only one.
 	sqlDB, _ := db.DB()
 	sqlDB.SetMaxOpenConns(1)
-	database.Migrate(db)
+	if err := database.AutoMigrateSQLite(db); err != nil {
+		t.Fatalf("migrating sqlite: %v", err)
+	}
 	return repository.NewRepositories(db)
 }

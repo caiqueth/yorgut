@@ -1,0 +1,26 @@
+# Local Postgres for development, same engine as production.
+#   docker compose up -d     (or: make db_up)
+# Then in backend/.env:
+#   DEV_MODE=false
+#   DATABASE_DSN=postgres://localdev:localdev@localhost:5432/yorgut-dev?sslmode=disable
+# The API applies the migrations on startup; `make seed` resets and fills it.
+services:
+  db:
+    image: postgres:17
+    container_name: yorgut-dev
+    environment:
+      POSTGRES_USER: localdev
+      POSTGRES_PASSWORD: localdev
+      POSTGRES_DB: yorgut-dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - yorgut-dev-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U localdev -d yorgut-dev"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  yorgut-dev-data:

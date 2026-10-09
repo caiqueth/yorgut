@@ -27,12 +27,14 @@ type CommunityProfile struct {
 	Community      *Community `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
 
+// CommunityMembership rows are unique per user and community among the live
+// (not soft-deleted) ones, so leaving and rejoining keeps the old row.
 type CommunityMembership struct {
 	gorm.Model
-	CommunityID uint
+	CommunityID uint       `gorm:"uniqueIndex:idx_community_memberships_active_pair,priority:2,where:deleted_at IS NULL"`
 	Community   *Community `gorm:"foreignKey:CommunityID;references:ID"`
-	UserID      uint
-	User        *User `gorm:"foreignKey:UserID;references:ID"`
+	UserID      uint       `gorm:"uniqueIndex:idx_community_memberships_active_pair,priority:1,where:deleted_at IS NULL"`
+	User        *User      `gorm:"foreignKey:UserID;references:ID"`
 }
 
 type Friendship struct {

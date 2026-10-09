@@ -1,9 +1,7 @@
 package database
 
 import (
-	"fmt"
 	"os"
-	"yorgut/internal/model"
 
 	_ "github.com/joho/godotenv/autoload"
 	_ "github.com/mattn/go-sqlite3"
@@ -15,6 +13,9 @@ import (
 var dsn string = os.Getenv("DATABASE_DSN")
 var development bool = os.Getenv("DEV_MODE") == "true"
 
+// DatabaseConnection opens SQLite when DEV_MODE=true (DATABASE_DSN is the
+// file path), else Postgres (DATABASE_DSN is a Postgres DSN or URL). Schema
+// setup is separate: see Migrate in migrate.go.
 func DatabaseConnection() *gorm.DB {
 	var db *gorm.DB
 	var err error
@@ -32,26 +33,4 @@ func DatabaseConnection() *gorm.DB {
 	}
 
 	return db
-}
-
-func Migrate(db *gorm.DB) {
-	err := db.AutoMigrate(
-		&model.User{},
-		&model.UserProfile{},
-		&model.Community{},
-		&model.CommunityProfile{},
-		&model.CommunityMembership{},
-		&model.Friendship{},
-		&model.PhotoAlbum{},
-		&model.Photo{},
-		&model.Scrap{},
-		&model.Testimonial{},
-		&model.Topic{},
-		&model.UserReview{},
-		&model.UserFan{},
-	)
-	if err != nil {
-		// Fail fast: running on a half-migrated schema breaks in less obvious ways.
-		panic(fmt.Errorf("database migration failed: %w", err))
-	}
 }
