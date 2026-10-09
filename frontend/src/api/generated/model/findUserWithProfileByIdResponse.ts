@@ -7,30 +7,48 @@
  */
 
 export interface FindUserWithProfileByIdResponse {
-  about: string;
-  birthCity: string;
+  /** @nullable */
+  about: string | null;
+  /** @nullable */
+  birthCity: string | null;
   birthDate: string;
-  books: string;
+  /** @nullable */
+  books: string | null;
   createdAt: string;
-  cuisine: string;
-  description: string;
+  /** @nullable */
+  cuisine: string | null;
+  /** @nullable */
+  description: string | null;
   email: string;
-  fashion: string;
+  /** @nullable */
+  fashion: string | null;
   firstName: string;
   friendCount: number;
-  hobbies: string;
-  humor: string;
+  /** @nullable */
+  hobbies: string | null;
+  /** @nullable */
+  humor: string | null;
   id: number;
-  interests: string;
+  /** @nullable */
+  interests: string | null;
   lastName: string;
-  livesWith: string;
-  movies: string;
-  music: string;
-  passions: string;
-  profilePicture: string;
-  relationshipStatus: string;
-  religion: string;
-  sports: string;
+  /** @nullable */
+  livesWith: string | null;
+  /** @nullable */
+  movies: string | null;
+  /** @nullable */
+  music: string | null;
+  /** @nullable */
+  passions: string | null;
+  /** @nullable */
+  profilePicture: string | null;
+  /** @nullable */
+  relationshipStatus: string | null;
+  /** @nullable */
+  religion: string | null;
+  /** @nullable */
+  sports: string | null;
   updatedAt: string;
-  website: string;
+  /** @nullable */
+  website: string | null;
 }

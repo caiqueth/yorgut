@@ -32,7 +32,7 @@ Left to do:
 
 - [ ] Log in with Google in the browser end to end (new user, existing user, logout, expired token → login).
 - [ ] Before deploying: set `SESSION_SECRET` and `GOOGLE_CLIENT_ID` in production (the server won't start without them) and check prod has no duplicate emails (the new unique index would fail the migration, and a failed migration now stops startup): `SELECT email, COUNT(*) FROM users GROUP BY email HAVING COUNT(*) > 1;`
-- [ ] `make swagger` to add `/auth/google` to the docs (needs `swag` installed). The `@securityDefinitions` comment in `routes.go` is also malformed.
+- [x] `/auth/google` is in the Swagger docs and the `@securityDefinitions` comment is fixed (done with item 8).
 - [ ] Keep in mind: never render user content (scraps, testimonials, topics) as raw HTML (`dangerouslySetInnerHTML`) without sanitizing. With the token in `localStorage`, XSS is the main risk. None today.
 
 ### 2. Transactions for multi-write operations ✅ (done 2026-10-09)
@@ -99,16 +99,33 @@ Left to do:
 - [x] Generic `repository[T].Update` used `Updates(struct)`, which silently skips zero values. Nothing called it, so it's deleted; every partial update already uses `Update`, a map, or `Select(...).Updates(struct)`. The rule is in the architecture skill ("Partial updates").
 - [x] Services return `transport` DTOs: kept on purpose (documented in the skill); revisit if one service result needs to feed two responses.
 
-### 7. Frontend structure and dependencies
+### 7. Frontend structure and dependencies ✅ (done 2026-10-09)
 
-- [ ] Consider feature folders (`features/profile`, `features/community`, `features/scrapbook`) instead of atomic design + `pages/*/components`, which causes most of the placement entries in known-deviations. Keep a small shared `components/` for real design-system pieces.
-- [ ] Align versions: React 18 runtime with React 19 `@types/*`; TypeScript 4.9 is old. Move `@types/*`, `typescript`, eslint/prettier bits to `devDependencies`.
-- [ ] Get `npx tsc --noEmit -p .` to zero errors and keep it there.
+- [x] Feature folders: `src/features/<feature>/pages/<Page>` (route screens) and `components/<Name>` (sections only
+  that feature uses); no feature imports another. Shared pieces live in a flat `src/components/<Name>` (the
+  atoms/molecules/organisms split is gone). `Menu` became the shared `HomeMenu`; the duplicated `FriendsList` /
+  `CommunitiesList` are one component each (optional `userId`); the two `ProfilePicture`s are now `ProfilePicture`
+  and `UserProfilePicture`.
+- [x] React 18 with matching `@types/react` 18; TypeScript 5.9; types and tooling in `devDependencies`.
+- [x] `npx tsc --noEmit -p .` at zero errors (`yarn typecheck`).
 
-### 8. Generate frontend types from Swagger
+Left to do:
 
-- [ ] Use **orval** (types + TanStack Query hooks) on `backend/docs/swagger.json`. Chosen because it's already familiar from other projects.
-  - Swag emits Swagger 2.0; check orval handles it directly, otherwise convert to OpenAPI 3 first.
-  - Point orval's mutator at `api/http.ts` so auth and error handling stay in one place.
-- [ ] Replace the hand-written `api/*/types.ts`; a backend DTO change then becomes a frontend compile error.
-- [ ] Add a script (`make swagger && yarn gen:api`) so it's one command.
+- [ ] Click through the app in a browser. The move was mechanical and type-checks, but nobody has looked at it.
+
+### 8. Generate frontend types from Swagger ✅ (done 2026-10-09)
+
+- [x] **orval** 8 generates TanStack Query hooks and types into `frontend/src/api/generated/` (committed) from
+  `backend/docs/swagger.json`; its mutator is `api/http.ts`, so auth, 401 handling and error messages are unchanged.
+  `api/<domain>/queries.ts` stays as a thin layer (same hook names; query options and cache invalidation live there,
+  using orval's query-key helpers).
+- [x] Hand-written `api/*/types.ts` deleted; pages import from `api/generated/model`.
+- [x] `make gen-api` regenerates the spec (swag `--requiredByDefault`) and then the client (`yarn gen:api`).
+- [x] Controller godoc fixed so the spec matches the handlers (`@ID`, params, response types, `BearerAuth`), and pointer
+  fields in response DTOs are marked `x-nullable`, so the client types them `| null`. That surfaced 13 places that
+  assumed a value could never be `null` (image props, the topic page); they're fixed.
+
+Left to do:
+
+- [ ] Query keys are now spec paths (`["/me/friends"]`) instead of full URLs. Worth a browser check that
+  scraps, friendships, memberships and testimonials still refresh after changes.

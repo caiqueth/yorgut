@@ -8,7 +8,8 @@
 
 export interface AmIFriendOfResponse {
   amIFriend: boolean;
-  friendshipId: number;
+  /** @nullable */
+  friendshipId: number | null;
   isPendingMyReply: boolean;
   isPendingTheirReply: boolean;
 }

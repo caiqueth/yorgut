@@ -2052,7 +2052,8 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "friendshipId": {
-                    "type": "integer"
+                    "type": "integer",
+                    "x-nullable": true
                 },
                 "isPendingMyReply": {
                     "type": "boolean"
@@ -2100,7 +2101,8 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "profilePicture": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 }
             }
         },
@@ -2150,7 +2152,8 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "profilePicture": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 }
             }
         },
@@ -2319,10 +2322,12 @@ const docTemplate = `{
             ],
             "properties": {
                 "description": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 },
                 "profilePicture": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 }
             }
         },
@@ -2570,31 +2575,37 @@ const docTemplate = `{
             ],
             "properties": {
                 "about": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 },
                 "birthCity": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 },
                 "birthDate": {
                     "type": "string"
                 },
                 "books": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 },
                 "createdAt": {
                     "type": "string"
                 },
                 "cuisine": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 },
                 "description": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 },
                 "email": {
                     "type": "string"
                 },
                 "fashion": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 },
                 "firstName": {
                     "type": "string"
@@ -2603,49 +2614,61 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "hobbies": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 },
                 "humor": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 },
                 "id": {
                     "type": "integer"
                 },
                 "interests": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 },
                 "lastName": {
                     "type": "string"
                 },
                 "livesWith": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 },
                 "movies": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 },
                 "music": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 },
                 "passions": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 },
                 "profilePicture": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 },
                 "relationshipStatus": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 },
                 "religion": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 },
                 "sports": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 },
                 "updatedAt": {
                     "type": "string"
                 },
                 "website": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 }
             }
         },
@@ -2719,7 +2742,8 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "profilePicture": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 }
             }
         },
@@ -3014,7 +3038,12 @@ const docTemplate = `{
                     }
                 },
                 "topic": {
-                    "$ref": "#/definitions/transport.Topic"
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/transport.Topic"
+                        }
+                    ],
+                    "x-nullable": true
                 }
             }
         },
@@ -3350,7 +3379,12 @@ const docTemplate = `{
                     "type": "number"
                 },
                 "myReview": {
-                    "$ref": "#/definitions/transport.UserReviewItem"
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/transport.UserReviewItem"
+                        }
+                    ],
+                    "x-nullable": true
                 },
                 "reviewCount": {
                     "type": "integer"
@@ -3386,7 +3420,8 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "profilePicture": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 }
             }
         },

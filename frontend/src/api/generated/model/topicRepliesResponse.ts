@@ -10,5 +10,5 @@ import type { TopicReply } from './topicReply.ts';
 
 export interface TopicRepliesResponse {
   replies: TopicReply[];
-  topic: Topic;
+  topic: Topic | null;
 }

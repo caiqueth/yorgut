@@ -10,7 +10,7 @@ import type { UserReviewItem } from './userReviewItem.ts';
 export interface UserReviewSummaryResponse {
   canReview: boolean;
   cool: number;
-  myReview: UserReviewItem;
+  myReview: UserReviewItem | null;
   reviewCount: number;
   sexy: number;
   trustworthy: number;

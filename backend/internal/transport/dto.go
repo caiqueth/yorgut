@@ -73,8 +73,8 @@ type FindCommunityByIdResponse struct {
 }
 
 type FindCommunityProfileByIdResponse struct {
-	Description    *string `json:"description"`
-	ProfilePicture *string `json:"profilePicture"`
+	Description    *string `json:"description" extensions:"x-nullable"`
+	ProfilePicture *string `json:"profilePicture" extensions:"x-nullable"`
 }
 
 type CommunityMemberEntry struct {
@@ -235,31 +235,31 @@ type UserItem struct {
 }
 
 type UserProfileItem struct {
-	ProfilePicture     *string `json:"profilePicture"`
-	Description        *string `json:"description"`
-	RelationshipStatus *string `json:"relationshipStatus"`
-	Interests          *string `json:"interests"`
-	About              *string `json:"about"`
-	Religion           *string `json:"religion"`
-	Humor              *string `json:"humor"`
-	Fashion            *string `json:"fashion"`
-	LivesWith          *string `json:"livesWith"`
-	BirthCity          *string `json:"birthCity"`
-	Website            *string `json:"website"`
-	Passions           *string `json:"passions"`
-	Sports             *string `json:"sports"`
-	Hobbies            *string `json:"hobbies"`
-	Books              *string `json:"books"`
-	Music              *string `json:"music"`
-	Movies             *string `json:"movies"`
-	Cuisine            *string `json:"cuisine"`
+	ProfilePicture     *string `json:"profilePicture" extensions:"x-nullable"`
+	Description        *string `json:"description" extensions:"x-nullable"`
+	RelationshipStatus *string `json:"relationshipStatus" extensions:"x-nullable"`
+	Interests          *string `json:"interests" extensions:"x-nullable"`
+	About              *string `json:"about" extensions:"x-nullable"`
+	Religion           *string `json:"religion" extensions:"x-nullable"`
+	Humor              *string `json:"humor" extensions:"x-nullable"`
+	Fashion            *string `json:"fashion" extensions:"x-nullable"`
+	LivesWith          *string `json:"livesWith" extensions:"x-nullable"`
+	BirthCity          *string `json:"birthCity" extensions:"x-nullable"`
+	Website            *string `json:"website" extensions:"x-nullable"`
+	Passions           *string `json:"passions" extensions:"x-nullable"`
+	Sports             *string `json:"sports" extensions:"x-nullable"`
+	Hobbies            *string `json:"hobbies" extensions:"x-nullable"`
+	Books              *string `json:"books" extensions:"x-nullable"`
+	Music              *string `json:"music" extensions:"x-nullable"`
+	Movies             *string `json:"movies" extensions:"x-nullable"`
+	Cuisine            *string `json:"cuisine" extensions:"x-nullable"`
 }
 
 type UserSearchItem struct {
 	ID             uint      `json:"id"`
 	FirstName      string    `json:"firstName"`
 	BirthDate      time.Time `json:"birthDate"`
-	ProfilePicture *string   `json:"profilePicture"`
+	ProfilePicture *string   `json:"profilePicture" extensions:"x-nullable"`
 	FriendCount    uint      `json:"friendCount"`
 }
 
@@ -275,7 +275,7 @@ type CommunityItem struct {
 	ID              uint    `json:"id"`
 	Name            string  `json:"name"`
 	CreatedBy       uint    `json:"firstName"`
-	ProfilePicture  *string `json:"profilePicture"`
+	ProfilePicture  *string `json:"profilePicture" extensions:"x-nullable"`
 	MembershipCount uint    `json:"membershipCount"`
 	OwnerID         uint    `json:"owner"`
 }
@@ -284,7 +284,7 @@ type MyOwnedCommunityItem struct {
 	ID              uint    `json:"id"`
 	MembershipCount uint    `json:"membershipCount"`
 	Name            string  `json:"name"`
-	ProfilePicture  *string `json:"profilePicture"`
+	ProfilePicture  *string `json:"profilePicture" extensions:"x-nullable"`
 }
 
 type FindUserResponse struct {
@@ -331,7 +331,7 @@ type CommunitySearchItem struct {
 	ID             uint    `json:"id"`
 	Name           string  `json:"name"`
 	Category       string  `json:"category"`
-	ProfilePicture *string `json:"profilePicture"`
+	ProfilePicture *string `json:"profilePicture" extensions:"x-nullable"`
 	MemberCount    uint    `json:"memberCount"`
 }
 
@@ -354,7 +354,7 @@ type AmIMemberOfResponse struct {
 }
 
 type AmIFriendOfResponse struct {
-	FriendshipId        *uint `json:"friendshipId"`
+	FriendshipId        *uint `json:"friendshipId" extensions:"x-nullable"`
 	AmIFriend           bool  `json:"amIFriend"`
 	IsPendingTheirReply bool  `json:"isPendingTheirReply"`
 	IsPendingMyReply    bool  `json:"isPendingMyReply"`
@@ -395,7 +395,7 @@ type TopicReply struct {
 }
 
 type TopicRepliesResponse struct {
-	Topic   *Topic       `json:"topic"`
+	Topic   *Topic       `json:"topic" extensions:"x-nullable"`
 	Replies []TopicReply `json:"replies"`
 }
 
@@ -436,5 +436,5 @@ type UserReviewSummaryResponse struct {
 	Trustworthy float64         `json:"trustworthy"`
 	ReviewCount int64           `json:"reviewCount"`
 	CanReview   bool            `json:"canReview"`
-	MyReview    *UserReviewItem `json:"myReview"`
+	MyReview    *UserReviewItem `json:"myReview" extensions:"x-nullable"`
 }

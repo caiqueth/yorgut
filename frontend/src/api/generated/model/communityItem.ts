@@ -12,5 +12,6 @@ export interface CommunityItem {
   membershipCount: number;
   name: string;
   owner: number;
-  profilePicture: string;
+  /** @nullable */
+  profilePicture: string | null;
 }

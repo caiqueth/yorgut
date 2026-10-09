@@ -15,8 +15,11 @@ export const Topic: React.FC<IProps> = () => {
 
   const { data: replies, isLoading } = useTopicReplies(topicId);
 
-  const items = replies ?
-    [replies.topic, ...(replies.replies ?? [])].map((r) => (
+  // The topic itself comes first, followed by its replies.
+  const posts = replies
+    ? [...(replies.topic ? [replies.topic] : []), ...(replies.replies ?? [])]
+    : [];
+  const items = posts.map((r) => (
       <PicAndTextHorizontal
         title={`${r.authorFirstName} em ${dayjsFromDate(r.createdAt, "D [de] MMMM [de] YYYY")}:`}
         text={r.text}
@@ -24,13 +27,13 @@ export const Topic: React.FC<IProps> = () => {
         imageSrc={r.authorProfilePicture}
         imageSize={56}
       />
-    )) : [];
+    ));
 
   return (
     <Box>
       <BoxWithTitle title="respostas">
         <Box sx={{ px: 1 }}>
-          <Typography variant={"h6"}>{replies?.topic.title}</Typography>
+          <Typography variant={"h6"}>{replies?.topic?.title}</Typography>
         </Box>
         <StripedGrid items={items} elementsPerRow={1} isLoading={isLoading} />
         <Reply topicId={topicId} />

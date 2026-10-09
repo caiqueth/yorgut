@@ -7,6 +7,8 @@
  */
 
 export interface FindCommunityProfileByIdResponse {
-  description: string;
-  profilePicture: string;
+  /** @nullable */
+  description: string | null;
+  /** @nullable */
+  profilePicture: string | null;
 }

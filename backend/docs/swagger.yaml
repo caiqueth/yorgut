@@ -6,6 +6,7 @@ definitions:
         type: boolean
       friendshipId:
         type: integer
+        x-nullable: true
       isPendingMyReply:
         type: boolean
       isPendingTheirReply:
@@ -37,6 +38,7 @@ definitions:
         type: integer
       profilePicture:
         type: string
+        x-nullable: true
     required:
     - firstName
     - id
@@ -73,6 +75,7 @@ definitions:
         type: string
       profilePicture:
         type: string
+        x-nullable: true
     required:
     - category
     - id
@@ -191,8 +194,10 @@ definitions:
     properties:
       description:
         type: string
+        x-nullable: true
       profilePicture:
         type: string
+        x-nullable: true
     required:
     - description
     - profilePicture
@@ -346,56 +351,74 @@ definitions:
     properties:
       about:
         type: string
+        x-nullable: true
       birthCity:
         type: string
+        x-nullable: true
       birthDate:
         type: string
       books:
         type: string
+        x-nullable: true
       createdAt:
         type: string
       cuisine:
         type: string
+        x-nullable: true
       description:
         type: string
+        x-nullable: true
       email:
         type: string
       fashion:
         type: string
+        x-nullable: true
       firstName:
         type: string
       friendCount:
         type: integer
       hobbies:
         type: string
+        x-nullable: true
       humor:
         type: string
+        x-nullable: true
       id:
         type: integer
       interests:
         type: string
+        x-nullable: true
       lastName:
         type: string
       livesWith:
         type: string
+        x-nullable: true
       movies:
         type: string
+        x-nullable: true
       music:
         type: string
+        x-nullable: true
       passions:
         type: string
+        x-nullable: true
       profilePicture:
         type: string
+        x-nullable: true
       relationshipStatus:
         type: string
+        x-nullable: true
       religion:
         type: string
+        x-nullable: true
       sports:
         type: string
+        x-nullable: true
       updatedAt:
         type: string
       website:
         type: string
+        x-nullable: true
     required:
     - about
     - birthCity
@@ -470,6 +493,7 @@ definitions:
         type: string
       profilePicture:
         type: string
+        x-nullable: true
     required:
     - id
     - membershipCount
@@ -676,7 +700,9 @@ definitions:
           $ref: '#/definitions/transport.TopicReply'
         type: array
       topic:
-        $ref: '#/definitions/transport.Topic'
+        allOf:
+        - $ref: '#/definitions/transport.Topic'
+        x-nullable: true
     required:
     - replies
     - topic
@@ -921,7 +947,9 @@ definitions:
       cool:
         type: number
       myReview:
-        $ref: '#/definitions/transport.UserReviewItem'
+        allOf:
+        - $ref: '#/definitions/transport.UserReviewItem'
+        x-nullable: true
       reviewCount:
         type: integer
       sexy:
@@ -948,6 +976,7 @@ definitions:
         type: integer
       profilePicture:
         type: string
+        x-nullable: true
     required:
     - birthDate
     - firstName

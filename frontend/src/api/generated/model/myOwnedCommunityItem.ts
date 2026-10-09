@@ -10,5 +10,6 @@ export interface MyOwnedCommunityItem {
   id: number;
   membershipCount: number;
   name: string;
-  profilePicture: string;
+  /** @nullable */
+  profilePicture: string | null;
 }

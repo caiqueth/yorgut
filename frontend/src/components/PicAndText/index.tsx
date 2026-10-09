@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 import { uploadUrl } from "helpers/uploadUrl";
 
 interface IProps {
-  imageSrc: string;
+  // Null or missing: no picture uploaded.
+  imageSrc?: string | null;
   url: string;
   text: string;
 }

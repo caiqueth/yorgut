@@ -11,5 +11,6 @@ export interface CommunitySearchItem {
   id: number;
   memberCount: number;
   name: string;
-  profilePicture: string;
+  /** @nullable */
+  profilePicture: string | null;
 }

@@ -4,7 +4,7 @@ import { Box, Paper, Skeleton } from "@mui/material";
 import { uploadUrl } from "helpers/uploadUrl";
 
 interface IProfilePictureProps {
-  imageSrc?: string;
+  imageSrc?: string | null;
   isLoading?: boolean;
 }
 export const ProfilePicture: React.FC<IProfilePictureProps> = ({
