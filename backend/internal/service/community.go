@@ -9,12 +9,11 @@ import (
 	"yorgut/internal/transport"
 
 	"github.com/go-playground/validator/v10"
-	"gorm.io/gorm"
 )
 
 var (
-	ErrCommunityNotFound  = errors.New("community not found")
-	ErrCommunityForbidden = errors.New("only the owner can edit this community")
+	ErrCommunityNotFound  = newError(ErrNotFound, "community not found")
+	ErrCommunityForbidden = newError(ErrForbidden, "only the owner can edit this community")
 )
 
 type CommunityService struct {
@@ -51,7 +50,7 @@ func NewCommunityService(
 func (c *CommunityService) CreateCommunity(creatorId uint, name string, category string, picture []byte) (uint, error) {
 	creator, err := c.userRepository.FindById(creatorId)
 	if err != nil {
-		return 0, errors.New("could not find specified community creator")
+		return 0, fromRepository(err, "community creator")
 	}
 
 	profile := &model.CommunityProfile{}
@@ -79,7 +78,7 @@ func (c *CommunityService) CreateCommunity(creatorId uint, name string, category
 		return tx.Community.UpdateMemberCount(communityModel.ID)
 	})
 	if err != nil {
-		return 0, err
+		return 0, fromRepository(err, "community")
 	}
 	return communityModel.ID, nil
 }
@@ -95,7 +94,7 @@ func (c *CommunityService) DeleteCommunity(id uint) error {
 func (c *CommunityService) FindCommunityById(id uint) (*transport.FindCommunityByIdResponse, error) {
 	community, err := c.communityRepository.FindByIdEager(id)
 	if err != nil {
-		return nil, errors.New("could not find specified community id")
+		return nil, fromRepository(err, "community")
 	}
 
 	response := transport.FindCommunityByIdResponse{}
@@ -109,11 +108,11 @@ func (c *CommunityService) FindCommunityProfileById(communityId uint) (*transpor
 
 	profile, err := c.communityProfileRepository.FindOfCommunity(communityId)
 	// Communities may have no profile row yet; that's an empty profile, not an error.
-	if errors.Is(err, gorm.ErrRecordNotFound) {
+	if errors.Is(err, repository.ErrNotFound) {
 		return &response, nil
 	}
 	if err != nil {
-		return nil, errors.New("could not find the profile of the specified community")
+		return nil, err
 	}
 
 	response.FromCommunityProfile(profile)
@@ -141,7 +140,7 @@ func (c *CommunityService) FindCommunityMembers(communityId uint) (*transport.Fi
 
 	community, err := c.communityRepository.FindById(communityId)
 	if err != nil {
-		return nil, err
+		return nil, fromRepository(err, "community")
 	}
 
 	response := transport.FindCommunityMembersResponse{}
@@ -179,8 +178,11 @@ func (c *CommunityService) SearchCommunitiesToDiscover(userId uint, name string,
 // findOwnedCommunity loads the community and checks that userId owns it.
 func (c *CommunityService) findOwnedCommunity(userId uint, communityId uint) error {
 	community, err := c.communityRepository.FindById(communityId)
-	if err != nil {
+	if errors.Is(err, repository.ErrNotFound) {
 		return ErrCommunityNotFound
+	}
+	if err != nil {
+		return err
 	}
 	if community.OwnerID != userId {
 		return ErrCommunityForbidden

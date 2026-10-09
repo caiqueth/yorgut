@@ -1,7 +1,6 @@
 package service
 
 import (
-	"errors"
 	"strings"
 	"time"
 	"yorgut/internal/model"
@@ -11,7 +10,7 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-var ErrFirstNameRequired = errors.New("first name is required")
+var ErrFirstNameRequired = newError(ErrInvalid, "first name is required")
 
 type UserService struct {
 	userRepository repository.UserRepository
@@ -50,10 +49,7 @@ func (u *UserService) FindManyUsers() (*transport.FindManyUsersResponse, error) 
 
 func (u *UserService) CreateUser(firstName string, lastName string, email string, birthDate time.Time, profilePicture *string) error {
 	err := u.userRepository.Create(model.NewUser(firstName, lastName, email, birthDate, profilePicture))
-	if err != nil {
-		return err
-	}
-	return nil
+	return fromRepository(err, "user")
 }
 
 type UpdateUserInput struct {
@@ -75,7 +71,7 @@ func (u *UserService) UpdateUser(userId uint, input UpdateUserInput) error {
 func (u *UserService) FindUserById(id uint) (*transport.FindUserResponse, error) {
 	userData, err := u.userRepository.FindById(id)
 	if err != nil {
-		return nil, err
+		return nil, fromRepository(err, "user")
 	}
 
 	resp := transport.FindUserResponse{}
@@ -97,7 +93,7 @@ func (u *UserService) SearchUsers(name string, page int, pageSize int) *transpor
 func (u *UserService) FindUserWithProfileById(id uint) (*transport.FindUserWithProfileByIdResponse, error) {
 	userData, err := u.userRepository.FindUserWithProfile(id)
 	if err != nil {
-		return nil, err
+		return nil, fromRepository(err, "user")
 	}
 
 	resp := transport.FindUserWithProfileByIdResponse{}

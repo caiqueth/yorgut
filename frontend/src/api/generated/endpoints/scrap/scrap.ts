@@ -75,7 +75,7 @@ export const createScrap = (
 
 export const getCreateScrapMutationKey = () => ['createScrap'] as const;
 
-export const getCreateScrapMutationOptions = <TError = ErrorType<unknown>,
+export const getCreateScrapMutationOptions = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createScrap>>, TError,CreateScrapMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
 ): UseMutationOptions<Awaited<ReturnType<typeof createScrap>>, TError,CreateScrapMutationVariables, TContext> => {
 
@@ -104,13 +104,13 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type CreateScrapMutationResult = NonNullable<Awaited<ReturnType<typeof createScrap>>>
     export type CreateScrapMutationBody = BodyType<CreateScrapRequest>
-    export type CreateScrapMutationError = ErrorType<unknown>
+    export type CreateScrapMutationError = ErrorType<void>
     export type CreateScrapMutationVariables = {data: BodyType<CreateScrapRequest>}
 
     /**
  * @summary Create a Scrap.
  */
-export const useCreateScrap = <TError = ErrorType<unknown>,
+export const useCreateScrap = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createScrap>>, TError,CreateScrapMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof createScrap>>,
@@ -210,7 +210,7 @@ export const getFindUserScrapsQueryKey = (userId: number,) => {
     }
 
 
-export const getFindUserScrapsQueryOptions = <TData = Awaited<ReturnType<typeof findUserScraps>>, TError = ErrorType<unknown>>(userId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findUserScraps>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
+export const getFindUserScrapsQueryOptions = <TData = Awaited<ReturnType<typeof findUserScraps>>, TError = ErrorType<void>>(userId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findUserScraps>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -229,10 +229,10 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type FindUserScrapsQueryResult = NonNullable<Awaited<ReturnType<typeof findUserScraps>>>
-export type FindUserScrapsQueryError = ErrorType<unknown>
+export type FindUserScrapsQueryError = ErrorType<void>
 
 
-export function useFindUserScraps<TData = Awaited<ReturnType<typeof findUserScraps>>, TError = ErrorType<unknown>>(
+export function useFindUserScraps<TData = Awaited<ReturnType<typeof findUserScraps>>, TError = ErrorType<void>>(
  userId: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof findUserScraps>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof findUserScraps>>,
@@ -242,7 +242,7 @@ export function useFindUserScraps<TData = Awaited<ReturnType<typeof findUserScra
       >, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useFindUserScraps<TData = Awaited<ReturnType<typeof findUserScraps>>, TError = ErrorType<unknown>>(
+export function useFindUserScraps<TData = Awaited<ReturnType<typeof findUserScraps>>, TError = ErrorType<void>>(
  userId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findUserScraps>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof findUserScraps>>,
@@ -252,7 +252,7 @@ export function useFindUserScraps<TData = Awaited<ReturnType<typeof findUserScra
       >, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useFindUserScraps<TData = Awaited<ReturnType<typeof findUserScraps>>, TError = ErrorType<unknown>>(
+export function useFindUserScraps<TData = Awaited<ReturnType<typeof findUserScraps>>, TError = ErrorType<void>>(
  userId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findUserScraps>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -260,7 +260,7 @@ export function useFindUserScraps<TData = Awaited<ReturnType<typeof findUserScra
  * @summary Gets a list of scraps of a user.
  */
 
-export function useFindUserScraps<TData = Awaited<ReturnType<typeof findUserScraps>>, TError = ErrorType<unknown>>(
+export function useFindUserScraps<TData = Awaited<ReturnType<typeof findUserScraps>>, TError = ErrorType<void>>(
  userId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findUserScraps>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {

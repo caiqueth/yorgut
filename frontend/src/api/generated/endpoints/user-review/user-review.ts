@@ -75,7 +75,7 @@ export const upsertUserReview = (
 
 export const getUpsertUserReviewMutationKey = () => ['upsertUserReview'] as const;
 
-export const getUpsertUserReviewMutationOptions = <TError = ErrorType<unknown>,
+export const getUpsertUserReviewMutationOptions = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof upsertUserReview>>, TError,UpsertUserReviewMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
 ): UseMutationOptions<Awaited<ReturnType<typeof upsertUserReview>>, TError,UpsertUserReviewMutationVariables, TContext> => {
 
@@ -104,13 +104,13 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type UpsertUserReviewMutationResult = NonNullable<Awaited<ReturnType<typeof upsertUserReview>>>
     export type UpsertUserReviewMutationBody = BodyType<UpsertUserReviewRequest>
-    export type UpsertUserReviewMutationError = ErrorType<unknown>
+    export type UpsertUserReviewMutationError = ErrorType<void>
     export type UpsertUserReviewMutationVariables = {userId: number;data: BodyType<UpsertUserReviewRequest>}
 
     /**
  * @summary Reviews a user.
  */
-export const useUpsertUserReview = <TError = ErrorType<unknown>,
+export const useUpsertUserReview = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof upsertUserReview>>, TError,UpsertUserReviewMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof upsertUserReview>>,
@@ -145,7 +145,7 @@ export const getFindUserReviewsQueryKey = (userId: number,) => {
     }
 
 
-export const getFindUserReviewsQueryOptions = <TData = Awaited<ReturnType<typeof findUserReviews>>, TError = ErrorType<unknown>>(userId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findUserReviews>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
+export const getFindUserReviewsQueryOptions = <TData = Awaited<ReturnType<typeof findUserReviews>>, TError = ErrorType<void>>(userId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findUserReviews>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -164,10 +164,10 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type FindUserReviewsQueryResult = NonNullable<Awaited<ReturnType<typeof findUserReviews>>>
-export type FindUserReviewsQueryError = ErrorType<unknown>
+export type FindUserReviewsQueryError = ErrorType<void>
 
 
-export function useFindUserReviews<TData = Awaited<ReturnType<typeof findUserReviews>>, TError = ErrorType<unknown>>(
+export function useFindUserReviews<TData = Awaited<ReturnType<typeof findUserReviews>>, TError = ErrorType<void>>(
  userId: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof findUserReviews>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof findUserReviews>>,
@@ -177,7 +177,7 @@ export function useFindUserReviews<TData = Awaited<ReturnType<typeof findUserRev
       >, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useFindUserReviews<TData = Awaited<ReturnType<typeof findUserReviews>>, TError = ErrorType<unknown>>(
+export function useFindUserReviews<TData = Awaited<ReturnType<typeof findUserReviews>>, TError = ErrorType<void>>(
  userId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findUserReviews>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof findUserReviews>>,
@@ -187,7 +187,7 @@ export function useFindUserReviews<TData = Awaited<ReturnType<typeof findUserRev
       >, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useFindUserReviews<TData = Awaited<ReturnType<typeof findUserReviews>>, TError = ErrorType<unknown>>(
+export function useFindUserReviews<TData = Awaited<ReturnType<typeof findUserReviews>>, TError = ErrorType<void>>(
  userId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findUserReviews>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -195,7 +195,7 @@ export function useFindUserReviews<TData = Awaited<ReturnType<typeof findUserRev
  * @summary Gets the review summary of a user.
  */
 
-export function useFindUserReviews<TData = Awaited<ReturnType<typeof findUserReviews>>, TError = ErrorType<unknown>>(
+export function useFindUserReviews<TData = Awaited<ReturnType<typeof findUserReviews>>, TError = ErrorType<void>>(
  userId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findUserReviews>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {

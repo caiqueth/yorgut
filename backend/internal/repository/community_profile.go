@@ -20,7 +20,7 @@ func (r *CommunityProfileRepository) FindOfCommunity(communityId uint) (*model.C
 	var profile model.CommunityProfile
 	result := r.db.Where("community_id = ?", communityId).First(&profile)
 	if result.Error != nil {
-		return nil, result.Error
+		return nil, translate(result.Error)
 	}
 	return &profile, nil
 }

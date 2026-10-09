@@ -29,7 +29,7 @@ func (p *paginate) paginatedResult(db *gorm.DB) *gorm.DB {
 func (r *repository[T]) Create(entity T) error {
 	result := r.db.Create(&entity)
 	if result.Error != nil {
-		return fmt.Errorf("error creating entity: %v", result.Error)
+		return fmt.Errorf("error creating entity: %w", translate(result.Error))
 	}
 	return nil
 }
@@ -37,7 +37,7 @@ func (r *repository[T]) Create(entity T) error {
 func (r *repository[T]) CreateMany(entities []T) error {
 	result := r.db.CreateInBatches(&entities, 100)
 	if result.Error != nil {
-		return fmt.Errorf("error creating entity: %v", result.Error)
+		return fmt.Errorf("error creating entity: %w", translate(result.Error))
 	}
 	return nil
 }
@@ -55,7 +55,7 @@ func (r *repository[T]) FindById(id uint) (T, error) {
 	var ent T
 	result := r.db.First(&ent, id)
 	if result.Error != nil {
-		return ent, result.Error
+		return ent, translate(result.Error)
 	}
 	return ent, nil
 }
@@ -64,7 +64,7 @@ func (r *repository[T]) FindByIdEager(id uint) (T, error) {
 	var ent T
 	result := r.db.Preload(clause.Associations).First(&ent, id)
 	if result.Error != nil {
-		return ent, result.Error
+		return ent, translate(result.Error)
 	}
 	return ent, nil
 }

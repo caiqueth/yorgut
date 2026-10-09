@@ -87,7 +87,7 @@ export const getFindMeQueryKey = () => {
     }
 
 
-export const getFindMeQueryOptions = <TData = Awaited<ReturnType<typeof findMe>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMe>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
+export const getFindMeQueryOptions = <TData = Awaited<ReturnType<typeof findMe>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMe>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -106,10 +106,10 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type FindMeQueryResult = NonNullable<Awaited<ReturnType<typeof findMe>>>
-export type FindMeQueryError = ErrorType<unknown>
+export type FindMeQueryError = ErrorType<void>
 
 
-export function useFindMe<TData = Awaited<ReturnType<typeof findMe>>, TError = ErrorType<unknown>>(
+export function useFindMe<TData = Awaited<ReturnType<typeof findMe>>, TError = ErrorType<void>>(
   options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMe>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof findMe>>,
@@ -119,7 +119,7 @@ export function useFindMe<TData = Awaited<ReturnType<typeof findMe>>, TError = E
       >, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useFindMe<TData = Awaited<ReturnType<typeof findMe>>, TError = ErrorType<unknown>>(
+export function useFindMe<TData = Awaited<ReturnType<typeof findMe>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMe>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof findMe>>,
@@ -129,7 +129,7 @@ export function useFindMe<TData = Awaited<ReturnType<typeof findMe>>, TError = E
       >, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useFindMe<TData = Awaited<ReturnType<typeof findMe>>, TError = ErrorType<unknown>>(
+export function useFindMe<TData = Awaited<ReturnType<typeof findMe>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMe>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -137,7 +137,7 @@ export function useFindMe<TData = Awaited<ReturnType<typeof findMe>>, TError = E
  * @summary Get the logged user.
  */
 
-export function useFindMe<TData = Awaited<ReturnType<typeof findMe>>, TError = ErrorType<unknown>>(
+export function useFindMe<TData = Awaited<ReturnType<typeof findMe>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMe>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -176,7 +176,7 @@ export const updateMe = (
 
 export const getUpdateMeMutationKey = () => ['updateMe'] as const;
 
-export const getUpdateMeMutationOptions = <TError = ErrorType<unknown>,
+export const getUpdateMeMutationOptions = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateMe>>, TError,UpdateMeMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
 ): UseMutationOptions<Awaited<ReturnType<typeof updateMe>>, TError,UpdateMeMutationVariables, TContext> => {
 
@@ -205,13 +205,13 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type UpdateMeMutationResult = NonNullable<Awaited<ReturnType<typeof updateMe>>>
     export type UpdateMeMutationBody = BodyType<UpdateMeRequest>
-    export type UpdateMeMutationError = ErrorType<unknown>
+    export type UpdateMeMutationError = ErrorType<void>
     export type UpdateMeMutationVariables = {data: BodyType<UpdateMeRequest>}
 
     /**
  * @summary Update the logged user
  */
-export const useUpdateMe = <TError = ErrorType<unknown>,
+export const useUpdateMe = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateMe>>, TError,UpdateMeMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof updateMe>>,
@@ -246,7 +246,7 @@ export const getFindMyFriendsQueryKey = () => {
     }
 
 
-export const getFindMyFriendsQueryOptions = <TData = Awaited<ReturnType<typeof findMyFriends>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMyFriends>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
+export const getFindMyFriendsQueryOptions = <TData = Awaited<ReturnType<typeof findMyFriends>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMyFriends>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -265,10 +265,10 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type FindMyFriendsQueryResult = NonNullable<Awaited<ReturnType<typeof findMyFriends>>>
-export type FindMyFriendsQueryError = ErrorType<unknown>
+export type FindMyFriendsQueryError = ErrorType<void>
 
 
-export function useFindMyFriends<TData = Awaited<ReturnType<typeof findMyFriends>>, TError = ErrorType<unknown>>(
+export function useFindMyFriends<TData = Awaited<ReturnType<typeof findMyFriends>>, TError = ErrorType<void>>(
   options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMyFriends>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof findMyFriends>>,
@@ -278,7 +278,7 @@ export function useFindMyFriends<TData = Awaited<ReturnType<typeof findMyFriends
       >, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useFindMyFriends<TData = Awaited<ReturnType<typeof findMyFriends>>, TError = ErrorType<unknown>>(
+export function useFindMyFriends<TData = Awaited<ReturnType<typeof findMyFriends>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMyFriends>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof findMyFriends>>,
@@ -288,7 +288,7 @@ export function useFindMyFriends<TData = Awaited<ReturnType<typeof findMyFriends
       >, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useFindMyFriends<TData = Awaited<ReturnType<typeof findMyFriends>>, TError = ErrorType<unknown>>(
+export function useFindMyFriends<TData = Awaited<ReturnType<typeof findMyFriends>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMyFriends>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -296,7 +296,7 @@ export function useFindMyFriends<TData = Awaited<ReturnType<typeof findMyFriends
  * @summary Gets a list of friends of the user.
  */
 
-export function useFindMyFriends<TData = Awaited<ReturnType<typeof findMyFriends>>, TError = ErrorType<unknown>>(
+export function useFindMyFriends<TData = Awaited<ReturnType<typeof findMyFriends>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMyFriends>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -338,7 +338,7 @@ export const getFindMyPendingFriendshipsQueryKey = () => {
     }
 
 
-export const getFindMyPendingFriendshipsQueryOptions = <TData = Awaited<ReturnType<typeof findMyPendingFriendships>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMyPendingFriendships>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
+export const getFindMyPendingFriendshipsQueryOptions = <TData = Awaited<ReturnType<typeof findMyPendingFriendships>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMyPendingFriendships>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -357,10 +357,10 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type FindMyPendingFriendshipsQueryResult = NonNullable<Awaited<ReturnType<typeof findMyPendingFriendships>>>
-export type FindMyPendingFriendshipsQueryError = ErrorType<unknown>
+export type FindMyPendingFriendshipsQueryError = ErrorType<void>
 
 
-export function useFindMyPendingFriendships<TData = Awaited<ReturnType<typeof findMyPendingFriendships>>, TError = ErrorType<unknown>>(
+export function useFindMyPendingFriendships<TData = Awaited<ReturnType<typeof findMyPendingFriendships>>, TError = ErrorType<void>>(
   options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMyPendingFriendships>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof findMyPendingFriendships>>,
@@ -370,7 +370,7 @@ export function useFindMyPendingFriendships<TData = Awaited<ReturnType<typeof fi
       >, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useFindMyPendingFriendships<TData = Awaited<ReturnType<typeof findMyPendingFriendships>>, TError = ErrorType<unknown>>(
+export function useFindMyPendingFriendships<TData = Awaited<ReturnType<typeof findMyPendingFriendships>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMyPendingFriendships>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof findMyPendingFriendships>>,
@@ -380,7 +380,7 @@ export function useFindMyPendingFriendships<TData = Awaited<ReturnType<typeof fi
       >, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useFindMyPendingFriendships<TData = Awaited<ReturnType<typeof findMyPendingFriendships>>, TError = ErrorType<unknown>>(
+export function useFindMyPendingFriendships<TData = Awaited<ReturnType<typeof findMyPendingFriendships>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMyPendingFriendships>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -388,7 +388,7 @@ export function useFindMyPendingFriendships<TData = Awaited<ReturnType<typeof fi
  * @summary Gets a list of friendship invites of the user.
  */
 
-export function useFindMyPendingFriendships<TData = Awaited<ReturnType<typeof findMyPendingFriendships>>, TError = ErrorType<unknown>>(
+export function useFindMyPendingFriendships<TData = Awaited<ReturnType<typeof findMyPendingFriendships>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMyPendingFriendships>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -430,7 +430,7 @@ export const getAmIFriendOfQueryKey = (userId: number,) => {
     }
 
 
-export const getAmIFriendOfQueryOptions = <TData = Awaited<ReturnType<typeof amIFriendOf>>, TError = ErrorType<unknown>>(userId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof amIFriendOf>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
+export const getAmIFriendOfQueryOptions = <TData = Awaited<ReturnType<typeof amIFriendOf>>, TError = ErrorType<void>>(userId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof amIFriendOf>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -449,10 +449,10 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type AmIFriendOfQueryResult = NonNullable<Awaited<ReturnType<typeof amIFriendOf>>>
-export type AmIFriendOfQueryError = ErrorType<unknown>
+export type AmIFriendOfQueryError = ErrorType<void>
 
 
-export function useAmIFriendOf<TData = Awaited<ReturnType<typeof amIFriendOf>>, TError = ErrorType<unknown>>(
+export function useAmIFriendOf<TData = Awaited<ReturnType<typeof amIFriendOf>>, TError = ErrorType<void>>(
  userId: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof amIFriendOf>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof amIFriendOf>>,
@@ -462,7 +462,7 @@ export function useAmIFriendOf<TData = Awaited<ReturnType<typeof amIFriendOf>>, 
       >, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useAmIFriendOf<TData = Awaited<ReturnType<typeof amIFriendOf>>, TError = ErrorType<unknown>>(
+export function useAmIFriendOf<TData = Awaited<ReturnType<typeof amIFriendOf>>, TError = ErrorType<void>>(
  userId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof amIFriendOf>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof amIFriendOf>>,
@@ -472,7 +472,7 @@ export function useAmIFriendOf<TData = Awaited<ReturnType<typeof amIFriendOf>>, 
       >, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useAmIFriendOf<TData = Awaited<ReturnType<typeof amIFriendOf>>, TError = ErrorType<unknown>>(
+export function useAmIFriendOf<TData = Awaited<ReturnType<typeof amIFriendOf>>, TError = ErrorType<void>>(
  userId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof amIFriendOf>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -480,7 +480,7 @@ export function useAmIFriendOf<TData = Awaited<ReturnType<typeof amIFriendOf>>, 
  * @summary Evaluates if the logged user is friend of specified user
  */
 
-export function useAmIFriendOf<TData = Awaited<ReturnType<typeof amIFriendOf>>, TError = ErrorType<unknown>>(
+export function useAmIFriendOf<TData = Awaited<ReturnType<typeof amIFriendOf>>, TError = ErrorType<void>>(
  userId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof amIFriendOf>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -517,7 +517,7 @@ export const joinCommunity = (
 
 export const getJoinCommunityMutationKey = () => ['joinCommunity'] as const;
 
-export const getJoinCommunityMutationOptions = <TError = ErrorType<unknown>,
+export const getJoinCommunityMutationOptions = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof joinCommunity>>, TError,JoinCommunityMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
 ): UseMutationOptions<Awaited<ReturnType<typeof joinCommunity>>, TError,JoinCommunityMutationVariables, TContext> => {
 
@@ -546,13 +546,13 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type JoinCommunityMutationResult = NonNullable<Awaited<ReturnType<typeof joinCommunity>>>
 
-    export type JoinCommunityMutationError = ErrorType<unknown>
+    export type JoinCommunityMutationError = ErrorType<void>
     export type JoinCommunityMutationVariables = {communityId: number}
 
     /**
  * @summary User joins a community.
  */
-export const useJoinCommunity = <TError = ErrorType<unknown>,
+export const useJoinCommunity = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof joinCommunity>>, TError,JoinCommunityMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof joinCommunity>>,
@@ -652,7 +652,7 @@ export const getFindMyMembershipsQueryKey = () => {
     }
 
 
-export const getFindMyMembershipsQueryOptions = <TData = Awaited<ReturnType<typeof findMyMemberships>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMyMemberships>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
+export const getFindMyMembershipsQueryOptions = <TData = Awaited<ReturnType<typeof findMyMemberships>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMyMemberships>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -671,10 +671,10 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type FindMyMembershipsQueryResult = NonNullable<Awaited<ReturnType<typeof findMyMemberships>>>
-export type FindMyMembershipsQueryError = ErrorType<unknown>
+export type FindMyMembershipsQueryError = ErrorType<void>
 
 
-export function useFindMyMemberships<TData = Awaited<ReturnType<typeof findMyMemberships>>, TError = ErrorType<unknown>>(
+export function useFindMyMemberships<TData = Awaited<ReturnType<typeof findMyMemberships>>, TError = ErrorType<void>>(
   options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMyMemberships>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof findMyMemberships>>,
@@ -684,7 +684,7 @@ export function useFindMyMemberships<TData = Awaited<ReturnType<typeof findMyMem
       >, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useFindMyMemberships<TData = Awaited<ReturnType<typeof findMyMemberships>>, TError = ErrorType<unknown>>(
+export function useFindMyMemberships<TData = Awaited<ReturnType<typeof findMyMemberships>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMyMemberships>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof findMyMemberships>>,
@@ -694,7 +694,7 @@ export function useFindMyMemberships<TData = Awaited<ReturnType<typeof findMyMem
       >, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useFindMyMemberships<TData = Awaited<ReturnType<typeof findMyMemberships>>, TError = ErrorType<unknown>>(
+export function useFindMyMemberships<TData = Awaited<ReturnType<typeof findMyMemberships>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMyMemberships>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -702,7 +702,7 @@ export function useFindMyMemberships<TData = Awaited<ReturnType<typeof findMyMem
  * @summary Gets a list of communities that user is member of.
  */
 
-export function useFindMyMemberships<TData = Awaited<ReturnType<typeof findMyMemberships>>, TError = ErrorType<unknown>>(
+export function useFindMyMemberships<TData = Awaited<ReturnType<typeof findMyMemberships>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMyMemberships>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -744,7 +744,7 @@ export const getAmIMemberOfQueryKey = (communityId: number,) => {
     }
 
 
-export const getAmIMemberOfQueryOptions = <TData = Awaited<ReturnType<typeof amIMemberOf>>, TError = ErrorType<unknown>>(communityId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof amIMemberOf>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
+export const getAmIMemberOfQueryOptions = <TData = Awaited<ReturnType<typeof amIMemberOf>>, TError = ErrorType<void>>(communityId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof amIMemberOf>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -763,10 +763,10 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type AmIMemberOfQueryResult = NonNullable<Awaited<ReturnType<typeof amIMemberOf>>>
-export type AmIMemberOfQueryError = ErrorType<unknown>
+export type AmIMemberOfQueryError = ErrorType<void>
 
 
-export function useAmIMemberOf<TData = Awaited<ReturnType<typeof amIMemberOf>>, TError = ErrorType<unknown>>(
+export function useAmIMemberOf<TData = Awaited<ReturnType<typeof amIMemberOf>>, TError = ErrorType<void>>(
  communityId: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof amIMemberOf>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof amIMemberOf>>,
@@ -776,7 +776,7 @@ export function useAmIMemberOf<TData = Awaited<ReturnType<typeof amIMemberOf>>, 
       >, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useAmIMemberOf<TData = Awaited<ReturnType<typeof amIMemberOf>>, TError = ErrorType<unknown>>(
+export function useAmIMemberOf<TData = Awaited<ReturnType<typeof amIMemberOf>>, TError = ErrorType<void>>(
  communityId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof amIMemberOf>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof amIMemberOf>>,
@@ -786,7 +786,7 @@ export function useAmIMemberOf<TData = Awaited<ReturnType<typeof amIMemberOf>>, 
       >, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useAmIMemberOf<TData = Awaited<ReturnType<typeof amIMemberOf>>, TError = ErrorType<unknown>>(
+export function useAmIMemberOf<TData = Awaited<ReturnType<typeof amIMemberOf>>, TError = ErrorType<void>>(
  communityId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof amIMemberOf>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -794,7 +794,7 @@ export function useAmIMemberOf<TData = Awaited<ReturnType<typeof amIMemberOf>>, 
  * @summary Evaluates if the logged user is member of specified community
  */
 
-export function useAmIMemberOf<TData = Awaited<ReturnType<typeof amIMemberOf>>, TError = ErrorType<unknown>>(
+export function useAmIMemberOf<TData = Awaited<ReturnType<typeof amIMemberOf>>, TError = ErrorType<void>>(
  communityId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof amIMemberOf>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -836,7 +836,7 @@ export const getFindMyCommunitiesQueryKey = () => {
     }
 
 
-export const getFindMyCommunitiesQueryOptions = <TData = Awaited<ReturnType<typeof findMyCommunities>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMyCommunities>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
+export const getFindMyCommunitiesQueryOptions = <TData = Awaited<ReturnType<typeof findMyCommunities>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMyCommunities>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -855,10 +855,10 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type FindMyCommunitiesQueryResult = NonNullable<Awaited<ReturnType<typeof findMyCommunities>>>
-export type FindMyCommunitiesQueryError = ErrorType<unknown>
+export type FindMyCommunitiesQueryError = ErrorType<void>
 
 
-export function useFindMyCommunities<TData = Awaited<ReturnType<typeof findMyCommunities>>, TError = ErrorType<unknown>>(
+export function useFindMyCommunities<TData = Awaited<ReturnType<typeof findMyCommunities>>, TError = ErrorType<void>>(
   options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMyCommunities>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof findMyCommunities>>,
@@ -868,7 +868,7 @@ export function useFindMyCommunities<TData = Awaited<ReturnType<typeof findMyCom
       >, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useFindMyCommunities<TData = Awaited<ReturnType<typeof findMyCommunities>>, TError = ErrorType<unknown>>(
+export function useFindMyCommunities<TData = Awaited<ReturnType<typeof findMyCommunities>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMyCommunities>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof findMyCommunities>>,
@@ -878,7 +878,7 @@ export function useFindMyCommunities<TData = Awaited<ReturnType<typeof findMyCom
       >, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useFindMyCommunities<TData = Awaited<ReturnType<typeof findMyCommunities>>, TError = ErrorType<unknown>>(
+export function useFindMyCommunities<TData = Awaited<ReturnType<typeof findMyCommunities>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMyCommunities>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -886,7 +886,7 @@ export function useFindMyCommunities<TData = Awaited<ReturnType<typeof findMyCom
  * @summary Gets a list of communities that user owns.
  */
 
-export function useFindMyCommunities<TData = Awaited<ReturnType<typeof findMyCommunities>>, TError = ErrorType<unknown>>(
+export function useFindMyCommunities<TData = Awaited<ReturnType<typeof findMyCommunities>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMyCommunities>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -928,7 +928,7 @@ export const getFindMyProfileQueryKey = () => {
     }
 
 
-export const getFindMyProfileQueryOptions = <TData = Awaited<ReturnType<typeof findMyProfile>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMyProfile>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
+export const getFindMyProfileQueryOptions = <TData = Awaited<ReturnType<typeof findMyProfile>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMyProfile>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -947,10 +947,10 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type FindMyProfileQueryResult = NonNullable<Awaited<ReturnType<typeof findMyProfile>>>
-export type FindMyProfileQueryError = ErrorType<unknown>
+export type FindMyProfileQueryError = ErrorType<void>
 
 
-export function useFindMyProfile<TData = Awaited<ReturnType<typeof findMyProfile>>, TError = ErrorType<unknown>>(
+export function useFindMyProfile<TData = Awaited<ReturnType<typeof findMyProfile>>, TError = ErrorType<void>>(
   options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMyProfile>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof findMyProfile>>,
@@ -960,7 +960,7 @@ export function useFindMyProfile<TData = Awaited<ReturnType<typeof findMyProfile
       >, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useFindMyProfile<TData = Awaited<ReturnType<typeof findMyProfile>>, TError = ErrorType<unknown>>(
+export function useFindMyProfile<TData = Awaited<ReturnType<typeof findMyProfile>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMyProfile>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof findMyProfile>>,
@@ -970,7 +970,7 @@ export function useFindMyProfile<TData = Awaited<ReturnType<typeof findMyProfile
       >, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useFindMyProfile<TData = Awaited<ReturnType<typeof findMyProfile>>, TError = ErrorType<unknown>>(
+export function useFindMyProfile<TData = Awaited<ReturnType<typeof findMyProfile>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMyProfile>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -978,7 +978,7 @@ export function useFindMyProfile<TData = Awaited<ReturnType<typeof findMyProfile
  * @summary Get logged user with it's profile by their Token.
  */
 
-export function useFindMyProfile<TData = Awaited<ReturnType<typeof findMyProfile>>, TError = ErrorType<unknown>>(
+export function useFindMyProfile<TData = Awaited<ReturnType<typeof findMyProfile>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMyProfile>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -1021,7 +1021,7 @@ if(updateMyProfilePictureBody?.picture !== undefined) {
 
 export const getUpdateMyProfilePictureMutationKey = () => ['updateMyProfilePicture'] as const;
 
-export const getUpdateMyProfilePictureMutationOptions = <TError = ErrorType<unknown>,
+export const getUpdateMyProfilePictureMutationOptions = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateMyProfilePicture>>, TError,UpdateMyProfilePictureMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
 ): UseMutationOptions<Awaited<ReturnType<typeof updateMyProfilePicture>>, TError,UpdateMyProfilePictureMutationVariables, TContext> => {
 
@@ -1050,13 +1050,13 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type UpdateMyProfilePictureMutationResult = NonNullable<Awaited<ReturnType<typeof updateMyProfilePicture>>>
     export type UpdateMyProfilePictureMutationBody = BodyType<UpdateMyProfilePictureBody> | undefined
-    export type UpdateMyProfilePictureMutationError = ErrorType<unknown>
+    export type UpdateMyProfilePictureMutationError = ErrorType<void>
     export type UpdateMyProfilePictureMutationVariables = {data?: BodyType<UpdateMyProfilePictureBody>}
 
     /**
  * @summary Update the logged user's profile picture
  */
-export const useUpdateMyProfilePicture = <TError = ErrorType<unknown>,
+export const useUpdateMyProfilePicture = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateMyProfilePicture>>, TError,UpdateMyProfilePictureMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof updateMyProfilePicture>>,
@@ -1091,7 +1091,7 @@ export const getFindMyWelcomeQueryKey = () => {
     }
 
 
-export const getFindMyWelcomeQueryOptions = <TData = Awaited<ReturnType<typeof findMyWelcome>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMyWelcome>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
+export const getFindMyWelcomeQueryOptions = <TData = Awaited<ReturnType<typeof findMyWelcome>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMyWelcome>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -1110,10 +1110,10 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type FindMyWelcomeQueryResult = NonNullable<Awaited<ReturnType<typeof findMyWelcome>>>
-export type FindMyWelcomeQueryError = ErrorType<unknown>
+export type FindMyWelcomeQueryError = ErrorType<void>
 
 
-export function useFindMyWelcome<TData = Awaited<ReturnType<typeof findMyWelcome>>, TError = ErrorType<unknown>>(
+export function useFindMyWelcome<TData = Awaited<ReturnType<typeof findMyWelcome>>, TError = ErrorType<void>>(
   options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMyWelcome>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof findMyWelcome>>,
@@ -1123,7 +1123,7 @@ export function useFindMyWelcome<TData = Awaited<ReturnType<typeof findMyWelcome
       >, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useFindMyWelcome<TData = Awaited<ReturnType<typeof findMyWelcome>>, TError = ErrorType<unknown>>(
+export function useFindMyWelcome<TData = Awaited<ReturnType<typeof findMyWelcome>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMyWelcome>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof findMyWelcome>>,
@@ -1133,7 +1133,7 @@ export function useFindMyWelcome<TData = Awaited<ReturnType<typeof findMyWelcome
       >, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useFindMyWelcome<TData = Awaited<ReturnType<typeof findMyWelcome>>, TError = ErrorType<unknown>>(
+export function useFindMyWelcome<TData = Awaited<ReturnType<typeof findMyWelcome>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMyWelcome>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1141,7 +1141,7 @@ export function useFindMyWelcome<TData = Awaited<ReturnType<typeof findMyWelcome
  * @summary Get user stats for the Home Welcome
  */
 
-export function useFindMyWelcome<TData = Awaited<ReturnType<typeof findMyWelcome>>, TError = ErrorType<unknown>>(
+export function useFindMyWelcome<TData = Awaited<ReturnType<typeof findMyWelcome>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findMyWelcome>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {

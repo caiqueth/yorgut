@@ -40,6 +40,9 @@ func NewCommunityController(
 // @Produce				application/json
 // @Tags				Community
 // @Success				201 {object} transport.Response{data=transport.CreateCommunityResponse}
+// @Failure			400
+// @Failure			401
+// @Failure			404
 // @Security			BearerAuth
 // @Router				/communities [post]
 func (c *CommunityController) Create(ctx *gin.Context) {
@@ -72,36 +75,14 @@ func (c *CommunityController) Create(ctx *gin.Context) {
 	}
 
 	communityId, err := c.communityService.CreateCommunity(user.ID, request.Name, request.Category, picture)
-	if errors.Is(err, service.ErrInvalidPicture) ||
-		errors.Is(err, service.ErrPictureTooLarge) ||
-		errors.Is(err, service.ErrPictureTooBig) {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 
 	ctx.JSON(http.StatusCreated, transport.Response{
 		Data: transport.CreateCommunityResponse{ID: communityId},
 	})
-}
-
-// communityErrorStatus maps the service's sentinel errors to HTTP statuses.
-func communityErrorStatus(err error) int {
-	switch {
-	case errors.Is(err, service.ErrCommunityNotFound):
-		return http.StatusNotFound
-	case errors.Is(err, service.ErrCommunityForbidden):
-		return http.StatusForbidden
-	case errors.Is(err, service.ErrInvalidPicture),
-		errors.Is(err, service.ErrPictureTooLarge),
-		errors.Is(err, service.ErrPictureTooBig):
-		return http.StatusBadRequest
-	default:
-		return http.StatusInternalServerError
-	}
 }
 
 // Update				godoc
@@ -114,6 +95,10 @@ func communityErrorStatus(err error) int {
 // @Produce				application/json
 // @Tags				Community
 // @Success				204
+// @Failure			400
+// @Failure			401
+// @Failure			403
+// @Failure			404
 // @Security			BearerAuth
 // @Router				/communities/{communityId} [put]
 func (c *CommunityController) Update(ctx *gin.Context) {
@@ -128,7 +113,7 @@ func (c *CommunityController) Update(ctx *gin.Context) {
 
 	err := c.communityService.UpdateCommunity(user.ID, communityId, request.Name, request.Category, request.Description)
 	if err != nil {
-		ctx.JSON(communityErrorStatus(err), gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 
@@ -145,6 +130,10 @@ func (c *CommunityController) Update(ctx *gin.Context) {
 // @Produce				application/json
 // @Tags				Community
 // @Success				204
+// @Failure			400
+// @Failure			401
+// @Failure			403
+// @Failure			404
 // @Security			BearerAuth
 // @Router				/communities/{communityId}/picture [put]
 func (c *CommunityController) UpdatePicture(ctx *gin.Context) {
@@ -169,7 +158,7 @@ func (c *CommunityController) UpdatePicture(ctx *gin.Context) {
 	}
 
 	if err := c.communityService.UpdateCommunityPicture(user.ID, communityId, picture); err != nil {
-		ctx.JSON(communityErrorStatus(err), gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 
@@ -184,12 +173,13 @@ func (c *CommunityController) UpdatePicture(ctx *gin.Context) {
 // @Produce				application/json
 // @Tags				Community
 // @Success				204
+// @Failure			401
 // @Security			BearerAuth
 // @Router				/communities/{communityId} [delete]
 func (c *CommunityController) Delete(ctx *gin.Context) {
 	communityId := helpers.MustParseUint(ctx.Param("communityId"))
 	if err := c.communityService.DeleteCommunity(uint(communityId)); err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 
@@ -205,6 +195,9 @@ func (c *CommunityController) Delete(ctx *gin.Context) {
 // @Produce				application/json
 // @Tags				Community
 // @Success				200 {object} transport.FindCommunityByIdResponse{}
+// @Failure			400
+// @Failure			401
+// @Failure			404
 // @Security			BearerAuth
 // @Router				/communities/{communityId} [get]
 func (c *CommunityController) FindById(ctx *gin.Context) {
@@ -217,7 +210,7 @@ func (c *CommunityController) FindById(ctx *gin.Context) {
 
 	community, err := c.communityService.FindCommunityById(uint(id))
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 
@@ -233,6 +226,8 @@ func (c *CommunityController) FindById(ctx *gin.Context) {
 // @Produce				application/json
 // @Tags				Community
 // @Success				200 {object} transport.FindCommunityProfileByIdResponse{}
+// @Failure			400
+// @Failure			401
 // @Security			BearerAuth
 // @Router				/communities/{communityId}/profile [get]
 func (c *CommunityController) FindProfileById(ctx *gin.Context) {
@@ -245,7 +240,7 @@ func (c *CommunityController) FindProfileById(ctx *gin.Context) {
 
 	profile, err := c.communityService.FindCommunityProfileById(uint(id))
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 
@@ -261,6 +256,9 @@ func (c *CommunityController) FindProfileById(ctx *gin.Context) {
 // @Produce				application/json
 // @Tags				Community
 // @Success				200 {object} transport.FindCommunityMembersResponse{}
+// @Failure			400
+// @Failure			401
+// @Failure			404
 // @Security			BearerAuth
 // @Router				/communities/{communityId}/members [get]
 func (c *CommunityController) FindMembers(ctx *gin.Context) {
@@ -273,7 +271,7 @@ func (c *CommunityController) FindMembers(ctx *gin.Context) {
 
 	members, err := c.communityService.FindCommunityMembers(uint(id))
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 
@@ -288,12 +286,13 @@ func (c *CommunityController) FindMembers(ctx *gin.Context) {
 // @Produce				application/json
 // @Tags				Community
 // @Success				200 {object} transport.FindManyCommunitiesResponse{}
+// @Failure			401
 // @Security			BearerAuth
 // @Router				/communities [get]
 func (c *CommunityController) FindMany(ctx *gin.Context) {
 	communities, err := c.communityService.FindManyCommunities()
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 
@@ -308,6 +307,7 @@ func (c *CommunityController) FindMany(ctx *gin.Context) {
 // @Produce				application/json
 // @Tags				Community
 // @Success				200 {object} transport.FindManyCommunitiesResponse{}
+// @Failure			401
 // @Security			BearerAuth
 // @Router				/communities/{communityId}/related [get]
 func (c *CommunityController) FindRelated(ctx *gin.Context) {
@@ -317,7 +317,7 @@ func (c *CommunityController) FindRelated(ctx *gin.Context) {
 
 	communities, err := c.communityService.FindManyCommunities()
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 
@@ -332,13 +332,14 @@ func (c *CommunityController) FindRelated(ctx *gin.Context) {
 // @Produce				application/json
 // @Tags				Community
 // @Success				200 {object} transport.TopicsResponse{}
+// @Failure			401
 // @Security			BearerAuth
 // @Router				/communities/{communityId}/hot-topics [get]
 func (c *CommunityController) FindHotTopics(ctx *gin.Context) {
 	communityId := helpers.MustParseUint(ctx.Param("communityId"))
 	topics, err := c.topicService.FindTopics(communityId, 5)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 
@@ -354,13 +355,14 @@ func (c *CommunityController) FindHotTopics(ctx *gin.Context) {
 // @Produce				application/json
 // @Tags				Community
 // @Success				200 {object} transport.TopicsResponse{}
+// @Failure			401
 // @Security			BearerAuth
 // @Router				/communities/{communityId}/topics [get]
 func (c *CommunityController) FindAllTopics(ctx *gin.Context) {
 	communityId := helpers.MustParseUint(ctx.Param("communityId"))
 	topics, err := c.topicService.FindTopics(communityId, 10)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 
@@ -378,6 +380,7 @@ func (c *CommunityController) FindAllTopics(ctx *gin.Context) {
 // @Produce				application/json
 // @Tags				Community
 // @Success				200 {object} transport.SearchCommunitiesResponse{}
+// @Failure			401
 // @Security			BearerAuth
 // @Router				/communities/search [get]
 func (c *CommunityController) Search(ctx *gin.Context) {
@@ -396,7 +399,7 @@ func (c *CommunityController) Search(ctx *gin.Context) {
 
 	communities, err := c.communityService.SearchCommunitiesToDiscover(user.ID, name, page, pageSize)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 

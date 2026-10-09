@@ -1,15 +1,14 @@
 package server
 
 import (
-	"errors"
 	"math/rand"
 	"net/http"
 	"strings"
 	"time"
+	"yorgut/internal/controller"
 	"yorgut/internal/service"
 
 	"github.com/gin-gonic/gin"
-	"github.com/rs/zerolog/log"
 )
 
 // AuthMiddleware checks the Yorgut session token from the Authorization
@@ -29,13 +28,9 @@ func AuthMiddleware(authService *service.AuthService) gin.HandlerFunc {
 		}
 
 		user, err := authService.UserFromSession(parts[1])
-		if errors.Is(err, service.ErrInvalidSession) {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
-			return
-		}
 		if err != nil {
-			log.Error().Err(err).Msg("user resolution failed")
-			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "could not resolve user"})
+			controller.RespondError(c, err)
+			c.Abort()
 			return
 		}
 

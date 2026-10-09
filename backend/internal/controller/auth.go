@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"errors"
 	"net/http"
 	"yorgut/internal/service"
 	"yorgut/internal/transport"
@@ -39,12 +38,8 @@ func (a *AuthController) LoginWithGoogle(ctx *gin.Context) {
 	}
 
 	resp, err := a.authService.LoginWithGoogle(ctx.Request.Context(), req.Credential)
-	if errors.Is(err, service.ErrInvalidGoogleCredential) {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
-		return
-	}
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 

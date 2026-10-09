@@ -76,7 +76,7 @@ export const createTestimonial = (
 
 export const getCreateTestimonialMutationKey = () => ['createTestimonial'] as const;
 
-export const getCreateTestimonialMutationOptions = <TError = ErrorType<unknown>,
+export const getCreateTestimonialMutationOptions = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createTestimonial>>, TError,CreateTestimonialMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
 ): UseMutationOptions<Awaited<ReturnType<typeof createTestimonial>>, TError,CreateTestimonialMutationVariables, TContext> => {
 
@@ -105,13 +105,13 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type CreateTestimonialMutationResult = NonNullable<Awaited<ReturnType<typeof createTestimonial>>>
     export type CreateTestimonialMutationBody = BodyType<CreateTestimonialRequest>
-    export type CreateTestimonialMutationError = ErrorType<unknown>
+    export type CreateTestimonialMutationError = ErrorType<void>
     export type CreateTestimonialMutationVariables = {data: BodyType<CreateTestimonialRequest>}
 
     /**
  * @summary Create a Testimonial.
  */
-export const useCreateTestimonial = <TError = ErrorType<unknown>,
+export const useCreateTestimonial = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createTestimonial>>, TError,CreateTestimonialMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof createTestimonial>>,
@@ -149,7 +149,7 @@ export const getFindUserTestimonialsQueryKey = (userId: number,
     }
 
 
-export const getFindUserTestimonialsQueryOptions = <TData = Awaited<ReturnType<typeof findUserTestimonials>>, TError = ErrorType<unknown>>(userId: number,
+export const getFindUserTestimonialsQueryOptions = <TData = Awaited<ReturnType<typeof findUserTestimonials>>, TError = ErrorType<void>>(userId: number,
     params?: FindUserTestimonialsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findUserTestimonials>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
 ) => {
 
@@ -169,10 +169,10 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type FindUserTestimonialsQueryResult = NonNullable<Awaited<ReturnType<typeof findUserTestimonials>>>
-export type FindUserTestimonialsQueryError = ErrorType<unknown>
+export type FindUserTestimonialsQueryError = ErrorType<void>
 
 
-export function useFindUserTestimonials<TData = Awaited<ReturnType<typeof findUserTestimonials>>, TError = ErrorType<unknown>>(
+export function useFindUserTestimonials<TData = Awaited<ReturnType<typeof findUserTestimonials>>, TError = ErrorType<void>>(
  userId: number,
     params: undefined |  FindUserTestimonialsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof findUserTestimonials>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
@@ -183,7 +183,7 @@ export function useFindUserTestimonials<TData = Awaited<ReturnType<typeof findUs
       >, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useFindUserTestimonials<TData = Awaited<ReturnType<typeof findUserTestimonials>>, TError = ErrorType<unknown>>(
+export function useFindUserTestimonials<TData = Awaited<ReturnType<typeof findUserTestimonials>>, TError = ErrorType<void>>(
  userId: number,
     params?: FindUserTestimonialsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findUserTestimonials>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
@@ -194,7 +194,7 @@ export function useFindUserTestimonials<TData = Awaited<ReturnType<typeof findUs
       >, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useFindUserTestimonials<TData = Awaited<ReturnType<typeof findUserTestimonials>>, TError = ErrorType<unknown>>(
+export function useFindUserTestimonials<TData = Awaited<ReturnType<typeof findUserTestimonials>>, TError = ErrorType<void>>(
  userId: number,
     params?: FindUserTestimonialsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findUserTestimonials>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
@@ -203,7 +203,7 @@ export function useFindUserTestimonials<TData = Awaited<ReturnType<typeof findUs
  * @summary Gets the testimonials of a user.
  */
 
-export function useFindUserTestimonials<TData = Awaited<ReturnType<typeof findUserTestimonials>>, TError = ErrorType<unknown>>(
+export function useFindUserTestimonials<TData = Awaited<ReturnType<typeof findUserTestimonials>>, TError = ErrorType<void>>(
  userId: number,
     params?: FindUserTestimonialsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findUserTestimonials>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
@@ -241,7 +241,7 @@ export const deleteTestimonial = (
 
 export const getDeleteTestimonialMutationKey = () => ['deleteTestimonial'] as const;
 
-export const getDeleteTestimonialMutationOptions = <TError = ErrorType<unknown>,
+export const getDeleteTestimonialMutationOptions = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteTestimonial>>, TError,DeleteTestimonialMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
 ): UseMutationOptions<Awaited<ReturnType<typeof deleteTestimonial>>, TError,DeleteTestimonialMutationVariables, TContext> => {
 
@@ -270,13 +270,13 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type DeleteTestimonialMutationResult = NonNullable<Awaited<ReturnType<typeof deleteTestimonial>>>
 
-    export type DeleteTestimonialMutationError = ErrorType<unknown>
+    export type DeleteTestimonialMutationError = ErrorType<void>
     export type DeleteTestimonialMutationVariables = {testimonialId: number}
 
     /**
  * @summary Delete Testimonial by id.
  */
-export const useDeleteTestimonial = <TError = ErrorType<unknown>,
+export const useDeleteTestimonial = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteTestimonial>>, TError,DeleteTestimonialMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof deleteTestimonial>>,
@@ -306,7 +306,7 @@ export const approveTestimonial = (
 
 export const getApproveTestimonialMutationKey = () => ['approveTestimonial'] as const;
 
-export const getApproveTestimonialMutationOptions = <TError = ErrorType<unknown>,
+export const getApproveTestimonialMutationOptions = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof approveTestimonial>>, TError,ApproveTestimonialMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
 ): UseMutationOptions<Awaited<ReturnType<typeof approveTestimonial>>, TError,ApproveTestimonialMutationVariables, TContext> => {
 
@@ -335,13 +335,13 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type ApproveTestimonialMutationResult = NonNullable<Awaited<ReturnType<typeof approveTestimonial>>>
 
-    export type ApproveTestimonialMutationError = ErrorType<unknown>
+    export type ApproveTestimonialMutationError = ErrorType<void>
     export type ApproveTestimonialMutationVariables = {testimonialId: number}
 
     /**
  * @summary Approve a Testimonial.
  */
-export const useApproveTestimonial = <TError = ErrorType<unknown>,
+export const useApproveTestimonial = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof approveTestimonial>>, TError,ApproveTestimonialMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof approveTestimonial>>,

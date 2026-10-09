@@ -9,7 +9,10 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-var ErrFriendshipNotFound = errors.New("friendship not found")
+var (
+	ErrFriendshipNotFound = newError(ErrNotFound, "friendship not found")
+	ErrFriendshipExists   = newError(ErrConflict, "there is already a friendship or request between these users")
+)
 
 type FriendshipService struct {
 	transactor           repository.Transactor
@@ -35,31 +38,31 @@ func NewFriendshipService(
 func (f *FriendshipService) CreateFriendship(userRequestedID uint, userRequesteeID uint) error {
 	userRequested, err := f.userRepository.FindById(userRequestedID)
 	if err != nil {
-		return errors.New("could not find user that requested the friendship")
+		return fromRepository(err, "user that requested the friendship")
 	}
 
 	userRequestee, err := f.userRepository.FindById(userRequesteeID)
 	if err != nil {
-		return errors.New("could not find target user (requestee) of the friendship")
+		return fromRepository(err, "target user (requestee) of the friendship")
 	}
 
 	if f.friendshipRepository.UsersHavePendingFriendshipInvites(userRequestedID, userRequesteeID) {
-		return errors.New("there is already a friendship or request between these users")
+		return ErrFriendshipExists
 	}
 
 	friendshipModel := model.NewFriendship(userRequested, userRequestee)
 
 	err = f.friendshipRepository.Create(friendshipModel)
-	if err != nil {
-		return err
+	if errors.Is(err, repository.ErrDuplicate) {
+		return ErrFriendshipExists
 	}
-	return nil
+	return err
 }
 
 func (f *FriendshipService) ReplyFriendship(friendshipId uint, accepted bool) error {
 	friendship, err := f.friendshipRepository.FindPendingFriendshipWithUsersById(friendshipId)
 	if err != nil {
-		return err
+		return fromRepository(err, "friendship")
 	}
 
 	if !accepted {
@@ -103,8 +106,11 @@ func (f *FriendshipService) ShouldThisUserBeDeleting(friendshipId uint, userId u
 
 func (f *FriendshipService) DeleteFriendship(friendshipId uint) error {
 	friendship, err := f.friendshipRepository.FindById(friendshipId)
-	if err != nil {
+	if errors.Is(err, repository.ErrNotFound) {
 		return ErrFriendshipNotFound
+	}
+	if err != nil {
+		return err
 	}
 
 	// Also used to cancel pending requests: recounting (instead of
@@ -131,8 +137,11 @@ func updateFriendCounts(tx *repository.Repositories, friendship *model.Friendshi
 // ErrFriendshipNotFound when they are not friends.
 func (f *FriendshipService) RemoveFriend(userId uint, friendId uint) error {
 	friendship, err := f.friendshipRepository.FindActiveAcceptedFriends(userId, friendId)
-	if err != nil {
+	if errors.Is(err, repository.ErrNotFound) {
 		return ErrFriendshipNotFound
+	}
+	if err != nil {
+		return err
 	}
 	return f.DeleteFriendship(friendship.ID)
 }

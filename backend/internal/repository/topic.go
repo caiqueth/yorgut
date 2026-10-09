@@ -64,7 +64,7 @@ func (t *TopicRepository) FindByIdWithAuthorProfile(topicId uint) (*model.Topic,
 		First(&topic, topicId)
 
 	if result.Error != nil {
-		return nil, result.Error
+		return nil, translate(result.Error)
 	}
 	return &topic, nil
 }

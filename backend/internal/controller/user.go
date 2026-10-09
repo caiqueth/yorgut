@@ -37,6 +37,9 @@ func NewUserController(
 // @Produce			application/json
 // @Tags			Users
 // @Success			201 {object} transport.Response{}
+// @Failure			400
+// @Failure			401
+// @Failure			409
 // @Security			BearerAuth
 // @Router			/users [post]
 func (uc *UserController) Create(ctx *gin.Context) {
@@ -51,7 +54,7 @@ func (uc *UserController) Create(ctx *gin.Context) {
 
 	err = uc.userService.CreateUser(req.FirstName, req.LastName, req.Email, req.BirthDate, nil)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 
@@ -70,12 +73,13 @@ func (uc *UserController) Create(ctx *gin.Context) {
 // @Produce				application/json
 // @Tags				Users
 // @Success				200 {object} transport.FindManyUsersResponse{}
+// @Failure			401
 // @Security			BearerAuth
 // @Router				/users [get]
 func (uc *UserController) FindMany(ctx *gin.Context) {
 	users, err := uc.userService.FindManyUsers()
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 
@@ -93,6 +97,7 @@ func (uc *UserController) FindMany(ctx *gin.Context) {
 // @Produce				application/json
 // @Tags				Users
 // @Success				200 {object} transport.SearchUsersResponse{}
+// @Failure			401
 // @Security			BearerAuth
 // @Router				/users/search-users [get]
 func (uc *UserController) SearchUsers(ctx *gin.Context) {
@@ -114,6 +119,9 @@ func (uc *UserController) SearchUsers(ctx *gin.Context) {
 // @Produce				application/json
 // @Tags				Users
 // @Success				200 {object} transport.FindUserResponse{}
+// @Failure			400
+// @Failure			401
+// @Failure			404
 // @Security			BearerAuth
 // @Router				/users/{userId} [get]
 func (uc *UserController) FindById(ctx *gin.Context) {
@@ -127,7 +135,7 @@ func (uc *UserController) FindById(ctx *gin.Context) {
 	user, err := uc.userService.FindUserById(uint(id))
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 
@@ -143,6 +151,8 @@ func (uc *UserController) FindById(ctx *gin.Context) {
 // @Produce				application/json
 // @Tags				Users
 // @Success				200 {object} transport.FindUserWithProfileByIdResponse{}
+// @Failure			401
+// @Failure			404
 // @Security			BearerAuth
 // @Router				/users/{userId}/profile [get]
 func (uc *UserController) FindUserProfile(ctx *gin.Context) {
@@ -150,7 +160,7 @@ func (uc *UserController) FindUserProfile(ctx *gin.Context) {
 	userWithProfile, err := uc.userService.FindUserWithProfileById(userId)
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 
@@ -166,6 +176,7 @@ func (uc *UserController) FindUserProfile(ctx *gin.Context) {
 // @Produce					application/json
 // @Tags					Users
 // @Success					200 {object} transport.FindUserMembershipsResponse{}
+// @Failure			401
 // @Security			BearerAuth
 // @Router					/users/{userId}/memberships [get]
 func (uc *UserController) FindMemberships(ctx *gin.Context) {
@@ -173,7 +184,7 @@ func (uc *UserController) FindMemberships(ctx *gin.Context) {
 
 	memberships, err := uc.communityMembershipService.FindUserMemberships(userId)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 
@@ -188,13 +199,14 @@ func (uc *UserController) FindMemberships(ctx *gin.Context) {
 // @Produce					application/json
 // @Tags					Users
 // @Success					200 {object} transport.FindFriendsOfUserResponse{}
+// @Failure			401
 // @Security			BearerAuth
 // @Router					/users/{userId}/friends [get]
 func (uc *UserController) FindFriends(ctx *gin.Context) {
 	userId := helpers.MustParseUint(ctx.Param("userId"))
 	friendships, err := uc.friendshipService.FindFriendsOfUser(userId)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 

@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"errors"
 	"net/http"
 	"yorgut/internal/helpers"
 	"yorgut/internal/model"
@@ -21,18 +20,6 @@ func NewTestimonialController(service service.TestimonialService) *TestimonialCo
 	}
 }
 
-// testimonialErrorStatus maps the service's sentinel errors to HTTP statuses.
-func testimonialErrorStatus(err error) int {
-	switch {
-	case errors.Is(err, service.ErrTestimonialNotFound):
-		return http.StatusNotFound
-	case errors.Is(err, service.ErrTestimonialForbidden), errors.Is(err, service.ErrTestimonialNotFriend):
-		return http.StatusForbidden
-	default:
-		return http.StatusInternalServerError
-	}
-}
-
 // FindOfUser			godoc
 // @ID					findUserTestimonials
 // @Summary				Gets the testimonials of a user.
@@ -43,6 +30,7 @@ func testimonialErrorStatus(err error) int {
 // @Produce				application/json
 // @Tags				Testimonial
 // @Success				200 {object} transport.FindTestimonialsOfUserResponse{}
+// @Failure			401
 // @Security			BearerAuth
 // @Router				/testimonials/user/{userId} [get]
 func (t *TestimonialController) FindOfUser(ctx *gin.Context) {
@@ -63,7 +51,7 @@ func (t *TestimonialController) FindOfUser(ctx *gin.Context) {
 
 	testimonials, err := t.testimonialService.FindTestimonialsOfUser(viewer.ID, userId, page, pageSize)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 
@@ -79,6 +67,10 @@ func (t *TestimonialController) FindOfUser(ctx *gin.Context) {
 // @Produce				application/json
 // @Tags				Testimonial
 // @Success				201 {object} transport.Response{}
+// @Failure			400
+// @Failure			401
+// @Failure			403
+// @Failure			404
 // @Security			BearerAuth
 // @Router				/testimonials [post]
 func (t *TestimonialController) Create(ctx *gin.Context) {
@@ -91,7 +83,7 @@ func (t *TestimonialController) Create(ctx *gin.Context) {
 	}
 
 	if err := t.testimonialService.CreateTestimonial(author.ID, request.UserRecipientID, request.Content); err != nil {
-		ctx.JSON(testimonialErrorStatus(err), gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 
@@ -106,6 +98,9 @@ func (t *TestimonialController) Create(ctx *gin.Context) {
 // @Produce				application/json
 // @Tags				Testimonial
 // @Success				204
+// @Failure			401
+// @Failure			403
+// @Failure			404
 // @Security			BearerAuth
 // @Router				/testimonials/{testimonialId}/approve [post]
 func (t *TestimonialController) Approve(ctx *gin.Context) {
@@ -113,7 +108,7 @@ func (t *TestimonialController) Approve(ctx *gin.Context) {
 	testimonialId := helpers.MustParseUint(ctx.Param("testimonialId"))
 
 	if err := t.testimonialService.ApproveTestimonial(viewer.ID, testimonialId); err != nil {
-		ctx.JSON(testimonialErrorStatus(err), gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 
@@ -128,6 +123,9 @@ func (t *TestimonialController) Approve(ctx *gin.Context) {
 // @Produce				application/json
 // @Tags				Testimonial
 // @Success				204
+// @Failure			401
+// @Failure			403
+// @Failure			404
 // @Security			BearerAuth
 // @Router				/testimonials/{testimonialId} [delete]
 func (t *TestimonialController) Delete(ctx *gin.Context) {
@@ -135,7 +133,7 @@ func (t *TestimonialController) Delete(ctx *gin.Context) {
 	testimonialId := helpers.MustParseUint(ctx.Param("testimonialId"))
 
 	if err := t.testimonialService.DeleteTestimonial(viewer.ID, testimonialId); err != nil {
-		ctx.JSON(testimonialErrorStatus(err), gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 

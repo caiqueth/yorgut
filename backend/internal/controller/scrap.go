@@ -29,6 +29,9 @@ func NewScrapController(service service.ScrapService) *ScrapController {
 // @Produce				application/json
 // @Tags				Scrap
 // @Success				201 {object} transport.Response{}
+// @Failure			400
+// @Failure			401
+// @Failure			404
 // @Security			BearerAuth
 // @Router				/scraps [post]
 func (s *ScrapController) Create(ctx *gin.Context) {
@@ -44,7 +47,7 @@ func (s *ScrapController) Create(ctx *gin.Context) {
 	}
 
 	if err := s.scrapService.CreateScrap(author.ID, req.UserRecipientID, req.Content); err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 
@@ -62,7 +65,8 @@ func (s *ScrapController) Create(ctx *gin.Context) {
 // @Description			Not implemented yet: always answers 501. The route has no scrap id yet.
 // @Produce				application/json
 // @Tags				Scrap
-// @Failure				501
+// @Failure			401
+// @Failure			501
 // @Security			BearerAuth
 // @Router				/scraps [delete]
 func (s *ScrapController) Delete(ctx *gin.Context) {
@@ -77,6 +81,7 @@ func (s *ScrapController) Delete(ctx *gin.Context) {
 // @Produce				application/json
 // @Tags				Scrap
 // @Success				200 {object} transport.FindScrapOfUserRecipientResponse{}
+// @Failure			401
 // @Security			BearerAuth
 // @Router				/scraps/user/{userId} [get]
 func (s *ScrapController) FindOfUser(ctx *gin.Context) {
@@ -84,7 +89,7 @@ func (s *ScrapController) FindOfUser(ctx *gin.Context) {
 	scraps, err := s.scrapService.FindScrapOfUserRecipient(userId)
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 

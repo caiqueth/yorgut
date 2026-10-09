@@ -50,7 +50,7 @@ export const createCommunityMembership = (
 
 export const getCreateCommunityMembershipMutationKey = () => ['createCommunityMembership'] as const;
 
-export const getCreateCommunityMembershipMutationOptions = <TError = ErrorType<unknown>,
+export const getCreateCommunityMembershipMutationOptions = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCommunityMembership>>, TError,CreateCommunityMembershipMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
 ): UseMutationOptions<Awaited<ReturnType<typeof createCommunityMembership>>, TError,CreateCommunityMembershipMutationVariables, TContext> => {
 
@@ -79,13 +79,13 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type CreateCommunityMembershipMutationResult = NonNullable<Awaited<ReturnType<typeof createCommunityMembership>>>
     export type CreateCommunityMembershipMutationBody = BodyType<CreateCommunityMembershipRequest>
-    export type CreateCommunityMembershipMutationError = ErrorType<unknown>
+    export type CreateCommunityMembershipMutationError = ErrorType<void>
     export type CreateCommunityMembershipMutationVariables = {data: BodyType<CreateCommunityMembershipRequest>}
 
     /**
  * @summary Create Community Membership
  */
-export const useCreateCommunityMembership = <TError = ErrorType<unknown>,
+export const useCreateCommunityMembership = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCommunityMembership>>, TError,CreateCommunityMembershipMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof createCommunityMembership>>,
@@ -116,7 +116,7 @@ export const deleteCommunityMembership = (
 
 export const getDeleteCommunityMembershipMutationKey = () => ['deleteCommunityMembership'] as const;
 
-export const getDeleteCommunityMembershipMutationOptions = <TError = ErrorType<unknown>,
+export const getDeleteCommunityMembershipMutationOptions = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteCommunityMembership>>, TError,DeleteCommunityMembershipMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
 ): UseMutationOptions<Awaited<ReturnType<typeof deleteCommunityMembership>>, TError,DeleteCommunityMembershipMutationVariables, TContext> => {
 
@@ -145,13 +145,13 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type DeleteCommunityMembershipMutationResult = NonNullable<Awaited<ReturnType<typeof deleteCommunityMembership>>>
 
-    export type DeleteCommunityMembershipMutationError = ErrorType<unknown>
+    export type DeleteCommunityMembershipMutationError = ErrorType<void>
     export type DeleteCommunityMembershipMutationVariables = {userId: number;communityId: number}
 
     /**
  * @summary Delete Community Membership
  */
-export const useDeleteCommunityMembership = <TError = ErrorType<unknown>,
+export const useDeleteCommunityMembership = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteCommunityMembership>>, TError,DeleteCommunityMembershipMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof deleteCommunityMembership>>,

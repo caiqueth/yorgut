@@ -40,7 +40,7 @@ func (c *CommunityMembershipRepository) FindOfUserAndCommunity(communityId uint,
 		Where("user_id = ? and community_id = ?", userId, communityId).
 		First(&membership)
 	if result.Error != nil {
-		return nil, result.Error
+		return nil, translate(result.Error)
 	}
 	return &membership, nil
 }

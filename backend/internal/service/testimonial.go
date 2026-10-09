@@ -2,7 +2,6 @@ package service
 
 import (
 	"errors"
-	"fmt"
 	"yorgut/internal/model"
 	"yorgut/internal/repository"
 	"yorgut/internal/transport"
@@ -11,9 +10,9 @@ import (
 )
 
 var (
-	ErrTestimonialNotFound  = errors.New("testimonial not found")
-	ErrTestimonialForbidden = errors.New("this testimonial does not belong to this user")
-	ErrTestimonialNotFriend = errors.New("only friends can write testimonials for this user")
+	ErrTestimonialNotFound  = newError(ErrNotFound, "testimonial not found")
+	ErrTestimonialForbidden = newError(ErrForbidden, "this testimonial does not belong to this user")
+	ErrTestimonialNotFriend = newError(ErrForbidden, "only friends can write testimonials for this user")
 )
 
 type TestimonialService struct {
@@ -54,12 +53,12 @@ func (t *TestimonialService) CreateTestimonial(authorId uint, recipientId uint, 
 
 	author, err := t.userRepository.FindById(authorId)
 	if err != nil {
-		return fmt.Errorf("author not found %v", authorId)
+		return fromRepository(err, "author")
 	}
 
 	recipient, err := t.userRepository.FindById(recipientId)
 	if err != nil {
-		return fmt.Errorf("recipient not found %v", recipientId)
+		return fromRepository(err, "recipient")
 	}
 
 	testimonialModel := model.NewTestimonial(author, recipient, content)
@@ -96,8 +95,11 @@ func (t *TestimonialService) FindTestimonialsOfUser(viewerId uint, userId uint, 
 // ApproveTestimonial is only allowed for the recipient.
 func (t *TestimonialService) ApproveTestimonial(viewerId uint, testimonialId uint) error {
 	testimonial, err := t.testimonialRepository.FindById(testimonialId)
-	if err != nil {
+	if errors.Is(err, repository.ErrNotFound) {
 		return ErrTestimonialNotFound
+	}
+	if err != nil {
+		return err
 	}
 
 	if testimonial.UserRecipientID != viewerId {
@@ -111,8 +113,11 @@ func (t *TestimonialService) ApproveTestimonial(viewerId uint, testimonialId uin
 // author take back one they wrote.
 func (t *TestimonialService) DeleteTestimonial(viewerId uint, testimonialId uint) error {
 	testimonial, err := t.testimonialRepository.FindById(testimonialId)
-	if err != nil {
+	if errors.Is(err, repository.ErrNotFound) {
 		return ErrTestimonialNotFound
+	}
+	if err != nil {
+		return err
 	}
 
 	if testimonial.UserRecipientID != viewerId && testimonial.UserAuthorID != viewerId {

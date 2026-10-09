@@ -76,7 +76,7 @@ export const createTopic = (
 
 export const getCreateTopicMutationKey = () => ['createTopic'] as const;
 
-export const getCreateTopicMutationOptions = <TError = ErrorType<unknown>,
+export const getCreateTopicMutationOptions = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createTopic>>, TError,CreateTopicMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
 ): UseMutationOptions<Awaited<ReturnType<typeof createTopic>>, TError,CreateTopicMutationVariables, TContext> => {
 
@@ -105,13 +105,13 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type CreateTopicMutationResult = NonNullable<Awaited<ReturnType<typeof createTopic>>>
     export type CreateTopicMutationBody = BodyType<CreateTopicRequest>
-    export type CreateTopicMutationError = ErrorType<unknown>
+    export type CreateTopicMutationError = ErrorType<void>
     export type CreateTopicMutationVariables = {data: BodyType<CreateTopicRequest>}
 
     /**
  * @summary Creates a new Topic
  */
-export const useCreateTopic = <TError = ErrorType<unknown>,
+export const useCreateTopic = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createTopic>>, TError,CreateTopicMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof createTopic>>,
@@ -144,7 +144,7 @@ export const replyTopic = (
 
 export const getReplyTopicMutationKey = () => ['replyTopic'] as const;
 
-export const getReplyTopicMutationOptions = <TError = ErrorType<unknown>,
+export const getReplyTopicMutationOptions = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof replyTopic>>, TError,ReplyTopicMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
 ): UseMutationOptions<Awaited<ReturnType<typeof replyTopic>>, TError,ReplyTopicMutationVariables, TContext> => {
 
@@ -173,13 +173,13 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type ReplyTopicMutationResult = NonNullable<Awaited<ReturnType<typeof replyTopic>>>
     export type ReplyTopicMutationBody = BodyType<ReplyTopicRequest>
-    export type ReplyTopicMutationError = ErrorType<unknown>
+    export type ReplyTopicMutationError = ErrorType<void>
     export type ReplyTopicMutationVariables = {topicId: number;data: BodyType<ReplyTopicRequest>}
 
     /**
  * @summary Creates a new Topic Reply
  */
-export const useReplyTopic = <TError = ErrorType<unknown>,
+export const useReplyTopic = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof replyTopic>>, TError,ReplyTopicMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof replyTopic>>,
@@ -214,7 +214,7 @@ export const getFindTopicRepliesQueryKey = (topicId: number,) => {
     }
 
 
-export const getFindTopicRepliesQueryOptions = <TData = Awaited<ReturnType<typeof findTopicReplies>>, TError = ErrorType<unknown>>(topicId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findTopicReplies>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
+export const getFindTopicRepliesQueryOptions = <TData = Awaited<ReturnType<typeof findTopicReplies>>, TError = ErrorType<void>>(topicId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findTopicReplies>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -233,10 +233,10 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type FindTopicRepliesQueryResult = NonNullable<Awaited<ReturnType<typeof findTopicReplies>>>
-export type FindTopicRepliesQueryError = ErrorType<unknown>
+export type FindTopicRepliesQueryError = ErrorType<void>
 
 
-export function useFindTopicReplies<TData = Awaited<ReturnType<typeof findTopicReplies>>, TError = ErrorType<unknown>>(
+export function useFindTopicReplies<TData = Awaited<ReturnType<typeof findTopicReplies>>, TError = ErrorType<void>>(
  topicId: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof findTopicReplies>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof findTopicReplies>>,
@@ -246,7 +246,7 @@ export function useFindTopicReplies<TData = Awaited<ReturnType<typeof findTopicR
       >, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useFindTopicReplies<TData = Awaited<ReturnType<typeof findTopicReplies>>, TError = ErrorType<unknown>>(
+export function useFindTopicReplies<TData = Awaited<ReturnType<typeof findTopicReplies>>, TError = ErrorType<void>>(
  topicId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findTopicReplies>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof findTopicReplies>>,
@@ -256,7 +256,7 @@ export function useFindTopicReplies<TData = Awaited<ReturnType<typeof findTopicR
       >, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useFindTopicReplies<TData = Awaited<ReturnType<typeof findTopicReplies>>, TError = ErrorType<unknown>>(
+export function useFindTopicReplies<TData = Awaited<ReturnType<typeof findTopicReplies>>, TError = ErrorType<void>>(
  topicId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findTopicReplies>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -264,7 +264,7 @@ export function useFindTopicReplies<TData = Awaited<ReturnType<typeof findTopicR
  * @summary Lists all the replies of a given topic
  */
 
-export function useFindTopicReplies<TData = Awaited<ReturnType<typeof findTopicReplies>>, TError = ErrorType<unknown>>(
+export function useFindTopicReplies<TData = Awaited<ReturnType<typeof findTopicReplies>>, TError = ErrorType<void>>(
  topicId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findTopicReplies>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {

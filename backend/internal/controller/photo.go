@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"errors"
 	"net/http"
 	"yorgut/internal/helpers"
 	"yorgut/internal/model"
@@ -21,25 +20,6 @@ func NewPhotoController(service service.PhotoService) *PhotoController {
 	}
 }
 
-// photoErrorStatus maps the service's sentinel errors to HTTP statuses.
-func photoErrorStatus(err error) int {
-	switch {
-	case errors.Is(err, service.ErrPhotoNotFound):
-		return http.StatusNotFound
-	case errors.Is(err, service.ErrPhotoForbidden):
-		return http.StatusForbidden
-	case errors.Is(err, service.ErrAlbumFull):
-		return http.StatusConflict
-	case errors.Is(err, service.ErrPictureTooLarge),
-		errors.Is(err, service.ErrPictureTooBig),
-		errors.Is(err, service.ErrPhotoCaptionTooLong),
-		errors.Is(err, service.ErrInvalidPicture):
-		return http.StatusBadRequest
-	default:
-		return http.StatusInternalServerError
-	}
-}
-
 // FindOfUser			godoc
 // @ID					findUserPhotos
 // @Summary				Lists the photos of a user's personal album.
@@ -48,6 +28,7 @@ func photoErrorStatus(err error) int {
 // @Produce				application/json
 // @Tags				Photo
 // @Success				200 {object} transport.FindPhotosOfUserResponse{}
+// @Failure			401
 // @Security			BearerAuth
 // @Router				/photos/user/{userId} [get]
 func (p *PhotoController) FindOfUser(ctx *gin.Context) {
@@ -56,7 +37,7 @@ func (p *PhotoController) FindOfUser(ctx *gin.Context) {
 
 	photos, err := p.photoService.FindPhotosOfUser(viewer.ID, userId)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 
@@ -73,6 +54,9 @@ func (p *PhotoController) FindOfUser(ctx *gin.Context) {
 // @Produce				application/json
 // @Tags				Photo
 // @Success				201 {object} transport.Response{}
+// @Failure			400
+// @Failure			401
+// @Failure			409
 // @Security			BearerAuth
 // @Router				/photos [post]
 func (p *PhotoController) Create(ctx *gin.Context) {
@@ -96,7 +80,7 @@ func (p *PhotoController) Create(ctx *gin.Context) {
 	}
 
 	if err := p.photoService.UploadPhoto(user.ID, picture, ctx.PostForm("caption")); err != nil {
-		ctx.JSON(photoErrorStatus(err), gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 
@@ -111,6 +95,9 @@ func (p *PhotoController) Create(ctx *gin.Context) {
 // @Produce				application/json
 // @Tags				Photo
 // @Success				204
+// @Failure			401
+// @Failure			403
+// @Failure			404
 // @Security			BearerAuth
 // @Router				/photos/{photoId} [delete]
 func (p *PhotoController) Delete(ctx *gin.Context) {
@@ -118,7 +105,7 @@ func (p *PhotoController) Delete(ctx *gin.Context) {
 	photoId := helpers.MustParseUint(ctx.Param("photoId"))
 
 	if err := p.photoService.DeletePhoto(user.ID, photoId); err != nil {
-		ctx.JSON(photoErrorStatus(err), gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 

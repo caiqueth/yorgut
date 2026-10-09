@@ -1,7 +1,6 @@
 package service
 
 import (
-	"errors"
 	"fmt"
 	"yorgut/internal/helpers"
 )
@@ -13,9 +12,9 @@ const (
 )
 
 var (
-	ErrInvalidPicture  = errors.New("the picture must be a PNG or JPEG image")
-	ErrPictureTooLarge = errors.New("the picture must be at most 1 MB")
-	ErrPictureTooBig   = fmt.Errorf("the picture must be at most %dx%d pixels", MaxPictureDimension, MaxPictureDimension)
+	ErrInvalidPicture  = newError(ErrInvalid, "the picture must be a PNG or JPEG image")
+	ErrPictureTooLarge = newError(ErrInvalid, "the picture must be at most 1 MB")
+	ErrPictureTooBig   = newError(ErrInvalid, fmt.Sprintf("the picture must be at most %dx%d pixels", MaxPictureDimension, MaxPictureDimension))
 )
 
 // validatePicture enforces the upload limits: PNG or JPEG, at most 1 MB and

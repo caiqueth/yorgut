@@ -82,7 +82,7 @@ if(uploadPhotoBody?.caption !== undefined) {
 
 export const getUploadPhotoMutationKey = () => ['uploadPhoto'] as const;
 
-export const getUploadPhotoMutationOptions = <TError = ErrorType<unknown>,
+export const getUploadPhotoMutationOptions = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadPhoto>>, TError,UploadPhotoMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
 ): UseMutationOptions<Awaited<ReturnType<typeof uploadPhoto>>, TError,UploadPhotoMutationVariables, TContext> => {
 
@@ -111,13 +111,13 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type UploadPhotoMutationResult = NonNullable<Awaited<ReturnType<typeof uploadPhoto>>>
     export type UploadPhotoMutationBody = BodyType<UploadPhotoBody> | undefined
-    export type UploadPhotoMutationError = ErrorType<unknown>
+    export type UploadPhotoMutationError = ErrorType<void>
     export type UploadPhotoMutationVariables = {data?: BodyType<UploadPhotoBody>}
 
     /**
  * @summary Uploads a photo to the logged user's album.
  */
-export const useUploadPhoto = <TError = ErrorType<unknown>,
+export const useUploadPhoto = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadPhoto>>, TError,UploadPhotoMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof uploadPhoto>>,
@@ -152,7 +152,7 @@ export const getFindUserPhotosQueryKey = (userId: number,) => {
     }
 
 
-export const getFindUserPhotosQueryOptions = <TData = Awaited<ReturnType<typeof findUserPhotos>>, TError = ErrorType<unknown>>(userId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findUserPhotos>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
+export const getFindUserPhotosQueryOptions = <TData = Awaited<ReturnType<typeof findUserPhotos>>, TError = ErrorType<void>>(userId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findUserPhotos>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -171,10 +171,10 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type FindUserPhotosQueryResult = NonNullable<Awaited<ReturnType<typeof findUserPhotos>>>
-export type FindUserPhotosQueryError = ErrorType<unknown>
+export type FindUserPhotosQueryError = ErrorType<void>
 
 
-export function useFindUserPhotos<TData = Awaited<ReturnType<typeof findUserPhotos>>, TError = ErrorType<unknown>>(
+export function useFindUserPhotos<TData = Awaited<ReturnType<typeof findUserPhotos>>, TError = ErrorType<void>>(
  userId: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof findUserPhotos>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof findUserPhotos>>,
@@ -184,7 +184,7 @@ export function useFindUserPhotos<TData = Awaited<ReturnType<typeof findUserPhot
       >, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useFindUserPhotos<TData = Awaited<ReturnType<typeof findUserPhotos>>, TError = ErrorType<unknown>>(
+export function useFindUserPhotos<TData = Awaited<ReturnType<typeof findUserPhotos>>, TError = ErrorType<void>>(
  userId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findUserPhotos>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof findUserPhotos>>,
@@ -194,7 +194,7 @@ export function useFindUserPhotos<TData = Awaited<ReturnType<typeof findUserPhot
       >, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useFindUserPhotos<TData = Awaited<ReturnType<typeof findUserPhotos>>, TError = ErrorType<unknown>>(
+export function useFindUserPhotos<TData = Awaited<ReturnType<typeof findUserPhotos>>, TError = ErrorType<void>>(
  userId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findUserPhotos>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -202,7 +202,7 @@ export function useFindUserPhotos<TData = Awaited<ReturnType<typeof findUserPhot
  * @summary Lists the photos of a user's personal album.
  */
 
-export function useFindUserPhotos<TData = Awaited<ReturnType<typeof findUserPhotos>>, TError = ErrorType<unknown>>(
+export function useFindUserPhotos<TData = Awaited<ReturnType<typeof findUserPhotos>>, TError = ErrorType<void>>(
  userId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findUserPhotos>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -239,7 +239,7 @@ export const deletePhoto = (
 
 export const getDeletePhotoMutationKey = () => ['deletePhoto'] as const;
 
-export const getDeletePhotoMutationOptions = <TError = ErrorType<unknown>,
+export const getDeletePhotoMutationOptions = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deletePhoto>>, TError,DeletePhotoMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
 ): UseMutationOptions<Awaited<ReturnType<typeof deletePhoto>>, TError,DeletePhotoMutationVariables, TContext> => {
 
@@ -268,13 +268,13 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type DeletePhotoMutationResult = NonNullable<Awaited<ReturnType<typeof deletePhoto>>>
 
-    export type DeletePhotoMutationError = ErrorType<unknown>
+    export type DeletePhotoMutationError = ErrorType<void>
     export type DeletePhotoMutationVariables = {photoId: number}
 
     /**
  * @summary Deletes a photo from the logged user's album.
  */
-export const useDeletePhoto = <TError = ErrorType<unknown>,
+export const useDeletePhoto = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deletePhoto>>, TError,DeletePhotoMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof deletePhoto>>,

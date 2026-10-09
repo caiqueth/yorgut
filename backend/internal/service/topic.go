@@ -10,8 +10,8 @@ import (
 )
 
 var (
-	ErrTopicNotFound      = errors.New("topic not found")
-	ErrNotCommunityMember = errors.New("only members of this community can post in its forum")
+	ErrTopicNotFound      = newError(ErrNotFound, "topic not found")
+	ErrNotCommunityMember = newError(ErrForbidden, "only members of this community can post in its forum")
 )
 
 type TopicService struct {
@@ -66,6 +66,9 @@ func (ts *TopicService) FindTopicReplies(topicId uint) (*transport.TopicRepliesR
 	response.Replies = []transport.TopicReply{}
 
 	topic, err := ts.topicRepository.FindByIdWithAuthorProfile(topicId)
+	if errors.Is(err, repository.ErrNotFound) {
+		return nil, ErrTopicNotFound
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -102,8 +105,11 @@ func (ts *TopicService) CreateTopic(authorId uint, communityId uint, title strin
 // client, so membership can't be bypassed by sending another community's id.
 func (ts *TopicService) ReplyTopic(authorId uint, parentTopicId uint, title string, text string) error {
 	parentTopic, err := ts.topicRepository.FindById(parentTopicId)
-	if err != nil {
+	if errors.Is(err, repository.ErrNotFound) {
 		return ErrTopicNotFound
+	}
+	if err != nil {
+		return err
 	}
 
 	if !ts.isMember(authorId, parentTopic.CommunityID) {

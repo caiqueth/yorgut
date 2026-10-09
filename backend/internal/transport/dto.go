@@ -100,12 +100,13 @@ type FriendshipItem struct {
 }
 
 type CreateFriendshipRequest struct {
-	UserRequesteeID uint `json:"userRequesteeId"`
+	UserRequesteeID uint `json:"userRequesteeId" binding:"required"`
 }
 
 type ReplyFriendshipRequest struct {
-	FriendshipID uint `json:"friendshipId"`
-	Accept       bool
+	FriendshipID uint `json:"friendshipId" binding:"required"`
+	// Accept false (or missing) declines the request.
+	Accept bool `json:"accept"`
 }
 
 type FindFriendshipOfUserResponse struct {

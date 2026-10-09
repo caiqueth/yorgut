@@ -63,12 +63,24 @@ Left to do:
 - [x] `go test ./...` in the Makefile (`make test`, was already there).
 - [ ] Later: run the same tests against Postgres (see item 5).
 
-### 4. Error handling: domain errors → HTTP status in one place
+### 4. Error handling: domain errors → HTTP status in one place ✅ (done 2026-10-09)
 
-- [ ] Shared service errors (`ErrNotFound`, `ErrForbidden`, `ErrConflict`, `ErrInvalid`), wrapped with context via `fmt.Errorf("...: %w", ErrNotFound)`.
-- [ ] Repositories or services translate `gorm.ErrRecordNotFound`; services stop importing `gorm` (`service/user.go` does today).
-- [ ] One controller helper (e.g. `respondError(ctx, err)`) that maps those errors to 404/403/409/400, else 500 (and logs it).
-- [ ] Fixes the "record not found → 500" entry in known-deviations.
+- [x] Service categories `ErrNotFound`, `ErrForbidden`, `ErrConflict`, `ErrInvalid` (`service/errors.go`); every
+  specific sentinel belongs to one (`errors.Is(err, service.ErrForbidden)`), with a readable message.
+- [x] Repositories translate `gorm.ErrRecordNotFound` → `repository.ErrNotFound` and unique violations →
+  `repository.ErrDuplicate` (GORM `TranslateError`); services map them and no longer import `gorm`.
+- [x] `controller.RespondError` maps them to 404/403/409/400 (401 for session/Google errors); anything else is logged
+  and answered with a generic 500, so raw errors no longer leak. `AuthMiddleware` uses it too.
+- [x] Fixes "record not found → 500", and duplicate joins/friend requests now answer 409.
+- [x] `AddFriend` / `ReplyFriendship` validated their JSON body (bind errors were ignored, so a bad body gave 403/404).
+- [x] Tests: `controller_test.go` (status mapping, no leak) and `service/errors_test.go` (category per service method).
+
+Left to do:
+
+- [ ] Error responses have no type in the spec, so the generated client types them `unknown`/`void`. Add a
+  `transport.ErrorResponse{Error string}` and use it in the `@Failure` lines, then `make gen-api`.
+- [ ] Bool permission checks (`ShouldThisUserBeReplying`, ...) answer 403 even when the friendship doesn't exist;
+  they could return categorized errors instead.
 
 ### 5. Versioned migrations and Postgres in dev ✅ (done 2026-10-09)
 

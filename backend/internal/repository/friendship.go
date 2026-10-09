@@ -25,7 +25,7 @@ func (f *FriendshipRepository) FindByIdWithUsers(id uint) (*model.Friendship, er
 		First(&ent, id)
 
 	if result.Error != nil {
-		return nil, result.Error
+		return nil, translate(result.Error)
 	}
 	return &ent, nil
 }
@@ -105,7 +105,7 @@ func (f *FriendshipRepository) FindActiveAcceptedFriends(userId1 uint, userId2 u
 		First(&ent)
 
 	if result.Error != nil {
-		return nil, result.Error
+		return nil, translate(result.Error)
 	}
 
 	return &ent, nil
@@ -153,7 +153,7 @@ func (f *FriendshipRepository) FindPendingFriendshipWithUsersById(friendshipId u
 		First(&ent)
 
 	if result.Error != nil {
-		return nil, result.Error
+		return nil, translate(result.Error)
 	}
 	return &ent, nil
 }

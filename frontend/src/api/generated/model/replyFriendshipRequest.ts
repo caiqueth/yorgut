@@ -7,6 +7,7 @@
  */
 
 export interface ReplyFriendshipRequest {
-  accept?: boolean;
+  /** Accept false (or missing) declines the request. */
+  accept: boolean;
   friendshipId: number;
 }

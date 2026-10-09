@@ -81,6 +81,9 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/transport.FindManyCommunitiesResponse"
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     }
                 }
             },
@@ -142,6 +145,15 @@ const docTemplate = `{
                                 }
                             ]
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found"
                     }
                 }
             }
@@ -188,6 +200,9 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/transport.SearchCommunitiesResponse"
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     }
                 }
             }
@@ -223,6 +238,15 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/transport.FindCommunityByIdResponse"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found"
                     }
                 }
             },
@@ -265,6 +289,18 @@ const docTemplate = `{
                 "responses": {
                     "204": {
                         "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
                     }
                 }
             },
@@ -295,6 +331,9 @@ const docTemplate = `{
                 "responses": {
                     "204": {
                         "description": "No Content"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     }
                 }
             }
@@ -330,6 +369,9 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/transport.TopicsResponse"
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     }
                 }
             }
@@ -365,6 +407,15 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/transport.FindCommunityMembersResponse"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found"
                     }
                 }
             }
@@ -407,6 +458,18 @@ const docTemplate = `{
                 "responses": {
                     "204": {
                         "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
                     }
                 }
             }
@@ -442,6 +505,12 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/transport.FindCommunityProfileByIdResponse"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     }
                 }
             }
@@ -477,6 +546,9 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/transport.FindManyCommunitiesResponse"
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     }
                 }
             }
@@ -512,6 +584,9 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/transport.TopicsResponse"
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     }
                 }
             }
@@ -552,6 +627,18 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/transport.Response"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
                     }
                 }
             }
@@ -591,6 +678,18 @@ const docTemplate = `{
                 "responses": {
                     "204": {
                         "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
                     }
                 }
             }
@@ -628,6 +727,18 @@ const docTemplate = `{
                 "responses": {
                     "204": {
                         "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
                     }
                 }
             }
@@ -660,6 +771,12 @@ const docTemplate = `{
                 "responses": {
                     "204": {
                         "description": "No Content"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found"
                     }
                 }
             }
@@ -697,6 +814,18 @@ const docTemplate = `{
                 "responses": {
                     "204": {
                         "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
                     }
                 }
             }
@@ -729,6 +858,15 @@ const docTemplate = `{
                 "responses": {
                     "204": {
                         "description": "No Content"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
                     }
                 }
             }
@@ -755,6 +893,9 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/transport.FindUserResponse"
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     }
                 }
             },
@@ -790,6 +931,12 @@ const docTemplate = `{
                 "responses": {
                     "204": {
                         "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     }
                 }
             }
@@ -816,6 +963,9 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/transport.FindFriendsOfUserResponse"
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     }
                 }
             }
@@ -842,6 +992,9 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/transport.FindPendingFriendshipOfUserResponse"
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     }
                 }
             }
@@ -880,6 +1033,9 @@ const docTemplate = `{
                     },
                     "204": {
                         "description": "userId is the logged user"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     }
                 }
             }
@@ -915,6 +1071,18 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/transport.Response"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
                     }
                 }
             }
@@ -951,8 +1119,17 @@ const docTemplate = `{
                             "$ref": "#/definitions/transport.Response"
                         }
                     },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
                     "403": {
                         "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
                     }
                 }
             }
@@ -979,6 +1156,9 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/transport.FindUserMembershipsResponse"
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     }
                 }
             }
@@ -1014,6 +1194,9 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/transport.AmIMemberOfResponse"
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     }
                 }
             }
@@ -1040,6 +1223,9 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/transport.FindMyOwnedCommunitiesResponse"
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     }
                 }
             }
@@ -1066,6 +1252,12 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/transport.FindUserWithProfileByIdResponse"
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found"
                     }
                 }
             }
@@ -1101,6 +1293,12 @@ const docTemplate = `{
                 "responses": {
                     "204": {
                         "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     }
                 }
             }
@@ -1127,6 +1325,9 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/transport.WelcomeResponse"
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     }
                 }
             }
@@ -1171,6 +1372,15 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/transport.Response"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "409": {
+                        "description": "Conflict"
                     }
                 }
             }
@@ -1206,6 +1416,9 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/transport.FindPhotosOfUserResponse"
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     }
                 }
             }
@@ -1238,6 +1451,15 @@ const docTemplate = `{
                 "responses": {
                     "204": {
                         "description": "No Content"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
                     }
                 }
             }
@@ -1278,6 +1500,15 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/transport.Response"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found"
                     }
                 }
             },
@@ -1297,6 +1528,9 @@ const docTemplate = `{
                 "summary": "Delete a Scrap (not implemented).",
                 "operationId": "deleteScrap",
                 "responses": {
+                    "401": {
+                        "description": "Unauthorized"
+                    },
                     "501": {
                         "description": "Not Implemented"
                     }
@@ -1334,6 +1568,9 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/transport.FindScrapOfUserRecipientResponse"
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     }
                 }
             }
@@ -1374,6 +1611,18 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/transport.Response"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
                     }
                 }
             }
@@ -1421,6 +1670,9 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/transport.FindTestimonialsOfUserResponse"
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     }
                 }
             }
@@ -1453,6 +1705,15 @@ const docTemplate = `{
                 "responses": {
                     "204": {
                         "description": "No Content"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
                     }
                 }
             }
@@ -1485,6 +1746,15 @@ const docTemplate = `{
                 "responses": {
                     "204": {
                         "description": "No Content"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
                     }
                 }
             }
@@ -1525,6 +1795,15 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/transport.Response"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
                     }
                 }
             }
@@ -1572,6 +1851,18 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/transport.Response"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
                     }
                 }
             }
@@ -1607,6 +1898,12 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/transport.TopicRepliesResponse"
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found"
                     }
                 }
             }
@@ -1633,6 +1930,9 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/transport.FindManyUsersResponse"
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     }
                 }
             },
@@ -1671,6 +1971,15 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/transport.Response"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "409": {
+                        "description": "Conflict"
                     }
                 }
             }
@@ -1717,6 +2026,9 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/transport.SearchUsersResponse"
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     }
                 }
             }
@@ -1752,6 +2064,15 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/transport.FindUserResponse"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found"
                     }
                 }
             }
@@ -1784,6 +2105,12 @@ const docTemplate = `{
                 "responses": {
                     "204": {
                         "description": "No Content"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
                     }
                 }
             },
@@ -1814,6 +2141,9 @@ const docTemplate = `{
                 "responses": {
                     "204": {
                         "description": "No Content"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     }
                 }
             }
@@ -1849,6 +2179,9 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/transport.UserFanSummaryResponse"
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     }
                 }
             }
@@ -1884,6 +2217,9 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/transport.FindFriendsOfUserResponse"
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     }
                 }
             }
@@ -1919,6 +2255,9 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/transport.FindUserMembershipsResponse"
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     }
                 }
             }
@@ -1954,6 +2293,12 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/transport.FindUserWithProfileByIdResponse"
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found"
                     }
                 }
             }
@@ -1998,6 +2343,15 @@ const docTemplate = `{
                 "responses": {
                     "204": {
                         "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
                     }
                 }
             }
@@ -2033,6 +2387,9 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/transport.UserReviewSummaryResponse"
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     }
                 }
             }
@@ -2830,10 +3187,12 @@ const docTemplate = `{
         "transport.ReplyFriendshipRequest": {
             "type": "object",
             "required": [
+                "accept",
                 "friendshipId"
             ],
             "properties": {
                 "accept": {
+                    "description": "Accept false (or missing) declines the request.",
                     "type": "boolean"
                 },
                 "friendshipId": {

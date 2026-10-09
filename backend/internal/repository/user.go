@@ -21,7 +21,7 @@ func (u *UserRepository) FindByEmail(email string) (*model.User, error) {
 	var ent model.User
 	result := u.db.Where("email = ?", email).First(&ent)
 	if result.Error != nil {
-		return nil, result.Error
+		return nil, translate(result.Error)
 	} else {
 		return &ent, nil
 	}
@@ -31,7 +31,7 @@ func (u *UserRepository) FindByGoogleSub(googleSub string) (*model.User, error) 
 	var ent model.User
 	result := u.db.Where("google_sub = ?", googleSub).First(&ent)
 	if result.Error != nil {
-		return nil, result.Error
+		return nil, translate(result.Error)
 	}
 	return &ent, nil
 }
@@ -41,14 +41,14 @@ func (u *UserRepository) SetGoogleSub(userId uint, googleSub string) error {
 		Where("id = ?", userId).
 		Update("google_sub", googleSub)
 
-	return result.Error
+	return translate(result.Error)
 }
 
 func (r *UserRepository) FindUserWithProfile(userId uint) (*model.User, error) {
 	var ent model.User
 	results := r.db.Preload("Profile").Where("id = ?", userId).First(&ent)
 	if results.Error != nil {
-		return nil, results.Error
+		return nil, translate(results.Error)
 	}
 	return &ent, nil
 }

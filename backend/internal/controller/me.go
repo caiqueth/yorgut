@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"errors"
 	"net/http"
 	"strconv"
 	"time"
@@ -50,6 +49,7 @@ func NewMeController(
 // @Produce				application/json
 // @Tags				Me
 // @Success				200 {object} transport.FindUserResponse{}
+// @Failure			401
 // @Security			BearerAuth
 // @Router				/me [get]
 func (uc *MeController) FindMe(ctx *gin.Context) {
@@ -68,6 +68,7 @@ func (uc *MeController) FindMe(ctx *gin.Context) {
 // @Produce				application/json
 // @Tags				Me
 // @Success				200 {object} transport.WelcomeResponse{}
+// @Failure			401
 // @Security			BearerAuth
 // @Router				/me/welcome [get]
 func (uc *MeController) Welcome(ctx *gin.Context) {
@@ -75,13 +76,13 @@ func (uc *MeController) Welcome(ctx *gin.Context) {
 
 	numberOfFans, err := uc.userFanService.CountFansOfUser(user.ID)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 
 	numberOfScraps, err := uc.scrapService.CountScrapsOfUser(user.ID)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 
@@ -112,6 +113,8 @@ func (uc *MeController) Welcome(ctx *gin.Context) {
 // @Produce			application/json
 // @Tags			Me
 // @Success			204
+// @Failure			400
+// @Failure			401
 // @Security			BearerAuth
 // @Router			/me [put]
 func (uc *MeController) UpdateMe(ctx *gin.Context) {
@@ -138,12 +141,8 @@ func (uc *MeController) UpdateMe(ctx *gin.Context) {
 		LastName:  request.LastName,
 		BirthDate: birthDate,
 	})
-	if errors.Is(err, service.ErrFirstNameRequired) {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 
@@ -167,7 +166,7 @@ func (uc *MeController) UpdateMe(ctx *gin.Context) {
 		Cuisine:            request.Cuisine,
 	})
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 
@@ -183,6 +182,8 @@ func (uc *MeController) UpdateMe(ctx *gin.Context) {
 // @Produce			application/json
 // @Tags			Me
 // @Success			204
+// @Failure			400
+// @Failure			401
 // @Security			BearerAuth
 // @Router			/me/profile-picture [put]
 func (uc *MeController) UpdateMyProfilePicture(ctx *gin.Context) {
@@ -206,14 +207,8 @@ func (uc *MeController) UpdateMyProfilePicture(ctx *gin.Context) {
 	}
 
 	err = uc.userProfileService.UpdateProfilePicture(user.ID, picture)
-	if errors.Is(err, service.ErrInvalidPicture) ||
-		errors.Is(err, service.ErrPictureTooLarge) ||
-		errors.Is(err, service.ErrPictureTooBig) {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 
@@ -227,6 +222,8 @@ func (uc *MeController) UpdateMyProfilePicture(ctx *gin.Context) {
 // @Produce					application/json
 // @Tags					Me
 // @Success					200 {object} transport.FindUserWithProfileByIdResponse{}
+// @Failure			401
+// @Failure			404
 // @Security			BearerAuth
 // @Router					/me/profile [get]
 func (uc *MeController) FindMyProfile(ctx *gin.Context) {
@@ -234,7 +231,7 @@ func (uc *MeController) FindMyProfile(ctx *gin.Context) {
 	userWithProfile, err := uc.userService.FindUserWithProfileById(user.ID)
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 
@@ -249,13 +246,14 @@ func (uc *MeController) FindMyProfile(ctx *gin.Context) {
 // @Produce			application/json
 // @Tags			Me
 // @Success			200 {object} transport.FindFriendsOfUserResponse{}
+// @Failure			401
 // @Security			BearerAuth
 // @Router			/me/friends [get]
 func (uc *MeController) FindMyFriends(ctx *gin.Context) {
 	user := ctx.MustGet("user").(*model.User)
 	friendships, err := uc.friendshipService.FindFriendsOfUser(user.ID)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 
@@ -269,13 +267,14 @@ func (uc *MeController) FindMyFriends(ctx *gin.Context) {
 // @Produce					application/json
 // @Tags					Me
 // @Success					200 {object} transport.FindPendingFriendshipOfUserResponse{}
+// @Failure			401
 // @Security			BearerAuth
 // @Router					/me/friends/pending [get]
 func (uc *MeController) FindMyPendingFriendships(ctx *gin.Context) {
 	user := ctx.MustGet("user").(*model.User)
 	friendships, err := uc.friendshipService.FindPendingFriendshipsOfUser(user.ID)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 
@@ -290,6 +289,10 @@ func (uc *MeController) FindMyPendingFriendships(ctx *gin.Context) {
 // @Produce			application/json
 // @Tags			Me
 // @Success			201 {object} transport.Response{}
+// @Failure			400
+// @Failure			401
+// @Failure			404
+// @Failure			409
 // @Security			BearerAuth
 // @Router			/me/join/{communityId} [post]
 func (uc *MeController) JoinCommunity(ctx *gin.Context) {
@@ -302,7 +305,7 @@ func (uc *MeController) JoinCommunity(ctx *gin.Context) {
 
 	err = uc.communityMembershipService.JoinCommunity(user.ID, uint(communityId))
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 	ctx.JSON(http.StatusCreated, transport.Response{})
@@ -316,7 +319,10 @@ func (uc *MeController) JoinCommunity(ctx *gin.Context) {
 // @Produce			application/json
 // @Tags			Me
 // @Success			201 {object} transport.Response{}
+// @Failure			400
+// @Failure			401
 // @Failure			403
+// @Failure			404
 // @Security			BearerAuth
 // @Router			/me/leave/{communityId} [post]
 func (uc *MeController) LeaveCommunity(ctx *gin.Context) {
@@ -328,12 +334,8 @@ func (uc *MeController) LeaveCommunity(ctx *gin.Context) {
 	}
 
 	err = uc.communityMembershipService.LeaveCommunity(user.ID, uint(communityId))
-	if errors.Is(err, service.ErrOwnerCannotLeave) {
-		ctx.JSON(http.StatusForbidden, gin.H{"error": err.Error()})
-		return
-	}
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 	ctx.JSON(http.StatusCreated, transport.Response{})
@@ -346,6 +348,7 @@ func (uc *MeController) LeaveCommunity(ctx *gin.Context) {
 // @Produce					application/json
 // @Tags					Me
 // @Success					200 {object} transport.FindUserMembershipsResponse{}
+// @Failure			401
 // @Security			BearerAuth
 // @Router					/me/memberships [get]
 func (uc *MeController) FindMyMemberships(ctx *gin.Context) {
@@ -353,7 +356,7 @@ func (uc *MeController) FindMyMemberships(ctx *gin.Context) {
 
 	memberships, err := uc.communityMembershipService.FindUserMemberships(user.ID)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 
@@ -367,6 +370,7 @@ func (uc *MeController) FindMyMemberships(ctx *gin.Context) {
 // @Produce					application/json
 // @Tags					Me
 // @Success					200 {object} transport.FindMyOwnedCommunitiesResponse{}
+// @Failure			401
 // @Security			BearerAuth
 // @Router					/me/my-communities [get]
 func (uc *MeController) FindMyCommunities(ctx *gin.Context) {
@@ -374,7 +378,7 @@ func (uc *MeController) FindMyCommunities(ctx *gin.Context) {
 
 	communities, err := uc.communityService.FindCommunitiesCreatedByUser(user.ID)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 
@@ -389,6 +393,7 @@ func (uc *MeController) FindMyCommunities(ctx *gin.Context) {
 // @Produce			application/json
 // @Tags			Me
 // @Success			200 {object} transport.AmIMemberOfResponse{}
+// @Failure			401
 // @Security			BearerAuth
 // @Router			/me/memberships/{communityId} [get]
 func (uc *MeController) AmIMemberOf(ctx *gin.Context) {
@@ -411,6 +416,7 @@ func (uc *MeController) AmIMemberOf(ctx *gin.Context) {
 // @Tags			Me
 // @Success			200 {object} transport.AmIFriendOfResponse{}
 // @Success			204 "userId is the logged user"
+// @Failure			401
 // @Security			BearerAuth
 // @Router			/me/friends/{userId} [get]
 func (uc *MeController) AmIFriendOf(ctx *gin.Context) {

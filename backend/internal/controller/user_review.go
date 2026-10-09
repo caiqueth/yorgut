@@ -28,6 +28,7 @@ func NewUserReviewController(service service.UserReviewService) *UserReviewContr
 // @Produce				application/json
 // @Tags				UserReview
 // @Success				200 {object} transport.UserReviewSummaryResponse{}
+// @Failure			401
 // @Security			BearerAuth
 // @Router				/users/{userId}/reviews [get]
 func (u *UserReviewController) FindSummary(ctx *gin.Context) {
@@ -36,7 +37,7 @@ func (u *UserReviewController) FindSummary(ctx *gin.Context) {
 
 	summary, err := u.userReviewService.FindSummaryOfUser(viewer.ID, userId)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 
@@ -53,6 +54,9 @@ func (u *UserReviewController) FindSummary(ctx *gin.Context) {
 // @Produce				application/json
 // @Tags				UserReview
 // @Success				204
+// @Failure			400
+// @Failure			401
+// @Failure			403
 // @Security			BearerAuth
 // @Router				/users/{userId}/review [put]
 func (u *UserReviewController) Upsert(ctx *gin.Context) {
@@ -71,7 +75,7 @@ func (u *UserReviewController) Upsert(ctx *gin.Context) {
 	}
 
 	if err := u.userReviewService.UpsertReview(reviewer.ID, userId, *request.Cool, *request.Sexy, *request.Trustworthy); err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 

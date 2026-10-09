@@ -19,10 +19,10 @@ const (
 )
 
 var (
-	ErrPhotoCaptionTooLong = fmt.Errorf("the caption must be at most %d characters", MaxCaptionLength)
-	ErrAlbumFull           = fmt.Errorf("the album already has %d photos", MaxPhotosPerAlbum)
-	ErrPhotoNotFound       = errors.New("photo not found")
-	ErrPhotoForbidden      = errors.New("this photo does not belong to this user")
+	ErrPhotoCaptionTooLong = newError(ErrInvalid, fmt.Sprintf("the caption must be at most %d characters", MaxCaptionLength))
+	ErrAlbumFull           = newError(ErrConflict, fmt.Sprintf("the album already has %d photos", MaxPhotosPerAlbum))
+	ErrPhotoNotFound       = newError(ErrNotFound, "photo not found")
+	ErrPhotoForbidden      = newError(ErrForbidden, "this photo does not belong to this user")
 )
 
 type PhotoService struct {
@@ -97,8 +97,11 @@ func (p *PhotoService) UploadPhoto(userId uint, picture []byte, caption string) 
 // DeletePhoto removes a photo from the user's album; only the owner may.
 func (p *PhotoService) DeletePhoto(userId uint, photoId uint) error {
 	photo, err := p.photoRepository.FindByIdWithAlbum(photoId)
-	if err != nil {
+	if errors.Is(err, repository.ErrNotFound) {
 		return ErrPhotoNotFound
+	}
+	if err != nil {
+		return err
 	}
 
 	if photo.PhotoAlbum == nil || photo.PhotoAlbum.UserID != userId {

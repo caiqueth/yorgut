@@ -9,7 +9,10 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-var ErrOwnerCannotLeave = errors.New("the owner cannot leave their own community")
+var (
+	ErrOwnerCannotLeave = newError(ErrForbidden, "the owner cannot leave their own community")
+	ErrAlreadyMember    = newError(ErrConflict, "user is already a member of that community")
+)
 
 type CommunityMembershipService struct {
 	transactor                    repository.Transactor
@@ -72,33 +75,38 @@ func (c *CommunityMembershipService) CountUserMemberships(userId uint) uint {
 func (c *CommunityMembershipService) JoinCommunity(userId uint, communityId uint) error {
 	community, err := c.communityRepository.FindById(communityId)
 	if err != nil {
-		return err
+		return fromRepository(err, "community")
 	}
 
 	user, err := c.userRepository.FindById(userId)
 	if err != nil {
-		return err
+		return fromRepository(err, "user")
 	}
 
 	membershipExisting, _ := c.communityMembershipRepository.FindOfUserAndCommunity(communityId, userId)
 	if membershipExisting != nil {
-		return errors.New("user is already a member of that community")
+		return ErrAlreadyMember
 	}
 
 	membership := model.NewCommunityMembership(community, user)
-	return c.transactor.Transaction(func(tx *repository.Repositories) error {
+	err = c.transactor.Transaction(func(tx *repository.Repositories) error {
 		if err := tx.CommunityMembership.Create(membership); err != nil {
 			return err
 		}
 		return tx.Community.UpdateMemberCount(communityId)
 	})
+	if errors.Is(err, repository.ErrDuplicate) {
+		// Two joins at the same time: the unique index rejected the second.
+		return ErrAlreadyMember
+	}
+	return err
 }
 
 // LeaveCommunity removes the user's membership. The owner can't leave.
 func (c *CommunityMembershipService) LeaveCommunity(userId uint, communityId uint) error {
 	community, err := c.communityRepository.FindById(communityId)
 	if err != nil {
-		return err
+		return fromRepository(err, "community")
 	}
 
 	if community.OwnerID == userId {
@@ -107,7 +115,7 @@ func (c *CommunityMembershipService) LeaveCommunity(userId uint, communityId uin
 
 	membership, err := c.communityMembershipRepository.FindOfUserAndCommunity(communityId, userId)
 	if err != nil {
-		return err
+		return fromRepository(err, "membership")
 	}
 
 	return c.transactor.Transaction(func(tx *repository.Repositories) error {

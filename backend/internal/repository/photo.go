@@ -49,7 +49,7 @@ func (p *PhotoRepository) FindByIdWithAlbum(photoId uint) (*model.Photo, error) 
 	var photo model.Photo
 	result := p.db.Preload("PhotoAlbum").First(&photo, photoId)
 	if result.Error != nil {
-		return nil, result.Error
+		return nil, translate(result.Error)
 	}
 	return &photo, nil
 }

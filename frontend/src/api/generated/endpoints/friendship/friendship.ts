@@ -50,7 +50,7 @@ export const addFriend = (
 
 export const getAddFriendMutationKey = () => ['addFriend'] as const;
 
-export const getAddFriendMutationOptions = <TError = ErrorType<unknown>,
+export const getAddFriendMutationOptions = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof addFriend>>, TError,AddFriendMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
 ): UseMutationOptions<Awaited<ReturnType<typeof addFriend>>, TError,AddFriendMutationVariables, TContext> => {
 
@@ -79,13 +79,13 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type AddFriendMutationResult = NonNullable<Awaited<ReturnType<typeof addFriend>>>
     export type AddFriendMutationBody = BodyType<CreateFriendshipRequest>
-    export type AddFriendMutationError = ErrorType<unknown>
+    export type AddFriendMutationError = ErrorType<void>
     export type AddFriendMutationVariables = {data: BodyType<CreateFriendshipRequest>}
 
     /**
  * @summary Creates a Friendship request.
  */
-export const useAddFriend = <TError = ErrorType<unknown>,
+export const useAddFriend = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof addFriend>>, TError,AddFriendMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof addFriend>>,
@@ -115,7 +115,7 @@ export const removeFriend = (
 
 export const getRemoveFriendMutationKey = () => ['removeFriend'] as const;
 
-export const getRemoveFriendMutationOptions = <TError = ErrorType<unknown>,
+export const getRemoveFriendMutationOptions = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeFriend>>, TError,RemoveFriendMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
 ): UseMutationOptions<Awaited<ReturnType<typeof removeFriend>>, TError,RemoveFriendMutationVariables, TContext> => {
 
@@ -144,13 +144,13 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type RemoveFriendMutationResult = NonNullable<Awaited<ReturnType<typeof removeFriend>>>
 
-    export type RemoveFriendMutationError = ErrorType<unknown>
+    export type RemoveFriendMutationError = ErrorType<void>
     export type RemoveFriendMutationVariables = {userId: number}
 
     /**
  * @summary Deletes a Friendship by the target userId Id.
  */
-export const useRemoveFriend = <TError = ErrorType<unknown>,
+export const useRemoveFriend = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeFriend>>, TError,RemoveFriendMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof removeFriend>>,
@@ -182,7 +182,7 @@ export const replyFriendship = (
 
 export const getReplyFriendshipMutationKey = () => ['replyFriendship'] as const;
 
-export const getReplyFriendshipMutationOptions = <TError = ErrorType<unknown>,
+export const getReplyFriendshipMutationOptions = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof replyFriendship>>, TError,ReplyFriendshipMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
 ): UseMutationOptions<Awaited<ReturnType<typeof replyFriendship>>, TError,ReplyFriendshipMutationVariables, TContext> => {
 
@@ -211,13 +211,13 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type ReplyFriendshipMutationResult = NonNullable<Awaited<ReturnType<typeof replyFriendship>>>
     export type ReplyFriendshipMutationBody = BodyType<ReplyFriendshipRequest>
-    export type ReplyFriendshipMutationError = ErrorType<unknown>
+    export type ReplyFriendshipMutationError = ErrorType<void>
     export type ReplyFriendshipMutationVariables = {data: BodyType<ReplyFriendshipRequest>}
 
     /**
  * @summary Reply a Friendship request.
  */
-export const useReplyFriendship = <TError = ErrorType<unknown>,
+export const useReplyFriendship = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof replyFriendship>>, TError,ReplyFriendshipMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof replyFriendship>>,
@@ -247,7 +247,7 @@ export const deleteFriendship = (
 
 export const getDeleteFriendshipMutationKey = () => ['deleteFriendship'] as const;
 
-export const getDeleteFriendshipMutationOptions = <TError = ErrorType<unknown>,
+export const getDeleteFriendshipMutationOptions = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteFriendship>>, TError,DeleteFriendshipMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
 ): UseMutationOptions<Awaited<ReturnType<typeof deleteFriendship>>, TError,DeleteFriendshipMutationVariables, TContext> => {
 
@@ -276,13 +276,13 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type DeleteFriendshipMutationResult = NonNullable<Awaited<ReturnType<typeof deleteFriendship>>>
 
-    export type DeleteFriendshipMutationError = ErrorType<unknown>
+    export type DeleteFriendshipMutationError = ErrorType<void>
     export type DeleteFriendshipMutationVariables = {friendshipId: number}
 
     /**
  * @summary Deletes a Friendship by id.
  */
-export const useDeleteFriendship = <TError = ErrorType<unknown>,
+export const useDeleteFriendship = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteFriendship>>, TError,DeleteFriendshipMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof deleteFriendship>>,

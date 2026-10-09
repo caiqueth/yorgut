@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"errors"
 	"net/http"
 	"yorgut/internal/helpers"
 	"yorgut/internal/model"
@@ -21,18 +20,6 @@ func NewTopicController(service service.TopicService) *TopicController {
 	}
 }
 
-// topicErrorStatus maps the service's sentinel errors to HTTP statuses.
-func topicErrorStatus(err error) int {
-	switch {
-	case errors.Is(err, service.ErrTopicNotFound):
-		return http.StatusNotFound
-	case errors.Is(err, service.ErrNotCommunityMember):
-		return http.StatusForbidden
-	default:
-		return http.StatusInternalServerError
-	}
-}
-
 // FindTopicAndReplies	godoc
 // @ID					findTopicReplies
 // @Summary				Lists all the replies of a given topic
@@ -41,13 +28,15 @@ func topicErrorStatus(err error) int {
 // @Produce				application/json
 // @Tags				Topics
 // @Success				200 {object} transport.TopicRepliesResponse{}
+// @Failure			401
+// @Failure			404
 // @Security			BearerAuth
 // @Router				/topics/{topicId}/replies [get]
 func (tc *TopicController) FindTopicAndReplies(ctx *gin.Context) {
 	topicId := helpers.MustParseUint(ctx.Param("topicId"))
 	topics, err := tc.topicService.FindTopicReplies(topicId)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 
@@ -64,6 +53,9 @@ func (tc *TopicController) FindTopicAndReplies(ctx *gin.Context) {
 // @Produce				application/json
 // @Tags			Topics
 // @Success			201 {object} transport.Response{}
+// @Failure			400
+// @Failure			401
+// @Failure			403
 // @Security			BearerAuth
 // @Router			/topics [post]
 func (tc *TopicController) CreateTopic(ctx *gin.Context) {
@@ -76,7 +68,7 @@ func (tc *TopicController) CreateTopic(ctx *gin.Context) {
 	}
 
 	if err := tc.topicService.CreateTopic(user.ID, req.CommunityID, req.Title, req.Text); err != nil {
-		ctx.JSON(topicErrorStatus(err), gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 
@@ -93,6 +85,10 @@ func (tc *TopicController) CreateTopic(ctx *gin.Context) {
 // @Produce				application/json
 // @Tags			Topics
 // @Success			201 {object} transport.Response{}
+// @Failure			400
+// @Failure			401
+// @Failure			403
+// @Failure			404
 // @Security			BearerAuth
 // @Router			/topics/{topicId} [post]
 func (tc *TopicController) ReplyTopic(ctx *gin.Context) {
@@ -106,7 +102,7 @@ func (tc *TopicController) ReplyTopic(ctx *gin.Context) {
 	}
 
 	if err := tc.topicService.ReplyTopic(user.ID, parentTopicId, req.Title, req.Text); err != nil {
-		ctx.JSON(topicErrorStatus(err), gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 

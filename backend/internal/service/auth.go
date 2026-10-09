@@ -13,7 +13,6 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"google.golang.org/api/idtoken"
-	"gorm.io/gorm"
 )
 
 var (
@@ -83,7 +82,7 @@ func (a *AuthService) UserFromSession(token string) (*model.User, error) {
 	}
 
 	user, err := a.userRepository.FindById(userId)
-	if errors.Is(err, gorm.ErrRecordNotFound) {
+	if errors.Is(err, repository.ErrNotFound) {
 		// The user was deleted after the token was issued.
 		return nil, ErrInvalidSession
 	}
@@ -99,7 +98,7 @@ func (a *AuthService) getOrCreateUser(googleSub string, email string, firstName 
 	if err == nil {
 		return user, nil
 	}
-	if !errors.Is(err, gorm.ErrRecordNotFound) {
+	if !errors.Is(err, repository.ErrNotFound) {
 		return nil, fmt.Errorf("could not find user: %w", err)
 	}
 
@@ -117,7 +116,7 @@ func (a *AuthService) getOrCreateUser(googleSub string, email string, firstName 
 		user.GoogleSub = &googleSub
 		return user, nil
 	}
-	if !errors.Is(err, gorm.ErrRecordNotFound) {
+	if !errors.Is(err, repository.ErrNotFound) {
 		return nil, fmt.Errorf("could not find user: %w", err)
 	}
 

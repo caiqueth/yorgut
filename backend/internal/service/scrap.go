@@ -1,7 +1,6 @@
 package service
 
 import (
-	"errors"
 	"yorgut/internal/model"
 	"yorgut/internal/repository"
 	"yorgut/internal/transport"
@@ -26,12 +25,12 @@ func NewScrapService(scrapRepository repository.ScrapRepository, userRepository 
 func (s *ScrapService) CreateScrap(userAuthorID uint, userRecipientID uint, content string) error {
 	author, err := s.userRepository.FindById(userAuthorID)
 	if err != nil {
-		return errors.New("author not found")
+		return fromRepository(err, "author")
 	}
 
 	recipient, err := s.userRepository.FindById(userRecipientID)
 	if err != nil {
-		return errors.New("recipient not found")
+		return fromRepository(err, "recipient")
 	}
 
 	scrapModel := model.NewScrap(author, recipient, content)

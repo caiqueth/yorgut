@@ -27,6 +27,7 @@ func NewUserFanController(service service.UserFanService) *UserFanController {
 // @Produce				application/json
 // @Tags				UserFan
 // @Success				200 {object} transport.UserFanSummaryResponse{}
+// @Failure			401
 // @Security			BearerAuth
 // @Router				/users/{userId}/fans [get]
 func (u *UserFanController) FindSummary(ctx *gin.Context) {
@@ -35,7 +36,7 @@ func (u *UserFanController) FindSummary(ctx *gin.Context) {
 
 	summary, err := u.userFanService.FindSummaryOfUser(viewer.ID, userId)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 
@@ -50,6 +51,8 @@ func (u *UserFanController) FindSummary(ctx *gin.Context) {
 // @Produce				application/json
 // @Tags				UserFan
 // @Success				204
+// @Failure			401
+// @Failure			403
 // @Security			BearerAuth
 // @Router				/users/{userId}/fan [put]
 func (u *UserFanController) BecomeFan(ctx *gin.Context) {
@@ -62,7 +65,7 @@ func (u *UserFanController) BecomeFan(ctx *gin.Context) {
 	}
 
 	if err := u.userFanService.BecomeFan(fan.ID, userId); err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 
@@ -77,6 +80,7 @@ func (u *UserFanController) BecomeFan(ctx *gin.Context) {
 // @Produce				application/json
 // @Tags				UserFan
 // @Success				204
+// @Failure			401
 // @Security			BearerAuth
 // @Router				/users/{userId}/fan [delete]
 func (u *UserFanController) StopBeingFan(ctx *gin.Context) {
@@ -84,7 +88,7 @@ func (u *UserFanController) StopBeingFan(ctx *gin.Context) {
 	userId := helpers.MustParseUint(ctx.Param("userId"))
 
 	if err := u.userFanService.StopBeingFan(fan.ID, userId); err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 

@@ -30,7 +30,7 @@ func (u *UserReviewRepository) Upsert(review *model.UserReview) error {
 		DoUpdates: clause.AssignmentColumns([]string{"cool", "sexy", "trustworthy", "updated_at", "deleted_at"}),
 	}).Create(review)
 
-	return result.Error
+	return translate(result.Error)
 }
 
 func (u *UserReviewRepository) FindOfReviewerAndReviewed(reviewerId uint, reviewedId uint) (*model.UserReview, error) {

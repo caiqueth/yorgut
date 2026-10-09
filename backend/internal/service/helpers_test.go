@@ -14,7 +14,7 @@ import (
 // in-memory SQLite database.
 func newTestRepositories(t *testing.T) *repository.Repositories {
 	t.Helper()
-	db, err := gorm.Open(sqlite.Open("file::memory:"), &gorm.Config{Logger: logger.Discard})
+	db, err := gorm.Open(sqlite.Open("file::memory:"), &gorm.Config{Logger: logger.Discard, TranslateError: true})
 	if err != nil {
 		t.Fatalf("opening sqlite: %v", err)
 	}

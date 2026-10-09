@@ -71,7 +71,7 @@ export const becomeFan = (
 
 export const getBecomeFanMutationKey = () => ['becomeFan'] as const;
 
-export const getBecomeFanMutationOptions = <TError = ErrorType<unknown>,
+export const getBecomeFanMutationOptions = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof becomeFan>>, TError,BecomeFanMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
 ): UseMutationOptions<Awaited<ReturnType<typeof becomeFan>>, TError,BecomeFanMutationVariables, TContext> => {
 
@@ -100,13 +100,13 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type BecomeFanMutationResult = NonNullable<Awaited<ReturnType<typeof becomeFan>>>
 
-    export type BecomeFanMutationError = ErrorType<unknown>
+    export type BecomeFanMutationError = ErrorType<void>
     export type BecomeFanMutationVariables = {userId: number}
 
     /**
  * @summary Becomes a fan of a user.
  */
-export const useBecomeFan = <TError = ErrorType<unknown>,
+export const useBecomeFan = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof becomeFan>>, TError,BecomeFanMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof becomeFan>>,
@@ -136,7 +136,7 @@ export const stopBeingFan = (
 
 export const getStopBeingFanMutationKey = () => ['stopBeingFan'] as const;
 
-export const getStopBeingFanMutationOptions = <TError = ErrorType<unknown>,
+export const getStopBeingFanMutationOptions = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof stopBeingFan>>, TError,StopBeingFanMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
 ): UseMutationOptions<Awaited<ReturnType<typeof stopBeingFan>>, TError,StopBeingFanMutationVariables, TContext> => {
 
@@ -165,13 +165,13 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type StopBeingFanMutationResult = NonNullable<Awaited<ReturnType<typeof stopBeingFan>>>
 
-    export type StopBeingFanMutationError = ErrorType<unknown>
+    export type StopBeingFanMutationError = ErrorType<void>
     export type StopBeingFanMutationVariables = {userId: number}
 
     /**
  * @summary Stops being a fan of a user.
  */
-export const useStopBeingFan = <TError = ErrorType<unknown>,
+export const useStopBeingFan = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof stopBeingFan>>, TError,StopBeingFanMutationVariables, TContext>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof stopBeingFan>>,
@@ -206,7 +206,7 @@ export const getFindUserFansQueryKey = (userId: number,) => {
     }
 
 
-export const getFindUserFansQueryOptions = <TData = Awaited<ReturnType<typeof findUserFans>>, TError = ErrorType<unknown>>(userId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findUserFans>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
+export const getFindUserFansQueryOptions = <TData = Awaited<ReturnType<typeof findUserFans>>, TError = ErrorType<void>>(userId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findUserFans>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -225,10 +225,10 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type FindUserFansQueryResult = NonNullable<Awaited<ReturnType<typeof findUserFans>>>
-export type FindUserFansQueryError = ErrorType<unknown>
+export type FindUserFansQueryError = ErrorType<void>
 
 
-export function useFindUserFans<TData = Awaited<ReturnType<typeof findUserFans>>, TError = ErrorType<unknown>>(
+export function useFindUserFans<TData = Awaited<ReturnType<typeof findUserFans>>, TError = ErrorType<void>>(
  userId: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof findUserFans>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof findUserFans>>,
@@ -238,7 +238,7 @@ export function useFindUserFans<TData = Awaited<ReturnType<typeof findUserFans>>
       >, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useFindUserFans<TData = Awaited<ReturnType<typeof findUserFans>>, TError = ErrorType<unknown>>(
+export function useFindUserFans<TData = Awaited<ReturnType<typeof findUserFans>>, TError = ErrorType<void>>(
  userId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findUserFans>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof findUserFans>>,
@@ -248,7 +248,7 @@ export function useFindUserFans<TData = Awaited<ReturnType<typeof findUserFans>>
       >, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useFindUserFans<TData = Awaited<ReturnType<typeof findUserFans>>, TError = ErrorType<unknown>>(
+export function useFindUserFans<TData = Awaited<ReturnType<typeof findUserFans>>, TError = ErrorType<void>>(
  userId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findUserFans>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -256,7 +256,7 @@ export function useFindUserFans<TData = Awaited<ReturnType<typeof findUserFans>>
  * @summary Gets the fan summary of a user.
  */
 
-export function useFindUserFans<TData = Awaited<ReturnType<typeof findUserFans>>, TError = ErrorType<unknown>>(
+export function useFindUserFans<TData = Awaited<ReturnType<typeof findUserFans>>, TError = ErrorType<void>>(
  userId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findUserFans>>, TError, TData>>, request?: SecondParameter<typeof apiRequest>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {

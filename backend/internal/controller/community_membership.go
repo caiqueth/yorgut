@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"errors"
 	"net/http"
 	"strconv"
 	"yorgut/internal/model"
@@ -30,6 +29,10 @@ func NewCommunityMembershipController(service service.CommunityMembershipService
 // @Produce				application/json
 // @Tags				CommunityMembership
 // @Success				201 {object} transport.Response{}
+// @Failure			400
+// @Failure			401
+// @Failure			404
+// @Failure			409
 // @Security			BearerAuth
 // @Router				/community-memberships [post]
 func (cm *CommunityMembershipController) Create(ctx *gin.Context) {
@@ -45,7 +48,7 @@ func (cm *CommunityMembershipController) Create(ctx *gin.Context) {
 
 	err = cm.communityMembershipService.JoinCommunity(user.ID, createMembershipRequest.CommunityID)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 
@@ -66,6 +69,10 @@ func (cm *CommunityMembershipController) Create(ctx *gin.Context) {
 // @Produce				application/json
 // @Tags				CommunityMembership
 // @Success				204
+// @Failure			400
+// @Failure			401
+// @Failure			403
+// @Failure			404
 // @Security			BearerAuth
 // @Router				/community-memberships/{userId}/{communityId} [delete]
 func (cm *CommunityMembershipController) Delete(ctx *gin.Context) {
@@ -89,12 +96,8 @@ func (cm *CommunityMembershipController) Delete(ctx *gin.Context) {
 	}
 
 	err = cm.communityMembershipService.LeaveCommunity(user.ID, uint(communityId))
-	if errors.Is(err, service.ErrOwnerCannotLeave) {
-		ctx.JSON(http.StatusForbidden, gin.H{"error": err.Error()})
-		return
-	}
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		RespondError(ctx, err)
 		return
 	}
 

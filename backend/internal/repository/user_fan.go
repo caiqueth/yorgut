@@ -24,7 +24,7 @@ func (u *UserFanRepository) Add(fan *model.UserFan) error {
 		DoNothing: true,
 	}).Create(fan)
 
-	return result.Error
+	return translate(result.Error)
 }
 
 // Remove hard-deletes the row, so becoming a fan again doesn't collide with a
