@@ -1,5 +1,11 @@
 # Simple Makefile for a Go project
 
+# DATABASE_DSN etc. from the local, gitignored .env (if present).
+-include .env
+
+GOOSE := go run github.com/pressly/goose/v3/cmd/goose@v3.26.0
+MIGRATIONS_DIR := internal/database/migrations
+
 # Build the application
 all: build test
 
@@ -22,6 +28,11 @@ test:
 	@echo "Testing..."
 	@go test ./... -v
 
+# Migration and schema tests against a real Postgres (embedded-postgres
+# downloads it on the first run; no Docker needed)
+test_pg:
+	@go test -tags pgtest ./internal/database/ -v
+
 # Clean the binary
 clean:
 	@echo "Cleaning..."
@@ -30,7 +41,19 @@ clean:
 swagger:
 	@swag init -g ./internal/server/routes.go
 
-run_local_db:
-	@docker run --name yorgut-dev -e POSTGRES_USER=localdev -e POSTGRES_PASSWORD=localdev -e POSTGRES_DB=yorgut-dev -p 5432:5432 -d postgres
+# Local Postgres (docker-compose.yml); see README "Database"
+db_up:
+	@docker compose up -d --wait
 
-.PHONY: all build run seed test clean swagger run_local_db
+db_down:
+	@docker compose down
+
+# New SQL migration: make migration_new name=add_something
+migration_new:
+	@$(GOOSE) -dir $(MIGRATIONS_DIR) -s create $(name) sql
+
+# Applied and pending migrations of the Postgres at DATABASE_DSN
+migration_status:
+	@$(GOOSE) -dir $(MIGRATIONS_DIR) postgres "$(DATABASE_DSN)" status
+
+.PHONY: all build run seed test test_pg clean swagger db_up db_down migration_new migration_status
