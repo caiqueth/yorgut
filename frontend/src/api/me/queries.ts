@@ -1,43 +1,50 @@
-import { doGet, doPost, doPut } from "api/http";
-
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
-  IAmIFriendResponse,
-  IAmIMemberResponse,
-  IMeFriendsPendingResponse,
-  IMeFriendsResponse,
-  IMeMembershipsResponse,
-  IMeProfileResponse,
-  IMeResponse,
-  IUpdateMePayload,
-  WelcomeResponse,
-} from "./types";
+  getFindCommunityMembersQueryKey,
+  getSearchCommunitiesQueryKey,
+} from "api/generated/endpoints/community/community";
+import {
+  getAmIMemberOfQueryKey,
+  getFindMeQueryKey,
+  getFindMyMembershipsQueryKey,
+  getFindMyProfileQueryKey,
+  getFindMyWelcomeQueryKey,
+  joinCommunity,
+  leaveCommunity,
+  updateMe,
+  updateMyProfilePicture,
+  useAmIFriendOf,
+  useAmIMemberOf,
+  useFindMe,
+  useFindMyCommunities,
+  useFindMyFriends,
+  useFindMyMemberships,
+  useFindMyPendingFriendships,
+  useFindMyProfile,
+  useFindMyWelcome,
+} from "api/generated/endpoints/me/me";
+import {
+  getFindUserProfileQueryKey,
+  getFindUserQueryKey,
+} from "api/generated/endpoints/users/users";
+import { UpdateMeRequest } from "api/generated/model";
 
-const basePath = `${__API_BASE_URL__}/me`;
-
-export const useMe = () =>
-  useQuery<IMeResponse>({
-    queryKey: [`${basePath}`],
-    queryFn: ({ queryKey }) => doGet({ queryKey }),
-    staleTime: Infinity,
-  })
-
+export const useMe = () => useFindMe({ query: { staleTime: Infinity } });
 
 // userId is the logged user's id, used to refresh their public profile queries.
 export const useUpdateMe = (userId: number) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (payload: IUpdateMePayload) =>
-      doPut({ url: `${basePath}`, body: payload }),
+    mutationFn: (payload: UpdateMeRequest) => updateMe(payload),
     onSettled: () => {
-      for (const key of [
-        `${basePath}`,
-        `${basePath}/profile`,
-        `${basePath}/welcome`,
-        `${__API_BASE_URL__}/users/${userId}`,
-        `${__API_BASE_URL__}/users/${userId}/profile`,
+      for (const queryKey of [
+        getFindMeQueryKey(),
+        getFindMyProfileQueryKey(),
+        getFindMyWelcomeQueryKey(),
+        getFindUserQueryKey(userId),
+        getFindUserProfileQueryKey(userId),
       ]) {
-        queryClient.invalidateQueries({ queryKey: [key] });
+        queryClient.invalidateQueries({ queryKey });
       }
     },
   });
@@ -47,110 +54,56 @@ export const useUpdateMe = (userId: number) => {
 export const useUpdateProfilePicture = (userId: number) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (picture: File) => {
-      const form = new FormData();
-      form.append("picture", picture);
-      return doPut({ url: `${basePath}/profile-picture`, body: form });
-    },
+    mutationFn: (picture: File) => updateMyProfilePicture({ picture }),
     onSettled: () => {
-      for (const key of [
-        `${basePath}/profile`,
-        `${__API_BASE_URL__}/users/${userId}/profile`,
-      ]) {
-        queryClient.invalidateQueries({ queryKey: [key] });
+      for (const queryKey of [getFindMyProfileQueryKey(), getFindUserProfileQueryKey(userId)]) {
+        queryClient.invalidateQueries({ queryKey });
       }
     },
   });
 };
 
-export const useMeFriends = () =>
-  useQuery<IMeFriendsResponse>({
-    queryKey: [`${basePath}/friends`],
-    queryFn: ({ queryKey }) => doGet({ queryKey }),
-  });
+export const useMeFriends = () => useFindMyFriends();
 
-export const useMeFriendsPending = () =>
-  useQuery<IMeFriendsPendingResponse>({
-    queryKey: [`${basePath}/friends/pending`],
-    queryFn: ({ queryKey }) => doGet({ queryKey }),
-  });
+export const useMeFriendsPending = () => useFindMyPendingFriendships();
+
+// Joining or leaving changes the same queries.
+const invalidateMembership = (
+  queryClient: ReturnType<typeof useQueryClient>,
+  communityId: number,
+) => {
+  queryClient.invalidateQueries({ queryKey: getAmIMemberOfQueryKey(communityId) });
+  queryClient.invalidateQueries({ queryKey: getFindCommunityMembersQueryKey(communityId) });
+  queryClient.invalidateQueries({ queryKey: getFindMyMembershipsQueryKey() });
+  queryClient.invalidateQueries({ queryKey: getSearchCommunitiesQueryKey() });
+};
 
 export const useJoinCommunity = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ communityId }: { communityId: number }) =>
-      doPost({ url: `${basePath}/join/${communityId}`, body: {} }),
-    onSettled: (_data, _error, variables) => {
-      queryClient.invalidateQueries({
-        queryKey: [`${basePath}/memberships/${variables.communityId}`],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [`${__API_BASE_URL__}/communities/${variables.communityId}/members`],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [`${basePath}/memberships`],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [`${__API_BASE_URL__}/communities/search`],
-      });
-    },
+    mutationFn: ({ communityId }: { communityId: number }) => joinCommunity(communityId),
+    onSettled: (_data, _error, variables) =>
+      invalidateMembership(queryClient, variables.communityId),
   });
 };
 
 export const useLeaveCommunity = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ communityId }: { communityId: number }) =>
-      doPost({ url: `${basePath}/leave/${communityId}`, body: {} }),
-    onSettled: (_data, _error, variables) => {
-      queryClient.invalidateQueries({
-        queryKey: [`${basePath}/memberships/${variables.communityId}`],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [`${__API_BASE_URL__}/communities/${variables.communityId}/members`],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [`${basePath}/memberships`],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [`${__API_BASE_URL__}/communities/search`],
-      });
-    },
+    mutationFn: ({ communityId }: { communityId: number }) => leaveCommunity(communityId),
+    onSettled: (_data, _error, variables) =>
+      invalidateMembership(queryClient, variables.communityId),
   });
 };
 
-export const useMeMemberships = () =>
-  useQuery<IMeMembershipsResponse>({
-    queryKey: [`${basePath}/memberships`],
-    queryFn: ({ queryKey }) => doGet({ queryKey }),
-  });
+export const useMeMemberships = () => useFindMyMemberships();
 
-export const useMeMyCommunities = () =>
-  useQuery<IMeMembershipsResponse>({
-    queryKey: [`${basePath}/my-communities`],
-    queryFn: ({ queryKey }) => doGet({ queryKey }),
-  });
+export const useMeMyCommunities = () => useFindMyCommunities();
 
-export const useMeProfile = () =>
-  useQuery<IMeProfileResponse>({
-    queryKey: [`${basePath}/profile`],
-    queryFn: ({ queryKey }) => doGet({ queryKey }),
-  });
+export const useMeProfile = () => useFindMyProfile();
 
-export const useMeAmMember = (communityId: number) =>
-  useQuery<IAmIMemberResponse>({
-    queryKey: [`${basePath}/memberships/${communityId}`],
-    queryFn: ({ queryKey }) => doGet({ queryKey }),
-  });
+export const useMeAmMember = (communityId: number) => useAmIMemberOf(communityId);
 
-export const useMeAmFriend = (userId: number) =>
-  useQuery<IAmIFriendResponse>({
-    queryKey: [`${basePath}/friends/${userId}`],
-    queryFn: ({ queryKey }) => doGet({ queryKey }),
-  });
+export const useMeAmFriend = (userId: number) => useAmIFriendOf(userId);
 
-export const useMeWelcome = () =>
-  useQuery<WelcomeResponse>({
-    queryKey: [`${basePath}/welcome`],
-    queryFn: ({ queryKey }) => doGet({ queryKey }),
-  });
+export const useMeWelcome = () => useFindMyWelcome();

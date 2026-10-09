@@ -29,12 +29,15 @@ func NewUserController(
 }
 
 // Create			godoc
+// @ID					createUser
 // @Summary			Create user
-// @Decription		Save user in Db.
+// @Description		Save user in Db.
 // @Param			user body transport.CreateUserRequest true "Create User"
+// @Accept			application/json
 // @Produce			application/json
 // @Tags			Users
 // @Success			201 {object} transport.Response{}
+// @Security			BearerAuth
 // @Router			/users [post]
 func (uc *UserController) Create(ctx *gin.Context) {
 	req := transport.CreateUserRequest{}
@@ -61,11 +64,13 @@ func (uc *UserController) Create(ctx *gin.Context) {
 }
 
 // FindMany				godoc
+// @ID					findUsers
 // @Summary				Gets a list of users.
 // @Description			Returns a list of users
 // @Produce				application/json
 // @Tags				Users
 // @Success				200 {object} transport.FindManyUsersResponse{}
+// @Security			BearerAuth
 // @Router				/users [get]
 func (uc *UserController) FindMany(ctx *gin.Context) {
 	users, err := uc.userService.FindManyUsers()
@@ -78,12 +83,17 @@ func (uc *UserController) FindMany(ctx *gin.Context) {
 
 }
 
-// SearchUser			godoc
+// SearchUsers			godoc
+// @ID					searchUsers
 // @Summary				Searches for a user by their name.
-// @Description			Returns a list of users
+// @Param				name query string false "Part of the user's full name (omit to list all)"
+// @Param				page query int false "Page, starting at 1"
+// @Param				pageSize query int false "Users per page"
+// @Description			Returns a page of users
 // @Produce				application/json
 // @Tags				Users
 // @Success				200 {object} transport.SearchUsersResponse{}
+// @Security			BearerAuth
 // @Router				/users/search-users [get]
 func (uc *UserController) SearchUsers(ctx *gin.Context) {
 	name := ctx.Query("name")
@@ -97,12 +107,14 @@ func (uc *UserController) SearchUsers(ctx *gin.Context) {
 }
 
 // FindById 			godoc
+// @ID					findUser
 // @Summary				Get Single user by id.
-// @Param				userId path string true "User ID"
+// @Param				userId path int true "User ID"
 // @Description			Returns the user matching the requested id
 // @Produce				application/json
 // @Tags				Users
 // @Success				200 {object} transport.FindUserResponse{}
+// @Security			BearerAuth
 // @Router				/users/{userId} [get]
 func (uc *UserController) FindById(ctx *gin.Context) {
 	userId := ctx.Param("userId")
@@ -124,12 +136,14 @@ func (uc *UserController) FindById(ctx *gin.Context) {
 }
 
 // FindUserProfile 	godoc
+// @ID					findUserProfile
 // @Summary				Get Single user with it's profile by id.
-// @Param				userId path string true "User ID"
+// @Param				userId path int true "User ID"
 // @Description			Returns the user matching the requested id
 // @Produce				application/json
 // @Tags				Users
 // @Success				200 {object} transport.FindUserWithProfileByIdResponse{}
+// @Security			BearerAuth
 // @Router				/users/{userId}/profile [get]
 func (uc *UserController) FindUserProfile(ctx *gin.Context) {
 	userId := helpers.MustParseUint(ctx.Param("userId"))
@@ -145,12 +159,14 @@ func (uc *UserController) FindUserProfile(ctx *gin.Context) {
 }
 
 // FindMemberships	godoc
+// @ID					findUserMemberships
 // @Summary					Gets a list of communities that user is member of.
-// @Param					userId path string true "User ID"
+// @Param					userId path int true "User ID"
 // @Description				Returns a list of communities
 // @Produce					application/json
 // @Tags					Users
 // @Success					200 {object} transport.FindUserMembershipsResponse{}
+// @Security			BearerAuth
 // @Router					/users/{userId}/memberships [get]
 func (uc *UserController) FindMemberships(ctx *gin.Context) {
 	userId := helpers.MustParseUint(ctx.Param("userId"))
@@ -165,12 +181,14 @@ func (uc *UserController) FindMemberships(ctx *gin.Context) {
 }
 
 // FindFriends	godoc
+// @ID					findUserFriends
 // @Summary					Gets a list of friends of the user.
-// @Param					userId path string true "User ID"
+// @Param					userId path int true "User ID"
 // @Description				Returns a list of friends
 // @Produce					application/json
 // @Tags					Users
 // @Success					200 {object} transport.FindFriendsOfUserResponse{}
+// @Security			BearerAuth
 // @Router					/users/{userId}/friends [get]
 func (uc *UserController) FindFriends(ctx *gin.Context) {
 	userId := helpers.MustParseUint(ctx.Param("userId"))

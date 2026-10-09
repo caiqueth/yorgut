@@ -17,28 +17,17 @@ Severity:
   - Fix: add `.Model(&model.User{})` to the count query.
 - [ ] **consistency**: a missing record returns `500` (e.g. `GET /users/9999` → `{"error":"record not found"}`) instead of `404`.
   - Fix: have services translate `gorm.ErrRecordNotFound` into sentinel errors (like `service.ErrFriendshipNotFound`) and map them to `404` in controllers.
-- [ ] **consistency**: the `DELETE` route for scraps is registered without an id (`scraps.DELETE("", ...)`), while their swagger docs say `/{id}`.
-  - Fix: add `/:<entity>Id` when the handlers are implemented (they return `501` today).
+- [ ] **consistency**: the `DELETE` route for scraps is registered without an id (`scraps.DELETE("", ...)`); the swagger docs describe it as is (`DELETE /scraps`, `501`).
+  - Fix: add `/:scrapId` when the handler is implemented (it returns `501` today), and update its godoc.
+- [ ] **bug** (types): pointer fields in `transport` DTOs (`*string` profile fields, `FindCommunityProfileByIdResponse.Description`, `AmIFriendOfResponse.FriendshipId`, `UserReviewSummaryResponse.MyReview`, ...) are sent as `null`, but swag doesn't mark them nullable, so the generated frontend types say `string`/`number`/object. A smoke test against seeded data confirmed every other field matches the spec.
+  - Fix: add `extensions:"x-nullable"` to those DTO fields, `make gen-api`, then handle `null` where the frontend now gets type errors.
+- [ ] **consistency**: `make swagger` still runs `swag init` without `--requiredByDefault`, so it produces a spec where every response field is optional. Use `make gen-api`.
+  - Fix: add `--requiredByDefault` to the `swagger` target (left alone because the Makefile was being edited in parallel).
+- [ ] **consistency**: `ReplyFriendshipRequest.Accept` has no `json` tag (swag names it `accept` from the Go name; Go decodes it case-insensitively), and `transport.FindUserByIdResponse` is unused and untagged. `CommunityItem.CreatedBy` is tagged `json:"firstName"` (it holds a user id), so the generated type has `firstName: number`.
+  - Fix: tag `Accept`, delete `FindUserByIdResponse`, rename the `CreatedBy` tag to `createdBy` (nothing in the frontend reads it today).
 - [ ] **consistency**: `/me/join/:communityId` and `/me/leave/:communityId` put verbs in the URL, and `leave` answers `201`.
   - Fix: if it's worth a breaking change, use `PUT`/`DELETE /me/memberships/:communityId` with `204`.
 
 ## Frontend
 
-### Bugs caused by structure
-
-- [ ] **bug**: `hooks/useGlobalStateContext.ts` imports from `contexts/GlobalState`, but the file is `contexts/GlobalStateContext.tsx`, so this is a TS error.
-
-### Components in the wrong place
-
-- [ ] **layer**: one page imports a component from another.
-  - Where: `pages/MyScrapbook/index.tsx` imports `pages/Home/components/Menu`.
-  - Fix: promote `Menu` to `components/organisms/`.
-- [ ] **layer**: page sections are duplicated.
-  - Where: `FriendsList` and `CommunitiesList` exist in both `pages/Home/components/` and `pages/Profile/components/`.
-  - Fix: if they differ only in data source, promote one parameterised organism.
-- [ ] **consistency**: route-level sections are placed differently across pages.
-  - Profile keeps `ProfileHeader`, `ProfileDetails` and `ProfileMenu` at `pages/Profile/<Name>/`, as if they were sub-routes, while the page-only `FriendsList`/`CommunitiesList`/`UserReview` sit in `pages/Profile/components/`.
-  - Community keeps `ProfileHeader`/`ProfileDetails` in `pages/Community/components/` but `ProfileMenu` at `pages/Community/ProfileMenu/`.
-  - Fix: anything that is not a route belongs in `components/`.
-- [ ] **consistency**: two different components are both named `ProfilePicture` (`components/atoms/ProfilePicture` and `components/molecules/ProfilePicture`).
-  - Fix: rename one (for example, the molecule to `UserProfilePicture`, which is already its export name).
+None open. The structure entries (cross-page imports, duplicated sections, inconsistent section placement, the two `ProfilePicture`s) and the `useGlobalStateContext` import were fixed by the move to feature folders. For the API types, see the nullable-fields entry under Backend.

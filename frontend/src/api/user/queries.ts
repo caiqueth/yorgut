@@ -1,52 +1,22 @@
-import { doGet } from "api/http";
-
-import { useQuery } from "@tanstack/react-query";
-
 import {
-  ISearchUsersResponse,
-  IUserFriendsResponse,
-  IUserMembershipsResponse,
-  IUserProfileResponse,
-  IUserResponse,
-  IUsersResponse,
-} from "./types";
+  useFindUser,
+  useFindUserFriends,
+  useFindUserMemberships,
+  useFindUserProfile,
+  useFindUsers,
+  useSearchUsers,
+} from "api/generated/endpoints/users/users";
 
-const basePath = `${__API_BASE_URL__}/users`;
+export const useUsers = () => useFindUsers();
 
-export const useUsers = () =>
-  useQuery<IUsersResponse>({
-    queryKey: [`${basePath}`],
-    queryFn: ({ queryKey }) => doGet({ queryKey }),
-  });
+export const useUser = (userId: number) => useFindUser(userId);
 
-export const useUser = (userId: number) =>
-  useQuery<IUserResponse>({
-    queryKey: [`${basePath}/${userId}`],
-    queryFn: ({ queryKey }) => doGet({ queryKey }),
-  });
+export const useUserFriends = (userId: number) => useFindUserFriends(userId);
 
-export const useUserFriends = (userId: number) =>
-  useQuery<IUserFriendsResponse>({
-    queryKey: [`${basePath}/${userId}/friends`],
-    queryFn: ({ queryKey }) => doGet({ queryKey }),
-  });
-
-export const useUserMemberships = (userId: number) =>
-  useQuery<IUserMembershipsResponse>({
-    queryKey: [`${basePath}/${userId}/memberships`],
-    queryFn: ({ queryKey }) => doGet({ queryKey }),
-  });
+export const useUserMemberships = (userId: number) => useFindUserMemberships(userId);
 
 export const useUserProfile = (userId: number) =>
-  useQuery<IUserProfileResponse>({
-    queryKey: [`${basePath}/${userId}/profile`],
-    queryFn: ({ queryKey }) => doGet({ queryKey }),
-    enabled: !!userId,
-  });
+  useFindUserProfile(userId, { query: { enabled: !!userId } });
 
 export const useUserSearchUsers = (name: string, page: number, pageSize: number) =>
-  useQuery<ISearchUsersResponse>({
-    queryKey: [`${basePath}/search-users?name=${name}&page=${page}&pageSize=${pageSize}`],
-    queryFn: ({ queryKey }) => doGet({ queryKey }),
-  });
-
+  useSearchUsers({ name, page, pageSize });

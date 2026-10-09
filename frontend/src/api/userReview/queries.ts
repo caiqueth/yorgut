@@ -1,25 +1,20 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { doGet, doPut } from "api/http";
-import { IUpsertUserReviewPayload, IUserReviewSummaryResponse } from "./types";
-
-const basePath = `${__API_BASE_URL__}/users`;
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  getFindUserReviewsQueryKey,
+  upsertUserReview,
+  useFindUserReviews,
+} from "api/generated/endpoints/user-review/user-review";
+import { UpsertUserReviewRequest } from "api/generated/model";
 
 export const useUserReviews = (userId: number) =>
-  useQuery<IUserReviewSummaryResponse>({
-    queryKey: [`${basePath}/${userId}/reviews`],
-    queryFn: ({ queryKey }) => doGet({ queryKey }),
-    enabled: !!userId,
-  });
+  useFindUserReviews(userId, { query: { enabled: !!userId } });
 
 export const useUpsertUserReview = (userId: number) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (payload: IUpsertUserReviewPayload) =>
-      doPut({ url: `${basePath}/${userId}/review`, body: payload }),
+    mutationFn: (payload: UpsertUserReviewRequest) => upsertUserReview(userId, payload),
     onSettled: () => {
-      queryClient.invalidateQueries({
-        queryKey: [`${basePath}/${userId}/reviews`],
-      });
+      queryClient.invalidateQueries({ queryKey: getFindUserReviewsQueryKey(userId) });
     },
   });
 };

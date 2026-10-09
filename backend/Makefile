@@ -39,7 +39,7 @@ clean:
 	@rm -f main
 
 swagger:
-	@swag init -g ./internal/server/routes.go
+	@swag init -g ./internal/server/routes.go --requiredByDefault
 
 # Local Postgres (docker-compose.yml); see README "Database"
 db_up:
@@ -56,4 +56,12 @@ migration_new:
 migration_status:
 	@$(GOOSE) -dir $(MIGRATIONS_DIR) postgres "$(DATABASE_DSN)" status
 
-.PHONY: all build run seed test test_pg clean swagger db_up db_down migration_new migration_status
+# Regenerate the Swagger spec, then the frontend API client (types + TanStack
+# Query hooks in frontend/src/api/generated). Needs swag (go install
+# github.com/swaggo/swag/cmd/swag@v1.16.4) and the frontend node_modules.
+# --requiredByDefault marks every non-omitempty field required, so generated
+# response types are not all optional.
+gen-api: swagger
+	@cd ../frontend && yarn gen:api
+
+.PHONY: all build run seed test test_pg clean swagger gen-api db_up db_down migration_new migration_status

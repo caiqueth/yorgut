@@ -23,12 +23,15 @@ func NewFriendshipController(service service.FriendshipService) *FriendshipContr
 }
 
 // AddFriend			godoc
+// @ID					addFriend
 // @Summary				Creates a Friendship request.
 // @Description			Logged user makes a new friendship request.
 // @Param				Friendship body transport.CreateFriendshipRequest true "Create Friendship"
+// @Accept				application/json
 // @Produce				application/json
 // @Tags				Friendship
 // @Success				204
+// @Security			BearerAuth
 // @Router				/friendships [post]
 func (f *FriendshipController) AddFriend(ctx *gin.Context) {
 	user := ctx.MustGet("user").(*model.User)
@@ -45,12 +48,15 @@ func (f *FriendshipController) AddFriend(ctx *gin.Context) {
 }
 
 // ReplyFriendship		godoc
+// @ID					replyFriendship
 // @Summary				Reply a Friendship request.
 // @Description			Repliess a Friendship request.
 // @Param				FriendshipRequest body transport.ReplyFriendshipRequest true "Accept Friendship"
+// @Accept				application/json
 // @Produce				application/json
 // @Tags				Friendship
 // @Success				204
+// @Security			BearerAuth
 // @Router				/friendships/reply [post]
 func (f *FriendshipController) ReplyFriendship(ctx *gin.Context) {
 	user := ctx.MustGet("user").(*model.User)
@@ -73,12 +79,14 @@ func (f *FriendshipController) ReplyFriendship(ctx *gin.Context) {
 }
 
 // RemoveFriendByFriendshipID	godoc
+// @ID					deleteFriendship
 // @Summary						Deletes a Friendship by id.
-// @Param						friendshipId path string true "delete Friendship by id"
+// @Param						friendshipId path int true "Friendship ID"
 // @Description					Deletes a Friendship.
 // @Produce						application/json
 // @Tags						Friendship
 // @Success						204
+// @Security			BearerAuth
 // @Router						/friendships/{friendshipId} [delete]
 func (f *FriendshipController) RemoveFriendByFriendshipID(ctx *gin.Context) {
 	user := ctx.MustGet("user").(*model.User)
@@ -100,12 +108,14 @@ func (f *FriendshipController) RemoveFriendByFriendshipID(ctx *gin.Context) {
 }
 
 // RemoveFriendByUserID		godoc
+// @ID					removeFriend
 // @Summary					Deletes a Friendship by the target userId Id.
-// @Param					friendId path string true "Target User ID"
+// @Param					userId path int true "Target user ID"
 // @Description				Logged user deletes a friendship.
 // @Produce					application/json
 // @Tags					Friendship
 // @Success					204
+// @Security			BearerAuth
 // @Router					/friendships/friend/{userId} [delete]
 func (f *FriendshipController) RemoveFriendByUserID(ctx *gin.Context) {
 	user := ctx.MustGet("user").(*model.User)

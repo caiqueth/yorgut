@@ -30,6 +30,7 @@ func NewCommunityController(
 }
 
 // Create				godoc
+// @ID					createCommunity
 // @Summary				Create Community
 // @Description			Creates a community owned by the logged user, optionally with a picture (PNG or JPEG, max 1 MB and 1024x1024).
 // @Param				name formData string true "Community name"
@@ -39,6 +40,7 @@ func NewCommunityController(
 // @Produce				application/json
 // @Tags				Community
 // @Success				201 {object} transport.Response{data=transport.CreateCommunityResponse}
+// @Security			BearerAuth
 // @Router				/communities [post]
 func (c *CommunityController) Create(ctx *gin.Context) {
 	user := ctx.MustGet("user").(*model.User)
@@ -103,13 +105,16 @@ func communityErrorStatus(err error) int {
 }
 
 // Update				godoc
+// @ID					updateCommunity
 // @Summary				Updates a community.
-// @Param				communityId path string true "Community ID"
+// @Param				communityId path int true "Community ID"
 // @Param				Community body transport.UpdateCommunityRequest true "Community details"
 // @Description			Replaces the community's name, category and description. Only the owner may (403 otherwise).
+// @Accept				application/json
 // @Produce				application/json
 // @Tags				Community
 // @Success				204
+// @Security			BearerAuth
 // @Router				/communities/{communityId} [put]
 func (c *CommunityController) Update(ctx *gin.Context) {
 	user := ctx.MustGet("user").(*model.User)
@@ -131,14 +136,16 @@ func (c *CommunityController) Update(ctx *gin.Context) {
 }
 
 // UpdatePicture		godoc
+// @ID					updateCommunityPicture
 // @Summary				Replaces a community's picture.
-// @Param				communityId path string true "Community ID"
+// @Param				communityId path int true "Community ID"
 // @Param				picture formData file true "Community picture"
 // @Description			Uploads a PNG or JPEG (max 1 MB and 1024x1024) as the community's picture. Only the owner may (403 otherwise).
 // @Accept				multipart/form-data
 // @Produce				application/json
 // @Tags				Community
 // @Success				204
+// @Security			BearerAuth
 // @Router				/communities/{communityId}/picture [put]
 func (c *CommunityController) UpdatePicture(ctx *gin.Context) {
 	user := ctx.MustGet("user").(*model.User)
@@ -170,12 +177,14 @@ func (c *CommunityController) UpdatePicture(ctx *gin.Context) {
 }
 
 // Delete 				godoc
+// @ID					deleteCommunity
 // @Summary				Delete community by id.
-// @Param				communityId path string true "Community ID"
+// @Param				communityId path int true "Community ID"
 // @Description			Deletes a community
 // @Produce				application/json
 // @Tags				Community
-// @Success				204 {object} transport.Response{}
+// @Success				204
+// @Security			BearerAuth
 // @Router				/communities/{communityId} [delete]
 func (c *CommunityController) Delete(ctx *gin.Context) {
 	communityId := helpers.MustParseUint(ctx.Param("communityId"))
@@ -189,12 +198,14 @@ func (c *CommunityController) Delete(ctx *gin.Context) {
 }
 
 // FindById				godoc
+// @ID					findCommunity
 // @Summary				Get Single community by id.
-// @Param				communityId path string true "Community ID"
+// @Param				communityId path int true "Community ID"
 // @Description			Returns the community matching the requested id
 // @Produce				application/json
 // @Tags				Community
 // @Success				200 {object} transport.FindCommunityByIdResponse{}
+// @Security			BearerAuth
 // @Router				/communities/{communityId} [get]
 func (c *CommunityController) FindById(ctx *gin.Context) {
 	communityId := ctx.Param("communityId")
@@ -215,12 +226,14 @@ func (c *CommunityController) FindById(ctx *gin.Context) {
 }
 
 // FindProfileById		godoc
+// @ID					findCommunityProfile
 // @Summary				Get Single community profile by its id.
-// @Param				communityId path string true "Community ID"
+// @Param				communityId path int true "Community ID"
 // @Description			Returns the community profile matching the requested id
 // @Produce				application/json
 // @Tags				Community
 // @Success				200 {object} transport.FindCommunityProfileByIdResponse{}
+// @Security			BearerAuth
 // @Router				/communities/{communityId}/profile [get]
 func (c *CommunityController) FindProfileById(ctx *gin.Context) {
 	communityId := ctx.Param("communityId")
@@ -241,12 +254,14 @@ func (c *CommunityController) FindProfileById(ctx *gin.Context) {
 }
 
 // FindMembers			godoc
+// @ID					findCommunityMembers
 // @Summary				Get community members.
-// @Param				communityId path string true "Community ID"
+// @Param				communityId path int true "Community ID"
 // @Description			Returns a list of the community members matching the requested id and a few stats
 // @Produce				application/json
 // @Tags				Community
 // @Success				200 {object} transport.FindCommunityMembersResponse{}
+// @Security			BearerAuth
 // @Router				/communities/{communityId}/members [get]
 func (c *CommunityController) FindMembers(ctx *gin.Context) {
 	communityId := ctx.Param("communityId")
@@ -267,11 +282,13 @@ func (c *CommunityController) FindMembers(ctx *gin.Context) {
 }
 
 // FindMany				godoc
+// @ID					findCommunities
 // @Summary				Get Multiple communities.
 // @Description			Returns an array of communities
 // @Produce				application/json
 // @Tags				Community
 // @Success				200 {object} transport.FindManyCommunitiesResponse{}
+// @Security			BearerAuth
 // @Router				/communities [get]
 func (c *CommunityController) FindMany(ctx *gin.Context) {
 	communities, err := c.communityService.FindManyCommunities()
@@ -284,11 +301,14 @@ func (c *CommunityController) FindMany(ctx *gin.Context) {
 }
 
 // FindRelated			godoc
+// @ID					findRelatedCommunities
 // @Summary				Get Related communities.
-// @Description			Returns an array of communities
+// @Param				communityId path int true "Community ID"
+// @Description			Returns an array of communities (for now, every community)
 // @Produce				application/json
 // @Tags				Community
 // @Success				200 {object} transport.FindManyCommunitiesResponse{}
+// @Security			BearerAuth
 // @Router				/communities/{communityId}/related [get]
 func (c *CommunityController) FindRelated(ctx *gin.Context) {
 	// For now, I don't have a behavior for this, so we just list all communities
@@ -305,11 +325,14 @@ func (c *CommunityController) FindRelated(ctx *gin.Context) {
 }
 
 // FindHotTopics		godoc
-// @Summary				Gets a list of most recently replied topics.
+// @ID					findCommunityHotTopics
+// @Summary				Gets the 5 most recently replied topics of a community.
+// @Param				communityId path int true "Community ID"
 // @Description			Returns a list of topics
 // @Produce				application/json
 // @Tags				Community
 // @Success				200 {object} transport.TopicsResponse{}
+// @Security			BearerAuth
 // @Router				/communities/{communityId}/hot-topics [get]
 func (c *CommunityController) FindHotTopics(ctx *gin.Context) {
 	communityId := helpers.MustParseUint(ctx.Param("communityId"))
@@ -324,11 +347,14 @@ func (c *CommunityController) FindHotTopics(ctx *gin.Context) {
 }
 
 // FindAllTopics		godoc
-// @Summary				Gets a list of most recently replied topics.
+// @ID					findCommunityTopics
+// @Summary				Gets the 10 most recently replied topics of a community.
+// @Param				communityId path int true "Community ID"
 // @Description			Returns a list of topics
 // @Produce				application/json
 // @Tags				Community
 // @Success				200 {object} transport.TopicsResponse{}
+// @Security			BearerAuth
 // @Router				/communities/{communityId}/topics [get]
 func (c *CommunityController) FindAllTopics(ctx *gin.Context) {
 	communityId := helpers.MustParseUint(ctx.Param("communityId"))
@@ -343,6 +369,7 @@ func (c *CommunityController) FindAllTopics(ctx *gin.Context) {
 }
 
 // Search				godoc
+// @ID					searchCommunities
 // @Summary				Searches communities the logged user hasn't joined.
 // @Param				name query string false "Part of the community name (omit to list all)"
 // @Param				page query int false "Page, starting at 1 (default 1)"
@@ -351,6 +378,7 @@ func (c *CommunityController) FindAllTopics(ctx *gin.Context) {
 // @Produce				application/json
 // @Tags				Community
 // @Success				200 {object} transport.SearchCommunitiesResponse{}
+// @Security			BearerAuth
 // @Router				/communities/search [get]
 func (c *CommunityController) Search(ctx *gin.Context) {
 	user := ctx.MustGet("user").(*model.User)

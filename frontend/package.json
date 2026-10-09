@@ -9,24 +9,19 @@
     "@react-oauth/google": "^0.12.1",
     "@tanstack/react-query": "^5.90.21",
     "@tanstack/react-query-devtools": "^5.91.3",
-    "@types/jest": "^29.5.14",
-    "@types/node": "^22.13.1",
-    "@types/react": "^19.0.8",
-    "@types/react-dom": "^19.0.3",
-    "@typescript-eslint/parser": "^5.62.0",
     "dayjs": "^1.11.13",
-    "prettier-eslint": "^16.3.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.01",
-    "react-router-dom": "^7.1.5",
-    "typescript": "^4.9.5"
+    "react-router-dom": "^7.1.5"
   },
   "scripts": {
     "start": "rsbuild dev",
     "build": "rsbuild build",
     "preview": "rsbuild preview",
     "lint": "eslint --fix --ext .js,.jsx,.ts,.tsx .",
-    "serve": "serve -s dist"
+    "serve": "serve -s dist",
+    "gen:api": "orval --config ./orval.config.ts",
+    "typecheck": "tsc --noEmit -p ."
   },
   "eslintConfig": {
     "extends": [
@@ -34,6 +29,9 @@
       "react-app/jest"
     ]
   },
+  "eslintIgnore": [
+    "src/api/generated"
+  ],
   "browserslist": {
     "production": [
       ">0.2%",
@@ -49,11 +47,19 @@
   "devDependencies": {
     "@rsbuild/core": "^1.2.11",
     "@rsbuild/plugin-react": "^1.1.1",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.13.1",
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
+    "@typescript-eslint/parser": "^5.62.0",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.3",
     "eslint-plugin-simple-import-sort": "^12.1.1",
-    "prettier": "^3.5.3"
+    "orval": "8.37.0",
+    "prettier": "^3.5.3",
+    "prettier-eslint": "^16.3.0",
+    "typescript": "~5.9.3"
   },
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

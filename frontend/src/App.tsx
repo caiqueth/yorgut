@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Wrapper } from "components/templates/Wrapper";
+import { Wrapper } from "components/Wrapper";
 import { useNavigate, useRoutes } from "react-router-dom";
 import { Routes } from "routes";
 
@@ -10,9 +10,9 @@ import {
   QueryClientProvider,
 } from "@tanstack/react-query";
 
-import { theme } from "./theme";
+import { theme } from "theme";
 
-import "./App.css";
+import "App.css";
 import { GlobalContextStateProvider } from "contexts/GlobalStateContext";
 import { AuthContextProvider } from "contexts/AuthContext";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";

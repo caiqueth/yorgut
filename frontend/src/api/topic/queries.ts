@@ -1,30 +1,28 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { doGet, doPost } from "api/http";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
-  ITopicCreateRequest,
-  ITopicRepliesResponse,
-  ITopicReplyRequest,
-} from "./types";
+  getFindCommunityHotTopicsQueryKey,
+  getFindCommunityTopicsQueryKey,
+} from "api/generated/endpoints/community/community";
+import {
+  createTopic,
+  getFindTopicRepliesQueryKey,
+  replyTopic,
+  useFindTopicReplies,
+} from "api/generated/endpoints/topics/topics";
+import { CreateTopicRequest, ReplyTopicRequest } from "api/generated/model";
 
-const basePath = `${__API_BASE_URL__}/topics`;
-
-export const useTopicReplies = (topicId: number) =>
-  useQuery<ITopicRepliesResponse>({
-    queryKey: [`${basePath}/${topicId}/replies`],
-    queryFn: ({ queryKey }) => doGet({ queryKey }),
-  });
+export const useTopicReplies = (topicId: number) => useFindTopicReplies(topicId);
 
 export const useCreateTopic = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (payload: ITopicCreateRequest) =>
-      doPost({ url: `${basePath}`, body: payload }),
+    mutationFn: (payload: CreateTopicRequest) => createTopic(payload),
     onSettled: (_data, _error, variables) => {
       queryClient.invalidateQueries({
-        queryKey: [`${__API_BASE_URL__}/communities/${variables.communityId}/hot-topics`],
+        queryKey: getFindCommunityHotTopicsQueryKey(variables.communityId),
       });
       queryClient.invalidateQueries({
-        queryKey: [`${__API_BASE_URL__}/communities/${variables.communityId}/topics`],
+        queryKey: getFindCommunityTopicsQueryKey(variables.communityId),
       });
     },
   });
@@ -33,12 +31,9 @@ export const useCreateTopic = () => {
 export const useReplyTopic = (topicId: number) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (payload: ITopicReplyRequest) =>
-      doPost({ url: `${basePath}/${topicId}`, body: payload }),
+    mutationFn: (payload: ReplyTopicRequest) => replyTopic(topicId, payload),
     onSettled: () => {
-      queryClient.invalidateQueries({
-        queryKey: [`${basePath}/${topicId}/replies`],
-      });
+      queryClient.invalidateQueries({ queryKey: getFindTopicRepliesQueryKey(topicId) });
     },
   });
 };

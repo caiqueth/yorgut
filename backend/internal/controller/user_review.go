@@ -21,12 +21,14 @@ func NewUserReviewController(service service.UserReviewService) *UserReviewContr
 }
 
 // FindSummary			godoc
+// @ID					findUserReviews
 // @Summary				Gets the review summary of a user.
-// @Param				userId path string true "User ID"
+// @Param				userId path int true "User ID"
 // @Description			Returns the average cool, sexy and trustworthy ratings of a user, plus the logged user's own review.
 // @Produce				application/json
 // @Tags				UserReview
 // @Success				200 {object} transport.UserReviewSummaryResponse{}
+// @Security			BearerAuth
 // @Router				/users/{userId}/reviews [get]
 func (u *UserReviewController) FindSummary(ctx *gin.Context) {
 	viewer := ctx.MustGet("user").(*model.User)
@@ -42,13 +44,16 @@ func (u *UserReviewController) FindSummary(ctx *gin.Context) {
 }
 
 // Upsert				godoc
+// @ID					upsertUserReview
 // @Summary				Reviews a user.
-// @Param				userId path string true "User ID"
+// @Param				userId path int true "User ID"
 // @Param				UserReview body transport.UpsertUserReviewRequest true "Review (each trait from 0 to 3)"
+// @Accept				application/json
 // @Description			Logged user creates or updates their review of a friend.
 // @Produce				application/json
 // @Tags				UserReview
 // @Success				204
+// @Security			BearerAuth
 // @Router				/users/{userId}/review [put]
 func (u *UserReviewController) Upsert(ctx *gin.Context) {
 	reviewer := ctx.MustGet("user").(*model.User)

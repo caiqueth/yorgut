@@ -17,11 +17,15 @@ import (
 // @title Yorgut APIs
 // @version 1.0
 // @description Our very own OG Social Media.
-// @in header
-// @name token// @license.name Apache 2.0
+// @license.name Apache 2.0
 // @host localhost:8080
 // @BasePath /api/v1
 // @schemes http
+//
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
+// @description Yorgut session token from POST /auth/google, sent as "Bearer <token>".
 func NewRouter(
 	authController *controller.AuthController,
 	meController *controller.MeController,

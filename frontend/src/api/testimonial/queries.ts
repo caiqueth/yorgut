@@ -1,37 +1,30 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { doDelete, doGet, doPost } from "api/http";
-import { ICreateTestimonialPayload, ITestimonialsResponse } from "./types";
-
-const basePath = `${__API_BASE_URL__}/testimonials`;
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  approveTestimonial,
+  createTestimonial,
+  deleteTestimonial,
+  getFindUserTestimonialsQueryKey,
+  useFindUserTestimonials,
+} from "api/generated/endpoints/testimonial/testimonial";
+import { CreateTestimonialRequest } from "api/generated/model";
 
 // Without page, returns every approved testimonial. With page (from 1), returns
-// one page of them; the key keeps the base URL first so invalidating
-// `${basePath}/user/${userId}` also refreshes every page.
+// one page of them. The key starts with the user's testimonials path either way,
+// so invalidating getFindUserTestimonialsQueryKey(userId) refreshes every page.
 export const useTestimonials = (userId: number, page?: number, pageSize?: number) =>
-  useQuery<ITestimonialsResponse>({
-    queryKey: page
-      ? [`${basePath}/user/${userId}`, "page", page, pageSize]
-      : [`${basePath}/user/${userId}`],
-    queryFn: () =>
-      doGet({
-        queryKey: [
-          page
-            ? `${basePath}/user/${userId}?page=${page}&pageSize=${pageSize ?? 5}`
-            : `${basePath}/user/${userId}`,
-        ],
-      }),
-    enabled: !!userId,
-    placeholderData: (previous) => previous,
-  });
+  useFindUserTestimonials(
+    userId,
+    page ? { page, pageSize: pageSize ?? 5 } : undefined,
+    { query: { enabled: !!userId, placeholderData: (previous) => previous } },
+  );
 
 export const useCreateTestimonial = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (payload: ICreateTestimonialPayload) =>
-      doPost({ url: `${basePath}`, body: payload }),
+    mutationFn: (payload: CreateTestimonialRequest) => createTestimonial(payload),
     onSettled: (_data, _error, variables) => {
       queryClient.invalidateQueries({
-        queryKey: [`${basePath}/user/${variables.userRecipientId}`],
+        queryKey: getFindUserTestimonialsQueryKey(variables.userRecipientId),
       });
     },
   });
@@ -41,12 +34,9 @@ export const useCreateTestimonial = () => {
 export const useApproveTestimonial = (userId: number) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (testimonialId: number) =>
-      doPost({ url: `${basePath}/${testimonialId}/approve`, body: {} }),
+    mutationFn: (testimonialId: number) => approveTestimonial(testimonialId),
     onSettled: () => {
-      queryClient.invalidateQueries({
-        queryKey: [`${basePath}/user/${userId}`],
-      });
+      queryClient.invalidateQueries({ queryKey: getFindUserTestimonialsQueryKey(userId) });
     },
   });
 };
@@ -55,12 +45,9 @@ export const useApproveTestimonial = (userId: number) => {
 export const useDeleteTestimonial = (userId: number) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (testimonialId: number) =>
-      doDelete({ url: `${basePath}/${testimonialId}` }),
+    mutationFn: (testimonialId: number) => deleteTestimonial(testimonialId),
     onSettled: () => {
-      queryClient.invalidateQueries({
-        queryKey: [`${basePath}/user/${userId}`],
-      });
+      queryClient.invalidateQueries({ queryKey: getFindUserTestimonialsQueryKey(userId) });
     },
   });
 };

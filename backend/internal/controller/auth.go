@@ -20,6 +20,7 @@ func NewAuthController(authService service.AuthService) *AuthController {
 }
 
 // LoginWithGoogle		godoc
+// @ID					loginWithGoogle
 // @Summary				Logs in with a Google account.
 // @Description			Validates the Google ID token from Sign in with Google, creates the user on their first login, and returns a Yorgut session token. Send it as "Authorization: Bearer <token>" on every other request.
 // @Accept				application/json
