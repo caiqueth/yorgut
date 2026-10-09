@@ -113,27 +113,47 @@ Reference implementation: user reviews (`UserReview`).
 
 ## Frontend (`frontend/src/`)
 
-Imports are absolute from `src/` (`tsconfig.json` `baseUrl: "src"`): `import { doGet } from "api/http"`.
+Imports are absolute from `src/` (`tsconfig.json` `baseUrl: "src"`), also inside a feature: `import { apiRequest } from "api/http"`, `import { MembersOnly } from "features/community/components/MembersOnly"`.
+
+```
+src/
+  index.tsx, App.tsx, theme.ts, *.css   app shell
+  routes/                               route table + ProtectedRoute
+  api/
+    http.ts                             apiRequest (orval mutator)
+    generated/                          orval output, committed, never edited
+    <domain>/queries.ts                 the hooks the UI uses (one file per backend resource)
+  features/<feature>/
+    pages/<Page>/index.tsx              route screens of the feature (parent layouts and nested routes)
+    components/<Name>/index.tsx         sections only this feature uses
+    <helper>.ts                         feature-only data/helpers (e.g. profile/profileFields.ts)
+  components/<Name>/index.tsx           shared components (used by two or more features, or the app shell)
+  contexts/, hooks/, helpers/, assets/
+```
+
+Features today: `auth` (login), `home`, `scrapbook` (`/scraps`), `profile` (`/profile/:userId/*`), `community` (`/community/:communityId/*`), `communities` (`/communities/*`), `friends`, `search`, `account`, `info` (help, what's new, media), `errors`.
 
 | Layer | Location | Owns | Must not |
 |---|---|---|---|
 | App shell | `index.tsx`, `App.tsx`, `theme.ts`, `index.css`, `App.css` | Providers (QueryClient, MUI theme, Google OAuth, contexts), global styles, `palette` | — |
-| Routing | `routes/index.tsx`, `routes/ProtectedRoute.tsx` | Route table; nested routes render via `<Outlet />` in the parent page | Fetch data |
+| Routing | `routes/index.tsx`, `routes/ProtectedRoute.tsx` | Route table, importing the `features/*/pages` screens; nested routes render via `<Outlet />` in the parent page | Fetch data |
 | HTTP client | `api/http.ts` | `apiRequest`, the orval mutator every generated call goes through: base URL (`__API_BASE_URL__`), query string, auth header from `localStorage.token`, JSON vs `FormData` bodies, `401` → remove the token, error messages | Know about specific endpoints |
 | Generated client | `api/generated/` (`endpoints/<tag>/<tag>.ts`, `model/*.ts`), produced by orval from `backend/docs/swagger.json` (`orval.config.ts`, `scripts/orval-transformer.mjs`) | Request functions (`findUserProfile`), query hooks (`useFindUserProfile`), query-key helpers (`getFindUserProfileQueryKey`) and every request/response type (`FindUserWithProfileByIdResponse`) | Be edited by hand: regenerate with `yarn gen:api` |
-| API domain | `api/<domain>/queries.ts` (one per backend resource) | The hooks the UI uses: one `use<Thing>` per endpoint, wrapping a generated query hook with its options (`enabled`, `staleTime`, `placeholderData`) or a generated request function in `useMutation` with its cache invalidation | Declare request/response types (import them from `api/generated/model`); render anything |
-| Design system | `components/{atoms,molecules,organisms,templates}/<Name>/index.tsx` | Atomic-design components reused across **two or more pages** | Import from `pages/` |
-| Pages | `pages/<Page>/index.tsx` | Route-level screen; layout of its sections | Be imported by another page |
-| Sub-routes | `pages/<Page>/<SubRoute>/index.tsx` | Nested route screens (e.g. `pages/Profile/Scrapbook`) | — |
-| Page sections | `pages/<Page>/components/<Name>/index.tsx` | Pieces used only by that page (and its sub-routes) | Be imported by other pages; promote to `components/` instead |
+| API domain | `api/<domain>/queries.ts` (one per backend resource, shared by all features) | The hooks the UI uses: one `use<Thing>` per endpoint, wrapping a generated query hook with its options (`enabled`, `staleTime`, `placeholderData`) or a generated request function in `useMutation` with its cache invalidation | Declare request/response types (import them from `api/generated/model`); render anything |
+| Feature pages | `features/<feature>/pages/<Page>/index.tsx` | Route-level screens and their layout, including parent pages with `<Outlet />` (`profile/pages/Profile`) and nested routes (`profile/pages/Scrapbook`) | Be imported by anything but `routes/` |
+| Feature sections | `features/<feature>/components/<Name>/index.tsx` | Pieces used only inside that feature (`community/components/HotTopics`) | Be imported by another feature: move it to `components/` instead |
+| Shared components | `components/<Name>/index.tsx` (flat) | Design-system pieces (`Button`, `BoxWithTitle`, `StripedGrid`, `PicAndText`, `ProfilePicture`), app-shell parts (`Wrapper`, `Navbar`, `UserBar`, `YorgutTitle`) and sections used by two or more features (`Scrapbook`, `FriendsList`, `HomeMenu`, `UserProfilePicture`). May call `api/*` hooks | Import from `features/` |
 | Contexts | `contexts/<Name>Context.tsx` | Cross-cutting client state (auth, global loading) | Duplicate server state that TanStack Query already caches |
 | Hooks | `hooks/use<Name>.ts` | Non-API reusable hooks (`useToken`, context accessors) | Wrap endpoints (those go in `api/`) |
 | Helpers | `helpers/` (`helpers/formatting/*` for formatters) | Pure functions | Use React |
 | Assets | `assets/{fonts,images}` | Static files imported by components | — |
 
+Why this shape: a feature folder holds everything one area of the app needs, so most changes stay inside one folder and "is this used elsewhere?" has an answer (if it's in `features/x`, only `x` uses it). The old atoms/molecules/organisms/templates split was dropped: with ~20 shared components the level was a judgement call that didn't help find anything, and it let two different components both be called `ProfilePicture`. A flat `components/` with unique names is enough. API hooks stay in `api/` rather than in features because endpoints don't belong to one feature (`/me` feeds home, profile, communities and the shell).
+
 ### Conventions
 
-- **Files**: one component per folder, `index.tsx`, named export (`export const ProfileHeader: React.FC<IProps>`); styled-components variants go in a sibling `styles.tsx`.
+- **Files**: one component per folder, `index.tsx`, named export (`export const ProfileHeader: React.FC<IProps>`); styled-components variants go in a sibling `styles.tsx`. Names in `components/` are unique; inside a feature they only need to be unique within the feature (`profile/components/ProfileHeader` and `community/components/ProfileHeader` coexist).
+- **Promote, don't reach across**: when a second feature needs a section, move it to `components/` (with `git mv`) and, if the two uses differ only in data source, parameterise it (see `components/FriendsList`: `userId` omitted = the logged user).
 - **API types** come from the generated client and keep the backend DTO names: `import { FindUserResponse } from "api/generated/model"`. Never hand-write a type for an API request or response; if the generated one is wrong, fix the controller's godoc (or the DTO) and regenerate. Local, non-API interfaces are prefixed with `I` (`IProps`).
 - **API base**: `__API_BASE_URL__` (defined in `rsbuild.config.ts`, typed in `global.d.ts`) is added by `api/http.ts`; generated URLs are the spec paths (`/users/1/profile`).
 - **Query keys** are orval's: `[path]` or `[path, params]` (e.g. `["/communities/search", { name, page, pageSize }]`). Mutations invalidate with the generated helpers in `onSettled`: `queryClient.invalidateQueries({ queryKey: getFindUserScrapsQueryKey(userId) })`. Calling a helper without its params (`getSearchCommunitiesQueryKey()`) matches every params variant, since keys match by prefix.
@@ -141,23 +161,20 @@ Imports are absolute from `src/` (`tsconfig.json` `baseUrl: "src"`): `import { d
 - **Uploads**: multipart endpoints take a generated `*Body` type (`UploadPhotoBody`); the generated function builds the `FormData`, and `api/http.ts` drops the JSON `Content-Type` for it. Optional files are `undefined` (not `null`) when absent.
 - **Generated code is committed** (`api/generated/`, plus `backend/docs/`), so the frontend builds and type-checks without Go or swag installed. Regenerate in the same change as the backend change; a regenerated client that doesn't compile is the point (the frontend must be updated too). ESLint ignores the folder.
 - **Server state** lives in TanStack Query only.
-- **Uploaded images**: the API returns upload paths relative to the backend (`storage/uploads/<uuid>`). Always render them through `uploadUrl()` from `helpers/uploadUrl`, which resolves them against the API origin. The image atoms (`PicAndText`, `PicAndTextHorizontal`, `ProfilePicture`) already do this; a raw `<img>` must call it itself.
-- **Atomic levels**:
-  - atoms: no data fetching, purely presentational.
-  - molecules: small compositions, may use one query hook.
-  - organisms: sections like `Navbar` or `Scrapbook`.
-  - templates: page frames like `Wrapper`.
+- **Uploaded images**: the API returns upload paths relative to the backend (`storage/uploads/<uuid>`). Always render them through `uploadUrl()` from `helpers/uploadUrl`, which resolves them against the API origin. The shared image components (`PicAndText`, `PicAndTextHorizontal`, `ProfilePicture`) already do this; a raw `<img>` must call it itself.
+- **Type-check stays clean**: `yarn typecheck` (`tsc --noEmit -p .`) has zero errors; keep it that way.
+- **Dependencies**: React 18 with `@types/react` 18, TypeScript 5.9. Types, TypeScript, lint and codegen tooling are `devDependencies`. Yarn 1: change dependencies with `yarn add` / `yarn add -D` so `yarn.lock` stays in sync.
 - **UI language** is Portuguese (pt-BR); code identifiers are English.
 
 ### Recipe: adding a frontend feature
 
-Reference implementation: user reviews.
+Reference implementation: user reviews (`api/userReview/queries.ts`, `features/friends/components/FriendRating`).
 
 1. Backend first: endpoint + godoc (see the backend recipe), then `make gen-api` in `backend/` (or `yarn gen:api` in `frontend/` when only the spec changed). This updates `api/generated/`; commit it.
 2. `api/<domain>/queries.ts`: `use<Thing>` wrapping the generated query hook (add options here), and `use<Action><Thing>` = `useMutation` around the generated request function, invalidating the generated query keys it affects.
-3. The UI goes in `pages/<Page>/components/<Name>/` if one page uses it, or in `components/<level>/<Name>/` if it is (or will be) shared.
+3. The UI goes in `features/<feature>/components/<Name>/` if one feature uses it, or in `components/<Name>/` if it is (or will be) shared. A new route screen goes in `features/<feature>/pages/<Page>/` and is registered in `routes/index.tsx`.
 4. Mount it from the page or section that owns it.
-5. Check with `npx tsc --noEmit -p .` (filter for your files; some errors already exist) and `npx rsbuild build`.
+5. Check with `yarn typecheck` (must stay at zero errors) and `npx rsbuild build`.
 
 ---
 

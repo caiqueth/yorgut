@@ -30,21 +30,4 @@ Severity:
 
 ## Frontend
 
-### Bugs caused by structure
-
-- [ ] **bug**: `hooks/useGlobalStateContext.ts` imports from `contexts/GlobalState`, but the file is `contexts/GlobalStateContext.tsx`, so this is a TS error.
-
-### Components in the wrong place
-
-- [ ] **layer**: one page imports a component from another.
-  - Where: `pages/MyScrapbook/index.tsx` imports `pages/Home/components/Menu`.
-  - Fix: promote `Menu` to `components/organisms/`.
-- [ ] **layer**: page sections are duplicated.
-  - Where: `FriendsList` and `CommunitiesList` exist in both `pages/Home/components/` and `pages/Profile/components/`.
-  - Fix: if they differ only in data source, promote one parameterised organism.
-- [ ] **consistency**: route-level sections are placed differently across pages.
-  - Profile keeps `ProfileHeader`, `ProfileDetails` and `ProfileMenu` at `pages/Profile/<Name>/`, as if they were sub-routes, while the page-only `FriendsList`/`CommunitiesList`/`UserReview` sit in `pages/Profile/components/`.
-  - Community keeps `ProfileHeader`/`ProfileDetails` in `pages/Community/components/` but `ProfileMenu` at `pages/Community/ProfileMenu/`.
-  - Fix: anything that is not a route belongs in `components/`.
-- [ ] **consistency**: two different components are both named `ProfilePicture` (`components/atoms/ProfilePicture` and `components/molecules/ProfilePicture`).
-  - Fix: rename one (for example, the molecule to `UserProfilePicture`, which is already its export name).
+None open. The structure entries (cross-page imports, duplicated sections, inconsistent section placement, the two `ProfilePicture`s) and the `useGlobalStateContext` import were fixed by the move to feature folders. For the API types, see the nullable-fields entry under Backend.
