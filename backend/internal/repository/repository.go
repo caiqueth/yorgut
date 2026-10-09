@@ -78,15 +78,6 @@ func (r *repository[T]) FindMany() ([]T, error) {
 	return ents, nil
 }
 
-func (r *repository[T]) Update(ent T) error {
-	updateEntity := ent
-	result := r.db.Model(&ent).Updates(updateEntity)
-	if result.Error != nil {
-		return result.Error
-	}
-	return nil
-}
-
 // Transactor runs work that writes more than one row in a single database
 // transaction.
 type Transactor struct {
