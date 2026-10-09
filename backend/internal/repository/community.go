@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"yorgut/internal/helpers"
 	"yorgut/internal/model"
 
 	"gorm.io/gorm"
@@ -26,13 +25,20 @@ func (r *CommunityRepository) FindCommunitiesWithProfiles() ([]model.Community, 
 	return ents, nil
 }
 
-func (r *CommunityRepository) IncrementCommunityMembers(community *model.Community, increment int) error {
-	community.MemberCount = helpers.SafeAdd(community.MemberCount, increment)
-	result := r.db.Model(community).Updates(community)
-	if result.Error != nil {
-		return result.Error
-	}
-	return nil
+// UpdateMemberCount recounts the community's members and stores the result,
+// in a single statement so concurrent joins and leaves can't lose updates.
+func (r *CommunityRepository) UpdateMemberCount(communityId uint) error {
+	members := r.db.
+		Model(&model.CommunityMembership{}).
+		Select("count(*)").
+		Where("community_id = ?", communityId)
+
+	result := r.db.
+		Model(&model.Community{}).
+		Where("id = ?", communityId).
+		Update("member_count", members)
+
+	return result.Error
 }
 
 func (r *CommunityRepository) FindCreatedByUser(userId uint) ([]model.Community, error) {

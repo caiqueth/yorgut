@@ -18,6 +18,7 @@ var (
 )
 
 type CommunityService struct {
+	transactor                 repository.Transactor
 	communityRepository        repository.CommunityRepository
 	communityProfileRepository repository.CommunityProfileRepository
 	membershipRepository       repository.CommunityMembershipRepository
@@ -26,6 +27,7 @@ type CommunityService struct {
 }
 
 func NewCommunityService(
+	transactor repository.Transactor,
 	communityRepository repository.CommunityRepository,
 	communityProfileRepository repository.CommunityProfileRepository,
 	membershipRepository repository.CommunityMembershipRepository,
@@ -33,6 +35,7 @@ func NewCommunityService(
 	validate *validator.Validate,
 ) *CommunityService {
 	return &CommunityService{
+		transactor:                 transactor,
 		communityRepository:        communityRepository,
 		communityProfileRepository: communityProfileRepository,
 		membershipRepository:       membershipRepository,
@@ -65,13 +68,17 @@ func (c *CommunityService) CreateCommunity(creatorId uint, name string, category
 
 	communityModel := model.NewCommunity(strings.TrimSpace(name), strings.TrimSpace(category), creator)
 	communityModel.Profile = profile
-	// The creator owns the community and is its first member.
-	communityModel.MemberCount = 1
-	if err := c.communityRepository.Create(communityModel); err != nil {
-		return 0, err
-	}
-
-	if err := c.membershipRepository.Create(model.NewCommunityMembership(communityModel, creator)); err != nil {
+	err = c.transactor.Transaction(func(tx *repository.Repositories) error {
+		if err := tx.Community.Create(communityModel); err != nil {
+			return err
+		}
+		// The creator owns the community and is its first member.
+		if err := tx.CommunityMembership.Create(model.NewCommunityMembership(communityModel, creator)); err != nil {
+			return err
+		}
+		return tx.Community.UpdateMemberCount(communityModel.ID)
+	})
+	if err != nil {
 		return 0, err
 	}
 	return communityModel.ID, nil
@@ -188,11 +195,12 @@ func (c *CommunityService) UpdateCommunity(userId uint, communityId uint, name s
 		return err
 	}
 
-	if err := c.communityRepository.UpdateDetails(communityId, strings.TrimSpace(name), strings.TrimSpace(category)); err != nil {
-		return err
-	}
-
-	return c.communityProfileRepository.UpdateDescriptionOfCommunity(communityId, nilIfBlank(description))
+	return c.transactor.Transaction(func(tx *repository.Repositories) error {
+		if err := tx.Community.UpdateDetails(communityId, strings.TrimSpace(name), strings.TrimSpace(category)); err != nil {
+			return err
+		}
+		return tx.CommunityProfile.UpdateDescriptionOfCommunity(communityId, nilIfBlank(description))
+	})
 }
 
 // UpdateCommunityPicture replaces the community's picture (limits in

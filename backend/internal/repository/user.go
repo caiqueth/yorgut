@@ -2,7 +2,6 @@ package repository
 
 import (
 	"time"
-	"yorgut/internal/helpers"
 	"yorgut/internal/model"
 
 	"gorm.io/gorm"
@@ -54,23 +53,20 @@ func (r *UserRepository) FindUserWithProfile(userId uint) (*model.User, error) {
 	return &ent, nil
 }
 
-func (r *UserRepository) IncrementFriendCount(user *model.User, increment int) error {
-	user.FriendCount = helpers.SafeAdd(user.FriendCount, increment)
+// UpdateFriendCount recounts the user's accepted friendships and stores the
+// result, in a single statement so concurrent changes can't lose updates.
+func (r *UserRepository) UpdateFriendCount(userId uint) error {
+	friends := r.db.
+		Model(&model.Friendship{}).
+		Select("count(*)").
+		Where("(user_requested_id = ? or user_requestee_id = ?) and accepted = ?", userId, userId, true)
 
-	// Had to do it this way, otherwise gorm would ignore 0 values
-	result := r.db.Model(user).Select("FriendCount").Updates(user)
-	if result.Error != nil {
-		return result.Error
-	}
-	return nil
-}
-
-func (r *UserRepository) UpdateFriendCount(userId uint, friendCount uint) error {
-	updateResult := r.db.Model(&model.User{}).
+	result := r.db.
+		Model(&model.User{}).
 		Where("id = ?", userId).
-		Update("friend_count", friendCount)
+		Update("friend_count", friends)
 
-	return updateResult.Error
+	return result.Error
 }
 
 func (r *UserRepository) SearchUsers(name string, page int, pageSize int) ([]*model.User, int64) {

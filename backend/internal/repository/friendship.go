@@ -111,20 +111,6 @@ func (f *FriendshipRepository) FindActiveAcceptedFriends(userId1 uint, userId2 u
 	return &ent, nil
 }
 
-func (f *FriendshipRepository) CountFriends(userId uint) int64 {
-	var count int64
-	result := f.db.
-		Model(&model.Friendship{}).
-		Where("(user_requested_id = ? or user_requestee_id = ?) and accepted = true", userId, userId).
-		Count(&count)
-
-	if result.Error != nil {
-		return 0
-	}
-
-	return count
-}
-
 func (f *FriendshipRepository) AcceptFriendship(friendshipId uint) error {
 	now := time.Now()
 	result := f.db.

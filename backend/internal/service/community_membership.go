@@ -12,6 +12,7 @@ import (
 var ErrOwnerCannotLeave = errors.New("the owner cannot leave their own community")
 
 type CommunityMembershipService struct {
+	transactor                    repository.Transactor
 	communityMembershipRepository repository.CommunityMembershipRepository
 	communityRepository           repository.CommunityRepository
 	userRepository                repository.UserRepository
@@ -19,12 +20,14 @@ type CommunityMembershipService struct {
 }
 
 func NewCommunityMembershipService(
+	transactor repository.Transactor,
 	communityMembershipRepository repository.CommunityMembershipRepository,
 	communityRepository repository.CommunityRepository,
 	userRepository repository.UserRepository,
 	validate *validator.Validate,
 ) *CommunityMembershipService {
 	return &CommunityMembershipService{
+		transactor:                    transactor,
 		communityMembershipRepository: communityMembershipRepository,
 		communityRepository:           communityRepository,
 		userRepository:                userRepository,
@@ -83,15 +86,12 @@ func (c *CommunityMembershipService) JoinCommunity(userId uint, communityId uint
 	}
 
 	membership := model.NewCommunityMembership(community, user)
-	if err := c.communityMembershipRepository.Create(membership); err != nil {
-		return err
-	}
-
-	if err := c.communityRepository.IncrementCommunityMembers(community, 1); err != nil {
-		return err
-	}
-
-	return nil
+	return c.transactor.Transaction(func(tx *repository.Repositories) error {
+		if err := tx.CommunityMembership.Create(membership); err != nil {
+			return err
+		}
+		return tx.Community.UpdateMemberCount(communityId)
+	})
 }
 
 // LeaveCommunity removes the user's membership. The owner can't leave.
@@ -110,13 +110,10 @@ func (c *CommunityMembershipService) LeaveCommunity(userId uint, communityId uin
 		return err
 	}
 
-	if err := c.communityMembershipRepository.Delete(membership.ID); err != nil {
-		return err
-	}
-
-	if err := c.communityRepository.IncrementCommunityMembers(community, -1); err != nil {
-		return err
-	}
-
-	return nil
+	return c.transactor.Transaction(func(tx *repository.Repositories) error {
+		if err := tx.CommunityMembership.Delete(membership.ID); err != nil {
+			return err
+		}
+		return tx.Community.UpdateMemberCount(communityId)
+	})
 }

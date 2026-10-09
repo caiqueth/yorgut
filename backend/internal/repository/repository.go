@@ -87,9 +87,25 @@ func (r *repository[T]) Update(ent T) error {
 	return nil
 }
 
+// Transactor runs work that writes more than one row in a single database
+// transaction.
+type Transactor struct {
+	db *gorm.DB
+}
+
+// Transaction runs fn with repositories bound to a new transaction. If fn
+// returns an error (or panics), everything it wrote is rolled back.
+// Repositories outside tx don't see its writes until it commits.
+func (t Transactor) Transaction(fn func(tx *Repositories) error) error {
+	return t.db.Transaction(func(tx *gorm.DB) error {
+		return fn(NewRepositories(tx))
+	})
+}
+
 // Repositories holds one instance of every repository, so the API server and
 // the seed command are wired the same way.
 type Repositories struct {
+	Transactor          Transactor
 	User                *UserRepository
 	UserProfile         *UserProfileRepository
 	UserReview          *UserReviewRepository
@@ -107,6 +123,7 @@ type Repositories struct {
 
 func NewRepositories(db *gorm.DB) *Repositories {
 	return &Repositories{
+		Transactor:          Transactor{db: db},
 		User:                NewUserRepository(db),
 		UserProfile:         NewUserProfileRepository(db),
 		UserReview:          NewUserReviewRepository(db),

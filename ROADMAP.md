@@ -35,23 +35,25 @@ Left to do:
 - [ ] `make swagger` to add `/auth/google` to the docs (needs `swag` installed). The `@securityDefinitions` comment in `routes.go` is also malformed.
 - [ ] Keep in mind: never render user content (scraps, testimonials, topics) as raw HTML (`dangerouslySetInnerHTML`) without sanitizing. With the token in `localStorage`, XSS is the main risk. None today.
 
-### 2. Transactions for multi-write operations
+### 2. Transactions for multi-write operations ✅ (done 2026-10-09)
 
-**Problem.** No `db.Transaction` anywhere. Flows that write several rows can half-succeed and leave counters wrong:
+`repository.Transactor` runs a callback with repositories bound to one transaction. Used by
+`CreateCommunity`, `UpdateCommunity`, `JoinCommunity`, `LeaveCommunity`, `ReplyFriendship` and
+`DeleteFriendship`. Friend and member counts are recomputed in a single SQL `UPDATE ... (SELECT COUNT(*))`
+inside the transaction instead of read-modify-write increments. This also fixed `DeleteFriendship`
+decrementing both users' counts when cancelling a *pending* request. Pattern documented in the architecture skill.
 
-- `CommunityMembershipService.JoinCommunity` / `LeaveCommunity`: membership row + `IncrementCommunityMembers`.
-- `FriendshipService.ReplyFriendship`: accept + `UpdateFriendCount` for both users (recounts).
-- `FriendshipService.DeleteFriendship`: delete + `IncrementFriendCount(-1)` twice, **errors ignored** (inconsistent with `ReplyFriendship`, which recounts).
+Left to do:
 
-**Plan.**
-
-- [ ] Repositories: add `WithTx(tx *gorm.DB)` returning a copy bound to the transaction (cheap, since repositories only hold a `*gorm.DB`). Add it to the generic `repository[T]` so all inherit it.
-- [ ] Services: give the services that need it access to the `*gorm.DB` (or a small `TxRunner`) and wrap the flows above in `db.Transaction(func(tx *gorm.DB) error { ... })`.
-- [ ] Pick one counter strategy and use it everywhere: either atomic `UPDATE ... SET count = count + ?` inside the transaction, or recount inside the transaction. Stop ignoring errors in `DeleteFriendship`.
-- [ ] Grep services for any other place that calls two or more repository writes in a row and wrap those too.
-- [ ] Document the pattern in the architecture skill (Service row + recipe).
-
-**Done when:** every service method that writes more than one row runs in a single transaction, and counter updates never ignore errors.
+- [ ] Counts already wrong in production heal on the next friendship/membership change of that user or
+  community. To fix them all at once, run after deploying:
+  `UPDATE users u SET friend_count = (SELECT COUNT(*) FROM friendships f WHERE f.deleted_at IS NULL AND f.accepted AND (f.user_requested_id = u.id OR f.user_requestee_id = u.id));`
+  `UPDATE communities c SET member_count = (SELECT COUNT(*) FROM community_memberships m WHERE m.deleted_at IS NULL AND m.community_id = c.id);`
+- [ ] Duplicate rows are still possible under concurrency: `JoinCommunity` and `CreateFriendship` check
+  "already exists" and then insert. A transaction doesn't prevent that; a unique index would, but soft deletes
+  (`deleted_at`) make it tricky (leaving and rejoining keeps the old row). Options: partial unique index
+  `WHERE deleted_at IS NULL` (Postgres and SQLite support it; needs item 5's migrations) or hard deletes for these tables.
+- [ ] An uploaded picture stays on disk if `CreateCommunity` then fails. Minor; clean up when there's an upload cleanup job.
 
 ---
 
@@ -59,9 +61,10 @@ Left to do:
 
 ### 3. Tests for the service layer
 
-- [ ] Test helper that opens in-memory SQLite (`file::memory:?cache=shared`), runs `database.Migrate`, and builds `repository.NewRepositories` + `service.NewServices`.
-- [ ] First targets: friendship rules (`ShouldThisUserBeReplying`/`Deleting`, duplicate requests, counts after accept/delete), join/leave community (owner can't leave, member counts).
-- [ ] `go test ./...` in the Makefile.
+- [x] Test helper that opens in-memory SQLite, runs `database.Migrate`, and builds the repositories (`service/helpers_test.go`, `newTestRepositories`).
+- [x] Started: login/session (`auth_test.go`), friend and member counts, transaction rollback (`counters_test.go`).
+- [ ] Next targets: friendship permission rules (`ShouldThisUserBeReplying`/`Deleting`, duplicate requests), testimonials, user reviews/fans (friends-only rules).
+- [x] `go test ./...` in the Makefile (`make test`, was already there).
 - [ ] Later: run the same tests against Postgres (see item 5).
 
 ### 4. Error handling: domain errors → HTTP status in one place
