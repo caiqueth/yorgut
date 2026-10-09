@@ -83,10 +83,10 @@ Left to do:
 
 ## Later
 
-### 6. Smaller backend gotchas
+### 6. Smaller backend gotchas ✅ (done 2026-10-09)
 
-- [ ] Generic `repository[T].Update` uses `Updates(struct)`, which silently skips zero values (`false`, `0`, `""`). Use `Select("*")` / explicit columns, or a map, where clearing a field must work.
-- [ ] Services return `transport` DTOs. Fine for now (documented in the skill); revisit if one service result needs to feed two responses.
+- [x] Generic `repository[T].Update` used `Updates(struct)`, which silently skips zero values. Nothing called it, so it's deleted; every partial update already uses `Update`, a map, or `Select(...).Updates(struct)`. The rule is in the architecture skill ("Partial updates").
+- [x] Services return `transport` DTOs: kept on purpose (documented in the skill); revisit if one service result needs to feed two responses.
 
 ### 7. Frontend structure and dependencies
 
