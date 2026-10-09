@@ -21,12 +21,15 @@ func NewScrapController(service service.ScrapService) *ScrapController {
 }
 
 // Create				godoc
+// @ID					createScrap
 // @Summary				Create a Scrap.
 // @Description			Creates a Scrap.
 // @Param				Scrap body transport.CreateScrapRequest true "Create Scrap"
+// @Accept				application/json
 // @Produce				application/json
 // @Tags				Scrap
 // @Success				201 {object} transport.Response{}
+// @Security			BearerAuth
 // @Router				/scraps [post]
 func (s *ScrapController) Create(ctx *gin.Context) {
 	author := ctx.MustGet("user").(*model.User)
@@ -54,24 +57,27 @@ func (s *ScrapController) Create(ctx *gin.Context) {
 }
 
 // Delete 				godoc
-// @Summary				Delete Scrap by id.
-// @Param				scrapId path string true "Scrap ID"
-// @Description			Deletes a Scrap.
+// @ID					deleteScrap
+// @Summary				Delete a Scrap (not implemented).
+// @Description			Not implemented yet: always answers 501. The route has no scrap id yet.
 // @Produce				application/json
 // @Tags				Scrap
-// @Success				204 {object} transport.Response{}
-// @Router				/scraps/{scrapId} [delete]
+// @Failure				501
+// @Security			BearerAuth
+// @Router				/scraps [delete]
 func (s *ScrapController) Delete(ctx *gin.Context) {
 	notImplemented(ctx)
 }
 
 // FindOfUser			godoc
+// @ID					findUserScraps
 // @Summary				Gets a list of scraps of a user.
-// @Param				userId path string true "User ID"
+// @Param				userId path int true "User ID"
 // @Description			Returns a list of scraps
 // @Produce				application/json
 // @Tags				Scrap
 // @Success				200 {object} transport.FindScrapOfUserRecipientResponse{}
+// @Security			BearerAuth
 // @Router				/scraps/user/{userId} [get]
 func (s *ScrapController) FindOfUser(ctx *gin.Context) {
 	userId := helpers.MustParseUint(ctx.Param("userId"))

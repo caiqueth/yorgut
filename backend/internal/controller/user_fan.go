@@ -20,12 +20,14 @@ func NewUserFanController(service service.UserFanService) *UserFanController {
 }
 
 // FindSummary			godoc
+// @ID					findUserFans
 // @Summary				Gets the fan summary of a user.
-// @Param				userId path string true "User ID"
+// @Param				userId path int true "User ID"
 // @Description			Returns how many fans a user has, and whether the logged user is (or can become) one of them.
 // @Produce				application/json
 // @Tags				UserFan
 // @Success				200 {object} transport.UserFanSummaryResponse{}
+// @Security			BearerAuth
 // @Router				/users/{userId}/fans [get]
 func (u *UserFanController) FindSummary(ctx *gin.Context) {
 	viewer := ctx.MustGet("user").(*model.User)
@@ -41,12 +43,14 @@ func (u *UserFanController) FindSummary(ctx *gin.Context) {
 }
 
 // BecomeFan			godoc
+// @ID					becomeFan
 // @Summary				Becomes a fan of a user.
-// @Param				userId path string true "User ID"
+// @Param				userId path int true "User ID"
 // @Description			Logged user becomes a fan of a friend. Idempotent.
 // @Produce				application/json
 // @Tags				UserFan
 // @Success				204
+// @Security			BearerAuth
 // @Router				/users/{userId}/fan [put]
 func (u *UserFanController) BecomeFan(ctx *gin.Context) {
 	fan := ctx.MustGet("user").(*model.User)
@@ -66,12 +70,14 @@ func (u *UserFanController) BecomeFan(ctx *gin.Context) {
 }
 
 // StopBeingFan			godoc
+// @ID					stopBeingFan
 // @Summary				Stops being a fan of a user.
-// @Param				userId path string true "User ID"
+// @Param				userId path int true "User ID"
 // @Description			Logged user removes their star from a user. Idempotent.
 // @Produce				application/json
 // @Tags				UserFan
 // @Success				204
+// @Security			BearerAuth
 // @Router				/users/{userId}/fan [delete]
 func (u *UserFanController) StopBeingFan(ctx *gin.Context) {
 	fan := ctx.MustGet("user").(*model.User)

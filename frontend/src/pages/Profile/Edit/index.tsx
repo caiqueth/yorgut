@@ -1,6 +1,6 @@
 import { Box, Stack, TextField, Typography } from "@mui/material";
 import { useMe, useMeProfile, useUpdateMe, useUpdateProfilePicture } from "api/me/queries";
-import { IUpdateMePayload } from "api/me/types";
+import { UpdateMeRequest } from "api/generated/model";
 import { Button } from "components/atoms/Button";
 import { BoxWithTitle } from "components/molecules/BoxWithTitle";
 import { uploadUrl } from "helpers/uploadUrl";
@@ -9,12 +9,12 @@ import React, { useEffect, useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { profileFields } from "../profileFields";
 
-const emptyForm: IUpdateMePayload = {
+const emptyForm: UpdateMeRequest = {
   firstName: "",
   lastName: "",
   birthDate: "",
   ...Object.fromEntries(profileFields.map(({ key }) => [key, ""])),
-} as IUpdateMePayload;
+} as UpdateMeRequest;
 
 // The API sends birth dates as "1990-03-15T00:00:00-03:00". Users created on
 // first login get Go's zero time ("0001-01-01..."), shown as empty.
@@ -37,7 +37,7 @@ export const EditProfile: React.FC<IProps> = () => {
     reset: resetUpload,
   } = useUpdateProfilePicture(userId);
 
-  const [form, setForm] = useState<IUpdateMePayload>(emptyForm);
+  const [form, setForm] = useState<UpdateMeRequest>(emptyForm);
   const [picture, setPicture] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [pictureError, setPictureError] = useState<string | null>(null);
@@ -50,7 +50,7 @@ export const EditProfile: React.FC<IProps> = () => {
       lastName: profile.lastName ?? "",
       birthDate: toDateInput(profile.birthDate),
       ...Object.fromEntries(profileFields.map(({ key }) => [key, profile[key] ?? ""])),
-    } as IUpdateMePayload);
+    } as UpdateMeRequest);
   }, [profile]);
 
   // Release the local preview URL when it's replaced or the page closes.
@@ -60,7 +60,7 @@ export const EditProfile: React.FC<IProps> = () => {
     return <Navigate to={`/profile/${userId}`} replace />;
   }
 
-  const setField = (key: keyof IUpdateMePayload) =>
+  const setField = (key: keyof UpdateMeRequest) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
       setForm((current) => ({ ...current, [key]: e.target.value }));
 

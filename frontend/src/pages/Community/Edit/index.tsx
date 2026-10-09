@@ -5,7 +5,7 @@ import {
   useUpdateCommunity,
   useUpdateCommunityPicture,
 } from "api/community/queries";
-import { IUpdateCommunityPayload } from "api/community/types";
+import { UpdateCommunityRequest } from "api/generated/model";
 import { useMe } from "api/me/queries";
 import { Button } from "components/atoms/Button";
 import { BoxWithTitle } from "components/molecules/BoxWithTitle";
@@ -31,7 +31,7 @@ export const EditCommunity: React.FC<IProps> = () => {
     reset: resetUpload,
   } = useUpdateCommunityPicture(communityId);
 
-  const [form, setForm] = useState<IUpdateCommunityPayload>({ name: "", category: "", description: "" });
+  const [form, setForm] = useState<UpdateCommunityRequest>({ name: "", category: "", description: "" });
   const [picture, setPicture] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [pictureError, setPictureError] = useState<string | null>(null);
@@ -55,7 +55,7 @@ export const EditCommunity: React.FC<IProps> = () => {
     return <Navigate to={`/community/${communityId}`} replace />;
   }
 
-  const setField = (key: keyof IUpdateCommunityPayload) =>
+  const setField = (key: keyof UpdateCommunityRequest) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
       setForm((current) => ({ ...current, [key]: e.target.value }));
 

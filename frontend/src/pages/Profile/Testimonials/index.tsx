@@ -6,7 +6,7 @@ import {
   useDeleteTestimonial,
   useTestimonials,
 } from "api/testimonial/queries";
-import { ITestimonial } from "api/testimonial/types";
+import { TestimonialItem } from "api/generated/model";
 import { Button } from "components/atoms/Button";
 import { PicAndTextHorizontal } from "components/atoms/PicAndTextHorizontal";
 import { BoxWithTitle } from "components/molecules/BoxWithTitle";
@@ -16,7 +16,7 @@ import { dayjsFromDate } from "helpers/formatting/date";
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 
-const testimonialTitle = (t: ITestimonial) =>
+const testimonialTitle = (t: TestimonialItem) =>
   `${t.authorName} em ${dayjsFromDate(t.createdAt, "D [de] MMMM [de] YYYY")}: `;
 
 interface IProps { }

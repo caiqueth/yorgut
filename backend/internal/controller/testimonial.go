@@ -34,14 +34,16 @@ func testimonialErrorStatus(err error) int {
 }
 
 // FindOfUser			godoc
+// @ID					findUserTestimonials
 // @Summary				Gets the testimonials of a user.
-// @Param				userId path string true "User ID"
+// @Param				userId path int true "User ID"
 // @Param				page query int false "Page of approved testimonials, starting at 1 (omit for all)"
 // @Param				pageSize query int false "Approved testimonials per page (default 5, max 50)"
 // @Description			Returns the approved testimonials of a user. When the logged user is the recipient, pending ones are included too.
 // @Produce				application/json
 // @Tags				Testimonial
 // @Success				200 {object} transport.FindTestimonialsOfUserResponse{}
+// @Security			BearerAuth
 // @Router				/testimonials/user/{userId} [get]
 func (t *TestimonialController) FindOfUser(ctx *gin.Context) {
 	viewer := ctx.MustGet("user").(*model.User)
@@ -69,12 +71,15 @@ func (t *TestimonialController) FindOfUser(ctx *gin.Context) {
 }
 
 // Create				godoc
+// @ID					createTestimonial
 // @Summary				Create a Testimonial.
 // @Description			Logged user writes a testimonial for a friend. It stays pending until the recipient approves it.
 // @Param				Testimonial body transport.CreateTestimonialRequest true "Create Testimonial"
+// @Accept				application/json
 // @Produce				application/json
 // @Tags				Testimonial
 // @Success				201 {object} transport.Response{}
+// @Security			BearerAuth
 // @Router				/testimonials [post]
 func (t *TestimonialController) Create(ctx *gin.Context) {
 	author := ctx.MustGet("user").(*model.User)
@@ -94,12 +99,14 @@ func (t *TestimonialController) Create(ctx *gin.Context) {
 }
 
 // Approve				godoc
+// @ID					approveTestimonial
 // @Summary				Approve a Testimonial.
-// @Param				testimonialId path string true "Testimonial ID"
+// @Param				testimonialId path int true "Testimonial ID"
 // @Description			The recipient approves a pending testimonial, making it public.
 // @Produce				application/json
 // @Tags				Testimonial
 // @Success				204
+// @Security			BearerAuth
 // @Router				/testimonials/{testimonialId}/approve [post]
 func (t *TestimonialController) Approve(ctx *gin.Context) {
 	viewer := ctx.MustGet("user").(*model.User)
@@ -114,12 +121,14 @@ func (t *TestimonialController) Approve(ctx *gin.Context) {
 }
 
 // Delete 				godoc
+// @ID					deleteTestimonial
 // @Summary				Delete Testimonial by id.
-// @Param				testimonialId path string true "Testimonial ID"
+// @Param				testimonialId path int true "Testimonial ID"
 // @Description			The recipient rejects or removes a testimonial, or the author deletes one they wrote.
 // @Produce				application/json
 // @Tags				Testimonial
 // @Success				204
+// @Security			BearerAuth
 // @Router				/testimonials/{testimonialId} [delete]
 func (t *TestimonialController) Delete(ctx *gin.Context) {
 	viewer := ctx.MustGet("user").(*model.User)

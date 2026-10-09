@@ -22,12 +22,15 @@ func NewCommunityMembershipController(service service.CommunityMembershipService
 }
 
 // Create				godoc
+// @ID					createCommunityMembership
 // @Summary				Create Community Membership
-// @Decription			Save membership in Db.
+// @Description			Save membership in Db.
 // @Param				community body transport.CreateCommunityMembershipRequest true "Create Community Membership"
+// @Accept				application/json
 // @Produce				application/json
 // @Tags				CommunityMembership
 // @Success				201 {object} transport.Response{}
+// @Security			BearerAuth
 // @Router				/community-memberships [post]
 func (cm *CommunityMembershipController) Create(ctx *gin.Context) {
 	user := ctx.MustGet("user").(*model.User)
@@ -55,13 +58,15 @@ func (cm *CommunityMembershipController) Create(ctx *gin.Context) {
 }
 
 // Delete				godoc
+// @ID					deleteCommunityMembership
 // @Summary				Delete Community Membership
 // @Description			The logged user leaves a community (same as /me/leave). userId must be the logged user (403 otherwise), and the owner can't leave (403).
-// @Param				userId path uint true "id of the user"
-// @Param				communityId path string true "id of the community"
+// @Param				userId path int true "User ID (must be the logged user)"
+// @Param				communityId path int true "Community ID"
 // @Produce				application/json
 // @Tags				CommunityMembership
 // @Success				204
+// @Security			BearerAuth
 // @Router				/community-memberships/{userId}/{communityId} [delete]
 func (cm *CommunityMembershipController) Delete(ctx *gin.Context) {
 	user := ctx.MustGet("user").(*model.User)

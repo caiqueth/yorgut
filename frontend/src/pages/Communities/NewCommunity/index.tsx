@@ -46,8 +46,8 @@ export const NewCommunity: React.FC<IProps> = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     createCommunity(
-      { name, category, picture },
-      { onSuccess: (response) => navigate(`/community/${response.data.id}`) },
+      { name, category, picture: picture ?? undefined },
+      { onSuccess: (response) => navigate(`/community/${response.data!.id}`) },
     );
   }
 

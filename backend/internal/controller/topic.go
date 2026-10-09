@@ -34,11 +34,14 @@ func topicErrorStatus(err error) int {
 }
 
 // FindTopicAndReplies	godoc
+// @ID					findTopicReplies
 // @Summary				Lists all the replies of a given topic
-// @Description			Returns a list of topics
+// @Param				topicId path int true "Topic ID"
+// @Description			Returns the topic and its replies
 // @Produce				application/json
 // @Tags				Topics
 // @Success				200 {object} transport.TopicRepliesResponse{}
+// @Security			BearerAuth
 // @Router				/topics/{topicId}/replies [get]
 func (tc *TopicController) FindTopicAndReplies(ctx *gin.Context) {
 	topicId := helpers.MustParseUint(ctx.Param("topicId"))
@@ -53,11 +56,15 @@ func (tc *TopicController) FindTopicAndReplies(ctx *gin.Context) {
 }
 
 // CreateTopic		godoc
+// @ID					createTopic
 // @Summary			Creates a new Topic
 // @Description		Creates a new Topic inside a community's forum. Only members of the community may post (403 otherwise).
 // @Param			Topic body transport.CreateTopicRequest true "Create Topic"
+// @Accept				application/json
+// @Produce				application/json
 // @Tags			Topics
 // @Success			201 {object} transport.Response{}
+// @Security			BearerAuth
 // @Router			/topics [post]
 func (tc *TopicController) CreateTopic(ctx *gin.Context) {
 	user := ctx.MustGet("user").(*model.User)
@@ -77,12 +84,16 @@ func (tc *TopicController) CreateTopic(ctx *gin.Context) {
 }
 
 // ReplyTopic		godoc
+// @ID					replyTopic
 // @Summary			Creates a new Topic Reply
 // @Description		Replies to an existing Topic inside a community's forum. Only members of the topic's community may reply (403 otherwise).
-// @Param			topicId path string true "Topic ID"
+// @Param			topicId path int true "Topic ID"
 // @Param			Reply body transport.ReplyTopicRequest true "Reply"
+// @Accept				application/json
+// @Produce				application/json
 // @Tags			Topics
 // @Success			201 {object} transport.Response{}
+// @Security			BearerAuth
 // @Router			/topics/{topicId} [post]
 func (tc *TopicController) ReplyTopic(ctx *gin.Context) {
 	user := ctx.MustGet("user").(*model.User)

@@ -41,12 +41,14 @@ func photoErrorStatus(err error) int {
 }
 
 // FindOfUser			godoc
+// @ID					findUserPhotos
 // @Summary				Lists the photos of a user's personal album.
-// @Param				userId path string true "User ID"
+// @Param				userId path int true "User ID"
 // @Description			Returns the album's photos (newest first), how many it holds and its limit.
 // @Produce				application/json
 // @Tags				Photo
 // @Success				200 {object} transport.FindPhotosOfUserResponse{}
+// @Security			BearerAuth
 // @Router				/photos/user/{userId} [get]
 func (p *PhotoController) FindOfUser(ctx *gin.Context) {
 	viewer := ctx.MustGet("user").(*model.User)
@@ -62,6 +64,7 @@ func (p *PhotoController) FindOfUser(ctx *gin.Context) {
 }
 
 // Create				godoc
+// @ID					uploadPhoto
 // @Summary				Uploads a photo to the logged user's album.
 // @Description			Adds a PNG or JPEG (max 1 MB and 1024x1024) to the logged user's personal album, which holds up to 15 photos (409 when full).
 // @Param				picture formData file true "Photo"
@@ -70,6 +73,7 @@ func (p *PhotoController) FindOfUser(ctx *gin.Context) {
 // @Produce				application/json
 // @Tags				Photo
 // @Success				201 {object} transport.Response{}
+// @Security			BearerAuth
 // @Router				/photos [post]
 func (p *PhotoController) Create(ctx *gin.Context) {
 	user := ctx.MustGet("user").(*model.User)
@@ -100,12 +104,14 @@ func (p *PhotoController) Create(ctx *gin.Context) {
 }
 
 // Delete 				godoc
+// @ID					deletePhoto
 // @Summary				Deletes a photo from the logged user's album.
-// @Param				photoId path string true "Photo ID"
+// @Param				photoId path int true "Photo ID"
 // @Description			Removes one of the logged user's photos.
 // @Produce				application/json
 // @Tags				Photo
 // @Success				204
+// @Security			BearerAuth
 // @Router				/photos/{photoId} [delete]
 func (p *PhotoController) Delete(ctx *gin.Context) {
 	user := ctx.MustGet("user").(*model.User)

@@ -85,7 +85,15 @@ HTTP ←────────────────────── Contr
 - **Validation**: `transport.*Request` types use Gin `binding:"..."` tags, checked by `ctx.ShouldBindJSON`; use pointer fields (`*uint8`) when `0` is a valid value with `required`.
 - **Routes**: groups are plural kebab-case (`/communities`, `/community-memberships`, `/photo-albums`), and every path starts with `/`. Resources nested under the owning user use `/users/:userId/<thing>`; "my" views of the logged user go under `/me/...`. Renaming a route means updating `frontend/src/api` in the same change.
 - **Logged user exception**: `AuthService.UserFromSession` returns a `*model.User` because the middleware stores the model in the context; no other service method returns models.
-- **Swagger**: every controller method has a `godoc` block; regenerate with `make swagger` (needs `swag`).
+- **Swagger**: the spec (`backend/docs/`) is the contract the frontend client is generated from, so it must match what the handler really does. Every controller method has a `godoc` block with:
+  - `@ID` (camelCase, unique; it becomes the generated function name: `findUserProfile` → `useFindUserProfile`, `getFindUserProfileQueryKey`),
+  - `@Tags`, `@Summary`, `@Accept application/json` when it binds a JSON body, `@Produce application/json`,
+  - one `@Param` per path param (`userId path int true "User ID"`, typed `int` because ids are uints), query param and body/formData field,
+  - `@Success <status> {object} transport.<Response>` with the type the handler actually writes (`204` with no type for empty answers), `@Failure` only where the frontend cares,
+  - `@Security BearerAuth` on everything behind `AuthMiddleware` (all but `/auth/google`),
+  - `@Router` with the exact path from `routes.go` (without the `/api/v1` base path).
+  Regenerate with `make gen-api` (spec **and** frontend client; needs `swag` v1.16.4: `go install github.com/swaggo/swag/cmd/swag@v1.16.4`). It runs swag with `--requiredByDefault`, so every field without `omitempty` is required in the spec. Commit `backend/docs/` and `frontend/src/api/generated/` together.
+- **Nullable fields**: swag does not mark pointer fields (`*string`) as nullable, so they are typed non-null in the generated client even though the API sends `null`. Until the DTOs carry `extensions:"x-nullable"`, treat pointer-backed fields as possibly `null` in the UI (see known-deviations).
 - **Schema changes**: add the model to `database.Migrate`; there are no SQL migrations in use.
 
 ### Recipe: adding a backend feature
@@ -99,7 +107,7 @@ Reference implementation: user reviews (`UserReview`).
 5. `service/<entity>.go`: struct with its repositories + `Validate` (+ `transactor` if a method writes more than one row), `New<Entity>Service`, methods taking primitives (or a `<Action>Input` struct when there are many). Permission checks go here. Add it to `Services` / `NewServices` in `service/service.go`. Tests go in `service/<entity>_test.go`, using `newTestRepositories(t)` (in-memory SQLite).
 6. `controller/<entity>.go`: controller struct, `New<Entity>Controller`, handlers with godoc.
 7. `server/server.go`: build the controller from `services`. `server/routes.go`: add the parameter to `NewRouter` and register routes.
-8. `go build ./... && go vet ./... && go test ./...`, then `make swagger`.
+8. `go build ./... && go vet ./... && go test ./...`, then `make gen-api` (regenerates the spec and the frontend client) and fix any frontend type errors it causes.
 
 ---
 
@@ -111,8 +119,9 @@ Imports are absolute from `src/` (`tsconfig.json` `baseUrl: "src"`): `import { d
 |---|---|---|---|
 | App shell | `index.tsx`, `App.tsx`, `theme.ts`, `index.css`, `App.css` | Providers (QueryClient, MUI theme, Google OAuth, contexts), global styles, `palette` | — |
 | Routing | `routes/index.tsx`, `routes/ProtectedRoute.tsx` | Route table; nested routes render via `<Outlet />` in the parent page | Fetch data |
-| HTTP client | `api/http.ts` | `doGet`/`doPost`/`doPut`/`doDelete`, auth header from `localStorage.token`, error mapping | Know about specific endpoints |
-| API domain | `api/<domain>/queries.ts` + `api/<domain>/types.ts` | One `use<Thing>` hook per endpoint (TanStack `useQuery`/`useMutation`), cache invalidation, request/response interfaces | Render anything; be called with raw `fetch` from elsewhere |
+| HTTP client | `api/http.ts` | `apiRequest`, the orval mutator every generated call goes through: base URL (`__API_BASE_URL__`), query string, auth header from `localStorage.token`, JSON vs `FormData` bodies, `401` → remove the token, error messages | Know about specific endpoints |
+| Generated client | `api/generated/` (`endpoints/<tag>/<tag>.ts`, `model/*.ts`), produced by orval from `backend/docs/swagger.json` (`orval.config.ts`, `scripts/orval-transformer.mjs`) | Request functions (`findUserProfile`), query hooks (`useFindUserProfile`), query-key helpers (`getFindUserProfileQueryKey`) and every request/response type (`FindUserWithProfileByIdResponse`) | Be edited by hand: regenerate with `yarn gen:api` |
+| API domain | `api/<domain>/queries.ts` (one per backend resource) | The hooks the UI uses: one `use<Thing>` per endpoint, wrapping a generated query hook with its options (`enabled`, `staleTime`, `placeholderData`) or a generated request function in `useMutation` with its cache invalidation | Declare request/response types (import them from `api/generated/model`); render anything |
 | Design system | `components/{atoms,molecules,organisms,templates}/<Name>/index.tsx` | Atomic-design components reused across **two or more pages** | Import from `pages/` |
 | Pages | `pages/<Page>/index.tsx` | Route-level screen; layout of its sections | Be imported by another page |
 | Sub-routes | `pages/<Page>/<SubRoute>/index.tsx` | Nested route screens (e.g. `pages/Profile/Scrapbook`) | — |
@@ -125,10 +134,13 @@ Imports are absolute from `src/` (`tsconfig.json` `baseUrl: "src"`): `import { d
 ### Conventions
 
 - **Files**: one component per folder, `index.tsx`, named export (`export const ProfileHeader: React.FC<IProps>`); styled-components variants go in a sibling `styles.tsx`.
-- **Types**: interfaces prefixed with `I` (`IScrapsResponse`, `ICreateScrapPayload`); `Response` for API reads and `Payload`/`Request` for request bodies.
-- **API base**: `const basePath = \`${__API_BASE_URL__}/<resource>\`` (the global is defined in `rsbuild.config.ts`, typed in `global.d.ts`).
-- **Query keys** are the full URL string: `queryKey: [\`${basePath}/${id}\`]`. Mutations invalidate exactly the URLs they affect in `onSettled`.
-- **Server state** lives in TanStack Query only; components call `api/*` hooks, never `fetch`.
+- **API types** come from the generated client and keep the backend DTO names: `import { FindUserResponse } from "api/generated/model"`. Never hand-write a type for an API request or response; if the generated one is wrong, fix the controller's godoc (or the DTO) and regenerate. Local, non-API interfaces are prefixed with `I` (`IProps`).
+- **API base**: `__API_BASE_URL__` (defined in `rsbuild.config.ts`, typed in `global.d.ts`) is added by `api/http.ts`; generated URLs are the spec paths (`/users/1/profile`).
+- **Query keys** are orval's: `[path]` or `[path, params]` (e.g. `["/communities/search", { name, page, pageSize }]`). Mutations invalidate with the generated helpers in `onSettled`: `queryClient.invalidateQueries({ queryKey: getFindUserScrapsQueryKey(userId) })`. Calling a helper without its params (`getSearchCommunitiesQueryKey()`) matches every params variant, since keys match by prefix.
+- **Who calls what**: components call the hooks in `api/<domain>/queries.ts`, never `api/generated/endpoints` directly and never `fetch`. The domain layer keeps mutation variables in the shape the UI uses (`mutate(payload)`, `mutate(photoId)`) instead of orval's `{ data }` objects, and is the one place to read a query's options or a mutation's invalidation.
+- **Uploads**: multipart endpoints take a generated `*Body` type (`UploadPhotoBody`); the generated function builds the `FormData`, and `api/http.ts` drops the JSON `Content-Type` for it. Optional files are `undefined` (not `null`) when absent.
+- **Generated code is committed** (`api/generated/`, plus `backend/docs/`), so the frontend builds and type-checks without Go or swag installed. Regenerate in the same change as the backend change; a regenerated client that doesn't compile is the point (the frontend must be updated too). ESLint ignores the folder.
+- **Server state** lives in TanStack Query only.
 - **Uploaded images**: the API returns upload paths relative to the backend (`storage/uploads/<uuid>`). Always render them through `uploadUrl()` from `helpers/uploadUrl`, which resolves them against the API origin. The image atoms (`PicAndText`, `PicAndTextHorizontal`, `ProfilePicture`) already do this; a raw `<img>` must call it itself.
 - **Atomic levels**:
   - atoms: no data fetching, purely presentational.
@@ -141,8 +153,8 @@ Imports are absolute from `src/` (`tsconfig.json` `baseUrl: "src"`): `import { d
 
 Reference implementation: user reviews.
 
-1. `api/<domain>/types.ts`: response/payload interfaces.
-2. `api/<domain>/queries.ts`: `use<Thing>` query + `use<Action><Thing>` mutation with invalidation.
+1. Backend first: endpoint + godoc (see the backend recipe), then `make gen-api` in `backend/` (or `yarn gen:api` in `frontend/` when only the spec changed). This updates `api/generated/`; commit it.
+2. `api/<domain>/queries.ts`: `use<Thing>` wrapping the generated query hook (add options here), and `use<Action><Thing>` = `useMutation` around the generated request function, invalidating the generated query keys it affects.
 3. The UI goes in `pages/<Page>/components/<Name>/` if one page uses it, or in `components/<level>/<Name>/` if it is (or will be) shared.
 4. Mount it from the page or section that owns it.
 5. Check with `npx tsc --noEmit -p .` (filter for your files; some errors already exist) and `npx rsbuild build`.

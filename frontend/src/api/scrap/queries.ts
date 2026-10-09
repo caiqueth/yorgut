@@ -1,28 +1,26 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ICreateScrapPayload, IScrapsResponse } from "./types";
-import { doGet, doPost } from "api/http";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { getFindMyWelcomeQueryKey } from "api/generated/endpoints/me/me";
+import {
+  createScrap,
+  getFindUserScrapsQueryKey,
+  useFindUserScraps,
+} from "api/generated/endpoints/scrap/scrap";
+import { CreateScrapRequest } from "api/generated/model";
 
-const basePath = `${__API_BASE_URL__}/scraps`
-
+// Disabled until userId is known; the cast only satisfies the generated
+// signature, the request never runs without an id.
 export const useScraps = (userId: number | undefined) =>
-  useQuery<IScrapsResponse>({
-    queryKey: [`${basePath}/user/${userId}`],
-    queryFn: ({ queryKey }) => doGet({ queryKey }),
-    enabled: !!userId,
-  });
+  useFindUserScraps(userId as number, { query: { enabled: !!userId } });
 
 export const useCreateScrap = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (payload: ICreateScrapPayload) =>
-      doPost({ url: `${basePath}`, body: payload }),
+    mutationFn: (payload: CreateScrapRequest) => createScrap(payload),
     onSettled: (_data, _error, variables) => {
       queryClient.invalidateQueries({
-        queryKey: [`${basePath}/user/${variables.userRecipientId}`],
+        queryKey: getFindUserScrapsQueryKey(variables.userRecipientId),
       });
-      queryClient.invalidateQueries({
-        queryKey: [`${__API_BASE_URL__}/me/welcome`],
-      });
+      queryClient.invalidateQueries({ queryKey: getFindMyWelcomeQueryKey() });
     },
   });
 };

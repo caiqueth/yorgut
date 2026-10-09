@@ -1,6 +1,6 @@
 basePath: /api/v1
 definitions:
-  dto.AmIFriendOfResponse:
+  transport.AmIFriendOfResponse:
     properties:
       amIFriend:
         type: boolean
@@ -10,13 +10,20 @@ definitions:
         type: boolean
       isPendingTheirReply:
         type: boolean
+    required:
+    - amIFriend
+    - friendshipId
+    - isPendingMyReply
+    - isPendingTheirReply
     type: object
-  dto.AmIMemberOfResponse:
+  transport.AmIMemberOfResponse:
     properties:
       amIMember:
         type: boolean
+    required:
+    - amIMember
     type: object
-  dto.CommunityDto:
+  transport.CommunityItem:
     properties:
       firstName:
         type: integer
@@ -30,8 +37,15 @@ definitions:
         type: integer
       profilePicture:
         type: string
+    required:
+    - firstName
+    - id
+    - membershipCount
+    - name
+    - owner
+    - profilePicture
     type: object
-  dto.CommunityMemberEntry:
+  transport.CommunityMemberEntry:
     properties:
       firstName:
         type: string
@@ -41,52 +55,89 @@ definitions:
         type: integer
       profilePicture:
         type: string
+    required:
+    - firstName
+    - friendCount
+    - id
+    - profilePicture
     type: object
-  dto.CreateCommunityMembershipRequest:
+  transport.CommunitySearchItem:
+    properties:
+      category:
+        type: string
+      id:
+        type: integer
+      memberCount:
+        type: integer
+      name:
+        type: string
+      profilePicture:
+        type: string
+    required:
+    - category
+    - id
+    - memberCount
+    - name
+    - profilePicture
+    type: object
+  transport.CreateCommunityMembershipRequest:
     properties:
       communityId:
         type: integer
-      userId:
-        type: integer
+    required:
+    - communityId
     type: object
-  dto.CreateFriendshipRequest:
+  transport.CreateCommunityResponse:
+    properties:
+      id:
+        type: integer
+    required:
+    - id
+    type: object
+  transport.CreateFriendshipRequest:
     properties:
       userRequesteeId:
         type: integer
+    required:
+    - userRequesteeId
     type: object
-  dto.CreatePhotoAlbumRequest:
-    properties:
-      name:
-        type: string
-      userId:
-        type: integer
-    type: object
-  dto.CreatePhotoRequest:
-    properties:
-      caption:
-        type: string
-      photoAlbumId:
-        type: integer
-      uRL:
-        type: string
-    type: object
-  dto.CreateScrapRequest:
+  transport.CreateScrapRequest:
     properties:
       content:
         type: string
       userRecipientId:
         type: integer
+    required:
+    - content
+    - userRecipientId
     type: object
-  dto.CreateTestimonialRequest:
+  transport.CreateTestimonialRequest:
     properties:
       content:
+        maxLength: 2048
         type: string
-      userAuthorId:
-        type: integer
       userRecipientId:
         type: integer
+    required:
+    - content
+    - userRecipientId
     type: object
-  dto.CreateUserRequest:
+  transport.CreateTopicRequest:
+    properties:
+      communityId:
+        type: integer
+      text:
+        maxLength: 2048
+        type: string
+      title:
+        maxLength: 200
+        type: string
+    required:
+    - communityId
+    - text
+    - title
+    type: object
+  transport.CreateUserRequest:
     properties:
       birthDate:
         type: string
@@ -96,9 +147,16 @@ definitions:
         type: string
       lastName:
         type: string
+    required:
+    - birthDate
+    - email
+    - firstName
+    - lastName
     type: object
-  dto.FindCommunityByIdResponse:
+  transport.FindCommunityByIdResponse:
     properties:
+      category:
+        type: string
       createdAt:
         type: string
       createdById:
@@ -109,84 +167,154 @@ definitions:
         type: string
       ownerId:
         type: integer
+    required:
+    - category
+    - createdAt
+    - createdById
+    - name
+    - ownerFirstName
+    - ownerId
     type: object
-  dto.FindCommunityMembersResponse:
+  transport.FindCommunityMembersResponse:
     properties:
       memberCount:
         type: integer
       members:
         items:
-          $ref: '#/definitions/dto.CommunityMemberEntry'
+          $ref: '#/definitions/transport.CommunityMemberEntry'
         type: array
+    required:
+    - memberCount
+    - members
     type: object
-  dto.FindCommunityProfileByIdResponse:
+  transport.FindCommunityProfileByIdResponse:
     properties:
       description:
         type: string
       profilePicture:
         type: string
+    required:
+    - description
+    - profilePicture
     type: object
-  dto.FindFriendsOfUserResponse:
+  transport.FindFriendsOfUserResponse:
     properties:
       friends:
         items:
-          $ref: '#/definitions/dto.FriendDto'
+          $ref: '#/definitions/transport.FriendItem'
         type: array
+    required:
+    - friends
     type: object
-  dto.FindManyCommunitiesResponse:
+  transport.FindManyCommunitiesResponse:
     properties:
       communities:
         items:
-          $ref: '#/definitions/dto.CommunityDto'
+          $ref: '#/definitions/transport.CommunityItem'
         type: array
+    required:
+    - communities
     type: object
-  dto.FindManyUsersResponse:
+  transport.FindManyUsersResponse:
     properties:
       users:
         items:
-          $ref: '#/definitions/dto.UserDto'
+          $ref: '#/definitions/transport.UserItem'
         type: array
+    required:
+    - users
     type: object
-  dto.FindMyOwnedCommunitiesResponse:
+  transport.FindMyOwnedCommunitiesResponse:
     properties:
       communities:
         items:
-          $ref: '#/definitions/dto.MyOwnedCommunityDto'
+          $ref: '#/definitions/transport.MyOwnedCommunityItem'
         type: array
+    required:
+    - communities
     type: object
-  dto.FindPendingFriendshipOfUserResponse:
+  transport.FindPendingFriendshipOfUserResponse:
     properties:
       count:
         type: integer
       pendingFriendships:
         items:
-          $ref: '#/definitions/dto.PendingFriendship'
+          $ref: '#/definitions/transport.PendingFriendship'
         type: array
+    required:
+    - count
+    - pendingFriendships
     type: object
-  dto.FindPhotoAlbumOfUserResponse:
+  transport.FindPhotosOfUserResponse:
     properties:
-      photoAlbums:
+      canUpload:
+        description: CanUpload is true when the logged user owns the album.
+        type: boolean
+      count:
+        type: integer
+      maxPhotos:
+        description: MaxPhotos is how many photos the personal album can hold.
+        type: integer
+      photos:
         items:
-          $ref: '#/definitions/dto.PhotoAlbumDto'
+          $ref: '#/definitions/transport.PhotoItem'
         type: array
+    required:
+    - canUpload
+    - count
+    - maxPhotos
+    - photos
     type: object
-  dto.FindScrapOfUserRecipientResponse:
+  transport.FindScrapOfUserRecipientResponse:
     properties:
       scraps:
         items:
-          $ref: '#/definitions/dto.ScrapDto'
+          $ref: '#/definitions/transport.ScrapItem'
         type: array
+    required:
+    - scraps
     type: object
-  dto.FindUserMembershipsResponse:
+  transport.FindTestimonialsOfUserResponse:
+    properties:
+      canWrite:
+        type: boolean
+      count:
+        type: integer
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      pending:
+        description: Pending is only filled when the recipient is the one looking.
+        items:
+          $ref: '#/definitions/transport.TestimonialItem'
+        type: array
+      testimonials:
+        description: Testimonials holds the approved testimonials, visible to everyone.
+        items:
+          $ref: '#/definitions/transport.TestimonialItem'
+        type: array
+    required:
+    - canWrite
+    - count
+    - page
+    - pageSize
+    - pending
+    - testimonials
+    type: object
+  transport.FindUserMembershipsResponse:
     properties:
       communities:
         items:
-          $ref: '#/definitions/dto.CommunityDto'
+          $ref: '#/definitions/transport.CommunityItem'
         type: array
       membershipCount:
         type: integer
+    required:
+    - communities
+    - membershipCount
     type: object
-  dto.FindUserResponse:
+  transport.FindUserResponse:
     properties:
       birthDate:
         type: string
@@ -204,8 +332,17 @@ definitions:
         type: string
       updatedAt:
         type: string
+    required:
+    - birthDate
+    - createdAt
+    - email
+    - firstName
+    - friendCount
+    - id
+    - lastName
+    - updatedAt
     type: object
-  dto.FindUserWithProfileByIdResponse:
+  transport.FindUserWithProfileByIdResponse:
     properties:
       about:
         type: string
@@ -259,8 +396,35 @@ definitions:
         type: string
       website:
         type: string
+    required:
+    - about
+    - birthCity
+    - birthDate
+    - books
+    - createdAt
+    - cuisine
+    - description
+    - email
+    - fashion
+    - firstName
+    - friendCount
+    - hobbies
+    - humor
+    - id
+    - interests
+    - lastName
+    - livesWith
+    - movies
+    - music
+    - passions
+    - profilePicture
+    - relationshipStatus
+    - religion
+    - sports
+    - updatedAt
+    - website
     type: object
-  dto.FriendDto:
+  transport.FriendItem:
     properties:
       birthDate:
         type: string
@@ -272,8 +436,31 @@ definitions:
         type: integer
       profilePicture:
         type: string
+    required:
+    - birthDate
+    - firstName
+    - friendCount
+    - id
+    - profilePicture
     type: object
-  dto.MyOwnedCommunityDto:
+  transport.LoginResponse:
+    properties:
+      token:
+        description: 'Token is the Yorgut session token, sent back as "Authorization:
+          Bearer <token>".'
+        type: string
+    required:
+    - token
+    type: object
+  transport.LoginWithGoogleRequest:
+    properties:
+      credential:
+        description: Credential is the Google ID token returned by Sign in with Google.
+        type: string
+    required:
+    - credential
+    type: object
+  transport.MyOwnedCommunityItem:
     properties:
       id:
         type: integer
@@ -283,8 +470,13 @@ definitions:
         type: string
       profilePicture:
         type: string
+    required:
+    - id
+    - membershipCount
+    - name
+    - profilePicture
     type: object
-  dto.PendingFriendship:
+  transport.PendingFriendship:
     properties:
       firstName:
         type: string
@@ -296,40 +488,77 @@ definitions:
         type: string
       userRequestedId:
         type: integer
+    required:
+    - firstName
+    - id
+    - lastName
+    - profilePicture
+    - userRequestedId
     type: object
-  dto.PhotoAlbumDto:
+  transport.PhotoItem:
     properties:
-      name:
+      caption:
         type: string
-      userId:
+      createdAt:
+        type: string
+      id:
         type: integer
+      url:
+        type: string
+    required:
+    - caption
+    - createdAt
+    - id
+    - url
     type: object
-  dto.ProfileViews:
+  transport.ProfileViews:
     properties:
       allTime:
         type: integer
       lastWeek:
         type: integer
+    required:
+    - allTime
+    - lastWeek
     type: object
-  dto.RecentVisitor:
+  transport.RecentVisitor:
     properties:
       firstName:
         type: string
       userId:
         type: integer
+    required:
+    - firstName
+    - userId
     type: object
-  dto.ReplyFriendshipRequest:
+  transport.ReplyFriendshipRequest:
     properties:
       accept:
         type: boolean
       friendshipId:
         type: integer
+    required:
+    - friendshipId
     type: object
-  dto.Response:
+  transport.ReplyTopicRequest:
+    properties:
+      text:
+        maxLength: 2048
+        type: string
+      title:
+        maxLength: 200
+        type: string
+    required:
+    - text
+    - title
+    type: object
+  transport.Response:
     properties:
       data: {}
+    required:
+    - data
     type: object
-  dto.ScrapDto:
+  transport.ScrapItem:
     properties:
       authorId:
         type: integer
@@ -343,8 +572,33 @@ definitions:
         type: string
       id:
         type: integer
+    required:
+    - authorId
+    - authorName
+    - authorProfilePicture
+    - content
+    - createdAt
+    - id
     type: object
-  dto.SearchUsersResponse:
+  transport.SearchCommunitiesResponse:
+    properties:
+      communities:
+        items:
+          $ref: '#/definitions/transport.CommunitySearchItem'
+        type: array
+      count:
+        type: integer
+      page:
+        type: integer
+      pageSize:
+        type: integer
+    required:
+    - communities
+    - count
+    - page
+    - pageSize
+    type: object
+  transport.SearchUsersResponse:
     properties:
       count:
         type: integer
@@ -354,10 +608,40 @@ definitions:
         type: integer
       users:
         items:
-          $ref: '#/definitions/dto.UserSearchDto'
+          $ref: '#/definitions/transport.UserSearchItem'
         type: array
+    required:
+    - count
+    - page
+    - pageSize
+    - users
     type: object
-  dto.Topic:
+  transport.TestimonialItem:
+    properties:
+      approved:
+        type: boolean
+      authorId:
+        type: integer
+      authorName:
+        type: string
+      authorProfilePicture:
+        type: string
+      content:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: integer
+    required:
+    - approved
+    - authorId
+    - authorName
+    - authorProfilePicture
+    - content
+    - createdAt
+    - id
+    type: object
+  transport.Topic:
     properties:
       authorFirstName:
         type: string
@@ -375,17 +659,29 @@ definitions:
         type: string
       title:
         type: string
+    required:
+    - authorFirstName
+    - authorId
+    - authorProfilePicture
+    - createdAt
+    - id
+    - replies
+    - text
+    - title
     type: object
-  dto.TopicRepliesResponse:
+  transport.TopicRepliesResponse:
     properties:
       replies:
         items:
-          $ref: '#/definitions/dto.TopicReply'
+          $ref: '#/definitions/transport.TopicReply'
         type: array
       topic:
-        $ref: '#/definitions/dto.Topic'
+        $ref: '#/definitions/transport.Topic'
+    required:
+    - replies
+    - topic
     type: object
-  dto.TopicReply:
+  transport.TopicReply:
     properties:
       authorFirstName:
         type: string
@@ -401,8 +697,16 @@ definitions:
         type: string
       title:
         type: string
+    required:
+    - authorFirstName
+    - authorId
+    - authorProfilePicture
+    - createdAt
+    - id
+    - text
+    - title
     type: object
-  dto.TopicSummary:
+  transport.TopicSummary:
     properties:
       authorProfilePicture:
         type: string
@@ -416,15 +720,160 @@ definitions:
         type: integer
       title:
         type: string
+    required:
+    - authorProfilePicture
+    - id
+    - lastReplyDate
+    - lastReplyPreview
+    - replies
+    - title
     type: object
-  dto.TopicsResponse:
+  transport.TopicsResponse:
     properties:
       topics:
         items:
-          $ref: '#/definitions/dto.TopicSummary'
+          $ref: '#/definitions/transport.TopicSummary'
         type: array
+    required:
+    - topics
     type: object
-  dto.UserDto:
+  transport.UpdateCommunityRequest:
+    properties:
+      category:
+        maxLength: 100
+        type: string
+      description:
+        maxLength: 2048
+        type: string
+      name:
+        maxLength: 100
+        type: string
+    required:
+    - category
+    - description
+    - name
+    type: object
+  transport.UpdateMeRequest:
+    properties:
+      about:
+        maxLength: 2048
+        type: string
+      birthCity:
+        maxLength: 2048
+        type: string
+      birthDate:
+        description: BirthDate is a calendar date, "YYYY-MM-DD"; empty keeps the current
+          one.
+        type: string
+      books:
+        maxLength: 2048
+        type: string
+      cuisine:
+        maxLength: 2048
+        type: string
+      description:
+        maxLength: 2048
+        type: string
+      fashion:
+        maxLength: 2048
+        type: string
+      firstName:
+        maxLength: 50
+        type: string
+      hobbies:
+        maxLength: 2048
+        type: string
+      humor:
+        maxLength: 2048
+        type: string
+      interests:
+        maxLength: 2048
+        type: string
+      lastName:
+        maxLength: 50
+        type: string
+      livesWith:
+        maxLength: 2048
+        type: string
+      movies:
+        maxLength: 2048
+        type: string
+      music:
+        maxLength: 2048
+        type: string
+      passions:
+        maxLength: 2048
+        type: string
+      relationshipStatus:
+        maxLength: 2048
+        type: string
+      religion:
+        maxLength: 2048
+        type: string
+      sports:
+        maxLength: 2048
+        type: string
+      website:
+        maxLength: 2048
+        type: string
+    required:
+    - about
+    - birthCity
+    - birthDate
+    - books
+    - cuisine
+    - description
+    - fashion
+    - firstName
+    - hobbies
+    - humor
+    - interests
+    - lastName
+    - livesWith
+    - movies
+    - music
+    - passions
+    - relationshipStatus
+    - religion
+    - sports
+    - website
+    type: object
+  transport.UpsertUserReviewRequest:
+    properties:
+      cool:
+        example: 3
+        maximum: 3
+        minimum: 0
+        type: integer
+      sexy:
+        example: 2
+        maximum: 3
+        minimum: 0
+        type: integer
+      trustworthy:
+        example: 3
+        maximum: 3
+        minimum: 0
+        type: integer
+    required:
+    - cool
+    - sexy
+    - trustworthy
+    type: object
+  transport.UserFanSummaryResponse:
+    properties:
+      amIFan:
+        type: boolean
+      canFan:
+        type: boolean
+      fanCount:
+        type: integer
+    required:
+    - amIFan
+    - canFan
+    - fanCount
+    type: object
+  transport.UserItem:
     properties:
       birthDate:
         type: string
@@ -442,8 +891,52 @@ definitions:
         type: string
       updatedAt:
         type: string
+    required:
+    - birthDate
+    - createdAt
+    - email
+    - firstName
+    - friendCount
+    - id
+    - lastName
+    - updatedAt
     type: object
-  dto.UserSearchDto:
+  transport.UserReviewItem:
+    properties:
+      cool:
+        type: integer
+      sexy:
+        type: integer
+      trustworthy:
+        type: integer
+    required:
+    - cool
+    - sexy
+    - trustworthy
+    type: object
+  transport.UserReviewSummaryResponse:
+    properties:
+      canReview:
+        type: boolean
+      cool:
+        type: number
+      myReview:
+        $ref: '#/definitions/transport.UserReviewItem'
+      reviewCount:
+        type: integer
+      sexy:
+        type: number
+      trustworthy:
+        type: number
+    required:
+    - canReview
+    - cool
+    - myReview
+    - reviewCount
+    - sexy
+    - trustworthy
+    type: object
+  transport.UserSearchItem:
     properties:
       birthDate:
         type: string
@@ -455,8 +948,14 @@ definitions:
         type: integer
       profilePicture:
         type: string
+    required:
+    - birthDate
+    - firstName
+    - friendCount
+    - id
+    - profilePicture
     type: object
-  dto.WelcomeResponse:
+  transport.WelcomeResponse:
     properties:
       directConnections:
         type: integer
@@ -467,10 +966,10 @@ definitions:
       numberOfScraps:
         type: integer
       profileViews:
-        $ref: '#/definitions/dto.ProfileViews'
+        $ref: '#/definitions/transport.ProfileViews'
       recentVisitors:
         items:
-          $ref: '#/definitions/dto.RecentVisitor'
+          $ref: '#/definitions/transport.RecentVisitor'
         type: array
       todaysLuck:
         type: string
@@ -478,48 +977,91 @@ definitions:
         type: string
       userFirstName:
         type: string
+    required:
+    - directConnections
+    - indirectConnections
+    - numberOfFans
+    - numberOfScraps
+    - profileViews
+    - recentVisitors
+    - todaysLuck
+    - userCreatedAt
+    - userFirstName
     type: object
 host: localhost:8080
 info:
   contact: {}
   description: Our very own OG Social Media.
+  license:
+    name: Apache 2.0
   title: Yorgut APIs
   version: "1.0"
 paths:
-  /community:
-    get:
-      description: Returns an array of communities
+  /auth/google:
+    post:
+      consumes:
+      - application/json
+      description: 'Validates the Google ID token from Sign in with Google, creates
+        the user on their first login, and returns a Yorgut session token. Send it
+        as "Authorization: Bearer <token>" on every other request.'
+      operationId: loginWithGoogle
+      parameters:
+      - description: Google credential
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/transport.LoginWithGoogleRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.FindManyCommunitiesResponse'
+            $ref: '#/definitions/transport.LoginResponse'
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+      summary: Logs in with a Google account.
+      tags:
+      - Auth
+  /communities:
+    get:
+      description: Returns an array of communities
+      operationId: findCommunities
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.FindManyCommunitiesResponse'
+      security:
+      - BearerAuth: []
       summary: Get Multiple communities.
       tags:
       - Community
     post:
+      consumes:
+      - multipart/form-data
+      description: Creates a community owned by the logged user, optionally with a
+        picture (PNG or JPEG, max 1 MB and 1024x1024).
+      operationId: createCommunity
       parameters:
-      - description: Community Name
+      - description: Community name
         in: formData
         name: name
         required: true
         type: string
-      - description: Community Description
+      - description: Community category
         in: formData
-        name: description
+        name: category
         required: true
         type: string
-      - description: ID of Creator
-        in: formData
-        name: createdById
-        required: true
-        type: integer
-      - description: Community Picture
+      - description: Community picture
         in: formData
         name: picture
-        required: true
         type: file
       produces:
       - application/json
@@ -527,151 +1069,145 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/dto.Response'
+            allOf:
+            - $ref: '#/definitions/transport.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/transport.CreateCommunityResponse'
+              type: object
+      security:
+      - BearerAuth: []
       summary: Create Community
       tags:
       - Community
-    put:
-      description: Updates properties of a single community
-      produces:
-      - application/json
-      responses:
-        "204":
-          description: No Content
-          schema:
-            $ref: '#/definitions/dto.Response'
-      summary: Updates a community.
-      tags:
-      - Community
-  /community/{communityId}:
+  /communities/{communityId}:
     delete:
       description: Deletes a community
+      operationId: deleteCommunity
       parameters:
       - description: Community ID
         in: path
         name: communityId
         required: true
-        type: string
+        type: integer
       produces:
       - application/json
       responses:
         "204":
           description: No Content
-          schema:
-            $ref: '#/definitions/dto.Response'
+      security:
+      - BearerAuth: []
       summary: Delete community by id.
       tags:
       - Community
     get:
       description: Returns the community matching the requested id
+      operationId: findCommunity
       parameters:
       - description: Community ID
         in: path
         name: communityId
         required: true
-        type: string
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.FindCommunityByIdResponse'
+            $ref: '#/definitions/transport.FindCommunityByIdResponse'
+      security:
+      - BearerAuth: []
       summary: Get Single community by id.
       tags:
       - Community
-  /community/{communityId}/hot_topics:
+    put:
+      consumes:
+      - application/json
+      description: Replaces the community's name, category and description. Only the
+        owner may (403 otherwise).
+      operationId: updateCommunity
+      parameters:
+      - description: Community ID
+        in: path
+        name: communityId
+        required: true
+        type: integer
+      - description: Community details
+        in: body
+        name: Community
+        required: true
+        schema:
+          $ref: '#/definitions/transport.UpdateCommunityRequest'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      security:
+      - BearerAuth: []
+      summary: Updates a community.
+      tags:
+      - Community
+  /communities/{communityId}/hot-topics:
     get:
       description: Returns a list of topics
+      operationId: findCommunityHotTopics
+      parameters:
+      - description: Community ID
+        in: path
+        name: communityId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.TopicsResponse'
-      summary: Gets a list of most recently replied topics.
+            $ref: '#/definitions/transport.TopicsResponse'
+      security:
+      - BearerAuth: []
+      summary: Gets the 5 most recently replied topics of a community.
       tags:
       - Community
-  /community/{communityId}/members:
+  /communities/{communityId}/members:
     get:
       description: Returns a list of the community members matching the requested
         id and a few stats
+      operationId: findCommunityMembers
       parameters:
       - description: Community ID
         in: path
         name: communityId
         required: true
-        type: string
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.FindCommunityMembersResponse'
+            $ref: '#/definitions/transport.FindCommunityMembersResponse'
+      security:
+      - BearerAuth: []
       summary: Get community members.
       tags:
       - Community
-  /community/{communityId}/profile:
-    get:
-      description: Returns the community profile matching the requested id
+  /communities/{communityId}/picture:
+    put:
+      consumes:
+      - multipart/form-data
+      description: Uploads a PNG or JPEG (max 1 MB and 1024x1024) as the community's
+        picture. Only the owner may (403 otherwise).
+      operationId: updateCommunityPicture
       parameters:
       - description: Community ID
         in: path
         name: communityId
         required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/dto.FindCommunityProfileByIdResponse'
-      summary: Get Single community profile by its id.
-      tags:
-      - Community
-  /community/{communityId}/related:
-    get:
-      description: Returns an array of communities
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/dto.FindManyCommunitiesResponse'
-      summary: Get Related communities.
-      tags:
-      - Community
-  /community/{communityId}/topics:
-    get:
-      description: Returns a list of topics
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/dto.TopicsResponse'
-      summary: Gets a list of most recently replied topics.
-      tags:
-      - Community
-  /community/profile:
-    post:
-      parameters:
-      - description: Community Name
-        in: formData
-        name: communityId
-        required: true
-        type: string
-      - description: Community Description
-        in: formData
-        name: description
-        required: true
-        type: string
-      - description: Community Picture
+        type: integer
+      - description: Community picture
         in: formData
         name: picture
         required: true
@@ -679,678 +1215,1083 @@ paths:
       produces:
       - application/json
       responses:
-        "201":
-          description: Created
-          schema:
-            $ref: '#/definitions/dto.Response'
-      summary: Create Community Profile
+        "204":
+          description: No Content
+      security:
+      - BearerAuth: []
+      summary: Replaces a community's picture.
       tags:
       - Community
-  /community_membership:
+  /communities/{communityId}/profile:
+    get:
+      description: Returns the community profile matching the requested id
+      operationId: findCommunityProfile
+      parameters:
+      - description: Community ID
+        in: path
+        name: communityId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.FindCommunityProfileByIdResponse'
+      security:
+      - BearerAuth: []
+      summary: Get Single community profile by its id.
+      tags:
+      - Community
+  /communities/{communityId}/related:
+    get:
+      description: Returns an array of communities (for now, every community)
+      operationId: findRelatedCommunities
+      parameters:
+      - description: Community ID
+        in: path
+        name: communityId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.FindManyCommunitiesResponse'
+      security:
+      - BearerAuth: []
+      summary: Get Related communities.
+      tags:
+      - Community
+  /communities/{communityId}/topics:
+    get:
+      description: Returns a list of topics
+      operationId: findCommunityTopics
+      parameters:
+      - description: Community ID
+        in: path
+        name: communityId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.TopicsResponse'
+      security:
+      - BearerAuth: []
+      summary: Gets the 10 most recently replied topics of a community.
+      tags:
+      - Community
+  /communities/search:
+    get:
+      description: Returns a page of communities the logged user is not a member of,
+        biggest first.
+      operationId: searchCommunities
+      parameters:
+      - description: Part of the community name (omit to list all)
+        in: query
+        name: name
+        type: string
+      - description: Page, starting at 1 (default 1)
+        in: query
+        name: page
+        type: integer
+      - description: Communities per page (default 10, max 50)
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.SearchCommunitiesResponse'
+      security:
+      - BearerAuth: []
+      summary: Searches communities the logged user hasn't joined.
+      tags:
+      - Community
+  /community-memberships:
     post:
+      consumes:
+      - application/json
+      description: Save membership in Db.
+      operationId: createCommunityMembership
       parameters:
       - description: Create Community Membership
         in: body
         name: community
         required: true
         schema:
-          $ref: '#/definitions/dto.CreateCommunityMembershipRequest'
+          $ref: '#/definitions/transport.CreateCommunityMembershipRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/dto.Response'
+            $ref: '#/definitions/transport.Response'
+      security:
+      - BearerAuth: []
       summary: Create Community Membership
       tags:
       - CommunityMembership
-  /community_membership/{userId}/{communityId}:
+  /community-memberships/{userId}/{communityId}:
     delete:
+      description: The logged user leaves a community (same as /me/leave). userId
+        must be the logged user (403 otherwise), and the owner can't leave (403).
+      operationId: deleteCommunityMembership
       parameters:
-      - description: id of the user
+      - description: User ID (must be the logged user)
         in: path
         name: userId
         required: true
         type: integer
-      - description: id of the community
+      - description: Community ID
         in: path
         name: communityId
         required: true
-        type: string
+        type: integer
       produces:
       - application/json
       responses:
         "204":
           description: No Content
-          schema:
-            $ref: '#/definitions/dto.Response'
+      security:
+      - BearerAuth: []
       summary: Delete Community Membership
       tags:
       - CommunityMembership
-  /friendship:
+  /friendships:
     post:
+      consumes:
+      - application/json
       description: Logged user makes a new friendship request.
+      operationId: addFriend
       parameters:
       - description: Create Friendship
         in: body
         name: Friendship
         required: true
         schema:
-          $ref: '#/definitions/dto.CreateFriendshipRequest'
+          $ref: '#/definitions/transport.CreateFriendshipRequest'
       produces:
       - application/json
       responses:
         "204":
           description: No Content
+      security:
+      - BearerAuth: []
       summary: Creates a Friendship request.
       tags:
       - Friendship
-  /friendship/{friendshipId}:
+  /friendships/{friendshipId}:
     delete:
       description: Deletes a Friendship.
+      operationId: deleteFriendship
       parameters:
-      - description: delete Friendship by id
+      - description: Friendship ID
         in: path
         name: friendshipId
         required: true
-        type: string
+        type: integer
       produces:
       - application/json
       responses:
         "204":
           description: No Content
+      security:
+      - BearerAuth: []
       summary: Deletes a Friendship by id.
       tags:
       - Friendship
-  /friendship/friend/{userId}:
+  /friendships/friend/{userId}:
     delete:
       description: Logged user deletes a friendship.
+      operationId: removeFriend
       parameters:
-      - description: Target User ID
+      - description: Target user ID
         in: path
-        name: friendId
+        name: userId
         required: true
-        type: string
+        type: integer
       produces:
       - application/json
       responses:
         "204":
           description: No Content
+      security:
+      - BearerAuth: []
       summary: Deletes a Friendship by the target userId Id.
       tags:
       - Friendship
-  /friendship/reply:
+  /friendships/reply:
     post:
+      consumes:
+      - application/json
       description: Repliess a Friendship request.
+      operationId: replyFriendship
       parameters:
       - description: Accept Friendship
         in: body
         name: FriendshipRequest
         required: true
         schema:
-          $ref: '#/definitions/dto.ReplyFriendshipRequest'
+          $ref: '#/definitions/transport.ReplyFriendshipRequest'
       produces:
       - application/json
       responses:
         "204":
           description: No Content
+      security:
+      - BearerAuth: []
       summary: Reply a Friendship request.
       tags:
       - Friendship
   /me:
     get:
-      description: Returns the user matching the requested id
+      description: Returns the user that owns the session token
+      operationId: findMe
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.FindUserResponse'
-      summary: Get Single user by id.
+            $ref: '#/definitions/transport.FindUserResponse'
+      security:
+      - BearerAuth: []
+      summary: Get the logged user.
       tags:
       - Me
     put:
-      description: Returns null
+      consumes:
+      - application/json
+      description: Replaces the logged user's basic data and profile fields. Email
+        can't be changed.
+      operationId: updateMe
+      parameters:
+      - description: User data
+        in: body
+        name: Me
+        required: true
+        schema:
+          $ref: '#/definitions/transport.UpdateMeRequest'
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/dto.Response'
-      summary: Update user
+        "204":
+          description: No Content
+      security:
+      - BearerAuth: []
+      summary: Update the logged user
       tags:
       - Me
   /me/friends:
     get:
       description: Returns a list of friends
+      operationId: findMyFriends
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.FindFriendsOfUserResponse'
+            $ref: '#/definitions/transport.FindFriendsOfUserResponse'
+      security:
+      - BearerAuth: []
       summary: Gets a list of friends of the user.
       tags:
       - Me
   /me/friends/{userId}:
     get:
-      description: Returns true or false
+      description: Returns the friendship status between the logged user and userId.
+        Answers 204 with no body when userId is the logged user.
+      operationId: amIFriendOf
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.AmIFriendOfResponse'
+            $ref: '#/definitions/transport.AmIFriendOfResponse'
+        "204":
+          description: userId is the logged user
+      security:
+      - BearerAuth: []
       summary: Evaluates if the logged user is friend of specified user
       tags:
       - Me
   /me/friends/pending:
     get:
       description: Returns a list of users
+      operationId: findMyPendingFriendships
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.FindPendingFriendshipOfUserResponse'
+            $ref: '#/definitions/transport.FindPendingFriendshipOfUserResponse'
+      security:
+      - BearerAuth: []
       summary: Gets a list of friendship invites of the user.
       tags:
       - Me
   /me/join/{communityId}:
     post:
       description: Joins a community.
+      operationId: joinCommunity
       parameters:
       - description: Community ID
         in: path
         name: communityId
         required: true
-        type: string
+        type: integer
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/dto.Response'
+            $ref: '#/definitions/transport.Response'
+      security:
+      - BearerAuth: []
       summary: User joins a community.
       tags:
       - Me
   /me/leave/{communityId}:
     post:
-      description: Leaves a community.
+      description: Leaves a community. The owner can't leave (403).
+      operationId: leaveCommunity
       parameters:
       - description: Community ID
         in: path
         name: communityId
         required: true
-        type: string
+        type: integer
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/dto.Response'
+            $ref: '#/definitions/transport.Response'
+        "403":
+          description: Forbidden
+      security:
+      - BearerAuth: []
       summary: User leaves a community.
       tags:
       - Me
   /me/memberships:
     get:
       description: Returns a list of communities
+      operationId: findMyMemberships
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.FindUserMembershipsResponse'
+            $ref: '#/definitions/transport.FindUserMembershipsResponse'
+      security:
+      - BearerAuth: []
       summary: Gets a list of communities that user is member of.
       tags:
       - Me
   /me/memberships/{communityId}:
     get:
       description: Returns true or false
+      operationId: amIMemberOf
+      parameters:
+      - description: Community ID
+        in: path
+        name: communityId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.AmIMemberOfResponse'
+            $ref: '#/definitions/transport.AmIMemberOfResponse'
+      security:
+      - BearerAuth: []
       summary: Evaluates if the logged user is member of specified community
       tags:
       - Me
   /me/my-communities:
     get:
       description: Returns a list of communities
+      operationId: findMyCommunities
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.FindMyOwnedCommunitiesResponse'
+            $ref: '#/definitions/transport.FindMyOwnedCommunitiesResponse'
+      security:
+      - BearerAuth: []
       summary: Gets a list of communities that user owns.
-      tags:
-      - Me
-  /me/photoAlbums:
-    get:
-      description: Returns a list of photo albums
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/dto.FindPhotoAlbumOfUserResponse'
-      summary: Gets a list of photo albums of the user.
       tags:
       - Me
   /me/profile:
     get:
       description: Returns the user matching the token
+      operationId: findMyProfile
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.FindUserWithProfileByIdResponse'
+            $ref: '#/definitions/transport.FindUserWithProfileByIdResponse'
+      security:
+      - BearerAuth: []
       summary: Get logged user with it's profile by their Token.
+      tags:
+      - Me
+  /me/profile-picture:
+    put:
+      consumes:
+      - multipart/form-data
+      description: Uploads a PNG or JPEG (max 1 MB and 1024x1024) as the logged user's
+        profile picture.
+      operationId: updateMyProfilePicture
+      parameters:
+      - description: Profile picture
+        in: formData
+        name: picture
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      security:
+      - BearerAuth: []
+      summary: Update the logged user's profile picture
       tags:
       - Me
   /me/welcome:
     get:
       description: Returns the user stats
+      operationId: findMyWelcome
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.WelcomeResponse'
+            $ref: '#/definitions/transport.WelcomeResponse'
+      security:
+      - BearerAuth: []
       summary: Get user stats for the Home Welcome
       tags:
       - Me
-  /photo:
+  /photos:
     post:
-      description: Creates a Photo.
+      consumes:
+      - multipart/form-data
+      description: Adds a PNG or JPEG (max 1 MB and 1024x1024) to the logged user's
+        personal album, which holds up to 15 photos (409 when full).
+      operationId: uploadPhoto
       parameters:
-      - description: Create Photo
-        in: body
-        name: Photo
+      - description: Photo
+        in: formData
+        name: picture
         required: true
-        schema:
-          $ref: '#/definitions/dto.CreatePhotoRequest'
+        type: file
+      - description: Caption (max 200 characters)
+        in: formData
+        name: caption
+        type: string
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/dto.Response'
-      summary: Create a Photo.
+            $ref: '#/definitions/transport.Response'
+      security:
+      - BearerAuth: []
+      summary: Uploads a photo to the logged user's album.
       tags:
       - Photo
-  /photo/{photoId}:
+  /photos/{photoId}:
     delete:
-      description: Deletes a Photo.
+      description: Removes one of the logged user's photos.
+      operationId: deletePhoto
       parameters:
-      - description: delete Photo by id
+      - description: Photo ID
         in: path
         name: photoId
         required: true
-        type: string
+        type: integer
       produces:
       - application/json
       responses:
         "204":
           description: No Content
-          schema:
-            $ref: '#/definitions/dto.Response'
-      summary: Delete Photo by id.
+      security:
+      - BearerAuth: []
+      summary: Deletes a photo from the logged user's album.
       tags:
       - Photo
-  /photoAlbum:
+  /photos/user/{userId}:
     get:
-      description: Returns an array of PhotoAlbums.
+      description: Returns the album's photos (newest first), how many it holds and
+        its limit.
+      operationId: findUserPhotos
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.Response'
-      summary: Get a list of PhotoAlbums.
+            $ref: '#/definitions/transport.FindPhotosOfUserResponse'
+      security:
+      - BearerAuth: []
+      summary: Lists the photos of a user's personal album.
       tags:
-      - PhotoAlbum
-    post:
-      description: Creates a PhotoAlbum.
-      parameters:
-      - description: Create PhotoAlbum
-        in: body
-        name: PhotoAlbum
-        required: true
-        schema:
-          $ref: '#/definitions/dto.CreatePhotoAlbumRequest'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            $ref: '#/definitions/dto.Response'
-      summary: Create a PhotoAlbum.
-      tags:
-      - PhotoAlbum
-    put:
-      description: Updates properties of a single PhotoAlbum
-      produces:
-      - application/json
-      responses:
-        "204":
-          description: No Content
-          schema:
-            $ref: '#/definitions/dto.Response'
-      summary: Updates a PhotoAlbum.
-      tags:
-      - PhotoAlbum
-  /photoAlbum/{photoAlbumId}:
+      - Photo
+  /scraps:
     delete:
-      description: Deletes a PhotoAlbum.
-      parameters:
-      - description: delete PhotoAlbum by id
-        in: path
-        name: photoAlbumId
-        required: true
-        type: string
+      description: 'Not implemented yet: always answers 501. The route has no scrap
+        id yet.'
+      operationId: deleteScrap
       produces:
       - application/json
       responses:
-        "204":
-          description: No Content
-          schema:
-            $ref: '#/definitions/dto.Response'
-      summary: Delete PhotoAlbum by id.
+        "501":
+          description: Not Implemented
+      security:
+      - BearerAuth: []
+      summary: Delete a Scrap (not implemented).
       tags:
-      - PhotoAlbum
-  /scrap:
+      - Scrap
     post:
+      consumes:
+      - application/json
       description: Creates a Scrap.
+      operationId: createScrap
       parameters:
       - description: Create Scrap
         in: body
         name: Scrap
         required: true
         schema:
-          $ref: '#/definitions/dto.CreateScrapRequest'
+          $ref: '#/definitions/transport.CreateScrapRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/dto.Response'
+            $ref: '#/definitions/transport.Response'
+      security:
+      - BearerAuth: []
       summary: Create a Scrap.
       tags:
       - Scrap
-  /scrap/{scrapId}:
-    delete:
-      description: Deletes a Scrap.
-      parameters:
-      - description: Scrap ID
-        in: path
-        name: scrapId
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "204":
-          description: No Content
-          schema:
-            $ref: '#/definitions/dto.Response'
-      summary: Delete Scrap by id.
-      tags:
-      - Scrap
-  /scrap/user/{userId}:
+  /scraps/user/{userId}:
     get:
       description: Returns a list of scraps
+      operationId: findUserScraps
       parameters:
       - description: User ID
         in: path
         name: userId
         required: true
-        type: string
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.FindScrapOfUserRecipientResponse'
+            $ref: '#/definitions/transport.FindScrapOfUserRecipientResponse'
+      security:
+      - BearerAuth: []
       summary: Gets a list of scraps of a user.
       tags:
       - Scrap
-  /testimonial:
+  /testimonials:
     post:
-      description: Creates a Testimonial.
+      consumes:
+      - application/json
+      description: Logged user writes a testimonial for a friend. It stays pending
+        until the recipient approves it.
+      operationId: createTestimonial
       parameters:
       - description: Create Testimonial
         in: body
         name: Testimonial
         required: true
         schema:
-          $ref: '#/definitions/dto.CreateTestimonialRequest'
+          $ref: '#/definitions/transport.CreateTestimonialRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/dto.Response'
+            $ref: '#/definitions/transport.Response'
+      security:
+      - BearerAuth: []
       summary: Create a Testimonial.
       tags:
       - Testimonial
-  /testimonial/{testimonialId}:
+  /testimonials/{testimonialId}:
     delete:
-      description: Deletes a Testimonial.
+      description: The recipient rejects or removes a testimonial, or the author deletes
+        one they wrote.
+      operationId: deleteTestimonial
       parameters:
-      - description: delete Testimonial by id
+      - description: Testimonial ID
         in: path
         name: testimonialId
         required: true
-        type: string
+        type: integer
       produces:
       - application/json
       responses:
         "204":
           description: No Content
-          schema:
-            $ref: '#/definitions/dto.Response'
+      security:
+      - BearerAuth: []
       summary: Delete Testimonial by id.
       tags:
       - Testimonial
-  /topic:
+  /testimonials/{testimonialId}/approve:
     post:
-      description: Creates a new Topic inside a community's forum
+      description: The recipient approves a pending testimonial, making it public.
+      operationId: approveTestimonial
+      parameters:
+      - description: Testimonial ID
+        in: path
+        name: testimonialId
+        required: true
+        type: integer
+      produces:
+      - application/json
       responses:
-        "201":
-          description: Created
-          schema:
-            $ref: '#/definitions/dto.Response'
-      summary: Creates a new Topic
+        "204":
+          description: No Content
+      security:
+      - BearerAuth: []
+      summary: Approve a Testimonial.
       tags:
-      - Topics
-  /topic/{topicId}:
-    post:
-      description: Replies to an existing Topic inside a community's forum
-      responses:
-        "201":
-          description: Created
-          schema:
-            $ref: '#/definitions/dto.Response'
-      summary: Creates a new Topic Reply
-      tags:
-      - Topics
-  /topic/{topicId}/replies:
+      - Testimonial
+  /testimonials/user/{userId}:
     get:
-      description: Returns a list of topics
+      description: Returns the approved testimonials of a user. When the logged user
+        is the recipient, pending ones are included too.
+      operationId: findUserTestimonials
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: Page of approved testimonials, starting at 1 (omit for all)
+        in: query
+        name: page
+        type: integer
+      - description: Approved testimonials per page (default 5, max 50)
+        in: query
+        name: pageSize
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.TopicRepliesResponse'
+            $ref: '#/definitions/transport.FindTestimonialsOfUserResponse'
+      security:
+      - BearerAuth: []
+      summary: Gets the testimonials of a user.
+      tags:
+      - Testimonial
+  /topics:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new Topic inside a community's forum. Only members of
+        the community may post (403 otherwise).
+      operationId: createTopic
+      parameters:
+      - description: Create Topic
+        in: body
+        name: Topic
+        required: true
+        schema:
+          $ref: '#/definitions/transport.CreateTopicRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/transport.Response'
+      security:
+      - BearerAuth: []
+      summary: Creates a new Topic
+      tags:
+      - Topics
+  /topics/{topicId}:
+    post:
+      consumes:
+      - application/json
+      description: Replies to an existing Topic inside a community's forum. Only members
+        of the topic's community may reply (403 otherwise).
+      operationId: replyTopic
+      parameters:
+      - description: Topic ID
+        in: path
+        name: topicId
+        required: true
+        type: integer
+      - description: Reply
+        in: body
+        name: Reply
+        required: true
+        schema:
+          $ref: '#/definitions/transport.ReplyTopicRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/transport.Response'
+      security:
+      - BearerAuth: []
+      summary: Creates a new Topic Reply
+      tags:
+      - Topics
+  /topics/{topicId}/replies:
+    get:
+      description: Returns the topic and its replies
+      operationId: findTopicReplies
+      parameters:
+      - description: Topic ID
+        in: path
+        name: topicId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.TopicRepliesResponse'
+      security:
+      - BearerAuth: []
       summary: Lists all the replies of a given topic
       tags:
       - Topics
   /users:
     get:
       description: Returns a list of users
+      operationId: findUsers
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.FindManyUsersResponse'
+            $ref: '#/definitions/transport.FindManyUsersResponse'
+      security:
+      - BearerAuth: []
       summary: Gets a list of users.
       tags:
       - Users
     post:
+      consumes:
+      - application/json
+      description: Save user in Db.
+      operationId: createUser
       parameters:
       - description: Create User
         in: body
         name: user
         required: true
         schema:
-          $ref: '#/definitions/dto.CreateUserRequest'
+          $ref: '#/definitions/transport.CreateUserRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/dto.Response'
+            $ref: '#/definitions/transport.Response'
+      security:
+      - BearerAuth: []
       summary: Create user
       tags:
       - Users
   /users/{userId}:
     get:
       description: Returns the user matching the requested id
+      operationId: findUser
       parameters:
       - description: User ID
         in: path
         name: userId
         required: true
-        type: string
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.FindUserResponse'
+            $ref: '#/definitions/transport.FindUserResponse'
+      security:
+      - BearerAuth: []
       summary: Get Single user by id.
       tags:
       - Users
-  /users/{userId}/friends:
-    get:
-      description: Returns a list of friends
+  /users/{userId}/fan:
+    delete:
+      description: Logged user removes their star from a user. Idempotent.
+      operationId: stopBeingFan
       parameters:
       - description: User ID
         in: path
         name: userId
         required: true
-        type: string
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      security:
+      - BearerAuth: []
+      summary: Stops being a fan of a user.
+      tags:
+      - UserFan
+    put:
+      description: Logged user becomes a fan of a friend. Idempotent.
+      operationId: becomeFan
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      security:
+      - BearerAuth: []
+      summary: Becomes a fan of a user.
+      tags:
+      - UserFan
+  /users/{userId}/fans:
+    get:
+      description: Returns how many fans a user has, and whether the logged user is
+        (or can become) one of them.
+      operationId: findUserFans
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.FindFriendsOfUserResponse'
+            $ref: '#/definitions/transport.UserFanSummaryResponse'
+      security:
+      - BearerAuth: []
+      summary: Gets the fan summary of a user.
+      tags:
+      - UserFan
+  /users/{userId}/friends:
+    get:
+      description: Returns a list of friends
+      operationId: findUserFriends
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.FindFriendsOfUserResponse'
+      security:
+      - BearerAuth: []
       summary: Gets a list of friends of the user.
       tags:
       - Users
   /users/{userId}/memberships:
     get:
       description: Returns a list of communities
+      operationId: findUserMemberships
       parameters:
       - description: User ID
         in: path
         name: userId
         required: true
-        type: string
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.FindUserMembershipsResponse'
+            $ref: '#/definitions/transport.FindUserMembershipsResponse'
+      security:
+      - BearerAuth: []
       summary: Gets a list of communities that user is member of.
-      tags:
-      - Users
-  /users/{userId}/photoAlbums:
-    get:
-      description: Returns a list of photo albums
-      parameters:
-      - description: User ID
-        in: path
-        name: userId
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/dto.FindPhotoAlbumOfUserResponse'
-      summary: Gets a list of photo albums of the user.
       tags:
       - Users
   /users/{userId}/profile:
     get:
       description: Returns the user matching the requested id
+      operationId: findUserProfile
       parameters:
       - description: User ID
         in: path
         name: userId
         required: true
-        type: string
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.FindUserWithProfileByIdResponse'
+            $ref: '#/definitions/transport.FindUserWithProfileByIdResponse'
+      security:
+      - BearerAuth: []
       summary: Get Single user with it's profile by id.
       tags:
       - Users
-  /users/search-users:
+  /users/{userId}/review:
+    put:
+      consumes:
+      - application/json
+      description: Logged user creates or updates their review of a friend.
+      operationId: upsertUserReview
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: Review (each trait from 0 to 3)
+        in: body
+        name: UserReview
+        required: true
+        schema:
+          $ref: '#/definitions/transport.UpsertUserReviewRequest'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      security:
+      - BearerAuth: []
+      summary: Reviews a user.
+      tags:
+      - UserReview
+  /users/{userId}/reviews:
     get:
-      description: Returns a list of users
+      description: Returns the average cool, sexy and trustworthy ratings of a user,
+        plus the logged user's own review.
+      operationId: findUserReviews
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.SearchUsersResponse'
+            $ref: '#/definitions/transport.UserReviewSummaryResponse'
+      security:
+      - BearerAuth: []
+      summary: Gets the review summary of a user.
+      tags:
+      - UserReview
+  /users/search-users:
+    get:
+      description: Returns a page of users
+      operationId: searchUsers
+      parameters:
+      - description: Part of the user's full name (omit to list all)
+        in: query
+        name: name
+        type: string
+      - description: Page, starting at 1
+        in: query
+        name: page
+        type: integer
+      - description: Users per page
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.SearchUsersResponse'
+      security:
+      - BearerAuth: []
       summary: Searches for a user by their name.
       tags:
       - Users
 schemes:
 - http
+securityDefinitions:
+  BearerAuth:
+    description: Yorgut session token from POST /auth/google, sent as "Bearer <token>".
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

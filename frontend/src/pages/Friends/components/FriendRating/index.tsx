@@ -3,11 +3,11 @@ import React from "react";
 import { Box, Stack, Typography } from "@mui/material";
 import { useSetFan, useUserFans } from "api/userFan/queries";
 import { useUpsertUserReview, useUserReviews } from "api/userReview/queries";
-import { IUserReview } from "api/userReview/types";
+import { UserReviewItem } from "api/generated/model";
 
 const MAX_RATING = 3;
 
-const traits: { key: keyof IUserReview; label: string; icon: string }[] = [
+const traits: { key: keyof UserReviewItem; label: string; icon: string }[] = [
   { key: "trustworthy", label: "confiável", icon: "😀" },
   { key: "cool", label: "legal", icon: "🧊" },
   { key: "sexy", label: "sexy", icon: "❤️" },
@@ -82,10 +82,10 @@ export const FriendRating: React.FC<IFriendRatingProps> = ({ userId }) => {
   const { data } = useUserReviews(userId);
   const { mutate: upsertReview, isPending } = useUpsertUserReview(userId);
 
-  const myReview: IUserReview = data?.myReview ?? { cool: 0, sexy: 0, trustworthy: 0 };
+  const myReview: UserReviewItem = data?.myReview ?? { cool: 0, sexy: 0, trustworthy: 0 };
   const disabled = !data?.canReview || isPending;
 
-  const handleChange = (key: keyof IUserReview, value: number) => {
+  const handleChange = (key: keyof UserReviewItem, value: number) => {
     upsertReview({ ...myReview, [key]: value });
   };
 

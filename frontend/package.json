@@ -26,7 +26,9 @@
     "build": "rsbuild build",
     "preview": "rsbuild preview",
     "lint": "eslint --fix --ext .js,.jsx,.ts,.tsx .",
-    "serve": "serve -s dist"
+    "serve": "serve -s dist",
+    "gen:api": "orval --config ./orval.config.ts",
+    "typecheck": "tsc --noEmit -p ."
   },
   "eslintConfig": {
     "extends": [
@@ -34,6 +36,9 @@
       "react-app/jest"
     ]
   },
+  "eslintIgnore": [
+    "src/api/generated"
+  ],
   "browserslist": {
     "production": [
       ">0.2%",
@@ -53,6 +58,7 @@
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.3",
     "eslint-plugin-simple-import-sort": "^12.1.1",
+    "orval": "8.37.0",
     "prettier": "^3.5.3"
   },
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"

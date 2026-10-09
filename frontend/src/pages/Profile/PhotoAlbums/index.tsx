@@ -1,6 +1,6 @@
 import { Box, Dialog, DialogContent, Stack, TextField, Typography } from "@mui/material";
 import { useDeletePhoto, usePhotos, useUploadPhoto } from "api/photo/queries";
-import { IPhoto } from "api/photo/types";
+import { PhotoItem } from "api/generated/model";
 import { Button } from "components/atoms/Button";
 import { BoxWithTitle } from "components/molecules/BoxWithTitle";
 import { dayjsFromDate } from "helpers/formatting/date";
@@ -25,7 +25,7 @@ export const UserPhotoAlbumsList: React.FC<IProps> = () => {
   const [preview, setPreview] = useState<string | null>(null);
   const [caption, setCaption] = useState("");
   const [validationError, setValidationError] = useState<string | null>(null);
-  const [opened, setOpened] = useState<IPhoto | null>(null);
+  const [opened, setOpened] = useState<PhotoItem | null>(null);
   const fileInput = useRef<HTMLInputElement>(null);
 
   // Release the local preview URL when it's replaced or the page closes.
