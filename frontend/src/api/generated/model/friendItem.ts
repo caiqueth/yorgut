@@ -11,5 +11,6 @@ export interface FriendItem {
   firstName: string;
   friendCount: number;
   id: number;
-  profilePicture: string;
+  /** @nullable */
+  profilePicture: string | null;
 }

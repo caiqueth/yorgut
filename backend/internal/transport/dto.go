@@ -78,10 +78,10 @@ type FindCommunityProfileByIdResponse struct {
 }
 
 type CommunityMemberEntry struct {
-	ID             uint   `json:"id"`
-	FirstName      string `json:"firstName"`
-	ProfilePicture string `json:"profilePicture"`
-	FriendCount    uint   `json:"friendCount"`
+	ID             uint    `json:"id"`
+	FirstName      string  `json:"firstName"`
+	ProfilePicture *string `json:"profilePicture" extensions:"x-nullable"`
+	FriendCount    uint    `json:"friendCount"`
 }
 
 type FindCommunityMembersResponse struct {
@@ -114,11 +114,11 @@ type FindFriendshipOfUserResponse struct {
 }
 
 type PendingFriendship struct {
-	ID              uint   `json:"id"`
-	UserRequestedID uint   `json:"userRequestedId"`
-	FirstName       string `json:"firstName"`
-	LastName        string `json:"lastName"`
-	ProfilePicture  string `json:"profilePicture"`
+	ID              uint    `json:"id"`
+	UserRequestedID uint    `json:"userRequestedId"`
+	FirstName       string  `json:"firstName"`
+	LastName        string  `json:"lastName"`
+	ProfilePicture  *string `json:"profilePicture" extensions:"x-nullable"`
 }
 
 type FindPendingFriendshipOfUserResponse struct {
@@ -156,7 +156,7 @@ type ScrapItem struct {
 	Content              string    `json:"content"`
 	AuthorID             uint      `json:"authorId"`
 	AuthorName           string    `json:"authorName"`
-	AuthorProfilePicture string    `json:"authorProfilePicture"`
+	AuthorProfilePicture *string   `json:"authorProfilePicture" extensions:"x-nullable"`
 	CreatedAt            time.Time `json:"createdAt"`
 }
 
@@ -174,7 +174,7 @@ type TestimonialItem struct {
 	Content              string    `json:"content"`
 	AuthorID             uint      `json:"authorId"`
 	AuthorName           string    `json:"authorName"`
-	AuthorProfilePicture string    `json:"authorProfilePicture"`
+	AuthorProfilePicture *string   `json:"authorProfilePicture" extensions:"x-nullable"`
 	Approved             bool      `json:"approved"`
 	CreatedAt            time.Time `json:"createdAt"`
 }
@@ -268,7 +268,7 @@ type FriendItem struct {
 	ID             uint      `json:"id"`
 	FirstName      string    `json:"firstName"`
 	BirthDate      time.Time `json:"birthDate"`
-	ProfilePicture string    `json:"profilePicture"`
+	ProfilePicture *string   `json:"profilePicture" extensions:"x-nullable"`
 	FriendCount    uint      `json:"friendCount"`
 }
 
@@ -363,7 +363,7 @@ type AmIFriendOfResponse struct {
 
 type TopicSummary struct {
 	ID                   uint      `json:"id"`
-	AuthorProfilePicture string    `json:"authorProfilePicture"`
+	AuthorProfilePicture *string   `json:"authorProfilePicture" extensions:"x-nullable"`
 	Title                string    `json:"title"`
 	Replies              int64     `json:"replies"`
 	LastReplyPreview     string    `json:"lastReplyPreview"`
@@ -378,7 +378,7 @@ type Topic struct {
 	ID                   uint      `json:"id"`
 	AuthorID             uint      `json:"authorId"`
 	AuthorFirstName      string    `json:"authorFirstName"`
-	AuthorProfilePicture string    `json:"authorProfilePicture"`
+	AuthorProfilePicture *string   `json:"authorProfilePicture" extensions:"x-nullable"`
 	Title                string    `json:"title"`
 	Text                 string    `json:"text"`
 	CreatedAt            time.Time `json:"createdAt"`
@@ -389,7 +389,7 @@ type TopicReply struct {
 	ID                   uint      `json:"id"`
 	AuthorID             uint      `json:"authorId"`
 	AuthorFirstName      string    `json:"authorFirstName"`
-	AuthorProfilePicture string    `json:"authorProfilePicture"`
+	AuthorProfilePicture *string   `json:"authorProfilePicture" extensions:"x-nullable"`
 	Title                string    `json:"title"`
 	Text                 string    `json:"text"`
 	CreatedAt            time.Time `json:"createdAt"`

@@ -2482,7 +2482,8 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "profilePicture": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 }
             }
         },
@@ -3052,7 +3053,8 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "profilePicture": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 }
             }
         },
@@ -3124,7 +3126,8 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "profilePicture": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 },
                 "userRequestedId": {
                     "type": "integer"
@@ -3244,7 +3247,8 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "authorProfilePicture": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 },
                 "content": {
                     "type": "string"
@@ -3331,7 +3335,8 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "authorProfilePicture": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 },
                 "content": {
                     "type": "string"
@@ -3364,7 +3369,8 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "authorProfilePicture": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 },
                 "createdAt": {
                     "type": "string"
@@ -3425,7 +3431,8 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "authorProfilePicture": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 },
                 "createdAt": {
                     "type": "string"
@@ -3453,7 +3460,8 @@ const docTemplate = `{
             ],
             "properties": {
                 "authorProfilePicture": {
-                    "type": "string"
+                    "type": "string",
+                    "x-nullable": true
                 },
                 "id": {
                     "type": "integer"

@@ -9,7 +9,8 @@
 export interface Topic {
   authorFirstName: string;
   authorId: number;
-  authorProfilePicture: string;
+  /** @nullable */
+  authorProfilePicture: string | null;
   createdAt: string;
   id: number;
   replies: number;

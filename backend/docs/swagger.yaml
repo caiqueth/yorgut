@@ -57,6 +57,7 @@ definitions:
         type: integer
       profilePicture:
         type: string
+        x-nullable: true
     required:
     - firstName
     - friendCount
@@ -459,6 +460,7 @@ definitions:
         type: integer
       profilePicture:
         type: string
+        x-nullable: true
     required:
     - birthDate
     - firstName
@@ -510,6 +512,7 @@ definitions:
         type: string
       profilePicture:
         type: string
+        x-nullable: true
       userRequestedId:
         type: integer
     required:
@@ -592,6 +595,7 @@ definitions:
         type: string
       authorProfilePicture:
         type: string
+        x-nullable: true
       content:
         type: string
       createdAt:
@@ -652,6 +656,7 @@ definitions:
         type: string
       authorProfilePicture:
         type: string
+        x-nullable: true
       content:
         type: string
       createdAt:
@@ -675,6 +680,7 @@ definitions:
         type: integer
       authorProfilePicture:
         type: string
+        x-nullable: true
       createdAt:
         type: string
       id:
@@ -717,6 +723,7 @@ definitions:
         type: integer
       authorProfilePicture:
         type: string
+        x-nullable: true
       createdAt:
         type: string
       id:
@@ -738,6 +745,7 @@ definitions:
     properties:
       authorProfilePicture:
         type: string
+        x-nullable: true
       id:
         type: integer
       lastReplyDate:

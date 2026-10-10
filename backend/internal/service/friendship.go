@@ -84,7 +84,7 @@ func (f *FriendshipService) ShouldThisUserBeReplying(friendshipId uint, userId u
 		return false
 	}
 
-	if friendship.UserRequesteeID == userId {
+	if !friendship.Accepted && friendship.UserRequesteeID == userId {
 		return true
 	}
 

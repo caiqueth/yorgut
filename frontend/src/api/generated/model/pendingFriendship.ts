@@ -10,6 +10,7 @@ export interface PendingFriendship {
   firstName: string;
   id: number;
   lastName: string;
-  profilePicture: string;
+  /** @nullable */
+  profilePicture: string | null;
   userRequestedId: number;
 }

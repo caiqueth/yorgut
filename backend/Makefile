@@ -28,10 +28,10 @@ test:
 	@echo "Testing..."
 	@go test ./... -v
 
-# Migration and schema tests against a real Postgres (embedded-postgres
+# Migration, schema and service tests against a real Postgres (embedded-postgres
 # downloads it on the first run; no Docker needed)
 test_pg:
-	@go test -tags pgtest ./internal/database/ -v
+	@go test -count=1 -tags pgtest -p 1 ./internal/database/ ./internal/service/ -v
 
 # Clean the binary
 clean:

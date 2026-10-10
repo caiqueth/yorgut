@@ -55,13 +55,16 @@ Left to do:
 
 ## Next
 
-### 3. Tests for the service layer
+### 3. Tests for the service layer ✅ (done 2026-10-09)
 
-- [x] Test helper that opens in-memory SQLite, runs `database.Migrate`, and builds the repositories (`service/helpers_test.go`, `newTestRepositories`).
-- [x] Started: login/session (`auth_test.go`), friend and member counts, transaction rollback (`counters_test.go`).
-- [ ] Next targets: friendship permission rules (`ShouldThisUserBeReplying`/`Deleting`, duplicate requests), testimonials, user reviews/fans (friends-only rules).
-- [x] `go test ./...` in the Makefile (`make test`, was already there).
-- [ ] Later: run the same tests against Postgres (see item 5).
+- [x] Test DB helper: `newTestRepositories(t)` uses in-memory SQLite by default, and an embedded Postgres migrated
+  with goose (exactly like production) under the `pgtest` tag (`db_sqlite_test.go` / `db_pg_test.go`).
+- [x] Covered: login/session, counts and transactions, duplicates, error categories, friendship permissions and status,
+  fans, reviews, testimonials, topics, profile updates (clearing fields), users without a picture or profile.
+- [x] `make test` (SQLite, fast, offline) and `make test_pg` (database + service packages on Postgres 17).
+- [x] Bugs the tests found, fixed: `ShouldThisUserBeReplying` allowed "replying" to an accepted friendship (a decline
+  would delete it); the response mappers panicked for users or communities without a picture or profile row
+  (8 DTO fields are now nullable).
 
 ### 4. Error handling: domain errors → HTTP status in one place ✅ (done 2026-10-09)
 

@@ -9,7 +9,8 @@
 export interface ScrapItem {
   authorId: number;
   authorName: string;
-  authorProfilePicture: string;
+  /** @nullable */
+  authorProfilePicture: string | null;
   content: string;
   createdAt: string;
   id: number;

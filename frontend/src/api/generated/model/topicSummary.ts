@@ -7,7 +7,8 @@
  */
 
 export interface TopicSummary {
-  authorProfilePicture: string;
+  /** @nullable */
+  authorProfilePicture: string | null;
   id: number;
   lastReplyDate: string;
   lastReplyPreview: string;

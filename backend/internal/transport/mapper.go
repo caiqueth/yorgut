@@ -22,24 +22,26 @@ func (r *FindUserWithProfileByIdResponse) FromUser(user *model.User) {
 	r.BirthDate = user.BirthDate
 	r.CreatedAt = user.CreatedAt
 	r.UpdatedAt = user.UpdatedAt
-	r.ProfilePicture = user.Profile.ProfilePicture
-	r.Description = user.Profile.Description
-	r.RelationshipStatus = user.Profile.RelationshipStatus
-	r.Interests = user.Profile.Interests
-	r.About = user.Profile.About
-	r.Religion = user.Profile.Religion
-	r.Humor = user.Profile.Humor
-	r.Fashion = user.Profile.Fashion
-	r.LivesWith = user.Profile.LivesWith
-	r.BirthCity = user.Profile.BirthCity
-	r.Website = user.Profile.Website
-	r.Passions = user.Profile.Passions
-	r.Sports = user.Profile.Sports
-	r.Hobbies = user.Profile.Hobbies
-	r.Books = user.Profile.Books
-	r.Music = user.Profile.Music
-	r.Movies = user.Profile.Movies
-	r.Cuisine = user.Profile.Cuisine
+	r.ProfilePicture = profilePictureOf(user)
+	if p := user.Profile; p != nil {
+		r.Description = p.Description
+		r.RelationshipStatus = p.RelationshipStatus
+		r.Interests = p.Interests
+		r.About = p.About
+		r.Religion = p.Religion
+		r.Humor = p.Humor
+		r.Fashion = p.Fashion
+		r.LivesWith = p.LivesWith
+		r.BirthCity = p.BirthCity
+		r.Website = p.Website
+		r.Passions = p.Passions
+		r.Sports = p.Sports
+		r.Hobbies = p.Hobbies
+		r.Books = p.Books
+		r.Music = p.Music
+		r.Movies = p.Movies
+		r.Cuisine = p.Cuisine
+	}
 }
 
 func (r *FindMyOwnedCommunitiesResponse) FromCommunities(communities []model.Community) {
@@ -64,7 +66,7 @@ func (r *FindUserMembershipsResponse) FromMemberships(memberships []model.Commun
 			ID:              m.Community.ID,
 			Name:            m.Community.Name,
 			CreatedBy:       m.Community.CreatedByID,
-			ProfilePicture:  m.Community.Profile.ProfilePicture,
+			ProfilePicture:  communityPictureOf(m.Community),
 			MembershipCount: m.Community.MemberCount,
 		}
 	}
@@ -90,7 +92,7 @@ func (r *FindFriendsOfUserResponse) FromFriends(friends []model.User) {
 			ID:             f.ID,
 			FirstName:      f.FirstName,
 			BirthDate:      f.BirthDate,
-			ProfilePicture: *f.Profile.ProfilePicture,
+			ProfilePicture: profilePictureOf(&f),
 			FriendCount:    f.FriendCount,
 		}
 	}
@@ -107,7 +109,7 @@ func (r *FindPendingFriendshipOfUserResponse) FromUsers(users []model.Friendship
 			UserRequestedID: f.UserRequested.ID,
 			FirstName:       f.UserRequested.FirstName,
 			LastName:        f.UserRequested.LastName,
-			ProfilePicture:  *f.UserRequested.Profile.ProfilePicture,
+			ProfilePicture:  profilePictureOf(f.UserRequested),
 		}
 	}
 }
@@ -119,7 +121,7 @@ func (r *FindManyCommunitiesResponse) FromCommunities(communities []model.Commun
 			ID:             c.ID,
 			Name:           c.Name,
 			CreatedBy:      c.CreatedByID,
-			ProfilePicture: c.Profile.ProfilePicture,
+			ProfilePicture: communityPictureOf(&c),
 			OwnerID:        c.OwnerID,
 		}
 	}
@@ -138,7 +140,7 @@ func (r *SearchUsersResponse) FromUsers(users []*model.User, page int, pageSize 
 			ID:             u.ID,
 			FirstName:      u.FirstName,
 			BirthDate:      u.BirthDate,
-			ProfilePicture: u.Profile.ProfilePicture,
+			ProfilePicture: profilePictureOf(u),
 			FriendCount:    u.FriendCount,
 		}
 	}
@@ -167,7 +169,7 @@ func (d *ScrapItem) FromScrap(scrap *model.Scrap) {
 	d.Content = scrap.Content
 	d.AuthorID = scrap.UserAuthorID
 	d.AuthorName = scrap.UserAuthor.FirstName
-	d.AuthorProfilePicture = *scrap.UserAuthor.Profile.ProfilePicture
+	d.AuthorProfilePicture = profilePictureOf(scrap.UserAuthor)
 	d.CreatedAt = scrap.CreatedAt
 }
 
@@ -199,7 +201,7 @@ func (r *FindCommunityMembersResponse) FromMemberships(community *model.Communit
 		r.Members[i] = CommunityMemberEntry{
 			ID:             m.UserID,
 			FirstName:      m.User.FirstName,
-			ProfilePicture: *m.User.Profile.ProfilePicture,
+			ProfilePicture: profilePictureOf(m.User),
 			FriendCount:    m.User.FriendCount,
 		}
 	}
@@ -207,7 +209,7 @@ func (r *FindCommunityMembersResponse) FromMemberships(community *model.Communit
 
 func (d *TopicSummary) FromTopic(topic *model.Topic, replyCount int64, replies []model.Topic) {
 	d.ID = topic.ID
-	d.AuthorProfilePicture = *topic.Author.Profile.ProfilePicture
+	d.AuthorProfilePicture = profilePictureOf(topic.Author)
 	d.Title = topic.Title
 	d.Replies = replyCount
 	if len(replies) > 0 {
@@ -221,7 +223,7 @@ func (d *Topic) FromTopic(topic *model.Topic, replyCount int64) {
 	d.ID = topic.ID
 	d.AuthorID = topic.AuthorID
 	d.AuthorFirstName = topic.Author.FirstName
-	d.AuthorProfilePicture = *topic.Author.Profile.ProfilePicture
+	d.AuthorProfilePicture = profilePictureOf(topic.Author)
 	d.Title = topic.Title
 	d.Text = topic.Text
 	d.CreatedAt = topic.CreatedAt
@@ -232,7 +234,7 @@ func (d *TopicReply) FromTopic(reply *model.Topic) {
 	d.ID = reply.ID
 	d.AuthorID = reply.AuthorID
 	d.AuthorFirstName = reply.Author.FirstName
-	d.AuthorProfilePicture = *reply.Author.Profile.ProfilePicture
+	d.AuthorProfilePicture = profilePictureOf(reply.Author)
 	d.Title = reply.Title
 	d.Text = reply.Text
 	d.CreatedAt = reply.CreatedAt
@@ -249,7 +251,7 @@ func (d *TestimonialItem) FromTestimonial(testimonial *model.Testimonial) {
 	d.Content = testimonial.Content
 	d.AuthorID = testimonial.UserAuthorID
 	d.AuthorName = testimonial.UserAuthor.FirstName
-	d.AuthorProfilePicture = *testimonial.UserAuthor.Profile.ProfilePicture
+	d.AuthorProfilePicture = profilePictureOf(testimonial.UserAuthor)
 	d.Approved = testimonial.Approved
 	d.CreatedAt = testimonial.CreatedAt
 }
@@ -310,4 +312,21 @@ func (r *FindPhotosOfUserResponse) FromPhotos(photos []model.Photo, maxPhotos in
 	r.Count = len(photos)
 	r.MaxPhotos = maxPhotos
 	r.CanUpload = canUpload
+}
+
+// profilePictureOf returns the user's profile picture, or nil when the user,
+// its profile or the picture is missing.
+func profilePictureOf(u *model.User) *string {
+	if u == nil || u.Profile == nil {
+		return nil
+	}
+	return u.Profile.ProfilePicture
+}
+
+// communityPictureOf is the community counterpart of profilePictureOf.
+func communityPictureOf(c *model.Community) *string {
+	if c == nil || c.Profile == nil {
+		return nil
+	}
+	return c.Profile.ProfilePicture
 }
