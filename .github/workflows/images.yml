@@ -30,6 +30,8 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Gives the job the production environment's variables (GOOGLE_CLIENT_ID).
+    environment: production
     strategy:
       matrix:
         image: [api, web]
@@ -38,8 +40,8 @@ jobs:
             context: backend
           - image: web
             context: frontend
-            # The repository variable GOOGLE_CLIENT_ID (Settings > Secrets and
-            # variables > Actions > Variables), baked into the SPA.
+            # The production environment's GOOGLE_CLIENT_ID variable (Settings >
+            # Environments > production), baked into the SPA.
             build-args: GOOGLE_CLIENT_ID=${{ vars.GOOGLE_CLIENT_ID }}
     steps:
       - uses: actions/checkout@v4

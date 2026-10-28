@@ -103,8 +103,8 @@ machine with Docker:
 - **Images**: GitHub Actions ([`images.yml`](.github/workflows/images.yml))
   builds `yorgut-api` and `yorgut-web` on every push to `main` and pushes them
   to ghcr.io as `latest` and `<commit sha>`, for amd64 and arm64. The web image
-  needs the repository variable `GOOGLE_CLIENT_ID` (**Settings > Secrets and
-  variables > Actions > Variables**). The server only pulls them
+  needs the variable `GOOGLE_CLIENT_ID` in the `production` environment
+  (**Settings > Environments**). The server only pulls them
   (`docker login ghcr.io` first if the packages are private).
 - **Services**: the API, nginx serving the SPA, and a SeaweedFS bucket for the
   pictures (in the `storage-data` volume). The database is an external MySQL
