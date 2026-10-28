@@ -1,0 +1,39 @@
+@font-face {
+  font-family: "Gymnastics";
+  src:
+    local("Gymnastics"),
+    url(./assets/fonts/Gymnastics.ttf) format("truetype");
+}
+
+/* Color emoji from the system's emoji font. Without it, smileys (U+1F600-1F64F)
+   come from DejaVu Sans, which draws them in black and white. unicode-range
+   keeps it to emoji, so digits and letters still use the fonts below. */
+@font-face {
+  font-family: "Color Emoji";
+  src:
+    local("Apple Color Emoji"),
+    local("Segoe UI Emoji"),
+    local("Noto Color Emoji");
+  unicode-range: U+1F000-1FAFF, U+2600-27BF, U+2B00-2BFF, U+FE0F, U+200D;
+}
+
+/* Same stack as typography.fontFamily in theme.ts. Each name is its own
+   item: quoting the whole list would name one font that doesn't exist. */
+body {
+  margin: 0;
+  font-family: "Color Emoji", Verdana, Tahoma, "DejaVu Sans", Geneva, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  overflow-y: scroll;
+}
+
+/* Form fields don't inherit the page font by default. */
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+/* Link colors are in theme.ts (MuiCssBaseline), so each theme sets its own. */

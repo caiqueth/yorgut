@@ -1,0 +1,4104 @@
+basePath: /api/v1
+definitions:
+  transport.AmIFriendOfResponse:
+    properties:
+      amIFriend:
+        type: boolean
+      friendshipId:
+        type: integer
+        x-nullable: true
+      isPendingMyReply:
+        type: boolean
+      isPendingTheirReply:
+        type: boolean
+    required:
+    - amIFriend
+    - friendshipId
+    - isPendingMyReply
+    - isPendingTheirReply
+    type: object
+  transport.AmIMemberOfResponse:
+    properties:
+      amIMember:
+        type: boolean
+      pending:
+        description: |-
+          Pending is true when the logged user asked to join a private community
+          and the owner hasn't answered yet.
+        type: boolean
+    required:
+    - amIMember
+    - pending
+    type: object
+  transport.BirthdayItem:
+    properties:
+      birthDate:
+        type: string
+      daysUntil:
+        type: integer
+      firstName:
+        type: string
+      id:
+        type: integer
+      nextBirthday:
+        description: NextBirthday is the date of the coming birthday (today counts).
+        type: string
+      profilePicture:
+        type: string
+        x-nullable: true
+    required:
+    - birthDate
+    - daysUntil
+    - firstName
+    - id
+    - nextBirthday
+    - profilePicture
+    type: object
+  transport.CommunityCategory:
+    enum:
+    - activities
+    - alumni_schools
+    - arts_entertainment
+    - automotive
+    - business
+    - cities_neighborhoods
+    - companies
+    - computers_internet
+    - countries_regional
+    - cultures_community
+    - family_home
+    - fashion_beauty
+    - food_drink_wine
+    - gay_lesbian_bi
+    - games
+    - government_politics
+    - health_wellness_fitness
+    - hobbies_crafts
+    - individuals
+    - music
+    - other
+    - pets_animals
+    - recreation_sports
+    - religion_beliefs
+    - romance_relationships
+    - schools_education
+    - science_history
+    - travel
+    type: string
+    x-enum-varnames:
+    - CategoryActivities
+    - CategoryAlumniSchools
+    - CategoryArtsEntertainment
+    - CategoryAutomotive
+    - CategoryBusiness
+    - CategoryCitiesNeighborhoods
+    - CategoryCompanies
+    - CategoryComputersInternet
+    - CategoryCountriesRegional
+    - CategoryCulturesCommunity
+    - CategoryFamilyHome
+    - CategoryFashionBeauty
+    - CategoryFoodDrinkWine
+    - CategoryGayLesbianBi
+    - CategoryGames
+    - CategoryGovernmentPolitics
+    - CategoryHealthWellnessFitness
+    - CategoryHobbiesCrafts
+    - CategoryIndividuals
+    - CategoryMusic
+    - CategoryOther
+    - CategoryPetsAnimals
+    - CategoryRecreationSports
+    - CategoryReligionBeliefs
+    - CategoryRomanceRelationships
+    - CategorySchoolsEducation
+    - CategoryScienceHistory
+    - CategoryTravel
+  transport.CommunityInvitationItem:
+    properties:
+      communityId:
+        type: integer
+      communityName:
+        type: string
+      communityPicture:
+        type: string
+        x-nullable: true
+      communityPrivate:
+        type: boolean
+      createdAt:
+        type: string
+      id:
+        type: integer
+      inviterFirstName:
+        type: string
+      inviterId:
+        type: integer
+      inviterProfilePicture:
+        type: string
+        x-nullable: true
+    required:
+    - communityId
+    - communityName
+    - communityPicture
+    - communityPrivate
+    - createdAt
+    - id
+    - inviterFirstName
+    - inviterId
+    - inviterProfilePicture
+    type: object
+  transport.CommunityItem:
+    properties:
+      createdBy:
+        type: integer
+      id:
+        type: integer
+      membershipCount:
+        type: integer
+      name:
+        type: string
+      owner:
+        type: integer
+      profilePicture:
+        type: string
+        x-nullable: true
+    required:
+    - createdBy
+    - id
+    - membershipCount
+    - name
+    - owner
+    - profilePicture
+    type: object
+  transport.CommunityMemberEntry:
+    properties:
+      firstName:
+        type: string
+      friendCount:
+        type: integer
+      id:
+        type: integer
+      profilePicture:
+        type: string
+        x-nullable: true
+    required:
+    - firstName
+    - friendCount
+    - id
+    - profilePicture
+    type: object
+  transport.CommunitySearchItem:
+    properties:
+      category:
+        $ref: '#/definitions/transport.CommunityCategory'
+      id:
+        type: integer
+      memberCount:
+        type: integer
+      name:
+        type: string
+      pending:
+        description: Pending is true when the logged user already asked to join.
+        type: boolean
+      private:
+        type: boolean
+      profilePicture:
+        type: string
+        x-nullable: true
+    required:
+    - category
+    - id
+    - memberCount
+    - name
+    - pending
+    - private
+    - profilePicture
+    type: object
+  transport.CreateCommunityResponse:
+    properties:
+      id:
+        type: integer
+    required:
+    - id
+    type: object
+  transport.CreateFriendshipRequest:
+    properties:
+      userRequesteeId:
+        type: integer
+    required:
+    - userRequesteeId
+    type: object
+  transport.CreatePollRequest:
+    properties:
+      closesAt:
+        description: |-
+          ClosesAt is when voting ends; omitted, the poll stays open until its
+          author or the community's owner closes it.
+        type: string
+      description:
+        maxLength: 2048
+        type: string
+      options:
+        items:
+          type: string
+        maxItems: 10
+        minItems: 2
+        type: array
+      question:
+        maxLength: 200
+        type: string
+    required:
+    - options
+    - question
+    type: object
+  transport.CreatePollResponse:
+    properties:
+      id:
+        type: integer
+    required:
+    - id
+    type: object
+  transport.CreateScrapRequest:
+    properties:
+      content:
+        maxLength: 2048
+        type: string
+      userRecipientId:
+        type: integer
+    required:
+    - content
+    - userRecipientId
+    type: object
+  transport.CreateTestimonialRequest:
+    properties:
+      content:
+        maxLength: 2048
+        type: string
+      userRecipientId:
+        type: integer
+    required:
+    - content
+    - userRecipientId
+    type: object
+  transport.CreateTopicRequest:
+    properties:
+      communityId:
+        type: integer
+      text:
+        maxLength: 2048
+        type: string
+      title:
+        maxLength: 200
+        type: string
+    required:
+    - communityId
+    - text
+    - title
+    type: object
+  transport.ErrorResponse:
+    properties:
+      error:
+        type: string
+    required:
+    - error
+    type: object
+  transport.FanItem:
+    properties:
+      firstName:
+        type: string
+      friendCount:
+        type: integer
+      id:
+        type: integer
+      profilePicture:
+        type: string
+        x-nullable: true
+    required:
+    - firstName
+    - friendCount
+    - id
+    - profilePicture
+    type: object
+  transport.FindCommunityByIdResponse:
+    properties:
+      category:
+        $ref: '#/definitions/transport.CommunityCategory'
+      createdAt:
+        type: string
+      createdById:
+        type: integer
+      name:
+        type: string
+      ownerFirstName:
+        type: string
+      ownerId:
+        type: integer
+      private:
+        type: boolean
+    required:
+    - category
+    - createdAt
+    - createdById
+    - name
+    - ownerFirstName
+    - ownerId
+    - private
+    type: object
+  transport.FindCommunityMembersResponse:
+    properties:
+      count:
+        type: integer
+      members:
+        items:
+          $ref: '#/definitions/transport.CommunityMemberEntry'
+        type: array
+      page:
+        type: integer
+      pageSize:
+        type: integer
+    required:
+    - count
+    - members
+    - page
+    - pageSize
+    type: object
+  transport.FindCommunityProfileByIdResponse:
+    properties:
+      description:
+        type: string
+        x-nullable: true
+      profilePicture:
+        type: string
+        x-nullable: true
+    required:
+    - description
+    - profilePicture
+    type: object
+  transport.FindFriendsOfUserResponse:
+    properties:
+      count:
+        type: integer
+      friends:
+        items:
+          $ref: '#/definitions/transport.FriendItem'
+        type: array
+      page:
+        type: integer
+      pageSize:
+        type: integer
+    required:
+    - count
+    - friends
+    - page
+    - pageSize
+    type: object
+  transport.FindInvitableFriendsResponse:
+    properties:
+      count:
+        type: integer
+      friends:
+        items:
+          $ref: '#/definitions/transport.InvitableFriendItem'
+        type: array
+      page:
+        type: integer
+      pageSize:
+        type: integer
+    required:
+    - count
+    - friends
+    - page
+    - pageSize
+    type: object
+  transport.FindJoinRequestsResponse:
+    properties:
+      requests:
+        items:
+          $ref: '#/definitions/transport.JoinRequestItem'
+        type: array
+    required:
+    - requests
+    type: object
+  transport.FindManyCommunitiesResponse:
+    properties:
+      communities:
+        items:
+          $ref: '#/definitions/transport.CommunityItem'
+        type: array
+    required:
+    - communities
+    type: object
+  transport.FindMeResponse:
+    properties:
+      createdAt:
+        type: string
+      email:
+        type: string
+      firstName:
+        type: string
+      friendCount:
+        type: integer
+      id:
+        type: integer
+      lastName:
+        type: string
+      privacy:
+        $ref: '#/definitions/transport.PrivacySettings'
+      theme:
+        description: Theme is the look the user picked for the app.
+        enum:
+        - "2005"
+        - "2008"
+        type: string
+      updatedAt:
+        type: string
+    required:
+    - createdAt
+    - email
+    - firstName
+    - friendCount
+    - id
+    - lastName
+    - privacy
+    - theme
+    - updatedAt
+    type: object
+  transport.FindMyCommunityInvitationsResponse:
+    properties:
+      invitations:
+        items:
+          $ref: '#/definitions/transport.CommunityInvitationItem'
+        type: array
+    required:
+    - invitations
+    type: object
+  transport.FindMyFriendsResponse:
+    properties:
+      count:
+        type: integer
+      friends:
+        items:
+          $ref: '#/definitions/transport.MyFriendItem'
+        type: array
+      page:
+        type: integer
+      pageSize:
+        type: integer
+    required:
+    - count
+    - friends
+    - page
+    - pageSize
+    type: object
+  transport.FindMyOwnedCommunitiesResponse:
+    properties:
+      communities:
+        items:
+          $ref: '#/definitions/transport.MyOwnedCommunityItem'
+        type: array
+      count:
+        type: integer
+      page:
+        type: integer
+      pageSize:
+        type: integer
+    required:
+    - communities
+    - count
+    - page
+    - pageSize
+    type: object
+  transport.FindPendingFriendshipOfUserResponse:
+    properties:
+      count:
+        type: integer
+      pendingFriendships:
+        items:
+          $ref: '#/definitions/transport.PendingFriendship'
+        type: array
+    required:
+    - count
+    - pendingFriendships
+    type: object
+  transport.FindPhotosOfUserResponse:
+    properties:
+      canUpload:
+        description: CanUpload is true when the logged user owns the album.
+        type: boolean
+      count:
+        type: integer
+      maxPhotos:
+        description: MaxPhotos is how many photos the personal album can hold.
+        type: integer
+      photos:
+        items:
+          $ref: '#/definitions/transport.PhotoItem'
+        type: array
+    required:
+    - canUpload
+    - count
+    - maxPhotos
+    - photos
+    type: object
+  transport.FindScrapOfUserRecipientResponse:
+    properties:
+      count:
+        type: integer
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      scraps:
+        items:
+          $ref: '#/definitions/transport.ScrapItem'
+        type: array
+    required:
+    - count
+    - page
+    - pageSize
+    - scraps
+    type: object
+  transport.FindTestimonialsOfUserResponse:
+    properties:
+      canWrite:
+        type: boolean
+      count:
+        type: integer
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      pending:
+        description: Pending is only filled when the recipient is the one looking.
+        items:
+          $ref: '#/definitions/transport.TestimonialItem'
+        type: array
+      testimonials:
+        description: Testimonials holds the approved testimonials, visible to everyone.
+        items:
+          $ref: '#/definitions/transport.TestimonialItem'
+        type: array
+    required:
+    - canWrite
+    - count
+    - page
+    - pageSize
+    - pending
+    - testimonials
+    type: object
+  transport.FindUpcomingBirthdaysResponse:
+    properties:
+      birthdays:
+        items:
+          $ref: '#/definitions/transport.BirthdayItem'
+        type: array
+    required:
+    - birthdays
+    type: object
+  transport.FindUserFanListResponse:
+    properties:
+      count:
+        type: integer
+      fans:
+        items:
+          $ref: '#/definitions/transport.FanItem'
+        type: array
+      page:
+        type: integer
+      pageSize:
+        type: integer
+    required:
+    - count
+    - fans
+    - page
+    - pageSize
+    type: object
+  transport.FindUserMembershipsResponse:
+    properties:
+      communities:
+        items:
+          $ref: '#/definitions/transport.CommunityItem'
+        type: array
+      count:
+        type: integer
+      page:
+        type: integer
+      pageSize:
+        type: integer
+    required:
+    - communities
+    - count
+    - page
+    - pageSize
+    type: object
+  transport.FindUserResponse:
+    properties:
+      createdAt:
+        type: string
+      firstName:
+        type: string
+      friendCount:
+        type: integer
+      id:
+        type: integer
+      lastName:
+        type: string
+      updatedAt:
+        type: string
+    required:
+    - createdAt
+    - firstName
+    - friendCount
+    - id
+    - lastName
+    - updatedAt
+    type: object
+  transport.FindUserWithProfileByIdResponse:
+    properties:
+      about:
+        type: string
+        x-nullable: true
+      birthCity:
+        type: string
+        x-nullable: true
+      birthDate:
+        description: |-
+          BirthDate is a calendar date; null when the viewer may not see it or
+          the user never set it.
+        type: string
+        x-nullable: true
+      books:
+        type: string
+        x-nullable: true
+      createdAt:
+        type: string
+      cuisine:
+        type: string
+        x-nullable: true
+      description:
+        type: string
+        x-nullable: true
+      fashion:
+        type: string
+        x-nullable: true
+      firstName:
+        type: string
+      friendCount:
+        type: integer
+      hiddenFields:
+        description: |-
+          HiddenFields are the profile fields left out for this viewer (by their
+          JSON names, "birthDate" included), so the page leaves their rows out
+          instead of showing "-".
+        items:
+          type: string
+        type: array
+      hobbies:
+        type: string
+        x-nullable: true
+      humor:
+        type: string
+        x-nullable: true
+      id:
+        type: integer
+      interests:
+        type: string
+        x-nullable: true
+      lastName:
+        type: string
+      livesWith:
+        type: string
+        x-nullable: true
+      movies:
+        type: string
+        x-nullable: true
+      music:
+        type: string
+        x-nullable: true
+      passions:
+        type: string
+        x-nullable: true
+      profilePicture:
+        type: string
+        x-nullable: true
+      relationshipStatus:
+        type: string
+        x-nullable: true
+      religion:
+        type: string
+        x-nullable: true
+      sports:
+        type: string
+        x-nullable: true
+      updatedAt:
+        type: string
+      visibility:
+        allOf:
+        - $ref: '#/definitions/transport.ProfileVisibility'
+        description: Visibility tells which parts of the profile the viewer may see.
+      website:
+        type: string
+        x-nullable: true
+    required:
+    - about
+    - birthCity
+    - birthDate
+    - books
+    - createdAt
+    - cuisine
+    - description
+    - fashion
+    - firstName
+    - friendCount
+    - hiddenFields
+    - hobbies
+    - humor
+    - id
+    - interests
+    - lastName
+    - livesWith
+    - movies
+    - music
+    - passions
+    - profilePicture
+    - relationshipStatus
+    - religion
+    - sports
+    - updatedAt
+    - visibility
+    - website
+    type: object
+  transport.FriendItem:
+    properties:
+      firstName:
+        type: string
+      friendCount:
+        type: integer
+      id:
+        type: integer
+      profilePicture:
+        type: string
+        x-nullable: true
+    required:
+    - firstName
+    - friendCount
+    - id
+    - profilePicture
+    type: object
+  transport.InstanceInfoResponse:
+    properties:
+      adminEmail:
+        description: |-
+          AdminEmail is how to reach the administrator (ADMIN_EMAIL), null when
+          it isn't set.
+        type: string
+        x-nullable: true
+    required:
+    - adminEmail
+    type: object
+  transport.InvitableFriendItem:
+    properties:
+      firstName:
+        type: string
+      friendCount:
+        type: integer
+      id:
+        type: integer
+      invited:
+        type: boolean
+      member:
+        description: 'Member: already in the community. Invited: someone already invited
+          them.'
+        type: boolean
+      profilePicture:
+        type: string
+        x-nullable: true
+    required:
+    - firstName
+    - friendCount
+    - id
+    - invited
+    - member
+    - profilePicture
+    type: object
+  transport.InviteToCommunityRequest:
+    properties:
+      userId:
+        description: UserID is the friend being invited.
+        type: integer
+    required:
+    - userId
+    type: object
+  transport.JoinCommunityResponse:
+    properties:
+      pending:
+        type: boolean
+    required:
+    - pending
+    type: object
+  transport.JoinRequestItem:
+    properties:
+      createdAt:
+        type: string
+      firstName:
+        type: string
+      friendCount:
+        type: integer
+      lastName:
+        type: string
+      profilePicture:
+        type: string
+        x-nullable: true
+      userId:
+        type: integer
+    required:
+    - createdAt
+    - firstName
+    - friendCount
+    - lastName
+    - profilePicture
+    - userId
+    type: object
+  transport.LoginResponse:
+    properties:
+      token:
+        description: 'Token is the Yorgut session token, sent back as "Authorization:
+          Bearer <token>".'
+        type: string
+    required:
+    - token
+    type: object
+  transport.LoginWithGoogleRequest:
+    properties:
+      credential:
+        description: Credential is the Google ID token returned by Sign in with Google.
+        type: string
+    required:
+    - credential
+    type: object
+  transport.MyFriendItem:
+    properties:
+      amIFan:
+        type: boolean
+      firstName:
+        type: string
+      friendCount:
+        type: integer
+      id:
+        type: integer
+      myReview:
+        $ref: '#/definitions/transport.UserReviewItem'
+      profilePicture:
+        type: string
+        x-nullable: true
+    required:
+    - amIFan
+    - firstName
+    - friendCount
+    - id
+    - myReview
+    - profilePicture
+    type: object
+  transport.MyOwnedCommunityItem:
+    properties:
+      id:
+        type: integer
+      membershipCount:
+        type: integer
+      name:
+        type: string
+      profilePicture:
+        type: string
+        x-nullable: true
+    required:
+    - id
+    - membershipCount
+    - name
+    - profilePicture
+    type: object
+  transport.PendingFriendship:
+    properties:
+      firstName:
+        type: string
+      id:
+        type: integer
+      lastName:
+        type: string
+      profilePicture:
+        type: string
+        x-nullable: true
+      userRequestedId:
+        type: integer
+    required:
+    - firstName
+    - id
+    - lastName
+    - profilePicture
+    - userRequestedId
+    type: object
+  transport.PhotoItem:
+    properties:
+      caption:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: integer
+      url:
+        type: string
+    required:
+    - caption
+    - createdAt
+    - id
+    - url
+    type: object
+  transport.PollOptionItem:
+    properties:
+      id:
+        type: integer
+      text:
+        type: string
+      votes:
+        description: |-
+          Votes is null until the logged user voted or the poll closed, so
+          results don't sway the vote.
+        type: integer
+        x-nullable: true
+    required:
+    - id
+    - text
+    - votes
+    type: object
+  transport.PollResponse:
+    properties:
+      authorFirstName:
+        type: string
+      authorId:
+        type: integer
+      authorProfilePicture:
+        type: string
+        x-nullable: true
+      canClose:
+        description: 'CanClose: the author or the community''s owner, while the poll
+          is open.'
+        type: boolean
+      canVote:
+        description: 'CanVote: a member who hasn''t voted, in an open poll.'
+        type: boolean
+      closed:
+        type: boolean
+      closesAt:
+        type: string
+        x-nullable: true
+      communityId:
+        type: integer
+      createdAt:
+        type: string
+      description:
+        type: string
+        x-nullable: true
+      id:
+        type: integer
+      myOptionId:
+        description: MyOptionID is the logged user's vote, null when they haven't
+          voted.
+        type: integer
+        x-nullable: true
+      options:
+        items:
+          $ref: '#/definitions/transport.PollOptionItem'
+        type: array
+      question:
+        type: string
+      voteCount:
+        type: integer
+    required:
+    - authorFirstName
+    - authorId
+    - authorProfilePicture
+    - canClose
+    - canVote
+    - closed
+    - closesAt
+    - communityId
+    - createdAt
+    - description
+    - id
+    - myOptionId
+    - options
+    - question
+    - voteCount
+    type: object
+  transport.PollSummary:
+    properties:
+      authorFirstName:
+        type: string
+      authorId:
+        type: integer
+      closed:
+        type: boolean
+      closesAt:
+        type: string
+        x-nullable: true
+      createdAt:
+        type: string
+      id:
+        type: integer
+      question:
+        type: string
+      voteCount:
+        type: integer
+      voted:
+        description: 'Voted: the logged user voted in it.'
+        type: boolean
+    required:
+    - authorFirstName
+    - authorId
+    - closed
+    - closesAt
+    - createdAt
+    - id
+    - question
+    - voteCount
+    - voted
+    type: object
+  transport.PollsResponse:
+    properties:
+      count:
+        type: integer
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      polls:
+        items:
+          $ref: '#/definitions/transport.PollSummary'
+        type: array
+    required:
+    - count
+    - page
+    - pageSize
+    - polls
+    type: object
+  transport.PrivacySettings:
+    properties:
+      hiddenProfileFields:
+        description: HiddenProfileFields are keys of ProfileFieldKeys.
+        items:
+          type: string
+        type: array
+      publicAlbum:
+        type: boolean
+      publicBirthday:
+        type: boolean
+      publicCommunities:
+        type: boolean
+      publicScraps:
+        type: boolean
+      publicTestimonials:
+        type: boolean
+      recordVisits:
+        type: boolean
+    required:
+    - hiddenProfileFields
+    - publicAlbum
+    - publicBirthday
+    - publicCommunities
+    - publicScraps
+    - publicTestimonials
+    - recordVisits
+    type: object
+  transport.ProfileViews:
+    properties:
+      allTime:
+        type: integer
+      lastSevenDays:
+        description: LastSevenDays includes today.
+        type: integer
+    required:
+    - allTime
+    - lastSevenDays
+    type: object
+  transport.ProfileVisibility:
+    properties:
+      album:
+        type: boolean
+      communities:
+        type: boolean
+      scraps:
+        type: boolean
+      testimonials:
+        type: boolean
+    required:
+    - album
+    - communities
+    - scraps
+    - testimonials
+    type: object
+  transport.RecentVisitor:
+    properties:
+      firstName:
+        type: string
+      userId:
+        type: integer
+    required:
+    - firstName
+    - userId
+    type: object
+  transport.ReplyFriendshipRequest:
+    properties:
+      accept:
+        description: Accept false (or missing) declines the request.
+        type: boolean
+      friendshipId:
+        type: integer
+    required:
+    - accept
+    - friendshipId
+    type: object
+  transport.ReplyJoinRequestRequest:
+    properties:
+      accept:
+        description: Accept false (or missing) declines the request.
+        type: boolean
+    required:
+    - accept
+    type: object
+  transport.ReplyTopicRequest:
+    properties:
+      text:
+        maxLength: 2048
+        type: string
+      title:
+        maxLength: 200
+        type: string
+    required:
+    - text
+    - title
+    type: object
+  transport.Response:
+    properties:
+      data: {}
+    required:
+    - data
+    type: object
+  transport.ScrapItem:
+    properties:
+      authorId:
+        type: integer
+      authorName:
+        type: string
+      authorProfilePicture:
+        type: string
+        x-nullable: true
+      content:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: integer
+    required:
+    - authorId
+    - authorName
+    - authorProfilePicture
+    - content
+    - createdAt
+    - id
+    type: object
+  transport.SearchCommunitiesResponse:
+    properties:
+      communities:
+        items:
+          $ref: '#/definitions/transport.CommunitySearchItem'
+        type: array
+      count:
+        type: integer
+      page:
+        type: integer
+      pageSize:
+        type: integer
+    required:
+    - communities
+    - count
+    - page
+    - pageSize
+    type: object
+  transport.SearchUsersResponse:
+    properties:
+      count:
+        type: integer
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      users:
+        items:
+          $ref: '#/definitions/transport.UserSearchItem'
+        type: array
+    required:
+    - count
+    - page
+    - pageSize
+    - users
+    type: object
+  transport.TestimonialItem:
+    properties:
+      approved:
+        type: boolean
+      authorId:
+        type: integer
+      authorName:
+        type: string
+      authorProfilePicture:
+        type: string
+        x-nullable: true
+      content:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: integer
+    required:
+    - approved
+    - authorId
+    - authorName
+    - authorProfilePicture
+    - content
+    - createdAt
+    - id
+    type: object
+  transport.Topic:
+    properties:
+      authorFirstName:
+        type: string
+      authorId:
+        type: integer
+      authorProfilePicture:
+        type: string
+        x-nullable: true
+      createdAt:
+        type: string
+      id:
+        type: integer
+      replies:
+        type: integer
+      text:
+        type: string
+      title:
+        type: string
+    required:
+    - authorFirstName
+    - authorId
+    - authorProfilePicture
+    - createdAt
+    - id
+    - replies
+    - text
+    - title
+    type: object
+  transport.TopicRepliesResponse:
+    properties:
+      count:
+        type: integer
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      replies:
+        items:
+          $ref: '#/definitions/transport.TopicReply'
+        type: array
+      topic:
+        allOf:
+        - $ref: '#/definitions/transport.Topic'
+        x-nullable: true
+    required:
+    - count
+    - page
+    - pageSize
+    - replies
+    - topic
+    type: object
+  transport.TopicReply:
+    properties:
+      authorFirstName:
+        type: string
+      authorId:
+        type: integer
+      authorProfilePicture:
+        type: string
+        x-nullable: true
+      createdAt:
+        type: string
+      id:
+        type: integer
+      text:
+        type: string
+      title:
+        type: string
+    required:
+    - authorFirstName
+    - authorId
+    - authorProfilePicture
+    - createdAt
+    - id
+    - text
+    - title
+    type: object
+  transport.TopicSummary:
+    properties:
+      authorId:
+        type: integer
+      authorProfilePicture:
+        type: string
+        x-nullable: true
+      id:
+        type: integer
+      lastReplyDate:
+        type: string
+      lastReplyPreview:
+        type: string
+      replies:
+        type: integer
+      title:
+        type: string
+    required:
+    - authorId
+    - authorProfilePicture
+    - id
+    - lastReplyDate
+    - lastReplyPreview
+    - replies
+    - title
+    type: object
+  transport.TopicsResponse:
+    properties:
+      count:
+        type: integer
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      topics:
+        items:
+          $ref: '#/definitions/transport.TopicSummary'
+        type: array
+    required:
+    - count
+    - page
+    - pageSize
+    - topics
+    type: object
+  transport.UpdateCommunityRequest:
+    properties:
+      category:
+        $ref: '#/definitions/transport.CommunityCategory'
+      description:
+        maxLength: 2048
+        type: string
+      name:
+        maxLength: 100
+        type: string
+      private:
+        description: Making a private community public accepts its pending join requests.
+        type: boolean
+    required:
+    - category
+    - description
+    - name
+    - private
+    type: object
+  transport.UpdateMeRequest:
+    properties:
+      about:
+        maxLength: 2048
+        type: string
+      birthCity:
+        maxLength: 2048
+        type: string
+      birthDate:
+        description: BirthDate is a calendar date, "YYYY-MM-DD"; empty keeps the current
+          one.
+        type: string
+      books:
+        maxLength: 2048
+        type: string
+      cuisine:
+        maxLength: 2048
+        type: string
+      description:
+        maxLength: 2048
+        type: string
+      fashion:
+        maxLength: 2048
+        type: string
+      firstName:
+        maxLength: 50
+        type: string
+      hobbies:
+        maxLength: 2048
+        type: string
+      humor:
+        maxLength: 2048
+        type: string
+      interests:
+        maxLength: 2048
+        type: string
+      lastName:
+        maxLength: 50
+        type: string
+      livesWith:
+        maxLength: 2048
+        type: string
+      movies:
+        maxLength: 2048
+        type: string
+      music:
+        maxLength: 2048
+        type: string
+      passions:
+        maxLength: 2048
+        type: string
+      relationshipStatus:
+        maxLength: 2048
+        type: string
+      religion:
+        maxLength: 2048
+        type: string
+      sports:
+        maxLength: 2048
+        type: string
+      website:
+        maxLength: 2048
+        type: string
+    required:
+    - about
+    - birthCity
+    - birthDate
+    - books
+    - cuisine
+    - description
+    - fashion
+    - firstName
+    - hobbies
+    - humor
+    - interests
+    - lastName
+    - livesWith
+    - movies
+    - music
+    - passions
+    - relationshipStatus
+    - religion
+    - sports
+    - website
+    type: object
+  transport.UpdateMyPrivacyRequest:
+    properties:
+      hiddenProfileFields:
+        description: Keys of the profile fields non-friends don't see; empty shows
+          them all.
+        items:
+          type: string
+        type: array
+      publicAlbum:
+        type: boolean
+      publicBirthday:
+        type: boolean
+      publicCommunities:
+        type: boolean
+      publicScraps:
+        type: boolean
+      publicTestimonials:
+        type: boolean
+      recordVisits:
+        type: boolean
+    required:
+    - hiddenProfileFields
+    - publicAlbum
+    - publicBirthday
+    - publicCommunities
+    - publicScraps
+    - publicTestimonials
+    - recordVisits
+    type: object
+  transport.UpdateMyThemeRequest:
+    properties:
+      theme:
+        enum:
+        - "2005"
+        - "2008"
+        type: string
+    required:
+    - theme
+    type: object
+  transport.UpsertUserReviewRequest:
+    properties:
+      cool:
+        example: 3
+        maximum: 3
+        minimum: 0
+        type: integer
+      sexy:
+        example: 2
+        maximum: 3
+        minimum: 0
+        type: integer
+      trustworthy:
+        example: 3
+        maximum: 3
+        minimum: 0
+        type: integer
+    required:
+    - cool
+    - sexy
+    - trustworthy
+    type: object
+  transport.UserFanSummaryResponse:
+    properties:
+      amIFan:
+        type: boolean
+      canFan:
+        type: boolean
+      fanCount:
+        type: integer
+    required:
+    - amIFan
+    - canFan
+    - fanCount
+    type: object
+  transport.UserReviewItem:
+    properties:
+      cool:
+        type: integer
+      sexy:
+        type: integer
+      trustworthy:
+        type: integer
+    required:
+    - cool
+    - sexy
+    - trustworthy
+    type: object
+  transport.UserReviewSummaryResponse:
+    properties:
+      canReview:
+        type: boolean
+      cool:
+        type: number
+      myReview:
+        allOf:
+        - $ref: '#/definitions/transport.UserReviewItem'
+        x-nullable: true
+      reviewCount:
+        type: integer
+      sexy:
+        type: number
+      trustworthy:
+        type: number
+    required:
+    - canReview
+    - cool
+    - myReview
+    - reviewCount
+    - sexy
+    - trustworthy
+    type: object
+  transport.UserSearchItem:
+    properties:
+      firstName:
+        type: string
+      friendCount:
+        type: integer
+      id:
+        type: integer
+      profilePicture:
+        type: string
+        x-nullable: true
+    required:
+    - firstName
+    - friendCount
+    - id
+    - profilePicture
+    type: object
+  transport.VotePollRequest:
+    properties:
+      optionId:
+        type: integer
+    required:
+    - optionId
+    type: object
+  transport.WelcomeResponse:
+    properties:
+      communityCount:
+        type: integer
+      directConnections:
+        type: integer
+      hasRatedFriends:
+        description: |-
+          For the "próximas etapas": whether the user rated any current friend,
+          and how many communities they're in (DirectConnections is their friends).
+        type: boolean
+      indirectConnections:
+        type: integer
+      numberOfFans:
+        type: integer
+      numberOfScraps:
+        type: integer
+      profileViews:
+        $ref: '#/definitions/transport.ProfileViews'
+      recentVisitors:
+        items:
+          $ref: '#/definitions/transport.RecentVisitor'
+        type: array
+      recordVisits:
+        description: |-
+          RecordVisits false: the user turned off "registrar minhas visitas", so
+          RecentVisitors is empty on purpose.
+        type: boolean
+      todaysLuck:
+        type: string
+      userCreatedAt:
+        type: string
+      userFirstName:
+        type: string
+    required:
+    - communityCount
+    - directConnections
+    - hasRatedFriends
+    - indirectConnections
+    - numberOfFans
+    - numberOfScraps
+    - profileViews
+    - recentVisitors
+    - recordVisits
+    - todaysLuck
+    - userCreatedAt
+    - userFirstName
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Our very own OG Social Media.
+  license:
+    name: Apache 2.0
+  title: Yorgut APIs
+  version: "1.0"
+paths:
+  /auth/google:
+    post:
+      consumes:
+      - application/json
+      description: 'Validates the Google ID token from Sign in with Google, creates
+        the user on their first login, and returns a Yorgut session token. Send it
+        as "Authorization: Bearer <token>" on every other request.'
+      operationId: loginWithGoogle
+      parameters:
+      - description: Google credential
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/transport.LoginWithGoogleRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.LoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      summary: Logs in with a Google account.
+      tags:
+      - Auth
+  /communities:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Creates a community owned by the logged user, optionally with a
+        picture (PNG or JPEG, max 5 MB and 50 megapixels; stored shrunk to 1024px
+        and 1 MB).
+      operationId: createCommunity
+      parameters:
+      - description: Community name
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: Community category, one of transport.CommunityCategory (e.g.
+          computers_internet)
+        in: formData
+        name: category
+        required: true
+        type: string
+      - description: Community description (max 2048 characters)
+        in: formData
+        name: description
+        type: string
+      - description: 'Private: only members read the forum, and the owner accepts
+          who joins'
+        in: formData
+        name: private
+        type: boolean
+      - description: Community picture
+        in: formData
+        name: picture
+        type: file
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/transport.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/transport.CreateCommunityResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create Community
+      tags:
+      - Community
+  /communities/{communityId}:
+    get:
+      description: Returns the community matching the requested id
+      operationId: findCommunity
+      parameters:
+      - description: Community ID
+        in: path
+        name: communityId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.FindCommunityByIdResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get Single community by id.
+      tags:
+      - Community
+    put:
+      consumes:
+      - application/json
+      description: Replaces the community's name, category, description and privacy.
+        Only the owner may (403 otherwise). Making a private community public accepts
+        its pending join requests.
+      operationId: updateCommunity
+      parameters:
+      - description: Community ID
+        in: path
+        name: communityId
+        required: true
+        type: integer
+      - description: Community details
+        in: body
+        name: Community
+        required: true
+        schema:
+          $ref: '#/definitions/transport.UpdateCommunityRequest'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Updates a community.
+      tags:
+      - Community
+  /communities/{communityId}/hot-topics:
+    get:
+      description: Returns a list of topics. In a private community, only members
+        may read (403 otherwise).
+      operationId: findCommunityHotTopics
+      parameters:
+      - description: Community ID
+        in: path
+        name: communityId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.TopicsResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Gets the 5 newest topics of a community.
+      tags:
+      - Community
+  /communities/{communityId}/invitable-friends:
+    get:
+      description: Returns a page of friends, most recently seen first, each saying
+        whether they already are a member or already invited. Only members may (403
+        otherwise).
+      operationId: findInvitableFriends
+      parameters:
+      - description: Community ID
+        in: path
+        name: communityId
+        required: true
+        type: integer
+      - description: Page, starting at 1 (default 1)
+        in: query
+        name: page
+        type: integer
+      - description: Items per page (default 20, max 50)
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.FindInvitableFriendsResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Gets a page of the logged user's friends to invite to a community.
+      tags:
+      - Community
+  /communities/{communityId}/invitations:
+    post:
+      consumes:
+      - application/json
+      description: Only members may invite (403 otherwise), and only their friends
+        (403). 409 when the friend is already a member or already invited.
+      operationId: inviteToCommunity
+      parameters:
+      - description: Community ID
+        in: path
+        name: communityId
+        required: true
+        type: integer
+      - description: The friend to invite
+        in: body
+        name: Invitation
+        required: true
+        schema:
+          $ref: '#/definitions/transport.InviteToCommunityRequest'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Invites a friend to join a community.
+      tags:
+      - Community
+  /communities/{communityId}/join-requests:
+    get:
+      description: Returns the pending join requests, oldest first. Only the owner
+        may (403 otherwise).
+      operationId: findCommunityJoinRequests
+      parameters:
+      - description: Community ID
+        in: path
+        name: communityId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.FindJoinRequestsResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Lists who asked to join a private community.
+      tags:
+      - Community
+  /communities/{communityId}/join-requests/{userId}/reply:
+    post:
+      consumes:
+      - application/json
+      description: Accepting makes the user a member; declining drops the request.
+        Only the owner may (403 otherwise).
+      operationId: replyCommunityJoinRequest
+      parameters:
+      - description: Community ID
+        in: path
+        name: communityId
+        required: true
+        type: integer
+      - description: ID of the user who asked to join
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: Accept or decline
+        in: body
+        name: Reply
+        required: true
+        schema:
+          $ref: '#/definitions/transport.ReplyJoinRequestRequest'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Accepts or declines a request to join a private community.
+      tags:
+      - Community
+  /communities/{communityId}/members:
+    get:
+      description: Returns a page of the community's members, most recently seen first
+      operationId: findCommunityMembers
+      parameters:
+      - description: Community ID
+        in: path
+        name: communityId
+        required: true
+        type: integer
+      - description: Page, starting at 1 (default 1)
+        in: query
+        name: page
+        type: integer
+      - description: Items per page (default 20, max 50)
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.FindCommunityMembersResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get a page of community members.
+      tags:
+      - Community
+  /communities/{communityId}/picture:
+    put:
+      consumes:
+      - multipart/form-data
+      description: Uploads a PNG or JPEG (max 5 MB and 50 megapixels; stored shrunk
+        to 1024px and 1 MB) as the community's picture. Only the owner may (403 otherwise).
+      operationId: updateCommunityPicture
+      parameters:
+      - description: Community ID
+        in: path
+        name: communityId
+        required: true
+        type: integer
+      - description: Community picture
+        in: formData
+        name: picture
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Replaces a community's picture.
+      tags:
+      - Community
+  /communities/{communityId}/polls:
+    get:
+      description: Returns a page of polls, newest first. In a private community,
+        only members may see them (403 otherwise).
+      operationId: findCommunityPolls
+      parameters:
+      - description: Community ID
+        in: path
+        name: communityId
+        required: true
+        type: integer
+      - description: Page, starting at 1 (default 1)
+        in: query
+        name: page
+        type: integer
+      - description: Items per page (default 20, max 50)
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.PollsResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Gets a page of a community's polls.
+      tags:
+      - Poll
+    post:
+      consumes:
+      - application/json
+      description: Only members may (403 otherwise). Takes 2 to 10 different options;
+        closesAt, when given, must be in the future.
+      operationId: createPoll
+      parameters:
+      - description: Community ID
+        in: path
+        name: communityId
+        required: true
+        type: integer
+      - description: The poll
+        in: body
+        name: Poll
+        required: true
+        schema:
+          $ref: '#/definitions/transport.CreatePollRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/transport.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/transport.CreatePollResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Creates a poll in a community.
+      tags:
+      - Poll
+  /communities/{communityId}/profile:
+    get:
+      description: Returns the community profile matching the requested id
+      operationId: findCommunityProfile
+      parameters:
+      - description: Community ID
+        in: path
+        name: communityId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.FindCommunityProfileByIdResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get Single community profile by its id.
+      tags:
+      - Community
+  /communities/{communityId}/related:
+    get:
+      description: Returns 9 random communities other than this one, the same ones
+        all day (communities don't record related ones yet)
+      operationId: findRelatedCommunities
+      parameters:
+      - description: Community ID
+        in: path
+        name: communityId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.FindManyCommunitiesResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get related communities.
+      tags:
+      - Community
+  /communities/{communityId}/topics:
+    get:
+      description: Returns a page of topics, newest first. In a private community,
+        only members may read (403 otherwise).
+      operationId: findCommunityTopics
+      parameters:
+      - description: Community ID
+        in: path
+        name: communityId
+        required: true
+        type: integer
+      - description: Page, starting at 1 (default 1)
+        in: query
+        name: page
+        type: integer
+      - description: Items per page (default 20, max 50)
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.TopicsResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Gets a page of a community's topics.
+      tags:
+      - Community
+  /communities/search:
+    get:
+      description: Returns a page of communities the logged user is not a member of,
+        biggest first.
+      operationId: searchCommunities
+      parameters:
+      - description: Part of the community name (omit to list all)
+        in: query
+        name: name
+        type: string
+      - description: Page, starting at 1 (default 1)
+        in: query
+        name: page
+        type: integer
+      - description: Communities per page (default 20, max 50)
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.SearchCommunitiesResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Searches communities the logged user hasn't joined.
+      tags:
+      - Community
+  /friendships:
+    post:
+      consumes:
+      - application/json
+      description: Logged user makes a new friendship request.
+      operationId: addFriend
+      parameters:
+      - description: Create Friendship
+        in: body
+        name: Friendship
+        required: true
+        schema:
+          $ref: '#/definitions/transport.CreateFriendshipRequest'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Creates a Friendship request.
+      tags:
+      - Friendship
+  /friendships/friend/{userId}:
+    delete:
+      description: Logged user deletes a friendship.
+      operationId: removeFriend
+      parameters:
+      - description: Target user ID
+        in: path
+        name: userId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Deletes a Friendship by the target userId Id.
+      tags:
+      - Friendship
+  /friendships/reply:
+    post:
+      consumes:
+      - application/json
+      description: Repliess a Friendship request.
+      operationId: replyFriendship
+      parameters:
+      - description: Accept Friendship
+        in: body
+        name: FriendshipRequest
+        required: true
+        schema:
+          $ref: '#/definitions/transport.ReplyFriendshipRequest'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Reply a Friendship request.
+      tags:
+      - Friendship
+  /info:
+    get:
+      description: 'Public: how to reach the administrator. Fields the administrator
+        didn''t set are null.'
+      operationId: findInstanceInfo
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.InstanceInfoResponse'
+      summary: Gets this instance's public details.
+      tags:
+      - Info
+  /me:
+    delete:
+      description: Deletes the user and everything they wrote or did in the app. Each
+        community they own goes to its longest-standing other member, or is deleted
+        when nobody else is in it.
+      operationId: deleteMe
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Deletes the logged user's account, for good.
+      tags:
+      - Me
+    get:
+      description: Returns the user that owns the session token, with their settings
+      operationId: findMe
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.FindMeResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get the logged user.
+      tags:
+      - Me
+    put:
+      consumes:
+      - application/json
+      description: Replaces the logged user's basic data and profile fields. Email
+        can't be changed.
+      operationId: updateMe
+      parameters:
+      - description: User data
+        in: body
+        name: Me
+        required: true
+        schema:
+          $ref: '#/definitions/transport.UpdateMeRequest'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update the logged user
+      tags:
+      - Me
+  /me/birthdays:
+    get:
+      description: Returns the friends whose birthday is in the next 30 days (today
+        included), soonest first
+      operationId: findMyBirthdays
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.FindUpcomingBirthdaysResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Gets the logged user's friends with a birthday in the next 30 days.
+      tags:
+      - Me
+  /me/community-invitations:
+    get:
+      description: Returns the invitations friends sent the logged user to join their
+        communities, newest first
+      operationId: findMyCommunityInvitations
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.FindMyCommunityInvitationsResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Gets the logged user's pending community invitations.
+      tags:
+      - Me
+  /me/community-invitations/{invitationId}:
+    delete:
+      description: Deletes the logged user's invitation (404 when there is none).
+      operationId: declineCommunityInvitation
+      parameters:
+      - description: Invitation ID
+        in: path
+        name: invitationId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: User declines an invitation to join a community.
+      tags:
+      - Me
+  /me/community-invitations/{invitationId}/accept:
+    post:
+      description: Joins the community. In a private community, an invitation from
+        a member other than the owner asks the owner instead, and answers pending
+        true.
+      operationId: acceptCommunityInvitation
+      parameters:
+      - description: Invitation ID
+        in: path
+        name: invitationId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/transport.JoinCommunityResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: User accepts an invitation to join a community.
+      tags:
+      - Me
+  /me/friends:
+    get:
+      description: Returns a page of friends, most recently seen first, each with
+        the logged user's rating of them and whether they are a fan
+      operationId: findMyFriends
+      parameters:
+      - description: Page, starting at 1 (default 1)
+        in: query
+        name: page
+        type: integer
+      - description: Items per page (default 20, max 50)
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.FindMyFriendsResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Gets a page of the logged user's friends, with their ratings and fan
+        stars.
+      tags:
+      - Me
+  /me/friends/{userId}:
+    get:
+      description: Returns the friendship status between the logged user and userId.
+        Answers 204 with no body when userId is the logged user.
+      operationId: amIFriendOf
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.AmIFriendOfResponse'
+        "204":
+          description: userId is the logged user
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Evaluates if the logged user is friend of specified user
+      tags:
+      - Me
+  /me/friends/pending:
+    get:
+      description: Returns a list of users
+      operationId: findMyPendingFriendships
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.FindPendingFriendshipOfUserResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Gets a list of friendship invites of the user.
+      tags:
+      - Me
+  /me/join-requests/{communityId}:
+    delete:
+      description: Deletes the logged user's pending join request (404 when there
+        is none).
+      operationId: cancelJoinRequest
+      parameters:
+      - description: Community ID
+        in: path
+        name: communityId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: User withdraws their request to join a private community.
+      tags:
+      - Me
+  /me/join/{communityId}:
+    post:
+      description: Joins a public community. For a private one, asks the owner to
+        accept the user and answers pending true.
+      operationId: joinCommunity
+      parameters:
+      - description: Community ID
+        in: path
+        name: communityId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/transport.JoinCommunityResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: User joins a community.
+      tags:
+      - Me
+  /me/leave/{communityId}:
+    post:
+      description: Leaves a community. The owner can't leave (403).
+      operationId: leaveCommunity
+      parameters:
+      - description: Community ID
+        in: path
+        name: communityId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: User leaves a community.
+      tags:
+      - Me
+  /me/memberships:
+    get:
+      description: Returns a page of communities
+      operationId: findMyMemberships
+      parameters:
+      - description: Page, starting at 1 (default 1)
+        in: query
+        name: page
+        type: integer
+      - description: Items per page (default 20, max 50)
+        in: query
+        name: pageSize
+        type: integer
+      - description: Shuffled instead of by name, the same way all day (for the profile
+          box)
+        in: query
+        name: random
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.FindUserMembershipsResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Gets a page of the communities the logged user is a member of.
+      tags:
+      - Me
+  /me/memberships/{communityId}:
+    get:
+      description: Says whether the logged user is a member, or is waiting for a private
+        community's owner to accept them
+      operationId: amIMemberOf
+      parameters:
+      - description: Community ID
+        in: path
+        name: communityId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.AmIMemberOfResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Evaluates if the logged user is member of specified community
+      tags:
+      - Me
+  /me/my-communities:
+    get:
+      description: Returns a page of communities, by name
+      operationId: findMyCommunities
+      parameters:
+      - description: Page, starting at 1 (default 1)
+        in: query
+        name: page
+        type: integer
+      - description: Items per page (default 20, max 50)
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.FindMyOwnedCommunitiesResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Gets a page of the communities the logged user created.
+      tags:
+      - Me
+  /me/privacy:
+    put:
+      consumes:
+      - application/json
+      description: recordVisits false stops recording the user's visits to profiles
+        and hides them from every visitor list (theirs too).
+      operationId: updateMyPrivacy
+      parameters:
+      - description: Privacy settings
+        in: body
+        name: Privacy
+        required: true
+        schema:
+          $ref: '#/definitions/transport.UpdateMyPrivacyRequest'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Changes the logged user's privacy settings.
+      tags:
+      - Me
+  /me/profile:
+    get:
+      description: Returns the user matching the token
+      operationId: findMyProfile
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.FindUserWithProfileByIdResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get logged user with it's profile by their Token.
+      tags:
+      - Me
+  /me/profile-picture:
+    put:
+      consumes:
+      - multipart/form-data
+      description: Uploads a PNG or JPEG (max 5 MB and 50 megapixels; stored shrunk
+        to 1024px and 1 MB) as the logged user's profile picture.
+      operationId: updateMyProfilePicture
+      parameters:
+      - description: Profile picture
+        in: formData
+        name: picture
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update the logged user's profile picture
+      tags:
+      - Me
+  /me/theme:
+    put:
+      consumes:
+      - application/json
+      operationId: updateMyTheme
+      parameters:
+      - description: Theme
+        in: body
+        name: Theme
+        required: true
+        schema:
+          $ref: '#/definitions/transport.UpdateMyThemeRequest'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Changes the look of the app for the logged user.
+      tags:
+      - Me
+  /me/welcome:
+    get:
+      description: Returns the user stats
+      operationId: findMyWelcome
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.WelcomeResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get user stats for the Home Welcome
+      tags:
+      - Me
+  /photos:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Adds a PNG or JPEG (max 5 MB and 50 megapixels; stored shrunk to
+        1024px and 1 MB) to the logged user's personal album, which holds up to 12
+        photos (409 when full).
+      operationId: uploadPhoto
+      parameters:
+      - description: Photo
+        in: formData
+        name: picture
+        required: true
+        type: file
+      - description: Caption (max 200 characters)
+        in: formData
+        name: caption
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/transport.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Uploads a photo to the logged user's album.
+      tags:
+      - Photo
+  /photos/{photoId}:
+    delete:
+      description: Removes one of the logged user's photos.
+      operationId: deletePhoto
+      parameters:
+      - description: Photo ID
+        in: path
+        name: photoId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Deletes a photo from the logged user's album.
+      tags:
+      - Photo
+  /photos/user/{userId}:
+    get:
+      description: Returns the album's photos (newest first), how many it holds and
+        its limit.
+      operationId: findUserPhotos
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: \
+        in: query
+        name: as
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.FindPhotosOfUserResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Lists the photos of a user's personal album.
+      tags:
+      - Photo
+  /polls/{pollId}:
+    get:
+      description: Each option's votes are null until the logged user voted or the
+        poll closed. In a private community, only members may see it (403 otherwise).
+      operationId: findPoll
+      parameters:
+      - description: Poll ID
+        in: path
+        name: pollId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.PollResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Gets a poll with its options.
+      tags:
+      - Poll
+  /polls/{pollId}/close:
+    post:
+      description: Ends voting now. Only the poll's author or the community's owner
+        may (403 otherwise); 409 when already closed.
+      operationId: closePoll
+      parameters:
+      - description: Poll ID
+        in: path
+        name: pollId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Closes a poll.
+      tags:
+      - Poll
+  /polls/{pollId}/vote:
+    post:
+      consumes:
+      - application/json
+      description: Only members vote (403 otherwise), once (409 after that), while
+        the poll is open (409 once closed).
+      operationId: votePoll
+      parameters:
+      - description: Poll ID
+        in: path
+        name: pollId
+        required: true
+        type: integer
+      - description: The chosen option
+        in: body
+        name: Vote
+        required: true
+        schema:
+          $ref: '#/definitions/transport.VotePollRequest'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Votes in a poll.
+      tags:
+      - Poll
+  /scraps:
+    post:
+      consumes:
+      - application/json
+      description: Creates a Scrap.
+      operationId: createScrap
+      parameters:
+      - description: Create Scrap
+        in: body
+        name: Scrap
+        required: true
+        schema:
+          $ref: '#/definitions/transport.CreateScrapRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/transport.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create a Scrap.
+      tags:
+      - Scrap
+  /scraps/{scrapId}:
+    delete:
+      description: Deletes the scrap for good. Only the owner of the scrapbook it
+        is in and its author may (403 otherwise).
+      operationId: deleteScrap
+      parameters:
+      - description: Scrap ID
+        in: path
+        name: scrapId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Deletes a scrap.
+      tags:
+      - Scrap
+  /scraps/user/{userId}:
+    get:
+      description: Returns a page of the scraps sent to the user, newest first
+      operationId: findUserScraps
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: \
+        in: query
+        name: as
+        type: string
+      - description: Page, starting at 1 (default 1)
+        in: query
+        name: page
+        type: integer
+      - description: Items per page (default 20, max 50)
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.FindScrapOfUserRecipientResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Gets a page of a user's scraps.
+      tags:
+      - Scrap
+  /testimonials:
+    post:
+      consumes:
+      - application/json
+      description: Logged user writes a testimonial for a friend. It stays pending
+        until the recipient approves it.
+      operationId: createTestimonial
+      parameters:
+      - description: Create Testimonial
+        in: body
+        name: Testimonial
+        required: true
+        schema:
+          $ref: '#/definitions/transport.CreateTestimonialRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/transport.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create a Testimonial.
+      tags:
+      - Testimonial
+  /testimonials/{testimonialId}:
+    delete:
+      description: The recipient rejects or removes a testimonial, or the author deletes
+        one they wrote.
+      operationId: deleteTestimonial
+      parameters:
+      - description: Testimonial ID
+        in: path
+        name: testimonialId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete Testimonial by id.
+      tags:
+      - Testimonial
+  /testimonials/{testimonialId}/approve:
+    post:
+      description: The recipient approves a pending testimonial, making it public.
+      operationId: approveTestimonial
+      parameters:
+      - description: Testimonial ID
+        in: path
+        name: testimonialId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Approve a Testimonial.
+      tags:
+      - Testimonial
+  /testimonials/user/{userId}:
+    get:
+      description: Returns the approved testimonials of a user. When the logged user
+        is the recipient, pending ones are included too.
+      operationId: findUserTestimonials
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: \
+        in: query
+        name: as
+        type: string
+      - description: Page of approved testimonials, starting at 1 (default 1)
+        in: query
+        name: page
+        type: integer
+      - description: Approved testimonials per page (default 20, max 50)
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.FindTestimonialsOfUserResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Gets the testimonials of a user.
+      tags:
+      - Testimonial
+  /topics:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new Topic inside a community's forum. Only members of
+        the community may post (403 otherwise).
+      operationId: createTopic
+      parameters:
+      - description: Create Topic
+        in: body
+        name: Topic
+        required: true
+        schema:
+          $ref: '#/definitions/transport.CreateTopicRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/transport.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Creates a new Topic
+      tags:
+      - Topics
+  /topics/{topicId}:
+    post:
+      consumes:
+      - application/json
+      description: Replies to an existing Topic inside a community's forum. Only members
+        of the topic's community may reply (403 otherwise).
+      operationId: replyTopic
+      parameters:
+      - description: Topic ID
+        in: path
+        name: topicId
+        required: true
+        type: integer
+      - description: Reply
+        in: body
+        name: Reply
+        required: true
+        schema:
+          $ref: '#/definitions/transport.ReplyTopicRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/transport.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Creates a new Topic Reply
+      tags:
+      - Topics
+  /topics/{topicId}/replies:
+    get:
+      description: Returns the topic and a page of its replies, oldest first. In a
+        private community, only members may read (403 otherwise).
+      operationId: findTopicReplies
+      parameters:
+      - description: Topic ID
+        in: path
+        name: topicId
+        required: true
+        type: integer
+      - description: Page, starting at 1 (default 1)
+        in: query
+        name: page
+        type: integer
+      - description: Items per page (default 20, max 50)
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.TopicRepliesResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Gets a topic and a page of its replies
+      tags:
+      - Topics
+  /users/{userId}:
+    get:
+      description: Returns the user matching the requested id
+      operationId: findUser
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.FindUserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get Single user by id.
+      tags:
+      - Users
+  /users/{userId}/fan:
+    delete:
+      description: Logged user removes their star from a user. Idempotent.
+      operationId: stopBeingFan
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Stops being a fan of a user.
+      tags:
+      - UserFan
+    put:
+      description: Logged user becomes a fan of a friend. Idempotent.
+      operationId: becomeFan
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Becomes a fan of a user.
+      tags:
+      - UserFan
+  /users/{userId}/fans:
+    get:
+      description: Returns how many fans a user has, and whether the logged user is
+        (or can become) one of them.
+      operationId: findUserFans
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.UserFanSummaryResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Gets the fan summary of a user.
+      tags:
+      - UserFan
+  /users/{userId}/fans/list:
+    get:
+      description: Returns a page of the users who are fans of the user, the newest
+        first
+      operationId: findUserFanList
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: Page, starting at 1 (default 1)
+        in: query
+        name: page
+        type: integer
+      - description: Items per page (default 20, max 50)
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.FindUserFanListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Gets a page of a user's fans.
+      tags:
+      - UserFan
+  /users/{userId}/friends:
+    get:
+      description: Returns a page of friends, most recently seen first
+      operationId: findUserFriends
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: Page, starting at 1 (default 1)
+        in: query
+        name: page
+        type: integer
+      - description: Items per page (default 20, max 50)
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.FindFriendsOfUserResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Gets a page of a user's friends.
+      tags:
+      - Users
+  /users/{userId}/memberships:
+    get:
+      description: Returns a page of communities
+      operationId: findUserMemberships
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: \
+        in: query
+        name: as
+        type: string
+      - description: Page, starting at 1 (default 1)
+        in: query
+        name: page
+        type: integer
+      - description: Items per page (default 20, max 50)
+        in: query
+        name: pageSize
+        type: integer
+      - description: Shuffled instead of by name, the same way all day (for the profile
+          box)
+        in: query
+        name: random
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.FindUserMembershipsResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Gets a page of the communities a user is a member of.
+      tags:
+      - Users
+  /users/{userId}/profile:
+    get:
+      description: Returns the user matching the requested id, and counts a visit
+        to their profile (see GET /me/welcome)
+      operationId: findUserProfile
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: \
+        in: query
+        name: as
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.FindUserWithProfileByIdResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get Single user with it's profile by id.
+      tags:
+      - Users
+  /users/{userId}/review:
+    put:
+      consumes:
+      - application/json
+      description: Logged user creates or updates their review of a friend.
+      operationId: upsertUserReview
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: Review (each trait from 0 to 3)
+        in: body
+        name: UserReview
+        required: true
+        schema:
+          $ref: '#/definitions/transport.UpsertUserReviewRequest'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Reviews a user.
+      tags:
+      - UserReview
+  /users/{userId}/reviews:
+    get:
+      description: Returns the average cool, sexy and trustworthy ratings of a user,
+        plus the logged user's own review.
+      operationId: findUserReviews
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.UserReviewSummaryResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Gets the review summary of a user.
+      tags:
+      - UserReview
+  /users/search-users:
+    get:
+      description: Returns a page of users
+      operationId: searchUsers
+      parameters:
+      - description: Part of the user's full name (omit to list all)
+        in: query
+        name: name
+        type: string
+      - description: Page, starting at 1 (default 1)
+        in: query
+        name: page
+        type: integer
+      - description: Users per page (default 20, max 50)
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transport.SearchUsersResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Searches for a user by their name.
+      tags:
+      - Users
+schemes:
+- http
+securityDefinitions:
+  BearerAuth:
+    description: Yorgut session token from POST /auth/google, sent as "Bearer <token>".
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

@@ -1,0 +1,71 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@fontsource-variable/quicksand": "5.1.1",
+    "@mui/material": "^6.4.3",
+    "@react-oauth/google": "^0.12.1",
+    "@tanstack/react-query": "^5.90.21",
+    "@tanstack/react-query-devtools": "^5.91.3",
+    "dayjs": "^1.11.13",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.01",
+    "react-markdown": "9.0.1",
+    "react-router-dom": "^7.1.5",
+    "rehype-raw": "7.0.0",
+    "rehype-sanitize": "6.0.0",
+    "remark-breaks": "4.0.0",
+    "remark-gfm": "4.0.0"
+  },
+  "scripts": {
+    "start": "rsbuild dev",
+    "build": "rsbuild build",
+    "preview": "rsbuild preview",
+    "lint": "eslint --fix --ext .js,.jsx,.ts,.tsx .",
+    "serve": "serve -s dist",
+    "gen:api": "orval --config ./orval.config.ts",
+    "typecheck": "tsc --noEmit -p ."
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "eslintIgnore": [
+    "src/api/generated"
+  ],
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@rsbuild/core": "^1.2.11",
+    "@rsbuild/plugin-react": "^1.1.1",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.13.1",
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
+    "@typescript-eslint/parser": "^5.62.0",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-prettier": "^5.2.3",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "orval": "8.37.0",
+    "prettier": "^3.5.3",
+    "prettier-eslint": "^16.3.0",
+    "typescript": "~5.9.3"
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+}

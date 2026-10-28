@@ -1,0 +1,13 @@
+{
+  "identities": [
+    {
+      "name": "yorgut",
+      "credentials": [{ "accessKey": "localdev", "secretKey": "localdev-secret" }],
+      "actions": ["Admin", "Read", "List", "Write", "Tagging"]
+    },
+    {
+      "name": "anonymous",
+      "actions": ["Read:yorgut"]
+    }
+  ]
+}

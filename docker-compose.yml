@@ -1,0 +1,92 @@
+# Local services. By default only what `go run` and `yarn start` need, each
+# optional (backend/README.md "Database" and "Uploads"):
+#   db       MySQL, same engine as production      make db_up       (in backend/)
+#   storage  SeaweedFS, an S3-compatible bucket     make storage_up  (in backend/)
+#
+# The "app" profile adds the whole app behind one nginx, like production:
+#   docker compose --profile app up --build    ->  http://localhost:8000
+# SESSION_SECRET and GOOGLE_CLIENT_ID come from backend/.env; pass
+# --env-file backend/.env so the frontend build gets GOOGLE_CLIENT_ID too.
+name: yorgut
+
+services:
+  db:
+    image: mysql:8.4
+    container_name: yorgut-dev
+    environment:
+      MYSQL_ROOT_PASSWORD: localdev
+      MYSQL_DATABASE: yorgut-dev
+      MYSQL_USER: localdev
+      MYSQL_PASSWORD: localdev
+    ports:
+      - "3306:3306"
+    volumes:
+      - yorgut-dev-mysql:/var/lib/mysql
+    healthcheck:
+      # Over TCP: the image's first start runs a temporary server on the socket
+      # only, which must not count as ready.
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u localdev -plocaldev --silent"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  # One process with an S3 endpoint on :8333 and the "yorgut" bucket, created
+  # on startup. seaweedfs-s3.json gives the API full access with the localdev
+  # key pair, and everyone else read access to that bucket.
+  storage:
+    image: chrislusf/seaweedfs:4.47
+    container_name: yorgut-dev-storage
+    command: >
+      mini -dir=/data -bucket=yorgut -s3.config=/etc/seaweedfs/s3.json
+      -master.telemetry=false -admin.ui=false
+    ports:
+      - "8333:8333"
+    volumes:
+      - yorgut-dev-storage:/data
+      - ./seaweedfs-s3.json:/etc/seaweedfs/s3.json:ro
+    healthcheck:
+      # Ready once the bucket exists: a missing object then answers NoSuchKey
+      # (before, NoSuchBucket).
+      test: ["CMD-SHELL", "curl -s http://127.0.0.1:8333/yorgut/healthcheck | grep -q NoSuchKey"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  api:
+    profiles: [app]
+    build: ./backend
+    env_file:
+      - path: backend/.env
+        required: false
+    environment:
+      DEV_MODE: "false"
+      PORT: "8080"
+      DATABASE_DSN: localdev:localdev@tcp(db:3306)/yorgut-dev
+      STORAGE: s3
+      S3_ENDPOINT: storage:8333
+      S3_USE_SSL: "false"
+      S3_BUCKET: yorgut
+      S3_ACCESS_KEY: localdev
+      S3_SECRET_KEY: localdev-secret
+      # Same origin as the app: nginx serves the bucket at /media.
+      MEDIA_BASE_URL: /media
+    depends_on:
+      db:
+        condition: service_healthy
+      storage:
+        condition: service_healthy
+
+  web:
+    profiles: [app]
+    build:
+      context: ./frontend
+      args:
+        GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+    ports:
+      - "8000:80"
+    depends_on:
+      - api
+
+volumes:
+  yorgut-dev-mysql:
+  yorgut-dev-storage:

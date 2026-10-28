@@ -1,0 +1,124 @@
+# Yorgut in production, on any machine with Docker, reachable through a
+# Cloudflare Tunnel or another proxy (README.md, "Deploying"). Run from the
+# repo root:
+#
+#   docker compose -f deploy/docker-compose.yml --env-file deploy/.env pull
+#   docker compose -f deploy/docker-compose.yml --env-file deploy/.env up -d
+#
+# The api and web images are built by GitHub Actions on every push to main
+# (.github/workflows/images.yml) and pulled from ghcr.io, so the server never
+# builds them. On a machine with enough memory, `up -d --build` still builds
+# them here instead.
+#
+# Differences from the dev docker-compose.yml at the repo root:
+#   - secrets come from deploy/.env (copy .env.example), never from the repo;
+#   - the database is an external MySQL (DB_* in deploy/.env), not a container;
+#   - no bucket port is published: only the containers reach it;
+#   - the app is published on 127.0.0.1:8000 only (for checks on the machine
+#     itself); the internet reaches it through cloudflared;
+#   - containers restart on their own, also after a reboot;
+#   - Swagger is off and Gin runs in release mode.
+name: yorgut-prod
+
+services:
+  # Writes the bucket's access config (the same format as the dev
+  # seaweedfs-s3.json) from deploy/.env, so the keys live in one place: the API
+  # gets full access, everyone else read access to the yorgut bucket (only
+  # nginx can reach the bucket anyway).
+  storage-config:
+    image: alpine:3.22
+    environment:
+      S3_ACCESS_KEY: ${S3_ACCESS_KEY:?set S3_ACCESS_KEY in deploy/.env}
+      S3_SECRET_KEY: ${S3_SECRET_KEY:?set S3_SECRET_KEY in deploy/.env}
+    command:
+      - sh
+      - -c
+      - |
+        cat > /config/s3.json <<JSON
+        {
+          "identities": [
+            {
+              "name": "yorgut",
+              "credentials": [{ "accessKey": "$$S3_ACCESS_KEY", "secretKey": "$$S3_SECRET_KEY" }],
+              "actions": ["Admin", "Read", "List", "Write", "Tagging"]
+            },
+            { "name": "anonymous", "actions": ["Read:yorgut"] }
+          ]
+        }
+        JSON
+        chmod 644 /config/s3.json
+    volumes:
+      - storage-config:/config
+
+  storage:
+    image: chrislusf/seaweedfs:4.47
+    restart: unless-stopped
+    command: >
+      mini -dir=/data -bucket=yorgut -s3.config=/config/s3.json
+      -master.telemetry=false -admin.ui=false
+    volumes:
+      - storage-data:/data
+      - storage-config:/config:ro
+    depends_on:
+      storage-config:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://127.0.0.1:8333/yorgut/healthcheck | grep -q NoSuchKey"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  api:
+    image: ghcr.io/caiqueth/yorgut-api:${YORGUT_TAG:-latest}
+    build: ../backend
+    restart: unless-stopped
+    environment:
+      DEV_MODE: "false"
+      GIN_MODE: release
+      DISABLE_SWAGGER: "true"
+      PORT: "8080"
+      DATABASE_DSN: "${DB_USER:?set DB_USER in deploy/.env}:${DB_PASSWORD:?set DB_PASSWORD in deploy/.env}@tcp(${DB_HOST:?set DB_HOST in deploy/.env}:${DB_PORT:-3306})/${DB_NAME:?set DB_NAME in deploy/.env}?tls=${DB_TLS:-true}"
+      SESSION_SECRET: ${SESSION_SECRET:?set SESSION_SECRET in deploy/.env}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:?set GOOGLE_CLIENT_ID in deploy/.env}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-}
+      STORAGE: s3
+      S3_ENDPOINT: storage:8333
+      S3_USE_SSL: "false"
+      S3_BUCKET: yorgut
+      S3_ACCESS_KEY: ${S3_ACCESS_KEY}
+      S3_SECRET_KEY: ${S3_SECRET_KEY}
+      # Same origin as the app: nginx serves the bucket at /media.
+      MEDIA_BASE_URL: /media
+    depends_on:
+      storage:
+        condition: service_healthy
+
+  web:
+    image: ghcr.io/caiqueth/yorgut-web:${YORGUT_TAG:-latest}
+    build:
+      context: ../frontend
+      args:
+        GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+    restart: unless-stopped
+    # Only this machine can open it directly; everyone else comes through the
+    # tunnel (cloudflared reaches it as http://web:80).
+    ports:
+      - "127.0.0.1:8000:80"
+    depends_on:
+      - api
+
+  # The Cloudflare Tunnel: an outbound connection to Cloudflare, so no router
+  # port is opened. Its public hostname is set in the Cloudflare dashboard,
+  # pointing to http://web:80. Remove this service to use another proxy.
+  cloudflared:
+    image: cloudflare/cloudflared:2025.9.1
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    environment:
+      TUNNEL_TOKEN: ${TUNNEL_TOKEN:?set TUNNEL_TOKEN in deploy/.env}
+    depends_on:
+      - web
+
+volumes:
+  storage-data:
+  storage-config:

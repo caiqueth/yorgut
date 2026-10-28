@@ -1,0 +1,8 @@
+.env
+*.db
+*.exe
+main
+tmp/
+storage/
+.vscode/
+.air.toml
