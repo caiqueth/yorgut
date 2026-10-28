@@ -40,9 +40,6 @@ jobs:
             context: backend
           - image: web
             context: frontend
-            # The production environment's GOOGLE_CLIENT_ID variable (Settings >
-            # Environments > production), baked into the SPA.
-            build-args: GOOGLE_CLIENT_ID=${{ vars.GOOGLE_CLIENT_ID }}
     steps:
       - uses: actions/checkout@v4
 
@@ -59,7 +56,10 @@ jobs:
         with:
           context: ${{ matrix.context }}
           platforms: linux/amd64,linux/arm64
-          build-args: ${{ matrix.build-args }}
+          # The production environment's GOOGLE_CLIENT_ID variable (Settings >
+          # Environments > production), baked into the SPA. Read here, not in
+          # the matrix: the matrix is resolved before the environment applies.
+          build-args: ${{ matrix.image == 'web' && format('GOOGLE_CLIENT_ID={0}', vars.GOOGLE_CLIENT_ID) || '' }}
           push: true
           tags: |
             ghcr.io/${{ github.repository_owner }}/yorgut-${{ matrix.image }}:latest
